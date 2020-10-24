@@ -1,7 +1,9 @@
 
 import './App.css'
-import Game1 from './components/pages/game_1/pages/page1'
+import Page1 from './components/pages/game_1/pages/page1'
 import Logo from './components/Logo'
+import Page2 from './components/pages/game_1/pages/page2'
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,21 +14,15 @@ import {
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <Logo />
-        <Game1 />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React YAY
-        </a>
-      </header>
+      <Router>
+        <header className="App-header">
+          <Logo />
+          <Switch>
+            <Route path="/page1"><Page1 /></Route>
+            <Route path="/page2"><Page2 /></Route>
+          </Switch>
+        </header>
+      </Router>
     </div>
   );
 }

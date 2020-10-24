@@ -1,12 +1,13 @@
 import React from 'react'
+import {Link} from 'react-router-dom'
 
-const Game1 = () => {
+const Page1 = () => {
     return (
         <div>
             <div>Parabéns! Você foi contratado para trabalhar na escola X! Hoje é seu primeiro dia!</div>
-            <button>Começar</button>
+            <Link to="/page2">Começar</Link>
         </div>
     )
 }
 
-export default Game1
+export default Page1
