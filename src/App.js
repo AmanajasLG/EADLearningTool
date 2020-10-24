@@ -1,8 +1,7 @@
 
 import './App.css'
-import Page1 from './components/pages/game_1/pages/page1'
-import Logo from './components/Logo'
-import Page2 from './components/pages/game_1/pages/page2'
+import Page1 from './components/pages/game1/pages/page1'
+import Page2 from './components/pages/game1/pages/page2'
 
 import {
   BrowserRouter as Router,
