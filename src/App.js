@@ -1,7 +1,9 @@
 
 import './App.css'
-import Page1 from './components/pages/game1/pages/page1'
-import Page2 from './components/pages/game1/pages/page2'
+import Init from './components/pages/game1/pages/Init'
+import Welcome from './components/pages/game1/pages/Welcome'
+import Game from './components/pages/game1/pages/Game'
+import Result from './components/pages/game1/pages/Result'
 
 import {
   BrowserRouter as Router,
@@ -17,8 +19,11 @@ function App() {
         <header className="App-header">
           {/* <Logo /> */}
           <Switch>
-            <Route path="/page1"><Page1 /></Route>
-            <Route path="/page2"><Page2 /></Route>
+            <Route path="/EADLearningTool"><Init /></Route>
+            <Route path="/init"><Init /></Route>
+            <Route path="/welcome"><Welcome /></Route>
+            <Route path="/game"><Game /></Route>
+            <Route path="/result"><Result /></Route>
           </Switch>
         </header>
       </Router>
