@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/EADLearningTool/static/css/main.73efbf52.chunk.css",
+    "main.js": "/EADLearningTool/static/js/main.0e1c417a.chunk.js",
+    "main.js.map": "/EADLearningTool/static/js/main.0e1c417a.chunk.js.map",
+    "runtime-main.js": "/EADLearningTool/static/js/runtime-main.d0243608.js",
+    "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.d0243608.js.map",
+    "static/js/2.3f82aaff.chunk.js": "/EADLearningTool/static/js/2.3f82aaff.chunk.js",
+    "static/js/2.3f82aaff.chunk.js.map": "/EADLearningTool/static/js/2.3f82aaff.chunk.js.map",
+    "static/js/3.e59e606e.chunk.js": "/EADLearningTool/static/js/3.e59e606e.chunk.js",
+    "static/js/3.e59e606e.chunk.js.map": "/EADLearningTool/static/js/3.e59e606e.chunk.js.map",
+    "index.html": "/EADLearningTool/index.html",
+    "static/css/main.73efbf52.chunk.css.map": "/EADLearningTool/static/css/main.73efbf52.chunk.css.map",
+    "static/js/2.3f82aaff.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.3f82aaff.chunk.js.LICENSE.txt",
+    "static/media/logo.2d27ead7.svg": "/EADLearningTool/static/media/logo.2d27ead7.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d0243608.js",
+    "static/js/2.3f82aaff.chunk.js",
+    "static/css/main.73efbf52.chunk.css",
+    "static/js/main.0e1c417a.chunk.js"
+  ]
+}
