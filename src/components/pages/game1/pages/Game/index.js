@@ -10,7 +10,7 @@ const Game = () => {
 	const rooms = [
 		{
 			nome: "Saguão principal",
-			cor: "#050505",
+			colorPalette: "palette01",
 			personagens: [
 				listaPersonagens[0],
 				listaPersonagens[1],
@@ -19,7 +19,7 @@ const Game = () => {
 		},
 		{
 			nome: "Corredor",
-			cor: "#330033",
+			colorPalette: "palette02",
 			personagens: [
 				listaPersonagens[3],
 				listaPersonagens[4],
@@ -28,7 +28,7 @@ const Game = () => {
 		},
 		{
 			nome: "Cantina",
-			cor: "#333300",
+			colorPalette: "palette03",
 			personagens: [
 				listaPersonagens[6],
 				listaPersonagens[7],
@@ -37,7 +37,7 @@ const Game = () => {
 		},
 		{
 			nome: "Livraria",
-			cor: "#003333",
+			colorPalette: "palette04",
 			personagens: [
 				listaPersonagens[9],
 				listaPersonagens[10],
@@ -46,7 +46,7 @@ const Game = () => {
 		},
 		{
 			nome: "Estacionamento",
-			cor: "#555555",
+			colorPalette: "palette05",
 			personagens: [
 				listaPersonagens[12],
 				listaPersonagens[13],
@@ -76,8 +76,7 @@ const Game = () => {
 
     return (
         <div>
-            <div>Game</div>
-			<div>Estado: {state.currentRoom}</div>
+			<div id="RoomName">{rooms[state.currentRoom].nome}</div>
 			<RoomSelect
 			roomsData={rooms}
 			onChange={(num) => {

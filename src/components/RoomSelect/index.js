@@ -10,7 +10,7 @@ const RoomSelect = ({roomsData, onChange}) => {
 	}
 
     return (
-        <div className="DivRoomSelect">
+        <div id="RoomSelect">
 			{roomsData.map( (data, index) => <button className="RoomBtn" key={index} id={ state === index ? "selected" : "" } onClick={buttonClick(index)}>{data.nome}</button> )}
         </div>
     )

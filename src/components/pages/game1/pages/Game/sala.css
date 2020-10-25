@@ -1,4 +1,7 @@
+@import '../../../../../colorPalettes.css';
+
 #sala {
-	visibility: visible;
+	color: var(--accent-color);
+	background-color: var(--main-color);
 	padding: 5px;
 }

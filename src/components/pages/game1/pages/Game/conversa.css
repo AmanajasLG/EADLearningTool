@@ -4,6 +4,16 @@
 	top: 10vh;	left: 10vw;
 	height: 80vh;	width: 80vw;
 
-	background-color: #FFFFFF;
+	background-color: #CCCCCC;
+	box-shadow: #2A2A2AAA 0px 5px 10px 5px;
+	/* border-radius: 5px; */
 	color: #000000;
+}
+
+#charData {
+	margin-top: 100px;
+}
+
+#conversationActions {
+	margin-top: 20px;
 }
