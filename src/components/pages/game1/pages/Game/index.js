@@ -1,14 +1,15 @@
 import React from 'react'
-import {Link, Redirect} from 'react-router-dom'
 import RoomSelect from '../../../../RoomSelect'
 import Sala from './sala.js'
 import Conversa from './conversa.js'
 import listaPersonagens from './listaPersonagens.js'
+import './index.css'
 
 const Game = () => {
 	const [state, setState] = React.useState({currentRoom: 0, targetName: 'Juslecino', endGame: false, currentChar: null, found: false});
 	const rooms = [
 		{
+			nome: "Saguão principal",
 			cor: "#050505",
 			personagens: [
 				listaPersonagens[0],
@@ -17,6 +18,7 @@ const Game = () => {
 			]
 		},
 		{
+			nome: "Corredor",
 			cor: "#330033",
 			personagens: [
 				listaPersonagens[3],
@@ -25,6 +27,7 @@ const Game = () => {
 			]
 		},
 		{
+			nome: "Cantina",
 			cor: "#333300",
 			personagens: [
 				listaPersonagens[6],
@@ -33,6 +36,7 @@ const Game = () => {
 			]
 		},
 		{
+			nome: "Livraria",
 			cor: "#003333",
 			personagens: [
 				listaPersonagens[9],
@@ -41,6 +45,7 @@ const Game = () => {
 			]
 		},
 		{
+			nome: "Estacionamento",
 			cor: "#555555",
 			personagens: [
 				listaPersonagens[12],
@@ -73,10 +78,11 @@ const Game = () => {
         <div>
             <div>Game</div>
 			<div>Estado: {state.currentRoom}</div>
-			<RoomSelect 			
+			<RoomSelect
+			roomsData={rooms}
 			onChange={(num) => {
 				setState({...state, currentRoom: num})
-			}} 	
+			}}
 			/>
 			
 			<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>

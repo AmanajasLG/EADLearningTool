@@ -1,10 +1,7 @@
 import React from 'react'
+import './personagem.css'
 
 const Personagem = ({charData, setCurrentChar}) => {
-
-    const [state, setState] = React.useState({visibilidadeConversa: false});
-
-    
     return (
     <div>
         <div className="CharDiv" onClick={setCurrentChar(charData)}>

@@ -6,6 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
+import './conversa.css'
 
 const Conversa = ({charData, clearCurrentChar, checkEnd, endGame}) => {
     const [state, setState] = React.useState(false) 
@@ -15,7 +16,7 @@ const Conversa = ({charData, clearCurrentChar, checkEnd, endGame}) => {
     }
     
     return (
-        <div id="conversa" style={{position: "absolute", top: "10vh", left: "10vw", width: "80vw", height: "80vh", backgroundColor: "#FFFFFF", color: "#000000"}}>
+        <div id="conversa">
             {
                 endGame ? 
                 <div>
