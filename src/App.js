@@ -1,5 +1,6 @@
 
 import './App.css'
+import AppHeader from './components/AppHeader'
 import Init from './components/pages/game1/pages/Init'
 import Game from './components/pages/game1/pages/Game'
 import Result from './components/pages/game1/pages/Result'
@@ -11,19 +12,20 @@ import {
 } from "react-router-dom"
 
 function App() {
+  let palette = "palette06"
   return (
-    <div className="App">
+    <div className={"App " + palette}>
       <Router>
-        <header className="App-header">
+        {/* <header className="App-header"></header> */}
           {/* <Logo /> */}
-          <Switch>
-            <Route path="/EADLearningTool"><Init /></Route>
-            <Route path="/init"><Init /></Route>
-            <Route path="/game"><Game /></Route>
-            <Route path="/result"><Result /></Route>
-            <Route path="/"><Init /></Route>
-          </Switch>
-        </header>
+        <AppHeader/>
+        <Switch>
+          <Route path="/EADLearningTool"><Init /></Route>
+          <Route path="/init"><Init /></Route>
+          <Route path="/game"><Game /></Route>
+          <Route path="/result"><Result /></Route>
+          <Route path="/"><Init /></Route>
+        </Switch>
       </Router>
     </div>
   );

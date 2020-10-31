@@ -32,3 +32,11 @@
 	--thertiary-color: #000000;
 	--accent-color: #ffffff;
 }
+
+.palette06 {
+	--main-color: #ffffff;
+	--secondary-color: #F9AFA1;
+	--thertiary-color: #FFCCA9;
+	--thertiary-color: #535C89;
+	--accent-color: #59316D;
+}
