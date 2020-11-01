@@ -1,19 +1,19 @@
 const listaPersonagens = [
-	{charData: {nome: 'Fulano'		, trabalho: 'Programador'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Beltrano'	, trabalho: 'Dançarino'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Ciclano'		, trabalho: 'Sofredor'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Jujubinha'	, trabalho: 'Dormir'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: '7Belinho'	, trabalho: 'Comer'			, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Pirulitinha'	, trabalho: 'Quebra dente'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Juslecino'	, trabalho: 'Professor'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Facebookson'	, trabalho: 'Ladrão'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Snowden'		, trabalho: 'Espião'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Cypher'		, trabalho: 'Perseguidor'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Omen'		, trabalho: 'Satanás'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Raze'		, trabalho: 'Bombardeadora'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Katarina'	, trabalho: 'The monio'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Nasus'		, trabalho: 'Deus da massa'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}},
-	{charData: {nome: 'Seraphine'	, trabalho: 'Cantora'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}}
+	{charData: {nome: 'Fulano'		, trabalho: 'Programador'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 10, y: 30 }}},
+	{charData: {nome: 'Beltrano'	, trabalho: 'Dançarino'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 20, y: 30 }}},
+	{charData: {nome: 'Ciclano'		, trabalho: 'Sofredor'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 30, y: 30 }}},
+	{charData: {nome: 'Jujubinha'	, trabalho: 'Dormir'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 20, y: 30 }}},
+	{charData: {nome: '7Belinho'	, trabalho: 'Comer'			, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 30, y: 30 }}},
+	{charData: {nome: 'Pirulitinha'	, trabalho: 'Quebra dente'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 40, y: 30 }}},
+	{charData: {nome: 'Juslecino'	, trabalho: 'Professor'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 20, y: 30 }}},
+	{charData: {nome: 'Facebookson'	, trabalho: 'Ladrão'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 30, y: 30 }}},
+	{charData: {nome: 'Snowden'		, trabalho: 'Espião'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 40, y: 30 }}},
+	{charData: {nome: 'Cypher'		, trabalho: 'Perseguidor'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 10, y: 30 }}},
+	{charData: {nome: 'Omen'		, trabalho: 'Satanás'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 30, y: 30 }}},
+	{charData: {nome: 'Raze'		, trabalho: 'Bombardeadora'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 50, y: 30 }}},
+	{charData: {nome: 'Katarina'	, trabalho: 'The monio'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 100, y: 30 }}},
+	{charData: {nome: 'Nasus'		, trabalho: 'Deus da massa'	, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 100, y: 30 }}},
+	{charData: {nome: 'Seraphine'	, trabalho: 'Cantora'		, estadoCivil: 'solteiro'}, diagData: {texto: 'Teste'}, metaData:{position: {x: 100, y: 30 }}}
 ]
 
 export default listaPersonagens
