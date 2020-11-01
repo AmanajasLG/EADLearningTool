@@ -2,7 +2,7 @@
 	/* position: fixed; */
 	display: flex;
 	flex-direction: row;
-	background-color: var(--secondary-color);
+	background-color: var(--second-color);
 	color: var(--accent-color);
 	padding: 25px 50px;
 	justify-content: space-between;
