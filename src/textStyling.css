@@ -1,0 +1,17 @@
+.title {
+	font-size: inherit;
+	font-family: 'Abril FatFace';
+	font-style: inherit;
+	font-variant: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+}
+
+.subtitle {
+	font-size: inherit;
+	font-family: 'Assistant';
+	font-style: italic;
+	font-variant: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+}

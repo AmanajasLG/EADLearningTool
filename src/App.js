@@ -18,7 +18,7 @@ function App() {
       <Router>
         {/* <header className="App-header"></header> */}
           {/* <Logo /> */}
-        <AppHeader/>
+        <AppHeader pageInfo={{title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}}/>
         <Switch>
           <Route path="/EADLearningTool"><Init /></Route>
           <Route path="/init"><Init /></Route>
