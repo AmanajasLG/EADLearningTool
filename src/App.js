@@ -1,5 +1,5 @@
 
-import './App.css'
+import './App.scss'
 import AppHeader from './components/AppHeader'
 import Init from './components/pages/game1/pages/Init'
 import Game from './components/pages/game1/pages/Game'

@@ -1,5 +1,5 @@
-@import './colorPalettes.css';
-@import './textStyling.css';
+@use './colorPalettes.css';
+@use './textStyling';
 
 .App {
   text-align: center;
