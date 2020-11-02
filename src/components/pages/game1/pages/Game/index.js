@@ -3,7 +3,7 @@ import RoomSelect from '../../../../RoomSelect'
 import Sala from './sala.js'
 import Conversa from './conversa.js'
 import listaPersonagens from './listaPersonagens.js'
-import './index.css'
+import './index.scss'
 
 const Game = () => {
 	const [state, setState] = React.useState({currentRoom: 0, targetName: 'Juslecino', endGame: false, currentChar: null, found: false});

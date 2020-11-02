@@ -6,7 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import Button from '@material-ui/core/Button';
-import './conversa.css'
+import './conversa.scss'
 
 const Conversa = ({charData, clearCurrentChar, checkEnd, endGame}) => {
     const [state, setState] = React.useState(false) 

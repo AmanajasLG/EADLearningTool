@@ -1,5 +1,5 @@
 import React from 'react'
-import './personagem.css'
+import './personagem.scss'
 
 const Personagem = ({charData, setCurrentChar}) => {
     return (
