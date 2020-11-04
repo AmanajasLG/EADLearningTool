@@ -1,13 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
+@import url('colorPalettes.css');
+
+/* VARIABLES */
+:root {
+	--font-title: 'abril fatface', serif;
+  --font-text: 'assistant', sans-serif;
+  --color-lightest: #ede6f0;
+  --color-main: #f9afa1;
+  --color-accent: #535c89;
+	--color-second: #d6e3f4;
+	--color-third: #cbe7de;
+	--color-fourth: #ffcca9;
+	--color-text: #59316d;
+}
+
+
+/* TYPE */
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  color: var(--color-text);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: inherit; 
+  font-size: inherit;
+  font-weight: 300;
+}
+
+.type-l {font-size: 2rem;}
+.type-m {font-size: 1.75rem}
+.type-s {font-size: 1rem;}
+.type-xs {font-size: 0.8rem;}
+
+.type-display {font-family: var(--font-title);}
+.type-center {text-align: center;}
+
+/* ATOMS */
+
+.btn {
+  padding: 10px 20px;
+  background-color: var(--color-accent);
+  border-radius: 50px;
+  color: white;
+  text-decoration: none;
+  font-weight: 800;
+  text-transform: lowercase;
+  font-size: 1.25rem;
+  transition: linear 0.2s;
+}
+
+.RoomBtn {
+  padding: 10px 20px;
+  border: 0;
+  background-color: var(--color-accent);
+  border-radius: 50px 0px 50px 50px;
+  color: white
+}
+
+.btn:hover {
+  background-color: var(--color-text);
+  transition: linear 0.2s;
+}
+
+.btn.btn-center {
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-block;
+}
+
+/* MOLECULES */
+
+.main-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 2rem
+}
+
+/* TEMPLATES */
+
+
+/* BACKGROUNDS */
+
+#RoomName {
+  /*background-color: var(--color-main);*/
+  padding: 2rem;
+  height: 7rem;
+  box-sizing: border-box;
+  background: url('components/pages/game1/pages/Init/img/capa-top.svg');
+  background-size: cover;
+  background-position: bottom;
+  text-align: center;
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+}
+
+#sala {
+  height:calc(100vh - 7.6rem);
+  top: 0;
+}
+
+.bg-shape-bottom {
+  background-image: url('components/pages/game1/pages/Init/img/formas-bottom.svg');
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 33%;
+}
+
+@media screen and (max-width: 40rem) {
+  .bg-shape-bottom {background-size: 90%;}
 }

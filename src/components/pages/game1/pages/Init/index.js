@@ -4,9 +4,10 @@ import './index.css'
 
 const Init = () => {
     return (
-        <div>
-            <div>Parabéns! Você foi contratado para trabalhar na escola X! Hoje é seu primeiro dia!</div>
-            <Link to="/game">Começar</Link>
+        <div class="main-wrapper bg-shape-bottom">
+            <div><h1 class="type-l type-display type-center">Parabéns!</h1> 
+            <h2 class="type-m type-center">Você foi contratado para trabalhar na escola X! Hoje é seu primeiro dia!</h2></div>
+            <Link to="/game" class="btn btn-center">Começar</Link>
         </div>
     )
 }
