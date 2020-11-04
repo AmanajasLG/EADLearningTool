@@ -46,10 +46,17 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ATOMS */
 
+.margin-top {
+  margin-top: 5rem;
+}
+.margin-half-top {
+  margin-top: 2.5rem;
+}
+
 .btn {
   padding: 10px 20px;
   background-color: var(--color-accent);
-  border-radius: 50px;
+  border-radius: 50px 50px 50px 0;
   color: white;
   text-decoration: none;
   font-weight: 800;
@@ -59,11 +66,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .RoomBtn {
-  padding: 10px 20px;
+  padding: 10px 20px !important;
   border: 0;
-  background-color: var(--color-accent);
-  border-radius: 50px 0px 50px 50px;
-  color: white
+  background-color: transparent;
+  border-radius: 50px;
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent)
 }
 
 .btn:hover {
@@ -77,6 +85,12 @@ h1, h2, h3, h4, h5, h6 {
   display: inline-block;
 }
 
+.classImage {
+  max-height: 150px;
+  margin: 0 auto;
+  display: block; 
+}
+
 /* MOLECULES */
 
 .main-wrapper {
@@ -88,6 +102,9 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   box-sizing: border-box;
   padding: 2rem
+}
+.main-wrapper > div {
+  max-width: 40rem;
 }
 
 /* TEMPLATES */
@@ -114,12 +131,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bg-shape-bottom {
-  background-image: url('components/pages/game1/pages/Init/img/formas-bottom.svg');
+  background-image: url('components/pages/game1/pages/Init/img/formas-bottom-2.svg');
   background-repeat: no-repeat;
   background-position: bottom;
-  background-size: 33%;
+  background-size: 90%;
 }
 
 @media screen and (max-width: 40rem) {
-  .bg-shape-bottom {background-size: 90%;}
+  .bg-shape-bottom {background-size: 70%;}
 }
