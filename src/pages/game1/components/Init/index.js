@@ -1,12 +1,11 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 import './index.scss'
 
-const Init = () => {
+const Init = ({onClose}) => {
     return (
         <div>
             <div>Parabéns! Você foi contratado para trabalhar na escola X! Hoje é seu primeiro dia!</div>
-            <Link to="/game">Começar</Link>
+            <button onClick={onClose}>Fechar resumo da missão</button>
         </div>
     )
 }

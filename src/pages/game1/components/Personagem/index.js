@@ -24,7 +24,7 @@ const Personagem = ({dragPosition, position, charData, setCurrentChar}) => {
           <div>
             {charData.nome}
           </div>
-          <img src={charImage} style={{maxHeight: 150}}/>
+          <img src={charImage} style={{maxHeight: 150}} alt="Kimpossible"/>
           {/*
           <div>
             {charData.trabalho}

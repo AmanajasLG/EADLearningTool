@@ -1,9 +1,8 @@
 
 import './App.scss'
 import AppHeader from './components/AppHeader'
-import Init from './components/pages/game1/pages/Init'
-import Game from './components/pages/game1/pages/Game'
-import Result from './components/pages/game1/pages/Result'
+import Home from './pages/Home'
+import Game from './pages/game1/Game'
 
 import {
   BrowserRouter as Router,
@@ -20,11 +19,8 @@ function App() {
           {/* <Logo /> */}
         <AppHeader pageInfo={{title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}}/>
         <Switch>
-          <Route path="/EADLearningTool"><Init /></Route>
-          <Route path="/init"><Init /></Route>
           <Route path="/game"><Game /></Route>
-          <Route path="/result"><Result /></Route>
-          <Route path="/"><Init /></Route>
+          <Route path="/"><Home /></Route>
         </Switch>
       </Router>
     </div>
