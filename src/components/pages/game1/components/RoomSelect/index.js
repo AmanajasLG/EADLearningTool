@@ -1,5 +1,5 @@
 import React from 'react'
-import './index.css'
+import './index.scss'
 
 const RoomSelect = ({roomsData, onChange}) => {
 	const [state, setState] = React.useState(0)

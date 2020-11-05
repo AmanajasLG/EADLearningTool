@@ -1,0 +1,33 @@
+
+#app-header {
+	/* position: fixed; */
+	display: flex;
+	flex-direction: row;
+	background-color: var(--second-color);
+	color: var(--accent-color);
+	padding: 25px 50px;
+	justify-content: space-between;
+}
+
+.group-btns {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.group-btns > div {
+	margin: 0px 20px;
+	cursor: pointer;
+}
+
+#pageTitle {
+	display: flex;
+	flex-direction: column;
+	font-size: 80%;
+	/* cursor: default; */
+}
+
+#subTitle {
+	font-weight: bold;
+	font-size: 80%;
+}

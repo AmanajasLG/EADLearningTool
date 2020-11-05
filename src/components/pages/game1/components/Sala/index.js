@@ -1,6 +1,6 @@
 import React from 'react'
 import Personagem from '../Personagem'
-import './sala.css'
+import './sala.scss'
 
 const Sala = ({roomData, setCurrentChar}) => {
 

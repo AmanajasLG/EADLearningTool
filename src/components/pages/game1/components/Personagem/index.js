@@ -1,5 +1,5 @@
 import React from 'react'
-import './personagem.css'
+import './personagem.scss'
 import charImage from './char1.png'
 
 const style = {
