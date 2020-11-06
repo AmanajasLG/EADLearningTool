@@ -23,7 +23,7 @@ const Game = () => {
 	const [missionOpen, setMissionOpen] = React.useState(true)
 
 	const handleSubmit = (value) => () =>
-			setState({...state, gameEndState: value === state.quizAnswer? "ACERTOU!" : "ERROU!"})
+			setState({...state, gameEndState: value == state.quizAnswer? "ACERTOU!" : "ERROU!"})
 
 	const setCurrentChar = (charData) => () =>
 		setState({...state, currentChar: charData, found: charData.nome === state.targetName})
@@ -56,7 +56,7 @@ const Game = () => {
 							/>
 								<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
 							{
-								state.currentChar ?
+								state.currentChar && !state.gameEndState ?
 									<Conversa endGame={state.endGame}
 										handleSubmit={handleSubmit} quizOptions={quizOptions}
 										charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
