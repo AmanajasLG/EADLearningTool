@@ -22,7 +22,8 @@ const Game = () => {
 		gameEndState: null,
 		tries: 0,
 		score: 0,
-		startedTimestamp: new Date(Date.now())
+		startedTimestamp: new Date(Date.now()),
+		elapsedTime: null
 	});
 	const [missionOpen, setMissionOpen] = React.useState(true)
 	const _minTimeBonus = 2*60*1000; // Se terminar antes desse tempo (em ms), ganha o bônus máximo
@@ -39,7 +40,9 @@ const Game = () => {
 			let bonusAmnt = (_maxTimeBonus - diff)/(_maxTimeBonus - _minTimeBonus);
 			bonusAmnt = Math.max(Math.min(bonusAmnt, 1.0), 0.0); // Clampa para que bonusAmnt = [0,1]
 
-			setState({...state, gameEndState: "ACERTOU!", score: state.score + _maxBonusPts*bonusAmnt})
+			// Sim, eu sei. Essa linha está 3x maior que o ideal por culpa da string. Mas ela é para ser temporária.
+			// Se estivermos em produção e essa linha ainda estiver existente, algo deu muito errado.
+			setState({...state, gameEndState: `ACERTOU! Você levou ${Math.trunc(diff / 60000)}:` + `${Math.trunc(diff/1000)%60}`.padStart(2, '0') + ` para terminar. Isso te garante ${Math.round(_maxBonusPts*bonusAmnt)} pontos de bonus.`, score: state.score + Math.round(_maxBonusPts*bonusAmnt), elapsedTime: diff})
 		} else {
 			setState({...state, gameEndState: "ERROU!"})
 		}
