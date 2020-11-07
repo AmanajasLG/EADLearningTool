@@ -32,14 +32,12 @@ function App() {
 
   return (
     <div className={"App " + palette}>
-      <AppHeader pageInfo={{title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}}/>
       { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }
       <Router history={history}>
         {/* <header className="App-header"></header> */}
           {/* <Logo /> */}
-       
         <Switch>
           <Route path="/login" component={Login} />
           <PrivateRoute path="/game"><Game /></PrivateRoute>

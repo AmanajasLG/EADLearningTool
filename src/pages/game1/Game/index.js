@@ -6,6 +6,7 @@ import Sala from '../components/Sala'
 import Conversa from '../components/Conversa'
 // import ConversaInicial from '../components/ConversaInicial'
 // import ConversaQuiz from '../components/ConversaQuiz'
+import AppHeader from '../../../_components/AppHeader'
 import rooms from './rooms.js'
 import quizOptions from './quizOptions.js'
 import './index.scss'
@@ -41,7 +42,9 @@ const Game = () => {
 	}
 
   return (
-	      <div style={{width: '100%', height: '100%'}}>
+	  <div>
+		  <AppHeader pageInfo={{title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}}/>
+		  <div style={{width: '100%', height: '100%'}}>
 					<div id="RoomName">{rooms[state.currentRoom].nome}</div>
 					{ missionOpen ?
 						<Init onClose={ () => setMissionOpen(false) }/>
@@ -67,6 +70,8 @@ const Game = () => {
 					}
 					{	state.gameEndState ? <Result gameEndState={state.gameEndState}/> : null }
 	      </div>
+	  </div>
+	      
   )
 }
 
