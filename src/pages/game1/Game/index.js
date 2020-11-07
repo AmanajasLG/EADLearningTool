@@ -31,15 +31,25 @@ const Game = () => {
 
 	const handleSubmit = (value) => () => {
 		if( value == state.quizAnswer ) {
+
+			/* Computa bônus por tempo */
 			let diff = Date.now() - state.startedTimestamp;
-			let bonus = (_maxTimeBonus - diff)/(_maxTimeBonus - _minTimeBonus);
-			bonus = Math.max(Math.min(bonus, 1.0), 0.0);
-			setState({...state, gameEndState: "ACERTOU!", score: state.score + _maxBonusPts*bonus})
+			// Faz o bônus ser decrescente com o passar do tempo, escalados para que bonusAmnt
+			// seja 1 em t = _minTimeBonus e 0 em t = _maxTimeBonus
+			let bonusAmnt = (_maxTimeBonus - diff)/(_maxTimeBonus - _minTimeBonus);
+			bonusAmnt = Math.max(Math.min(bonusAmnt, 1.0), 0.0); // Clampa para que bonusAmnt = [0,1]
+
+			setState({...state, gameEndState: "ACERTOU!", score: state.score + _maxBonusPts*bonusAmnt})
 		} else {
 			setState({...state, gameEndState: "ERROU!"})
 		}
 	}
 
+	// Criei essa função mas agora não sei se ela será útil ou se deve ser aqui.
+	// Precisamos determinar quando e onde haverá incremento ou decremento de pontuação.
+	// Caso seja somente tempo levado para terminar o jogo, essa função é inútil.
+	// Caso seja tudo somente ao término, essa função é inútil e as outras computações
+	// podem ser feitas em handleSubmit, junto com a computação do bônus por tempo
 	const changeScore = (value) => () => {
 		setState({...state, score: state.score + value})
 	}
