@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import Button from '@material-ui/core/Button';
 
 const ConversaQuiz = ({handleSubmit, quizOptions}) => {
