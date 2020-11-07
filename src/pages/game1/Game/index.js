@@ -20,12 +20,25 @@ const Game = () => {
 		found: false,
 		quizAnswer: 0,
 		gameEndState: null,
-		tries: 0
+		tries: 0,
+		score: 0,
+		startedTimestamp: new Date(Date.now())
 	});
 	const [missionOpen, setMissionOpen] = React.useState(true)
+	const _minTimeBonus = 2*60*1000; // Se terminar antes desse tempo (em ms), ganha o bônus máximo
+	const _maxTimeBonus = 5*60*1000; // Se terminar em até esse tempo (em ms), ganha um bônus no score proporcional. Terminar depois garante 0 de bônus
+	const _maxBonusPts = 100; // Máximo de 100 pontos se terminar antes do mínimo
 
-	const handleSubmit = (value) => () =>
-			setState({...state, gameEndState: value == state.quizAnswer? "ACERTOU!" : "ERROU!"})
+	const handleSubmit = (value) => () => {
+		if( value == state.quizAnswer ) {
+			let diff = Date.now() - state.startedTimestamp;
+			let bonus = (_maxTimeBonus - diff)/(_maxTimeBonus - _minTimeBonus);
+			bonus = Math.max(Math.min(bonus, 1.0), 0.0);
+			setState({...state, gameEndState: "ACERTOU!", score: state.score + _maxBonusPts*bonus})
+		} else {
+			setState({...state, gameEndState: "ERROU!"})
+		}
+	}
 
 	const setCurrentChar = (charData) => () =>
 		setState({...state, currentChar: charData, found: charData.nome === state.targetName})
