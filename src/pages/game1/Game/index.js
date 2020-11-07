@@ -40,6 +40,10 @@ const Game = () => {
 		}
 	}
 
+	const changeScore = (value) => () => {
+		setState({...state, score: state.score + value})
+	}
+
 	const setCurrentChar = (charData) => () =>
 		setState({...state, currentChar: charData, found: charData.nome === state.targetName})
 
