@@ -19,12 +19,13 @@ const Game = () => {
 		currentChar: null,
 		found: false,
 		quizAnswer: 0,
-		gameEndState: null
+		gameEndState: null,
+		tries: 0
 	});
 	const [missionOpen, setMissionOpen] = React.useState(true)
 
 	const handleSubmit = (value) => () =>
-			setState({...state, gameEndState: value === state.quizAnswer? "ACERTOU!" : "ERROU!"})
+			setState({...state, gameEndState: value == state.quizAnswer? "ACERTOU!" : "ERROU!"})
 
 	const setCurrentChar = (charData) => () =>
 		setState({...state, currentChar: charData, found: charData.nome === state.targetName})
@@ -34,10 +35,11 @@ const Game = () => {
 
 
 	const checkEnd = () => {
+		let newState = {...state, tries: state.tries+1}
 		if (state.found){
-			setState({...state, endGame: true})
+			setState({...newState, endGame: true})
 		} else {
-			clearCurrentChar()
+			setState({...newState, currentChar: null})
 		}
 	}
 
@@ -58,17 +60,18 @@ const Game = () => {
 							}}
 							/>
 								<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
-							{
-								state.currentChar ?
-									<Conversa endGame={state.endGame}
-										handleSubmit={handleSubmit} quizOptions={quizOptions}
-										charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
-									/>
-									: null
+
+							{ state.currentChar && !state.gameEndState ?
+										<Conversa endGame={state.endGame}
+											handleSubmit={handleSubmit} quizOptions={quizOptions}
+											charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
+										/>
+										: null
 							}
 						</div>
 					}
 					{	state.gameEndState ? <Result gameEndState={state.gameEndState}/> : null }
+					{ state.tries > 0 ? <div>{state.tries} tentativa{state.tries > 1? 's' : ''}!</div> : null}
 	      </div>
 	  </div>
 	      
