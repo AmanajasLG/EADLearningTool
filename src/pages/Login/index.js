@@ -57,11 +57,12 @@ function Login() {
     const location = useLocation()
     const classes = useStyles();
 
+/*
     // reset login status
     useEffect(() => {
         dispatch(userActions.logout())
-    })
-
+    }, [])
+*/
     function handleChange(e) {
         const {name, value} = e.target
         setInputs(inputs => ({...inputs, [name]: value}))
@@ -76,8 +77,7 @@ function Login() {
             dispatch(userActions.login(email, password, from))
         }
     }
-
-    
+    console.log('login page')
     return (
         <Grid container component="main" className={classes.root}>
           <CssBaseline />
@@ -127,8 +127,8 @@ function Login() {
                 {loggingIn && <span className="spinner-border spinner-border-sm mr-1"></span>}
                   Entrar
                 </Button>
-                <Link 
-                    to="/register" 
+                <Link
+                    to="/register"
                     className={classes.submit}
                 >
                   Registrar

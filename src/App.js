@@ -19,15 +19,15 @@ import { history } from './_helpers'
 import { alertActions } from './_actions'
 
 function App() {
-  const alert = useSelector(state => state.alert)
   const dispatch = useDispatch()
 
+/*
   useEffect(() => {
     history.listen((location, action) => {
       dispatch(alertActions.clear())
     })
   }, [])
-
+*/
   let palette = "palette06"
 
   return (
@@ -36,17 +36,16 @@ function App() {
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }
       <Router history={history}>
-        {/* <header className="App-header"></header> */}
-          {/* <Logo /> */}
         <Switch>
-          <Route path="/login" component={Login} />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
           <PrivateRoute path="/game"><Game /></PrivateRoute>
-          <Route exact path="/"><Home /></Route>
-          <Redirect from="*" to="/" />
         </Switch>
       </Router>
     </div>
   );
 }
-
+/*
+<Redirect from="*" to="/" />
+*/
 export default App;
