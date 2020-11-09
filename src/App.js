@@ -18,6 +18,10 @@ import { alertActions } from './_actions'
 import { history } from './_helpers'
 import { Login } from './pages/Login'
 import UserSpace from './pages/UserSpace'
+import UsersCRUD from './pages/UsersCRUD'
+import CharactersCRUD from './pages/CharactersCRUD'
+import CreateMissionGame1 from './pages/CreateMission/Game1'
+
 function App() {
   const dispatch = useDispatch()
 
@@ -41,6 +45,10 @@ function App() {
           <Route path="/login" component={Login} />
           <PrivateRoute exact path="/game"><Game /></PrivateRoute>
           <PrivateRoute exact path="/userspace"><UserSpace /></PrivateRoute>
+          <PrivateRoute exact path="/createMission1"><CreateMissionGame1 /></PrivateRoute>
+          <PrivateRoute exact path="/users"><UsersCRUD /></PrivateRoute>
+          <PrivateRoute exact path="/characters"><CharactersCRUD /></PrivateRoute>
+
         </Switch>
       </Router>
     </div>
