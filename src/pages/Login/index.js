@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector} from 'react-redux'
 
 import { userActions } from '../../_actions'
@@ -53,9 +53,10 @@ function Login() {
     const [submitted, setSubmitted ] = useState(false)
     const { email, password } = inputs
     const loggingIn = useSelector(state => state.authentication.loggingIn)
+    const user = useSelector(state => state.authentication.user)
     const dispatch = useDispatch()
     const location = useLocation()
-    const classes = useStyles();
+    const classes = useStyles()
 
 /*
     // reset login status
@@ -72,14 +73,16 @@ function Login() {
         e.preventDefault()
 
         setSubmitted(true)
+
         if(email && password){
-            const { from } = location.state || { from: {pathname: '/game'}}
+            const { from } = location.state || { from: {pathname: '/userspace'}}
             dispatch(userActions.login(email, password, from))
         }
     }
     console.log('login page')
     return (
         <Grid container component="main" className={classes.root}>
+          {user? user.user ? <Redirect to='/userspace' /> : null : null}
           <CssBaseline />
           <Grid item xs={false} sm={4} md={7} className={classes.image} />
           <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>

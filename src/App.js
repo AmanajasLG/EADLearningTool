@@ -5,7 +5,7 @@ import Home from './pages/Home'
 import Game from './pages/game1/Game'
 
 import {
-  Router,
+  BrowserRouter as Router,
   Switch,
   Route,
   Redirect
@@ -14,38 +14,39 @@ import {
 import React, {useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PrivateRoute } from './_components/PrivateRoute'
-import { Login } from './pages/Login'
-import { history } from './_helpers'
 import { alertActions } from './_actions'
-
+import { history } from './_helpers'
+import { Login } from './pages/Login'
+import UserSpace from './pages/UserSpace'
 function App() {
   const dispatch = useDispatch()
 
-/*
+
   useEffect(() => {
     history.listen((location, action) => {
       dispatch(alertActions.clear())
     })
   }, [])
-*/
-  let palette = "palette06"
 
+  let palette = "palette06"
+  console.log()
   return (
     <div className={"App " + palette}>
       { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }
-      <Router history={history}>
+      <Router>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-          <PrivateRoute path="/game"><Game /></PrivateRoute>
+          <Route path="/login" component={Login} />
+          <PrivateRoute exact path="/game"><Game /></PrivateRoute>
+          <PrivateRoute exact path="/userspace"><UserSpace /></PrivateRoute>
         </Switch>
       </Router>
     </div>
   );
 }
 /*
-<Redirect from="*" to="/" />
+          <Redirect from="*" to="/login" />
 */
 export default App;

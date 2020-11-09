@@ -19,7 +19,7 @@ function login(email, password, from){
             .then(
                 user => {
                     dispatch(success(user))
-                    history.push(from)
+                    //history.push(from)
                 },
                 error => {
                     dispatch(failure(error.toString()))

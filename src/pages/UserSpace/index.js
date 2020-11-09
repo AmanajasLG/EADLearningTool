@@ -4,7 +4,7 @@ const UserSpace = () => {
   const user = useSelector( state => state.authentication.user.user)
   return(
     <div>
-      Oi
+      Oi {user.username}!
     </div>
   )
 }
