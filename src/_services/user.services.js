@@ -1,6 +1,9 @@
 import { authHeader } from '../_helpers'
 import api from './api.services'
+import request from './request.services'
 import axios from 'axios'
+
+const database = (path) =>  `https://learning-tool-backend.herokuapp.com/${path}`
 
 export const userService = {
     login,
@@ -14,7 +17,7 @@ export const userService = {
 
 function login(email, password) {
     return axios.post('https://learning-tool-backend.herokuapp.com/auth/local', {
-        identifier: email, 
+        identifier: email,
         password: password
         },
         {
@@ -24,7 +27,7 @@ function login(email, password) {
         })
         .then(handleResponse)
         .then(user => {
-            localStorage.setItem(user,JSON.stringify(user))
+            localStorage.setItem('user',JSON.stringify(user))
 
             return user
         })
@@ -36,9 +39,13 @@ function logout(){
 
 function getAll() {
     // pegar rota
-    return axios.get('https://learning-tool-backend.herokuapp.com/rota', {
+    return axios(
+      {
+        method: 'get',
+        url: database('users'),
         headers: authHeader()
-    }).then(handleResponse)
+      })
+      .then(handleResponse)
 }
 
 function getById(id){
@@ -66,15 +73,17 @@ function update(user){
 }
 
 function _delete(id){
-    // checar rota
-    return axios.delete('https://learning-tool-backend.herokuapp.com/',{
+    return axios
+    ({
+        method: 'delete',
+        url: database(`users/${id}`),
         headers: authHeader()
     }).then(handleResponse)
 }
 
 function handleResponse(response) {
     console.log(response)
-    
+
     if(response.status !== 200){
         if(response.status === 401){
             logout()

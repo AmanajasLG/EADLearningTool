@@ -66,15 +66,16 @@ function getAll(){
     return dispatch => {
         dispatch(request())
 
-        userService.getAll()
-            .then(
+        const r = userService.getAll()
+        console.log('r:', r)
+            r.then(
                 users => dispatch(success(users)),
                 error => dispatch(failure(error.toString()))
             )
     }
 
     function request() { return {type: userConstants.GETALL_REQUEST} }
-    function success(user) { return {type: userConstants.GETALL_SUCCESS, user} }
+    function success(users) { return {type: userConstants.GETALL_SUCCESS, users} }
     function failure(error) { return {type: userConstants.GETALL_FAILURE, error} }
 }
 
