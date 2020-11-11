@@ -1,18 +1,20 @@
 .CharDiv {
-	width: 100px;
-	border-style: solid;
-	border-color: #00000000;
-	border-width: 2px;
+	width: 125px;
 }
 
-.CharDiv:hover {
-	border-color: var(--color-accent);
+.CharDiv > div {
+	display: flex;
+	justify-content: center;
+	flex-flow: column;
+	align-content: center;
 }
 
-.CharDiv * {
-	border-style: none;
+.CharDiv img {
+	width: 100%;
+	height: auto;
+	transition-duration: 0.1s;
 }
 
-.CharDiv *:hover {
-	border-style: none;
+.CharDiv img:hover {
+	filter: drop-shadow(0px 0px 5px var(--color-accent));
 }

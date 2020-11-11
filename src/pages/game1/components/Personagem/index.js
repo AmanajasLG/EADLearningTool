@@ -14,10 +14,8 @@ const Personagem = ({dragPosition, position, charData, setCurrentChar}) => {
     <div className="CharDiv" style={pos.x ? {position: 'absolute', left:pos.x, top: pos.y} : null}
       draggable onDragStart={()=>setDragging(true)} onDragEnd={()=>setDragging(false)}>
         <div onClick={setCurrentChar(charData)}>
-          <div>
-            {charData.nome}
-          </div>
-          <img src={charImage} style={{maxHeight: 150}} alt="Kimpossible"/>
+          <div>{charData.nome}</div>
+          <img src={charImage} alt="Kimpossible"/>
           {/*
           <div>
             {charData.trabalho}
