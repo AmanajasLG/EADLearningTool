@@ -8,7 +8,7 @@ const Sala = ({roomData, setCurrentChar}) => {
   const onDragOver = (e) => setPos({x: e.clientX, y: e.clientY})
 
   return (
-      <div id="sala" style={{width:'100%', height:'600px', top: 0}} className={roomData.colorPalette} onDragOver={onDragOver}>
+      <div id="sala" className={roomData.colorPalette} onDragOver={onDragOver}>
           {roomData.personagens.map((data, index) =>
             <Personagem key={index}
               dragPosition={pos}
