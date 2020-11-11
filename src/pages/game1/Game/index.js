@@ -31,20 +31,22 @@ const Game = () => {
 	const _maxBonusPts = 100; // Máximo de 100 pontos se terminar antes do mínimo
 
 	const handleSubmit = (value) => () => {
+		/* Computa bônus por tempo */
+		let diff = Date.now() - state.startedTimestamp;
+		// Faz o bônus ser decrescente com o passar do tempo, escalados para que bonusAmnt
+		// seja 1 em t = _minTimeBonus e 0 em t = _maxTimeBonus
+		let bonusAmnt = (_maxTimeBonus - diff)/(_maxTimeBonus - _minTimeBonus);
+		bonusAmnt = Math.max(Math.min(bonusAmnt, 1.0), 0.0); // Clampa para que bonusAmnt = [0,1]
+		
+		// Sim, eu sei. Essa linha está 3x maior que o ideal por culpa da string. Mas ela é para ser temporária.
+		// Se estivermos em produção e essa linha ainda estiver existente, algo deu muito errado.
+		let msgFinal = `Você encontrou ${state.targetName}!\n\nVocê levou ${Math.trunc(diff / 60000)}:` + `${Math.trunc(diff/1000)%60}`.padStart(2, '0') + ` para encontrar. Isso te garante ${Math.round(_maxBonusPts*bonusAmnt)} pontos de bonus.`
 		if( value == state.quizAnswer ) {
-
-			/* Computa bônus por tempo */
-			let diff = Date.now() - state.startedTimestamp;
-			// Faz o bônus ser decrescente com o passar do tempo, escalados para que bonusAmnt
-			// seja 1 em t = _minTimeBonus e 0 em t = _maxTimeBonus
-			let bonusAmnt = (_maxTimeBonus - diff)/(_maxTimeBonus - _minTimeBonus);
-			bonusAmnt = Math.max(Math.min(bonusAmnt, 1.0), 0.0); // Clampa para que bonusAmnt = [0,1]
-
-			// Sim, eu sei. Essa linha está 3x maior que o ideal por culpa da string. Mas ela é para ser temporária.
-			// Se estivermos em produção e essa linha ainda estiver existente, algo deu muito errado.
-			setState({...state, gameEndState: `ACERTOU! Você levou ${Math.trunc(diff / 60000)}:` + `${Math.trunc(diff/1000)%60}`.padStart(2, '0') + ` para terminar. Isso te garante ${Math.round(_maxBonusPts*bonusAmnt)} pontos de bonus.`, score: state.score + Math.round(_maxBonusPts*bonusAmnt), elapsedTime: diff})
+			let newScore = state.score + Math.round(_maxBonusPts*bonusAmnt) + 15;
+			setState({...state, gameEndState: msgFinal + `\nE se apresentou corretamente! +15 pontos\nSeu score final é de ${newScore}`, score: newScore, elapsedTime: diff})
 		} else {
-			setState({...state, gameEndState: "ERROU!"})
+			let newScore = state.score + Math.round(_maxBonusPts*bonusAmnt);
+			setState({...state, gameEndState: msgFinal + `\nSeu score final é de ${newScore}`, score: newScore})
 		}
 	}
 
@@ -73,38 +75,38 @@ const Game = () => {
 		}
 	}
 
-  return (
-	  <div>
-		  <AppHeader pageInfo={{title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}}/>
-		  <div style={{width: '100%', height: '100%'}}>
-					<div id="RoomName">{rooms[state.currentRoom].nome}</div>
-					{ missionOpen ?
-						<Init onClose={ () => setMissionOpen(false) }/>
-						:
-						<div>
-							<button onClick={ () => setMissionOpen(true) }>Abrir resumo da missão</button>
-							<RoomSelect
-								roomsData={rooms}
-								onChange={(num) => {
-								setState({...state, currentRoom: num})
-							}}
-							/>
-								<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
-
-							{ state.currentChar && !state.gameEndState ?
+	// Essa return aqui tá um BAD SMELL absurdo. Temos que refatorar esse trecho de código.
+	return (
+		<div>
+			<AppHeader pageInfo={{title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}}/>
+			<div style={{width: '100%', height: '100%'}}>
+				<div id="RoomName">{rooms[state.currentRoom].nome}</div>
+					{ !state.gameEndState ? // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
+						missionOpen ? <Init onClose={ () => setMissionOpen(false) }/>
+							:	<div>
+									<button onClick={ () => setMissionOpen(true) }>Abrir resumo da missão</button>
+									<RoomSelect
+										roomsData={rooms}
+										onChange={(num) => {
+											setState({...state, currentRoom: num}) 
+										}}
+									/>
+									<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
+									{ state.currentChar && !state.gameEndState ?
 										<Conversa endGame={state.endGame}
 											handleSubmit={handleSubmit} quizOptions={quizOptions}
 											charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
 										/>
 										: null
-							}
-						</div>
+									}
+								</div>
+						:
+						null
 					}
-					{	state.gameEndState ? <Result gameEndState={state.gameEndState}/> : null }
+					{	state.endGame ? <Result gameEndState={state.gameEndState}/> : null }
 					{ state.tries > 0 ? <div>{state.tries} tentativa{state.tries > 1? 's' : ''}!</div> : null}
-	      </div>
-	  </div>
-	      
+			</div>
+		</div>
   )
 }
 
