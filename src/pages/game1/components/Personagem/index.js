@@ -1,13 +1,6 @@
 import React from 'react'
-import './personagem.css'
+import './personagem.scss'
 import charImage from './pic-char-example.svg'
-
-const style = {
-  width: 100,
-  borderStyle: 'solid',
-  borderColor: 'red',
-  borderWidth: '1px'
-}
 
 const Personagem = ({dragPosition, position, charData, setCurrentChar}) => {
     const [pos, setPos] = React.useState({x:0, y:0})
@@ -18,9 +11,9 @@ const Personagem = ({dragPosition, position, charData, setCurrentChar}) => {
     }, [dragPosition])
 
     return (
-    <div style={pos.x ? {...style, position: 'absolute', left:pos.x, top: pos.y} : style}
+    <div className="CharDiv" style={pos.x ? {position: 'absolute', left:pos.x, top: pos.y} : null}
       draggable onDragStart={()=>setDragging(true)} onDragEnd={()=>setDragging(false)}>
-        <div className="CharDiv" onClick={setCurrentChar(charData)}>
+        <div onClick={setCurrentChar(charData)}>
           <div>
             {charData.nome}
           </div>

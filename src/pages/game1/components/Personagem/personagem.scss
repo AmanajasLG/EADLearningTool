@@ -1,3 +1,18 @@
 .CharDiv {
-	visibility: visible;
+	width: 100px;
+	border-style: solid;
+	border-color: #00000000;
+	border-width: 2px;
+}
+
+.CharDiv:hover {
+	border-color: var(--color-accent);
+}
+
+.CharDiv * {
+	border-style: none;
+}
+
+.CharDiv *:hover {
+	border-style: none;
 }
