@@ -43,6 +43,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
+          <Route path="/EADLearningTool" component={Home}/>
           <PrivateRoute exact path="/game" component={Game} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />
           <PrivateRoute exact path="/createMission1" component={CreateMissionGame1} />
