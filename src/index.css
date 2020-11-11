@@ -31,7 +31,7 @@ code {
     monospace;
 }
 h1, h2, h3, h4, h5, h6 {
-  font-family: inherit; 
+  font-family: inherit;
   font-size: inherit;
   font-weight: 300;
 }
@@ -88,7 +88,7 @@ h1, h2, h3, h4, h5, h6 {
 .classImage {
   max-height: 150px;
   margin: 0 auto;
-  display: block; 
+  display: block;
 }
 
 /* MOLECULES */
@@ -117,7 +117,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 2rem;
   height: 7rem;
   box-sizing: border-box;
-  background: url('components/pages/game1/pages/Init/img/capa-top.svg');
+  background: url('img/capa-top.svg');
   background-size: cover;
   background-position: bottom;
   text-align: center;
@@ -131,7 +131,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bg-shape-bottom {
-  background-image: url('components/pages/game1/pages/Init/img/formas-bottom-2.svg');
+  background-image: url('img/formas-bottom-2.svg');
   background-repeat: no-repeat;
   background-position: bottom;
   background-size: 90%;
