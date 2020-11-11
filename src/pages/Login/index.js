@@ -79,7 +79,7 @@ function Login() {
             dispatch(userActions.login(email, password, from))
         }
     }
-    console.log('login page')
+    
     return (
         <Grid container component="main" className={classes.root}>
           {user? user.user ? <Redirect to='/userspace' /> : null : null}

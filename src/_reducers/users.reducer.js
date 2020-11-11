@@ -2,16 +2,34 @@ import { userConstants } from '../_constants';
 
 export function users(state = {}, action) {
     switch (action.type) {
+        case userConstants.UPDATE_REQUEST:
+            return {updating: true}
+        case userConstants.UPDATE_SUCCESS:
+            return {}
+        case userConstants.UPDATE_FAILURE:
+            return {}
         case userConstants.GETALL_REQUEST:
-            return {
+            return {...state,
                 loading: true
             };
         case userConstants.GETALL_SUCCESS:
-            return {
+            return {...state,
                 items: action.users
             };
         case userConstants.GETALL_FAILURE:
-            return {
+            return {...state,
+                error: action.error
+            };
+        case userConstants.GETBYID_REQUEST:
+            return {...state,
+                loading: true
+            };
+        case userConstants.GETBYID_SUCCESS:
+            return {...state,
+                items: action.user
+            };
+        case userConstants.GETBYID_FAILURE:
+            return {...state,
                 error: action.error
             };
         case userConstants.DELETE_REQUEST:
@@ -26,11 +44,11 @@ export function users(state = {}, action) {
             };
         case userConstants.DELETE_SUCCESS:
             // remove deleted user from state
-            return {
+            return {...state,
                 items: state.items.filter(user => user.id !== action.id)
             };
         case userConstants.DELETE_FAILURE:
-            // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
+            // remove 'deleting:true' property and add 'deleteError:[error]' property to user
             return {
                 ...state,
                 items: state.items.map(user => {

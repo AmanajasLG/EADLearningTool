@@ -1,6 +1,9 @@
 import { authHeader } from '../_helpers'
 import api from './api.services'
-import axios from 'axios'
+// import request from './request.services'
+// import axios from 'axios'
+
+// const database = (path) =>  `https://learning-tool-backend.herokuapp.com/${path}`
 
 export const userService = {
     login,
@@ -13,18 +16,21 @@ export const userService = {
 }
 
 function login(email, password) {
-    return axios.post('https://learning-tool-backend.herokuapp.com/auth/local', {
-        identifier: email, 
-        password: password
-        },
-        {
+    return api(
+        {            
+            method: 'post',
+            url: '/auth/local',
             headers: {
                 'Content-Type': 'application/json'
+            },
+            data: {
+                identifier: email,
+                password: password
             }
         })
         .then(handleResponse)
         .then(user => {
-            localStorage.setItem(user,JSON.stringify(user))
+            localStorage.setItem('user',JSON.stringify(user))
 
             return user
         })
@@ -36,53 +42,75 @@ function logout(){
 
 function getAll() {
     // pegar rota
-    return axios.get('https://learning-tool-backend.herokuapp.com/rota', {
+    return api(
+      {
+        method: 'get',
+        url: '/users',
         headers: authHeader()
-    }).then(handleResponse)
+      })
+      .then(handleResponse)
 }
 
 function getById(id){
-    return api.get('/users/id', {
-        headers: authHeader()
-    }).then(handleResponse)
+    return api(
+        {
+          method: 'get',
+          url: `/users/${id}`,
+          headers: authHeader()
+        })
+        .then(handleResponse)
 }
 
 function register(user) {
-    return axios.post('https://learning-tool-backend.herokuapp.com/auth/local/register', user, {
-        headers: {
+    return api(
+        {
+          method: 'post',
+          url: '/users/',
+          headers: {
+              ...authHeader(),
             'Content-Type': 'application/json'
-        }
-    }).then(handleResponse)
+            },
+          data: user,
+        })
+        .then(handleResponse)
 }
 
 function update(user){
     // checar rota
-    return axios.put('https://learning-tool-backend.herokuapp.com/', user, {
-        headers: {
+    return api(
+        {
+          method: 'put',
+          url: `/users/${user.id}`,
+          headers:  {
             ...authHeader(),
-            'Content-Type': 'application/json'
-        }
-    }).then(handleResponse)
+          'Content-Type': 'application/json'
+          },
+          data: user
+        })
+        .then(handleResponse)
 }
 
 function _delete(id){
-    // checar rota
-    return axios.delete('https://learning-tool-backend.herokuapp.com/',{
-        headers: authHeader()
-    }).then(handleResponse)
+    return api(
+        {
+          method: 'delete',
+          url: `/users/${id}`,
+          headers: authHeader()
+        })
+        .then(handleResponse)
 }
 
 function handleResponse(response) {
-    console.log(response)
-    
-    if(response.status !== 200){
-        if(response.status === 401){
-            logout()
-            window.location.reload()
-        }
+  console.log(response)
 
-        return Promise.reject(response.statusText)
-    }
+  if(response.status !== 200){
+      if(response.status === 401){
+          logout()
+          window.location.reload()
+      }
 
-    return response.data
+      return Promise.reject(response.statusText)
+  }
+
+  return response.data
 }
