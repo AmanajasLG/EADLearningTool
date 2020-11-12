@@ -21,7 +21,7 @@ function login(email, password, from){
             .then(
                 user => {
                     dispatch(success(user))
-                    //history.push(from)
+                    // history.push(from)
                 },
                 error => {
                     dispatch(failure(error.toString()))
@@ -37,8 +37,11 @@ function login(email, password, from){
 }
 
 function logout(){
-    userService.logout()
-    return {type: userConstants.LOGOUT}
+    return dispatch => {
+        userService.logout()
+        dispatch({type: userConstants.LOGOUT})
+        // history.push('/')                
+    }
 }
 
 function register(user){

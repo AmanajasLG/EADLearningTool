@@ -44,8 +44,7 @@ const Game = () => {
 	}
 
   return (
-	  <div>
-		  <AppHeader pageInfo={{title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}}/>
+	  <div>		  
 		  <div style={{width: '100%', height: '100%'}}>
 					<div id="RoomName">{rooms[state.currentRoom].nome}</div>
 					{ missionOpen ?
