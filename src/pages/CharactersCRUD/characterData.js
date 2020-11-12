@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { characterActions } from '../../_actions'
+import { baseURL } from '../../_services'
 
 const CharacterData = ({data}) => {
   const [state, setState] = React.useState({nome: data.nome, job: data.job || '', id: data.id})
@@ -19,8 +20,11 @@ const CharacterData = ({data}) => {
           <div>
             Character_assets:
               {data.character_assets && data.character_assets.length > 0 ?
-                data.map((character_asset, index) =>
-                  <div>{index}</div>
+                data.character_assets.map((character_asset, index) =>
+                <div key={index}>
+                  <div>{character_asset.name}</div>
+                  <img src={`${baseURL}${character_asset.image[0].url}`} alt={character_asset.name}/>
+                </div>
               ):'nenhum'}
           </div>
           <button onClick={() => setEdit(true) }>Editar</button>

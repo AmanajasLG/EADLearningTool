@@ -1,5 +1,7 @@
 import React from 'react'
 import Radio from '@material-ui/core/Radio'
+import { useDispatch } from 'react-redux'
+import { characterActions } from '../../_actions'
 
 const CreateCharacter = () => {
   const [name, setName] = React.useState('')
@@ -7,6 +9,13 @@ const CreateCharacter = () => {
   const [civilState, setCivilState] = React.useState('single')
   const civilStates = ['single', 'married', 'divorced', 'widowed']
   const estadosCivis = ['solteir@', 'casad@', 'divorciad@', 'viúv@']
+
+  const create = () => {
+    console.log('called')
+    characterActions.create({nome: name, job})
+    setName('')
+    setJob('')
+  }
 
   return (
     <div>
@@ -21,6 +30,7 @@ const CreateCharacter = () => {
           </div>
         )}
       </div>
+      <button onClick={create}>Criar</button>
     </div>
   )
 }

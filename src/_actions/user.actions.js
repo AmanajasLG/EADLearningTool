@@ -91,7 +91,6 @@ function getAll(){
         dispatch(request())
 
         const r = userService.getAll()
-        console.log('r:', r)
             r.then(
                 users => dispatch(success(users)),
                 error => dispatch(failure(error.toString()))

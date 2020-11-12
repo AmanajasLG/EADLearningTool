@@ -2,12 +2,20 @@ import { characterConstants } from '../_constants';
 
 export function characters(state = {}, action) {
     switch (action.type) {
+        case characterConstants.CREATE_REQUEST:
+            return {creating: true}
+        case characterConstants.CREATE_SUCCESS:
+            return {}
+        case characterConstants.CREATE_FAILURE:
+            return {}
+
         case characterConstants.UPDATE_REQUEST:
             return {updating: true}
         case characterConstants.UPDATE_SUCCESS:
             return {}
         case characterConstants.UPDATE_FAILURE:
             return {}
+
         case characterConstants.GETALL_REQUEST:
             return {...state,
                 loading: true
@@ -20,6 +28,7 @@ export function characters(state = {}, action) {
             return {...state,
                 error: action.error
             };
+
         case characterConstants.GETBYID_REQUEST:
             return {...state,
                 loading: true
@@ -32,6 +41,7 @@ export function characters(state = {}, action) {
             return {...state,
                 error: action.error
             };
+
         case characterConstants.DELETE_REQUEST:
             // add 'deleting:true' property to character being deleted
             return {

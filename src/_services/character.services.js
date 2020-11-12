@@ -1,11 +1,10 @@
 import { authHeader } from '../_helpers'
 import api from './api.services'
 
-const database = (path) =>  `https://learning-tool-backend.herokuapp.com/${path}`
-
 export const characterService = {
     getAll,
     getById,
+    create,
     update,
     delete: _delete
 }
@@ -29,6 +28,18 @@ function getById(id){
           headers: authHeader()
         })
         .then(handleResponse)
+}
+
+function create(character) {
+  console.log('called')
+    return api(
+      {
+        method: 'post',
+        url: '/personagems',
+        headers: authHeader(),
+        data: character
+      })
+      .then(handleResponse)
 }
 
 function update(character){
@@ -57,13 +68,12 @@ function _delete(id){
 }
 
 function handleResponse(response) {
-  console.log(response)
+  console.log('response:', response)
 
   if(response.status !== 200){
       if(response.status === 401){
           window.location.reload()
       }
-
       return Promise.reject(response.statusText)
   }
 
