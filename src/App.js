@@ -14,7 +14,7 @@ import {
 import React, {useEffect} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { PrivateRoute } from './_components/PrivateRoute'
-import { alertActions } from './_actions'
+import { alertActions, userActions } from './_actions'
 import { history } from './_helpers'
 import { Login } from './pages/Login'
 import UserSpace from './pages/UserSpace'
@@ -25,21 +25,20 @@ import CreateMissionGame1 from './pages/CreateMission/Game1'
 const App = () => {
   const dispatch = useDispatch()
 
-
-  useEffect(() => {
-    history.listen((location, action) => {
-      dispatch(alertActions.clear())
-    })
-  })
+  // useEffect(() => {
+  //   history.listen((location, action) => {
+  //     dispatch(alertActions.clear())
+  //   })
+  // })
 
   let palette = "palette06"
-  console.log()
   return (
     <div className={"App " + palette}>
       { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
-      }
+      }      
       <Router>
+        <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn),title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}} />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
@@ -51,6 +50,7 @@ const App = () => {
           <PrivateRoute exact path="/characters" component={CharactersCRUD} />
         </Switch>
       </Router>
+      
     </div>
   );
 }

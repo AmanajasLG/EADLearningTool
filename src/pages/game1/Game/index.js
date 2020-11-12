@@ -78,7 +78,6 @@ const Game = () => {
 	// Essa return aqui tá um BAD SMELL absurdo. Temos que refatorar esse trecho de código.
 	return (
 		<div>
-			<AppHeader pageInfo={{title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}}/>
 			<div style={{width: '100%', height: '100%'}}>
 				<div id="RoomName">{rooms[state.currentRoom].nome}</div>
 					{ !state.gameEndState ? // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
@@ -93,6 +92,7 @@ const Game = () => {
 									/>
 									<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
 									{ state.currentChar && !state.gameEndState ?
+
 										<Conversa endGame={state.endGame}
 											handleSubmit={handleSubmit} quizOptions={quizOptions}
 											charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
