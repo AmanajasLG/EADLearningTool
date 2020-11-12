@@ -1,6 +1,6 @@
 import React from 'react'
-import './personagem.scss'
-import charImage from './char1.png'
+import './personagem.css'
+import charImage from './pic-char-example.svg'
 
 const style = {
   width: 100,

@@ -1,6 +1,9 @@
 
 #sala {
 	color: var(--accent-color);
-	background-color: var(--main-color);
+	background: var(--background);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
 	padding: 5px;
 }

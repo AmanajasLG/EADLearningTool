@@ -38,16 +38,17 @@ const App = () => {
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }      
       <Router>
-        <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn),title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}} />                 
-          <Switch>            
-            <Route exact path="/" component={Home} />
-            <Route path="/login" component={Login} />
-            <PrivateRoute exact path="/game" component={Game} />
-            <PrivateRoute exact path="/userspace" component={UserSpace} />
-            <PrivateRoute exact path="/createMission1" component={CreateMissionGame1} />
-            <PrivateRoute exact path="/users" component={UsersCRUD} />
-            <PrivateRoute exact path="/characters" component={CharactersCRUD} />          
-          </Switch>
+        <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn),title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}} />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route path="/login" component={Login} />
+          <Route path="/EADLearningTool" component={Home}/>
+          <PrivateRoute exact path="/game" component={Game} />
+          <PrivateRoute exact path="/userspace" component={UserSpace} />
+          <PrivateRoute exact path="/createMission1" component={CreateMissionGame1} />
+          <PrivateRoute exact path="/users" component={UsersCRUD} />
+          <PrivateRoute exact path="/characters" component={CharactersCRUD} />
+        </Switch>
       </Router>
       
     </div>

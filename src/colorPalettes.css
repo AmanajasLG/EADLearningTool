@@ -1,0 +1,39 @@
+.palette01 {
+	--main-color: #050535;
+	--secondary-color: #000000;
+	--thertiary-color: #000000;
+	--accent-color: #00ffff;
+	--background: url('img/bg-pic-bar.svg');
+}
+
+.palette02 {
+	--main-color: #330033;
+	--secondary-color: #000000;
+	--thertiary-color: #000000;
+	--accent-color: #ff0000;
+	--background: url('img/bg-pic-class.svg');
+}
+
+.palette03 {
+	--main-color: #333300;
+	--secondary-color: #000000;
+	--thertiary-color: #000000;
+	--accent-color: #ffff00;
+	--background: url('img/bg-pic-library.svg');
+}
+
+.palette04 {
+	--main-color: #003333;
+	--secondary-color: #000000;
+	--thertiary-color: #000000;
+	--accent-color: #00ff00;
+	--background: url('img/bg-pic-map.svg');
+}
+
+.palette05 {
+	--main-color: #555555;
+	--secondary-color: #000000;
+	--thertiary-color: #000000;
+	--accent-color: #ffffff;
+	--background: url('img/bg-pic-study.svg');
+}

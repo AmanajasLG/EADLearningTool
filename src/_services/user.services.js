@@ -5,6 +5,8 @@ import api from './api.services'
 
 // const database = (path) =>  `https://learning-tool-backend.herokuapp.com/${path}`
 
+const database = (path) =>  `https://learning-tool-backend.herokuapp.com/${path}`
+
 export const userService = {
     login,
     logout,
@@ -17,7 +19,7 @@ export const userService = {
 
 function login(email, password) {
     return api(
-        {            
+        {
             method: 'post',
             url: '/auth/local',
             headers: {

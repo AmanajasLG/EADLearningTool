@@ -93,8 +93,8 @@ function getAll(){
     return dispatch => {
         dispatch(request())
 
-        userService.getAll()
-            .then(
+        const r = userService.getAll()
+            r.then(
                 users => dispatch(success(users)),
                 error => dispatch(failure(error.toString()))
             )
