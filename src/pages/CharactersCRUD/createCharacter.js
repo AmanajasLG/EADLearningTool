@@ -9,10 +9,11 @@ const CreateCharacter = () => {
   const [civilState, setCivilState] = React.useState('single')
   const civilStates = ['single', 'married', 'divorced', 'widowed']
   const estadosCivis = ['solteir@', 'casad@', 'divorciad@', 'viúv@']
+  const dispatch = useDispatch()
 
   const create = () => {
     console.log('called')
-    characterActions.create({nome: name, job})
+    dispatch(characterActions.create({nome: name, job}))
     setName('')
     setJob('')
   }
