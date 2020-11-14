@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 const UserSpace = () => {
-  const user = useSelector( state => state.authentication.user.user)
+  const user = useSelector(state => state.authentication.user.user)
   return(
     <div>
       Oi {user.username}!
