@@ -32,10 +32,11 @@ const App = () => {
     })
   })
 
-  let palette = "palette06"
+  let palette = "palette02"
+  document.getElementsByTagName('html')[0].className = palette
   console.log()
   return (
-    <div className={"App " + palette}>
+    <div className="App">
       { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }

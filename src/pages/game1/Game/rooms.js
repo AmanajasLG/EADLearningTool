@@ -2,7 +2,8 @@ import listaPersonagens from './listaPersonagens.js'
 
 const rooms = [
   {
-    nome: "Saguão principal",
+    nome: "Bar",
+    className: "bar",
     personagens: [
       listaPersonagens[0],
       listaPersonagens[1],
@@ -10,7 +11,8 @@ const rooms = [
     ]
   },
   {
-    nome: "Corredor",
+    nome: "Sala de Aula",
+    className: "sala-aula",
     personagens: [
       listaPersonagens[3],
       listaPersonagens[4],
@@ -18,7 +20,8 @@ const rooms = [
     ]
   },
   {
-    nome: "Cantina",
+    nome: "Biblioteca",
+    className: "biblioteca",
     personagens: [
       listaPersonagens[6],
       listaPersonagens[7],
@@ -26,7 +29,8 @@ const rooms = [
     ]
   },
   {
-    nome: "Livraria",
+    nome: "Sala de Geografia",
+    className: "mapa",
     personagens: [
       listaPersonagens[9],
       listaPersonagens[10],
@@ -34,7 +38,8 @@ const rooms = [
     ]
   },
   {
-    nome: "Estacionamento",
+    nome: "Sala de Estudos",
+    className: "sala-estudos",
     personagens: [
       listaPersonagens[12],
       listaPersonagens[13],
