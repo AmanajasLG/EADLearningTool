@@ -1,17 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
-@import url('colorPalettes.css');
+@import './colorPalettes';
 
 /* VARIABLES */
 :root {
 	--font-title: 'abril fatface', serif;
   --font-text: 'assistant', sans-serif;
-  --color-lightest: #ede6f0;
-  --color-main: #f9afa1;
-  --color-accent: #535c89;
-	--color-second: #d6e3f4;
-	--color-third: #cbe7de;
-	--color-fourth: #ffcca9;
-	--color-text: #59316d;
 }
 
 

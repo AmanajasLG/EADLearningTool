@@ -1,3 +1,20 @@
 .CharDiv {
-	visibility: visible;
+	width: 125px;
+}
+
+.CharDiv > div {
+	display: flex;
+	justify-content: center;
+	flex-flow: column;
+	align-content: center;
+}
+
+.CharDiv img {
+	width: 100%;
+	height: auto;
+	transition-duration: 0.1s;
+}
+
+.CharDiv img:hover {
+	filter: drop-shadow(0px 0px 5px var(--color-accent));
 }
