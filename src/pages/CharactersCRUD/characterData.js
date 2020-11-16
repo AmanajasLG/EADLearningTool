@@ -12,22 +12,21 @@ const CharacterData = ({data}) => {
     <div>
       {!edit?
         <div>
-
-          <div>{data.nome}</div>
-          <div>{data.civilState}</div>
-          <div>{data.job}</div>
-
+          <div>
+            <span>{data.nome}</span> <span>{data.civilState}</span> <span>{data.job}</span>
+          </div>
           <div>
             Character_assets:
               {data.character_assets && data.character_assets.length > 0 ?
                 data.character_assets.map((character_asset, index) =>
                 <div key={index}>
-                  <div>{character_asset.name}</div>
+                  <div>Layer: {character_asset.layerDepth}</div>
                   <img src={`${baseURL}${character_asset.image[0].url}`} alt={character_asset.name}/>
                 </div>
               ):'nenhum'}
           </div>
           <button onClick={() => setEdit(true) }>Editar</button>
+          <button onClick={() => dispatch(characterActions.delete(data.id)) }>Delete</button>
         </div>
         :
         <div>
