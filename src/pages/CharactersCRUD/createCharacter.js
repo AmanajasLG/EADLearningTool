@@ -1,9 +1,10 @@
 import React from 'react'
 import Radio from '@material-ui/core/Radio'
 import { useDispatch } from 'react-redux'
-import { characterActions } from '../../_actions'
+import { apiActions } from '../../_actions'
 
 const CreateCharacter = () => {
+  const { characterActions }= apiActions
   const [name, setName] = React.useState('')
   const [job, setJob] = React.useState('')
   const [civilState, setCivilState] = React.useState('single')

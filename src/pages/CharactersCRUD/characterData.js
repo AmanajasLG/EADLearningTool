@@ -1,9 +1,10 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { characterActions } from '../../_actions'
+import { apiActions } from '../../_actions'
 import { baseURL } from '../../_services'
 
 const CharacterData = ({data}) => {
+  const { characterActions } = apiActions 
   const [state, setState] = React.useState({nome: data.nome, job: data.job || '', id: data.id})
   const [edit, setEdit] = React.useState(false)
   const dispatch = useDispatch()
