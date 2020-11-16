@@ -1,12 +1,13 @@
 import React from 'react'
 
 import { useDispatch, useSelector} from 'react-redux'
-import { characterActions } from '../../_actions'
+import { apiActions } from '../../_actions'
 
 import CharacterData from './characterData'
 import CreateCharacter from './createCharacter'
 
 const CharactersCRUD = () => {
+  const { characterActions } = apiActions
   const [createCharacter, setCreateCharacter] = React.useState(false)
   const dispatch = useDispatch()
   const characters = useSelector( state => state.characters)

@@ -1,8 +1,8 @@
 import { apiConstantBuilder } from '../_helpers/apiConstantBuilder'
+import apiValues from '../apiValues'
 
-const apiValues = ['CHARACTER']
 let apiConstants = {}
 
-apiValues.map( value => apiConstants[value.toLowerCase()] = apiConstantBuilder('CHARACTER') )
+apiValues.map( value => apiConstants[value.toLowerCase()] = apiConstantBuilder(value) )
 
 export { apiConstants }

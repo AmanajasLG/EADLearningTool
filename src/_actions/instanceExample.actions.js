@@ -1,3 +1,4 @@
+/*
 import { apiConstants } from '../_constants'
 import { characterService } from '../_services'
 import { alertActions } from './'
@@ -54,3 +55,4 @@ export const characterActions = {
     update,
     delete: _delete
 }
+*/
