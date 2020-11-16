@@ -68,7 +68,6 @@ function _delete(id){
 }
 
 function handleResponse(response) {
-  console.log('response:', response)
 
   if(response.status !== 200){
       if(response.status === 401){

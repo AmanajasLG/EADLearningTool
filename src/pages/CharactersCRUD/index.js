@@ -7,6 +7,7 @@ import CharacterData from './characterData'
 import CreateCharacter from './createCharacter'
 
 const CharactersCRUD = () => {
+  const [createCharacter, setCreateCharacter] = React.useState(false)
   const dispatch = useDispatch()
   const characters = useSelector( state => state.characters)
 
@@ -20,9 +21,13 @@ const CharactersCRUD = () => {
   return (
     <div>
       <div>Área de personagens</div>
-      <CreateCharacter />
+      <button onClick={() => setCreateCharacter(!createCharacter)}>{createCharacter? 'Cancelar' : 'Criar personagem'} </button>
+      { createCharacter && <CreateCharacter /> }
       <div>
         <div>All Characters:</div>
+        <div>
+          <span>Nome</span> <span>Estado civil</span> <span>Trabalho</span>
+        </div>
         <div>
           {characters.items && characters.items.length > 0 ?
             characters.items.map((character, index) =>
