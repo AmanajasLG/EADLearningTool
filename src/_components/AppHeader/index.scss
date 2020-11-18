@@ -7,6 +7,7 @@
 	color: var(--color-text);
 	padding: 25px 50px;
 	justify-content: space-between;
+	max-height: 80px;
 }
 
 .group-btns {
@@ -30,4 +31,9 @@
 #subTitle {
 	font-weight: bold;
 	font-size: 80%;
+}
+
+#profilePic {
+	transform-origin: top;
+	transform: scale(0.5) translateY(-25px);
 }
