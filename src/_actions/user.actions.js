@@ -20,7 +20,7 @@ export const login = (email, password) => dispatch => {
             error => {
                 dispatch(failure(error.toString()))
                 dispatch(alertActions.error(error.toString()))
-                return Promise.reject()
+                return Promise.reject(error.response.data.data[0].messages[0].message)
             }
         )
 
@@ -46,8 +46,7 @@ export const register = (user) => dispatch => {
             error => {
                 dispatch(failure(error.toString()))
                 dispatch(alertActions.error(error.toString()))
-                console.log(error)
-                return Promise.reject()
+                return Promise.reject(error.response.data.data[0].messages[0].message)
             }
         )
     function request(user) { return {type: userConstants.REGISTER_REQUEST, user} }

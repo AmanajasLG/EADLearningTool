@@ -70,12 +70,16 @@ function register(user) {
           data: user,
         })
         .then(response => {
-          console.log(response)
+          if(response.data.jwt){
+            localStorage.setItem('user',JSON.stringify(response.data))
+          }
+            
+          return response.data
         })
 }
 
 function update(user){
-    // checar rota
+    // checar rotausers
     return api(
         {
           method: 'put',

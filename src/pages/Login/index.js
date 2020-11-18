@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-function Login() {
+const Login = () => {
     const [inputs, setInputs] = useState({
         email: '',
         password: ''
@@ -59,8 +59,7 @@ function Login() {
     const classes = useStyles()
     const alert = useAlert()
 
-    function handleChange(e) {
-      
+    function handleChange(e) { 
         const {name, value} = e.target
         setInputs(inputs => ({...inputs, [name]: value}))
     }
@@ -73,7 +72,7 @@ function Login() {
         if(email && password){
             dispatch(login(email, password))
               .catch(() => {
-                alert.error('Email and/or password wrong! Please, check your inputs and try again!')
+                alert.error('Email and/or password invalid! Please, check your inputs and try again!')
               })
 
         } else {
@@ -129,14 +128,15 @@ function Login() {
                   className={classes.submit}
                 >
                 {loggingIn && <span className="spinner-border spinner-border-sm mr-1"></span>}
-                  Entrar
+                  Sign in
                 </Button>
-                <Link
-                    to="/register"
-                    className={classes.submit}
-                >
-                  Registrar
-                </Link>
+                <Grid container justify="flex-end">
+                  <Grid item>
+                    <Link to="/register" variant="body2">
+                    Don't have an account yet? Sign up!
+                    </Link>
+                  </Grid>
+                </Grid>
               </form>
             </div>
           </Grid>
@@ -146,4 +146,4 @@ function Login() {
 
 }
 
-export { Login }
+export default Login 

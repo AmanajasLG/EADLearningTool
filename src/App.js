@@ -15,13 +15,12 @@ import { useSelector } from 'react-redux'
 import { PrivateRoute } from './_components/PrivateRoute'
 // import { alertActions, userActions } from './_actions'
 // import { history } from './_helpers'
-import { Login } from './pages/Login'
+import Login from './pages/Login'
 import UserSpace from './pages/UserSpace'
 import UsersCRUD from './pages/UsersCRUD'
 import CharactersCRUD from './pages/CharactersCRUD'
 import CreateMissionGame1 from './pages/CreateMission/Game1'
 import Register from './pages/Register'
-import { history } from './_helpers'
 
 const App = () => {
   // const dispatch = useDispatch()
