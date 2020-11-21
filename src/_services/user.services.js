@@ -1,11 +1,5 @@
 import { authHeader } from '../_helpers'
 import api from './api.services'
-// import request from './request.services'
-// import axios from 'axios'
-
-// const database = (path) =>  `https://learning-tool-backend.herokuapp.com/${path}`
-
-const database = (path) =>  `https://learning-tool-backend.herokuapp.com/${path}`
 
 export const userService = {
     login,
@@ -30,11 +24,12 @@ function login(email, password) {
                 password: password
             }
         })
-        .then(handleResponse)
-        .then(user => {
-            localStorage.setItem('user',JSON.stringify(user))
-
-            return user
+        .then(response => {
+          if(response.data.jwt){
+            localStorage.setItem('user',JSON.stringify(response.data))
+          }
+            
+          return response.data
         })
 }
 
@@ -64,21 +59,27 @@ function getById(id){
 }
 
 function register(user) {
+  console.log(user)
     return api(
         {
           method: 'post',
-          url: '/users/',
+          url: '/auth/local/register',
           headers: {
-              ...authHeader(),
             'Content-Type': 'application/json'
             },
           data: user,
         })
-        .then(handleResponse)
+        .then(response => {
+          if(response.data.jwt){
+            localStorage.setItem('user',JSON.stringify(response.data))
+          }
+            
+          return response.data
+        })
 }
 
 function update(user){
-    // checar rota
+    // checar rotausers
     return api(
         {
           method: 'put',
@@ -89,7 +90,9 @@ function update(user){
           },
           data: user
         })
-        .then(handleResponse)
+        .then(response => {
+          console.log(response)
+        })
 }
 
 function _delete(id){

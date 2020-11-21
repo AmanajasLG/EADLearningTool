@@ -1,88 +1,74 @@
 import { userConstants } from '../_constants'
 import { userService } from '../_services'
 import { alertActions } from './'
-import { history } from '../_helpers'
 
 export const userActions = {
-    login,
-    logout,
-    register,
-    update,
     getAll,
     getById,
     delete: _delete
 }
 
-function login(email, password, from){
-    return dispatch => {
-        dispatch(request({email}))
+export const login = (email, password) => dispatch => {
+    dispatch(request({email}))
 
-        userService.login(email, password)
-            .then(
-                user => {
-                    dispatch(success(user))
-                    // history.push(from)
-                },
-                error => {
-                    dispatch(failure(error.toString()))
-                    dispatch(alertActions.error(error.toString()))
-                }
-            )
-    }
+    return userService.login(email, password)
+        .then(
+            user => {
+                dispatch(success(user))
+                return Promise.resolve()
+            },
+            error => {
+                dispatch(failure(error.toString()))
+                dispatch(alertActions.error(error.toString()))
+                return Promise.reject(error.response.data.data[0].messages[0].message)
+            }
+        )
 
-    //  ActionCreators
     function request(user) { return {type: userConstants.LOGIN_REQUEST, user} }
     function success(user) { return {type: userConstants.LOGIN_SUCCESS, user} }
     function failure(error) { return {type: userConstants.LOGIN_FAILURE, error} }
 }
 
-function logout(){
-    return dispatch => {
-        userService.logout()
-        dispatch({type: userConstants.LOGOUT})
-        // history.push('/')                
-    }
+export const logout = () => dispatch => {
+    userService.logout()
+    dispatch({type: userConstants.LOGOUT})                        
 }
 
-function register(user){
-    return dispatch => {
-        dispatch(request(user))
+export const register = (user) => dispatch => {
+    dispatch(request(user))
 
-        userService.register(user)
-            .then(
-                user => {
-                    dispatch(success())
-                    history.push('/login')
-                    dispatch(alertActions.success('Usuário registrado com sucesso!'))
-                },
-                error => {
-                    dispatch(failure(error.toString()))
-                    dispatch(alertActions.error(error.toString()))
-                }
-            )
-    }
-
+    return userService.register(user)
+        .then(
+            user => {
+                dispatch(success())
+                return Promise.resolve()
+            },
+            error => {
+                dispatch(failure(error.toString()))
+                dispatch(alertActions.error(error.toString()))
+                return Promise.reject(error.response.data.data[0].messages[0].message)
+            }
+        )
     function request(user) { return {type: userConstants.REGISTER_REQUEST, user} }
     function success(user) { return {type: userConstants.REGISTER_SUCCESS, user} }
     function failure(error) { return {type: userConstants.REGISTER_FAILURE, error} }
 }
 
-function update(user){
-    return dispatch => {
-        dispatch(request(user))
+export const update = (user) => dispatch => {
+    dispatch(request(user))
 
-        userService.update(user)
-            .then(
-                user => {
-                    dispatch(success())
-                    dispatch(alertActions.success('Usuário atualizado com sucesso!'))
-                },
-                error => {
-                    dispatch(failure(error.toString()))
-                    dispatch(alertActions.error(error.toString()))
-                }
-            )
-    }
+    return userService.update(user)
+        .then(
+            user => {
+                dispatch(success())
+                return Promise.resolve()
+            },
+            error => {
+                dispatch(failure(error.toString()))
+                dispatch(alertActions.error(error.toString()))
+                return Promise.reject()
+            }
+        )
 
     function request(user) { return {type: userConstants.UPDATE_REQUEST, user} }
     function success(user) { return {type: userConstants.UPDATE_SUCCESS, user} }

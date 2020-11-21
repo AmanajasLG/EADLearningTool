@@ -8,11 +8,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
-import React, { useState, useEffect } from 'react'
-import { Link, useLocation, Redirect } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector} from 'react-redux'
+import { useAlert } from 'react-alert'
 
-import { userActions } from '../../_actions'
+import { login } from '../../_actions'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-function Login() {
+const Login = () => {
     const [inputs, setInputs] = useState({
         email: '',
         password: ''
@@ -55,16 +56,10 @@ function Login() {
     const loggingIn = useSelector(state => state.authentication.loggingIn)
     const user = useSelector(state => state.authentication.user)
     const dispatch = useDispatch()
-    const location = useLocation()
     const classes = useStyles()
+    const alert = useAlert()
 
-/*
-    // reset login status
-    useEffect(() => {
-        dispatch(userActions.logout())
-    }, [])
-*/
-    function handleChange(e) {
+    function handleChange(e) { 
         const {name, value} = e.target
         setInputs(inputs => ({...inputs, [name]: value}))
     }
@@ -75,8 +70,13 @@ function Login() {
         setSubmitted(true)
 
         if(email && password){
-            const { from } = location.state || { from: {pathname: '/userspace'}}
-            dispatch(userActions.login(email, password, from))
+            dispatch(login(email, password))
+              .catch(() => {
+                alert.error('Email and/or password invalid! Please, check your inputs and try again!')
+              })
+
+        } else {
+          alert.error('Email and/or password missing! Please, check your inputs and try again!')
         }
     }
     
@@ -128,14 +128,15 @@ function Login() {
                   className={classes.submit}
                 >
                 {loggingIn && <span className="spinner-border spinner-border-sm mr-1"></span>}
-                  Entrar
+                  Sign in
                 </Button>
-                <Link
-                    to="/register"
-                    className={classes.submit}
-                >
-                  Registrar
-                </Link>
+                <Grid container justify="flex-end">
+                  <Grid item>
+                    <Link to="/register" variant="body2">
+                    Don't have an account yet? Sign up!
+                    </Link>
+                  </Grid>
+                </Grid>
               </form>
             </div>
           </Grid>
@@ -145,4 +146,4 @@ function Login() {
 
 }
 
-export { Login }
+export default Login 
