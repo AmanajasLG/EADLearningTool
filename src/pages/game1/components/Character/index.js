@@ -1,8 +1,8 @@
 import React from 'react'
-import './personagem.scss'
+import './character.scss'
 import charImage from './pic-char-example.svg'
 
-const Personagem = ({dragPosition, position, charData, setCurrentChar}) => {
+const Character = ({dragPosition, position, charData, setCurrentChar}) => {
     const [pos, setPos] = React.useState({x:0, y:0})
     const [dragging, setDragging] = React.useState(false)
 
@@ -29,4 +29,4 @@ const Personagem = ({dragPosition, position, charData, setCurrentChar}) => {
     )
 }
 
-export default Personagem
+export default Character

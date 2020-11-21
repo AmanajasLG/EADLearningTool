@@ -14,7 +14,7 @@ function getAll() {
     return api(
       {
         method: 'get',
-        url: '/personagems',
+        url: '/characters',
         headers: authHeader()
       })
       .then(handleResponse)
@@ -24,7 +24,7 @@ function getById(id){
     return api(
         {
           method: 'get',
-          url: `/personagems/${id}`,
+          url: `/characters/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
@@ -35,7 +35,7 @@ function create(character) {
     return api(
       {
         method: 'post',
-        url: '/personagems',
+        url: '/characters',
         headers: authHeader(),
         data: character
       })
@@ -47,7 +47,7 @@ function update(character){
     return api(
         {
           method: 'put',
-          url: `/personagems/${character.id}`,
+          url: `/characters/${character.id}`,
           headers:  {
             ...authHeader(),
           'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function _delete(id){
     return api(
         {
           method: 'delete',
-          url: `/personagems/${id}`,
+          url: `/characters/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)

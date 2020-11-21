@@ -1,5 +1,5 @@
 import React from 'react'
-import Personagem from '../Personagem'
+import Character from '../character'
 import './sala.scss'
 
 const Sala = ({roomData, setCurrentChar}) => {
@@ -10,7 +10,7 @@ const Sala = ({roomData, setCurrentChar}) => {
   return (
       <div id="sala" className={roomData.className} onDragOver={onDragOver}>
           {roomData.personagens.map((data, index) =>
-            <Personagem key={index}
+            <Character key={index}
               dragPosition={pos}
               position={data.metaData.position} charData={data.charData}
               diagData={data.diagData} setCurrentChar={setCurrentChar}
