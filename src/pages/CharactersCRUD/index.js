@@ -6,7 +6,7 @@ import { apiActions } from '../../_actions'
 import CharacterData from './characterData'
 import CreateCharacter from './createCharacter'
 
-const CharactersCRUD = () => {
+const CharactersCRUD = ({onAdd}) => {
   const { characterActions } = apiActions
   const [createCharacter, setCreateCharacter] = React.useState(false)
   const dispatch = useDispatch()
@@ -32,7 +32,10 @@ const CharactersCRUD = () => {
         <div>
           {characters.items && characters.items.length > 0 ?
             characters.items.map((character, index) =>
-            <CharacterData data={character} key={index}/>
+            <div key={index}>
+              <button onClick={onAdd(character.id)}>Adicionar a missão</button>
+              <CharacterData data={character}/>
+            </div>
           ):null}
         </div>
       </div>

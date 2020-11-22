@@ -3,6 +3,6 @@ import apiValues from '../apiValues'
 
 let apiConstants = {}
 
-apiValues.map( value => apiConstants[value.toLowerCase()] = apiConstantBuilder(value) )
+apiValues.map( value => apiConstants[value] = apiConstantBuilder(value) )
 
 export { apiConstants }

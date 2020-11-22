@@ -14,7 +14,7 @@ const CreateCharacter = () => {
 
   const create = () => {
     console.log('called')
-    dispatch(characterActions.create({nome: name, job}))
+    dispatch(characterActions.create({name, job}))
     setName('')
     setJob('')
   }

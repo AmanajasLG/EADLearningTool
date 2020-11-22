@@ -19,7 +19,7 @@ import Login from './pages/Login'
 import UserSpace from './pages/UserSpace'
 import UsersCRUD from './pages/UsersCRUD'
 import CharactersCRUD from './pages/CharactersCRUD'
-import CreateMissionGame1 from './pages/CreateMission/Game1'
+import Missions from './pages/Missions'
 import Register from './pages/Register'
 
 const App = () => {
@@ -41,12 +41,12 @@ const App = () => {
           <Route path="/EADLearningTool" component={Home}/>
           <PrivateRoute exact path="/game" component={Game} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />
-          <PrivateRoute exact path="/createMission1" component={CreateMissionGame1} />
+          <PrivateRoute exact path="/missions" component={Missions} />
           <PrivateRoute exact path="/users" component={UsersCRUD} />
           <PrivateRoute exact path="/characters" component={CharactersCRUD} />
         </Switch>
       </Router>
-      
+
     </div>
   );
 }

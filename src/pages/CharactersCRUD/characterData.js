@@ -1,10 +1,15 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
+
+import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
+import Button from '@material-ui/core/Button'
+
 import { apiActions } from '../../_actions'
 import { baseURL } from '../../_services'
 
 const CharacterData = ({data}) => {
-  const { characterActions } = apiActions 
+  const { characterActions } = apiActions
   const [state, setState] = React.useState({nome: data.nome, job: data.job || '', id: data.id})
   const [edit, setEdit] = React.useState(false)
   const dispatch = useDispatch()
@@ -12,10 +17,11 @@ const CharacterData = ({data}) => {
   return(
     <div>
       {!edit?
-        <div>
+        <div style={{display: 'flex', flexDirection: 'row'}}>
           <div>
-            <span>{data.nome}</span> <span>{data.civilState}</span> <span>{data.job}</span>
+            <span>{data.name}</span> <span>{data.civilState}</span> <span>{data.job}</span>
           </div>
+          {/*
           <div>
             Character_assets:
               {data.character_assets && data.character_assets.length > 0 ?
@@ -26,8 +32,9 @@ const CharacterData = ({data}) => {
                 </div>
               ):'nenhum'}
           </div>
-          <button onClick={() => setEdit(true) }>Editar</button>
-          <button onClick={() => dispatch(characterActions.delete(data.id)) }>Delete</button>
+          */}
+          <Button onClick={() => setEdit(true) }><EditIcon /></Button>
+          <Button onClick={() => dispatch(characterActions.delete(data.id)) }><DeleteIcon /></Button>
         </div>
         :
         <div>

@@ -1,5 +1,5 @@
 import { apiConstants } from '../_constants'
-import { apiDataService } from '../apiDataTypes'
+import { apiServices } from '../_services'
 import { alertActions } from './'
 import { history, requester } from '../_helpers'
 
@@ -55,13 +55,14 @@ const deleteConstructor = (service, apiDataType) => {
 }
 
 let apiActions = {}
-Object.keys(apiConstants).map( apiDataType =>
-  apiActions[`${apiDataType}Actions`] = {
-    getAll: getAllConstructor(apiDataService[apiDataType], apiDataType),
-    getById: getByIdConstructor(apiDataService[apiDataType], apiDataType),
-    create: createConstructor(apiDataService[apiDataType], apiDataType),
-    update: updateConstructor(apiDataService[apiDataType], apiDataType),
-    delete: deleteConstructor(apiDataService[apiDataType], apiDataType)
+Object.keys(apiConstants).map( apiDataType =>{
+  apiActions[`${apiDataType.toLowerCase()}Actions`] = {
+    getAll:  getAllConstructor(apiServices[apiDataType], apiDataType),
+    getById: getByIdConstructor(apiServices[apiDataType], apiDataType),
+    create:  createConstructor(apiServices[apiDataType], apiDataType),
+    update:  updateConstructor(apiServices[apiDataType], apiDataType),
+    delete:  deleteConstructor(apiServices[apiDataType], apiDataType)
+  }
 })
 
 export { apiActions }
