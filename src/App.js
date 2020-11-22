@@ -7,42 +7,37 @@ import Game from './pages/game1/Game'
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Redirect
+  Route
 } from "react-router-dom"
 
-import React, {useEffect} from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
+import { useSelector } from 'react-redux'
 import { PrivateRoute } from './_components/PrivateRoute'
-import { alertActions, userActions } from './_actions'
-import { history } from './_helpers'
-import { Login } from './pages/Login'
+// import { alertActions, userActions } from './_actions'
+// import { history } from './_helpers'
+import Login from './pages/Login'
 import UserSpace from './pages/UserSpace'
 import UsersCRUD from './pages/UsersCRUD'
 import CharactersCRUD from './pages/CharactersCRUD'
 import CreateMissionGame1 from './pages/CreateMission/Game1'
+import Register from './pages/Register'
 
 const App = () => {
-  const dispatch = useDispatch()
-
-  // useEffect(() => {
-  //   history.listen((location, action) => {
-  //     dispatch(alertActions.clear())
-  //   })
-  // })
+  // const dispatch = useDispatch()
 
   let palette = "palette01"
   document.getElementsByTagName('html')[0].className = palette
   return (
     <div className="App">
-      { alert.message &&
+      {/* { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
-      }      
+      }       */}
       <Router>
         <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn),title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}} />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
           <Route path="/EADLearningTool" component={Home}/>
           <PrivateRoute exact path="/game" component={Game} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />

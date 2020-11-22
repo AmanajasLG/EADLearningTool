@@ -4,11 +4,20 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
+import {positions, Provider as AlertProvider} from 'react-alert'
+import AlertTemplate from 'react-alert-template-basic'
 import { store } from './_helpers'
+
+const options = {
+  timeout: 5000,
+  position: positions.TOP_RIGHT
+}
 
 ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <AlertProvider template={AlertTemplate} {...options}>
+        <App />
+      </AlertProvider>
     </Provider>,
   document.getElementById('root')
 );
