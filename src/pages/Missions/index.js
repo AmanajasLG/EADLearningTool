@@ -20,6 +20,11 @@ const Missions = () => {
   const [ createMission, setCreateMission ] = React.useState(false)
   const [ edit, setEdit ] = React.useState(-1)
 
+  React.useEffect(()=> {
+    setEdit(-1)
+    setCreateMission(false)
+  }, [missions])
+
   React.useEffect(() => {
     dispatch(missionActions.getAll())
   }, [])

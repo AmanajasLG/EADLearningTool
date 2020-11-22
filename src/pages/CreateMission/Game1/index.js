@@ -22,16 +22,17 @@ const CreateMissionGame1 = () => {
   const characters = useSelector( state => state.characters)
   const { missionActions, characterActions } = apiActions
 
+  const createMission = () => {
+    let data = {...state, characters: charList.reduce((acc,  item) => [...acc, item.id], [] ) }
+    dispatch(missionActions.create(data))
+  }
+
   const addToMission = (character) => () => {
     setCharList([...charList, character])
   }
 
   const removeFromMission = (character) => () => {
     setCharList(charList.filter(c => c.id !== character.id))
-  }
-
-  const createMission = () => {
-
   }
 
   React.useEffect(()=>{
@@ -51,7 +52,7 @@ const CreateMissionGame1 = () => {
         Texto da missão:
         <input type='text' value={state.description} onChange={e => setState({...state, description: e.target.value})} />
       </div>
-      <Button onClick={dispatch(missionActions.create(state))}>Criar Missão</Button>
+      <Button onClick={createMission}>Criar Missão</Button>
 
       <div>
         <div>Personagens na missão:</div>
@@ -65,7 +66,9 @@ const CreateMissionGame1 = () => {
 
       <div>
         <div>Personagens disponíveis</div>
-        {characters.items && characters.items.length > 0 && characters.items.map( (character, index) =>
+        {characters.items && characters.items.length > 0 && characters.items
+          .filter( character => !charList.find( c => c.id === character.id) )
+          .map( (character, index) =>
           <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
             <Button onClick={addToMission(character)}>
               <AddIcon />

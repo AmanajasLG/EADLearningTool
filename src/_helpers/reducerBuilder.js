@@ -3,9 +3,9 @@ export const reducerBuilder = constants => (state = {}, action) =>
 {
   switch (action.type) {
       case constants.CREATE_REQUEST:
-          return {creating: true}
+          return {...state, creating: true}
       case constants.CREATE_SUCCESS:
-          return {}
+          return {...state, creating: false, items: [...state.items, action.data]}
       case constants.CREATE_FAILURE:
           return {}
 
