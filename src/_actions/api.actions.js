@@ -1,7 +1,19 @@
 import { apiConstants } from '../_constants'
 import { apiServices } from '../_services'
 import { alertActions } from './'
-import { history, requester } from '../_helpers'
+import { history } from '../_helpers'
+
+function requester(service, request, success, failure, payload){
+  return dispatch => {
+      dispatch(request(payload))
+
+      service(payload)
+          .then(
+              data => dispatch(success(data)),
+              error => dispatch(failure(error.toString()))
+          )
+  }
+}
 
 //Could use some code refactory
 const getAllConstructor = (service, apiDataType) => {

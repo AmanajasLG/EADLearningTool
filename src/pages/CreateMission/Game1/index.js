@@ -31,7 +31,7 @@ const CreateMissionGame1 = () => {
   }
 
   const createMission = () => {
-    dispatch(missionActions.create(state))
+
   }
 
   React.useEffect(()=>{
@@ -51,6 +51,7 @@ const CreateMissionGame1 = () => {
         Texto da missão:
         <input type='text' value={state.description} onChange={e => setState({...state, description: e.target.value})} />
       </div>
+      <Button onClick={dispatch(missionActions.create(state))}>Criar Missão</Button>
 
       <div>
         <div>Personagens na missão:</div>
@@ -77,7 +78,6 @@ const CreateMissionGame1 = () => {
         </Button>
         {createCharacter && <CreateCharacter /> }
       </div>
-      <Button onClick={createMission}>Criar Missão</Button>
     </div>
   )
 }

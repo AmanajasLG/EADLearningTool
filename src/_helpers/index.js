@@ -1,5 +1,4 @@
 export * from './history'
 export * from './store'
 export * from './auth-header'
-export * from './requester'
 export * from './reducerBuilder'

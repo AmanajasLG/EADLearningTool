@@ -10,11 +10,15 @@ export const reducerBuilder = constants => (state = {}, action) =>
           return {}
 
       case constants.UPDATE_REQUEST:
-          return {updating: true}
+          return {...state, updating: true}
       case constants.UPDATE_SUCCESS:
-          return {}
+          let index = state.items.findIndex( item => item.id === action.data.id )
+          let copy = [...state.items.slice(0, index), action.data, ...state.items.slice(index + 1)]
+          return {...state, updating: false,
+            items: copy
+          }
       case constants.UPDATE_FAILURE:
-          return {}
+          return {...state, updating: false}
 
       case constants.GETALL_REQUEST:
           return {...state,
@@ -22,10 +26,12 @@ export const reducerBuilder = constants => (state = {}, action) =>
           };
       case constants.GETALL_SUCCESS:
           return {...state,
+              loading: false,
               items: action.data
           };
       case constants.GETALL_FAILURE:
           return {...state,
+              loading: false,
               error: action.error
           };
 
