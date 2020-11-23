@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { apiActions } from '../../_actions'
 
 const CreateCharacter = () => {
-  const { characterActions }= apiActions
+  const { characterActions } = apiActions
   const [name, setName] = React.useState('')
   const [job, setJob] = React.useState('')
   const [civilState, setCivilState] = React.useState('single')

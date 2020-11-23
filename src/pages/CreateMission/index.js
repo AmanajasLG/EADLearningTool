@@ -5,10 +5,10 @@ import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
 import Button from '@material-ui/core/Button'
 
-import { characterActions } from '../../../_actions'
-import CharacterData from '../../CharactersCRUD/characterData'
-import CreateCharacter from '../../CharactersCRUD/createCharacter'
-import { apiActions } from '../../../_actions'
+import { characterActions } from '../../_actions'
+import Character from '../Character'
+import CreateCharacter from '../CreateCharacter'
+import { apiActions } from '../../_actions'
 
 const CreateMissionGame1 = () => {
   const [state, setState] = React.useState({
@@ -59,7 +59,7 @@ const CreateMissionGame1 = () => {
         {charList.map( ( character, index) =>
           <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
             <Button onClick={removeFromMission(character)}><RemoveIcon /></Button>
-            <CharacterData data={character}/>
+            <Character character={character}/>
           </div>
         )}
       </div>
@@ -73,7 +73,7 @@ const CreateMissionGame1 = () => {
             <Button onClick={addToMission(character)}>
               <AddIcon />
             </Button>
-            <CharacterData data={character}/>
+            <Character character={character}/>
           </div>
         )}
         <Button onClick={() => setCreateCharacter(!createCharacter)}>

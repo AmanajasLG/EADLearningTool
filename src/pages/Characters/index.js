@@ -3,10 +3,10 @@ import React from 'react'
 import { useDispatch, useSelector} from 'react-redux'
 import { apiActions } from '../../_actions'
 
-import CharacterData from './characterData'
-import CreateCharacter from './createCharacter'
+import Character from '../Character'
+import CreateCharacter from '../CreateCharacter'
 
-const CharactersCRUD = ({onAdd}) => {
+const Characters = ({onAdd}) => {
   const { characterActions } = apiActions
   const [createCharacter, setCreateCharacter] = React.useState(false)
   const dispatch = useDispatch()
@@ -34,7 +34,7 @@ const CharactersCRUD = ({onAdd}) => {
             characters.items.map((character, index) =>
             <div key={index}>
               <button onClick={onAdd(character.id)}>Adicionar a missão</button>
-              <CharacterData data={character}/>
+              <Character data={character}/>
             </div>
           ):null}
         </div>
@@ -43,4 +43,4 @@ const CharactersCRUD = ({onAdd}) => {
   )
 }
 
-export default CharactersCRUD
+export default Characters

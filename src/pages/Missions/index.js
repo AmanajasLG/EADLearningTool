@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { apiActions } from '../../_actions'
@@ -9,12 +10,13 @@ import EditIcon from '@material-ui/icons/Edit'
 import CancelIcon from '@material-ui/icons/Cancel'
 
 import Mission from '../Mission'
-import CreateMission from '../CreateMission/Game1'
+import CreateMission from '../CreateMission'
 import EditMission from '../EditMission'
 
 
 const Missions = () => {
   const { missionActions } = apiActions
+  const { characterActions } = apiActions
   const dispatch = useDispatch()
   const missions = useSelector( state => state.missions)
   const [ createMission, setCreateMission ] = React.useState(false)
@@ -27,6 +29,7 @@ const Missions = () => {
 
   React.useEffect(() => {
     dispatch(missionActions.getAll())
+    dispatch(characterActions.getAll())
   }, [])
 
   return(
@@ -36,13 +39,13 @@ const Missions = () => {
         <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
           {edit !== index ?
             <Mission key={index} mission={mission} />
-            : <EditMission mission={mission} onDone={(newState) => () => {
+            : <EditMission mission={mission} onDone={(newState) => {
                 setEdit(-1)
                 dispatch(missionActions.update(newState))
               }} /> }
 
           {edit !== index ?
-            <Button onClick={() => setEdit(index) }><EditIcon/></Button>
+            <Button onClick={ () => setEdit(index)}><EditIcon/></Button>
             : <Button onClick={() => setEdit(-1) }><CancelIcon/></Button>
            }
 

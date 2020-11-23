@@ -1,5 +1,9 @@
 
-export const reducerBuilder = constants => (state = {}, action) =>
+const initialState = {
+  items: []
+}
+
+export const reducerBuilder = constants => (state = initialState, action) =>
 {
   switch (action.type) {
       case constants.CREATE_REQUEST:
@@ -41,7 +45,7 @@ export const reducerBuilder = constants => (state = {}, action) =>
           };
       case constants.GETBYID_SUCCESS:
           return {...state,
-              items: action.data
+              items: [...state.items, action.data]
           };
       case constants.GETBYID_FAILURE:
           return {...state,

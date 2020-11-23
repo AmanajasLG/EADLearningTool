@@ -39,7 +39,6 @@ const createBuilder = (routeName) => function create(data) {
 }
 
 const updateBuilder = (routeName) => function update(data){
-    // checar rota
     return api(
         {
           method: 'put',
