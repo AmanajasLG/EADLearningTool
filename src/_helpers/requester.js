@@ -1,18 +1,24 @@
-import { userConstants } from '../_constants'
-import { userService } from '../_services'
-import { alertActions } from './'
-import { history } from '../_helpers'
+export const requester = (service, request, success, failure, payload) =>  dispatch => {
+    dispatch(request(payload))
 
-export { requester }
+    return service(payload)
+        .then(
+            data => {
+              dispatch(success(data))
 
-function requester(service, request, success, failure, payload){
-  return dispatch => {
-      dispatch(request(payload))
-
-      service(payload)
-          .then(
-              data => dispatch(success(data)),
-              error => dispatch(failure(error.toString()))
-          )
-  }
+              return Promise.resolve()
+            },
+            error => {
+              dispatch(failure(error.toString()))
+              console.log(error.response.data)
+              
+              try {
+                return Promise.reject(error.response.data.data[0].messages[0].message)
+              } catch{
+                return Promise.reject(error.response.data.message)
+              }
+              
+            }
+        )
 }
+

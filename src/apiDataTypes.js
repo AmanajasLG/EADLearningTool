@@ -1,7 +1,8 @@
-import { characterService } from './_services'
+import { characterService, questionService } from './_services'
 
 const apiDataService = {
-  character: characterService
+  character: characterService,
+  question: questionService
 }
 
 export { apiDataService }

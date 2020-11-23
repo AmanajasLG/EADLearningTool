@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { useAlert } from 'react-alert'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -48,7 +48,6 @@ const Register = () => {
   const [submitted, setSubmitted ] = useState(false)
   const registering = useSelector(state => state.authentication.registering)
   const dispatch = useDispatch()
-  const user = useSelector(state => state.authentication.user)
 
   function handleChange(e) {
       const {name, value} = e.target
