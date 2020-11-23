@@ -15,8 +15,7 @@ import EditMission from '../EditMission'
 
 
 const Missions = () => {
-  const { missionActions } = apiActions
-  const { characterActions } = apiActions
+  const { missionsActions, charactersActions, locationsActions } = apiActions
   const dispatch = useDispatch()
   const missions = useSelector( state => state.missions)
   const [ createMission, setCreateMission ] = React.useState(false)
@@ -28,8 +27,9 @@ const Missions = () => {
   }, [missions])
 
   React.useEffect(() => {
-    dispatch(missionActions.getAll())
-    dispatch(characterActions.getAll())
+    dispatch(missionsActions.getAll())
+    dispatch(charactersActions.getAll())
+    dispatch(locationsActions.getAll())
   }, [])
 
   return(
@@ -41,7 +41,7 @@ const Missions = () => {
             <Mission key={index} mission={mission} />
             : <EditMission mission={mission} onDone={(newState) => {
                 setEdit(-1)
-                dispatch(missionActions.update(newState))
+                dispatch(missionsActions.update(newState))
               }} /> }
 
           {edit !== index ?
@@ -49,7 +49,7 @@ const Missions = () => {
             : <Button onClick={() => setEdit(-1) }><CancelIcon/></Button>
            }
 
-          <Button onClick={() => dispatch(missionActions.delete(mission.id))}><DeleteIcon/></Button>
+          <Button onClick={() => dispatch(missionsActions.delete(mission.id))}><DeleteIcon/></Button>
         </div>
       )}
       <Button onClick={() => setCreateMission(!createMission)}>

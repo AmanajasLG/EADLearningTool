@@ -13,7 +13,9 @@ const EditMission = ({mission, onDone}) => {
   const [state, setState] = React.useState(mission)
 
   const [charList, setCharList] = React.useState(mission.characters)
+  const [locationList, setLocationList] = React.useState(mission.locations)
   const characters = useSelector(state => state.characters)
+  const locations = useSelector(state => state.locations)
 
   const addToMission = (character) => () => {
     setCharList([...charList, character])
@@ -23,6 +25,14 @@ const EditMission = ({mission, onDone}) => {
     setCharList(charList.filter( c => c.id !== character.id) )
   }
 
+  const addLocationToMission = (location) => () => {
+    setLocationList([...locationList, location])
+  }
+
+  const removeLocationFromMission = (location) => () => {
+    setLocationList(locationList.filter( l => l.id !== location.id) )
+  }
+
   const onClick = () => {
     let newState = {
       id: state.id,
@@ -30,6 +40,7 @@ const EditMission = ({mission, onDone}) => {
       description: state.description
     }
     newState.characters = charList.reduce((acc, character) => [...acc, character.id], [] )
+    newState.locations = locationList.reduce((acc, location) => [...acc, location.id], [] )
     onDone(newState)
   }
 
@@ -62,6 +73,30 @@ const EditMission = ({mission, onDone}) => {
               <AddIcon />
             </Button>
             <Character character={character}/>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <div>Locais na missão:</div>
+        {locationList.map((location, index) =>
+          <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
+            <Button onClick={removeLocationFromMission(location)}><RemoveIcon /></Button>
+            <div>{location.name}</div>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <div>Locais disponíveis</div>
+        {locations.items && locations.items.length > 0 && locations.items
+          .filter( location => !locationList.find( l => l.id === location.id ) )
+          .map( (location, index) =>
+          <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
+            <Button onClick={addLocationToMission(location)}>
+              <AddIcon />
+            </Button>
+            <div>{location.name}</div>
           </div>
         )}
       </div>
