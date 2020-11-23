@@ -12,6 +12,8 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import Mission from '../Mission'
 import CreateMission from '../CreateMission'
 import EditMission from '../EditMission'
+import QuestionCRUD from '../QuestionCRUD'
+
 
 
 const Missions = () => {
@@ -56,6 +58,7 @@ const Missions = () => {
         {createMission? 'Cancelar' : 'Criar Missão'}
       </Button>
       {createMission &&  <CreateMission />}
+      <QuestionCRUD />
     </div>
   )
 }

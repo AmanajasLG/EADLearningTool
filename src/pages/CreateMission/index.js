@@ -8,7 +8,9 @@ import Button from '@material-ui/core/Button'
 import Character from '../Character'
 import CreateCharacter from '../CreateCharacter'
 import CreateLocation from '../CreateLocation'
+
 import { apiActions } from '../../_actions'
+
 
 const CreateMissionGame1 = () => {
   const [state, setState] = React.useState({
@@ -125,7 +127,6 @@ const CreateMissionGame1 = () => {
         {createLocation ? "Cancelar" : "Criar local"}
       </Button>
       {createLocation && <CreateLocation />}
-
     </div>
   )
 }

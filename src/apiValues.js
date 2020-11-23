@@ -1,3 +1,3 @@
-const apiValues = ['CHARACTERS', 'MISSIONS', 'LOCATIONS']
+const apiValues = ['CHARACTERS', 'MISSIONS', 'LOCATIONS', 'QUESTIONS']
 
 export default apiValues
