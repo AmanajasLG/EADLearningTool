@@ -12,12 +12,11 @@ import CancelIcon from '@material-ui/icons/Cancel'
 import Mission from '../Mission'
 import CreateMission from '../CreateMission'
 import EditMission from '../EditMission'
-import QuestionCRUD from '../QuestionCRUD'
 
 
 
 const Missions = () => {
-  const { missionsActions, charactersActions, locationsActions } = apiActions
+  const { missionsActions, charactersActions, locationsActions, questionsActions } = apiActions
   const dispatch = useDispatch()
   const missions = useSelector( state => state.missions)
   const [ createMission, setCreateMission ] = React.useState(false)
@@ -32,6 +31,7 @@ const Missions = () => {
     dispatch(missionsActions.getAll())
     dispatch(charactersActions.getAll())
     dispatch(locationsActions.getAll())
+    dispatch(questionsActions.getAll())
   }, [])
 
   return(
@@ -58,7 +58,6 @@ const Missions = () => {
         {createMission? 'Cancelar' : 'Criar Missão'}
       </Button>
       {createMission &&  <CreateMission />}
-      <QuestionCRUD />
     </div>
   )
 }

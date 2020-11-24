@@ -8,6 +8,8 @@ import Button from '@material-ui/core/Button'
 import Character from '../Character'
 import CreateCharacter from '../CreateCharacter'
 import CreateLocation from '../CreateLocation'
+import Question from '../Question'
+import CreateQuestion from '../CreateQuestion'
 
 import { apiActions } from '../../_actions'
 
@@ -19,19 +21,23 @@ const CreateMissionGame1 = () => {
   })
   const [charList, setCharList] = React.useState([])
   const [locationList, setLocationList] = React.useState([])
+  const [questionList, setQuestionList] = React.useState([])
 
   const [createCharacter, setCreateCharacter] = React.useState(false)
   const [createLocation, setCreateLocation] = React.useState(false)
+  const [createQuestion, setCreateQuestion] = React.useState(false)
 
   const dispatch = useDispatch()
   const characters = useSelector( state => state.characters)
   const locations = useSelector( state => state.locations)
-  const { missionsActions, charactersActions } = apiActions
+  const questions = useSelector( state => state.questions)
+  const { missionsActions, charactersActions, questionsActions } = apiActions
 
   const createMission = () => {
     let data = {...state,
       characters: charList.reduce((acc,  item) => [...acc, item.id], [] ),
-      locations: locationList.reduce((acc, item) => [...acc, item.id], [] )
+      locations: locationList.reduce((acc, item) => [...acc, item.id], [] ),
+      questions: questionList.reduce((acc, item) => [...acc, item.id], [] )
     }
     dispatch(missionsActions.create(data))
   }
@@ -52,12 +58,13 @@ const CreateMissionGame1 = () => {
     setLocationList(locationList.filter(c => c.id !== location.id))
   }
 
-  React.useEffect(()=>{
-    if(Object.keys(characters).length === 0){
-      console.log('dispatching')
-      dispatch(charactersActions.getAll())
-    }
-  })
+  const addQuestionToMission = (question) => () => {
+    setQuestionList([...questionList, question])
+  }
+
+  const removeQuestionFromMission = (question) => () => {
+    setQuestionList(questionList.filter(c => c.id !== question.id))
+  }
 
   return(
     <div>
@@ -121,12 +128,40 @@ const CreateMissionGame1 = () => {
             <div>{location.name}</div>
           </div>
         )}
+        <Button onClick={() => setCreateLocation(!createLocation)}>
+        {createLocation ? "Cancelar" : "Criar local"}
+        </Button>
+        {createLocation && <CreateLocation />}
       </div>
 
-      <Button onClick={() => setCreateLocation(!createLocation)}>
-        {createLocation ? "Cancelar" : "Criar local"}
-      </Button>
-      {createLocation && <CreateLocation />}
+      
+      <div>
+        <div>Questions:</div>
+        {questionList.map( ( question, index) =>
+          <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
+            <Button onClick={removeQuestionFromMission(question)}><RemoveIcon /></Button>
+            <Question question={question}/>
+          </div>
+        )}
+      </div>
+
+      <div>
+        <div>Preset questions</div>
+        {questions.items && questions.items.length > 0 && questions.items
+          .filter( question => !questionList.find( c => c.id === question.id) )
+          .map( (question, index) =>
+          <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
+            <Button onClick={addQuestionToMission(question)}>
+              <AddIcon />
+            </Button>
+            <Question question={question}/>
+          </div>
+        )}
+        <Button onClick={() => setCreateQuestion(!createQuestion)}>
+          {createQuestion ? "Cancel" : "Create question"}
+        </Button>
+        {createQuestion && <CreateQuestion /> }
+      </div>
     </div>
   )
 }

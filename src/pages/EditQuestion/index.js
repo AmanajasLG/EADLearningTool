@@ -7,9 +7,9 @@ import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import Checkbox from '@material-ui/core/Checkbox'
 import { useAlert } from 'react-alert'
 import { makeStyles } from '@material-ui/core/styles'
+import { FormControlLabel, Radio, RadioGroup } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,43 +31,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CreateQuestion = () => {
+const EditQuestion = ({question, onDone}) => {
     const { questionsActions }= apiActions
     const dispatch = useDispatch()
-    const [inputs, setInputs] = useState({
-        question: '',
-        group: 0,
-        correct: "false"
-    })
+    const [inputs, setInputs] = useState(question)
     const [submitted, setSubmitted ] = useState(false)
     const classes = useStyles()
     const alert = useAlert()
-    const creating = useSelector(state => state.authentication.registering)
 
     function handleChange(e) {
         const {name, value} = e.target
         setInputs(inputs => ({...inputs, [name]: value}))
-        console.log(e.target.value)
-        console.log(inputs)
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault()
-
-        setSubmitted(true)
-
-        if(inputs.question && inputs.group){
-            dispatch(questionsActions.create(inputs))
-            .then(() => {
-                alert.success('Question created!')
-                document.getElementById('create-question-form').reset()
-            })
-            .catch(error => {
-                alert.error(error)
-            })
-        } else {
-            alert.error('Required fields missing! Please, check your inputs and try again!')
-        }
     }
 
     return (
@@ -75,9 +49,9 @@ const CreateQuestion = () => {
             <CssBaseline />
             <div className={classes.paper}>
                 <Typography component="h1" variant="h5">
-                Create Question
+                Edit Question
                 </Typography>
-                <form id="create-question-form" onSubmit={handleSubmit} className={classes.form} noValidate>
+                <form id="edit-question-form" onSubmit={onDone} className={classes.form} noValidate>
                     <Grid container spacing={2}>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -87,6 +61,7 @@ const CreateQuestion = () => {
                         fullWidth
                         id="question"
                         label="Question"
+                        value={inputs.question}
                         required
                         autoFocus
                         className={submitted && (inputs.question === "") ? 'danger' : ''}
@@ -101,24 +76,28 @@ const CreateQuestion = () => {
                         id="group"
                         label="Group"
                         name="group"
+                        value={inputs.group}
                         required
                         aria-describedby="my-helper-text"
-                        className={submitted && !inputs.order ? 'danger' : ''}
+                        className={submitted && !inputs.group ? 'danger' : ''}
                         onChange={handleChange}
                         />
                         <span id="my-helper-text">Group is a integer that defines the which questions to show in every step. For example, if a question is group 1, it will be displayed on the first user interaction with a character.</span>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <Checkbox
-                        // checked={inputs.correct === "true" ? true : false}
+                        <RadioGroup
+                        aria-label="correct"
                         fullWidth
                         id="correct"
                         label="Correct question"
                         name="correct"
-                        value={inputs.correct === "true" ? "true" : "false"}
+                        value={inputs.correct}
                         required
                         onChange={handleChange}
-                        />
+                        >
+                            <FormControlLabel value="true" control={<Radio />} label="Correct"/>
+                            <FormControlLabel value="false" control={<Radio />} label="Incorrect"/>
+                        </RadioGroup>
                     </Grid>
                     </Grid>
 
@@ -129,8 +108,7 @@ const CreateQuestion = () => {
                     color="primary"
                     className={classes.submit}
                     >
-                    {creating && <span className="spinner-border spinner-border-sm mr-1"></span>}
-                    Create
+                    Save
                     </Button>
                 </form>
             </div>
@@ -138,4 +116,4 @@ const CreateQuestion = () => {
     )
 }
 
-export default CreateQuestion
+export default EditQuestion
