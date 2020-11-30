@@ -3,21 +3,28 @@ import React from 'react'
 import { useDispatch, useSelector} from 'react-redux'
 import { apiActions } from '../../_actions'
 
+import EditIcon from '@material-ui/icons/Edit'
+import CancelIcon from '@material-ui/icons/Cancel'
+import Button from '@material-ui/core/Button'
+
 import Character from '../Character'
 import CreateCharacter from '../CreateCharacter'
+import EditCharacter from '../EditCharacter'
 
 const Characters = ({onAdd}) => {
-  const { characterActions } = apiActions
+  const { charactersActions } = apiActions
   const [createCharacter, setCreateCharacter] = React.useState(false)
+  const [edit, setEdit] = React.useState(-1)
   const dispatch = useDispatch()
   const characters = useSelector( state => state.characters)
 
   React.useEffect(()=>{
-    if(Object.keys(characters).length === 0){
-      console.log('dispatching')
-      dispatch(characterActions.getAll())
-    }
-  })
+      dispatch(charactersActions.getAll())
+  }, [])
+
+  React.useEffect(()=>{
+    setEdit(-1)
+  }, [characters])
 
   return (
     <div>
@@ -32,10 +39,19 @@ const Characters = ({onAdd}) => {
         <div>
           {characters.items && characters.items.length > 0 ?
             characters.items.map((character, index) =>
-            <div key={index}>
-              <button onClick={onAdd(character.id)}>Adicionar a missão</button>
-              <Character data={character}/>
-            </div>
+            <React.Fragment key={index}>
+              {edit === index ?
+                <div>
+                  <EditCharacter character={character} onDone={ state => () => dispatch(charactersActions.update(state))}/>
+                  <Button onClick={ () => setEdit(-1) }><CancelIcon /></Button>
+                </div>
+                : <div style={{display: 'flex', flexDirection: 'row'}}>
+                    <Character character={character}/>
+                    <Button onClick={ () => setEdit(index) }><EditIcon /></Button>
+                  </div>
+              }
+              <br/>
+            </React.Fragment>
           ):null}
         </div>
       </div>

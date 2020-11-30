@@ -18,8 +18,8 @@ import { PrivateRoute } from './_components/PrivateRoute'
 import Login from './pages/Login'
 import UserSpace from './pages/UserSpace'
 import UsersCRUD from './pages/UsersCRUD'
-import Characters from './pages/Characters'
 import Missions from './pages/Missions'
+import Characters from './pages/Characters'
 import Register from './pages/Register'
 
 const App = () => {
@@ -42,8 +42,8 @@ const App = () => {
           <PrivateRoute exact path="/game" component={Game} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />
           <PrivateRoute exact path="/missions" component={Missions} />
-          <PrivateRoute exact path="/users" component={UsersCRUD} />
           <PrivateRoute exact path="/characters" component={Characters} />
+          <PrivateRoute exact path="/users" component={UsersCRUD} />
         </Switch>
       </Router>
 

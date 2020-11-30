@@ -10,7 +10,7 @@ const getAllBuilder = (routeName) => function getAll() {
     return api(
       {
         method: 'get',
-        url: `/${routeName}`,
+        url: `/${routeName.toLowerCase()}`,
         headers: authHeader()
       })
       .then(handleResponse)
@@ -20,18 +20,17 @@ const getByIdBuilder = (routeName) => function getById(id){
     return api(
         {
           method: 'get',
-          url: `/${routeName}/${id}`,
+          url: `/${routeName.toLowerCase()}/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
 }
 
 const createBuilder = (routeName) => function create(data) {
-  console.log('called')
     return api(
       {
         method: 'post',
-        url: `/${routeName}`,
+        url: `/${routeName.toLowerCase()}`,
         headers: authHeader(),
         data: data
       })
@@ -39,10 +38,11 @@ const createBuilder = (routeName) => function create(data) {
 }
 
 const updateBuilder = (routeName) => function update(data){
+    console.log('data:', data)
     return api(
         {
           method: 'put',
-          url: `/${routeName}/${data.id}`,
+          url: `/${routeName.toLowerCase()}/${data.id}`,
           headers:  {
             ...authHeader(),
           'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ const deleteBuilder = (routeName) => function _delete(id){
     return api(
         {
           method: 'delete',
-          url: `/${routeName}/${id}`,
+          url: `/${routeName.toLowerCase()}/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
