@@ -10,7 +10,7 @@ import { apiActions } from '../../_actions'
 import { baseURL } from '../../_services'
 
 const EditCharacter = ({character, onDone}) => {
-  const { characterActions } = apiActions
+  const { charactersActions } = apiActions
   const [state, setState] = React.useState({
     name: character.name,
     job: character.job ? character.job : '',

@@ -5,7 +5,7 @@ import { apiActions } from '../../_actions'
 import { useAlert } from 'react-alert'
 
 const CreateCharacter = () => {
-  const { characterActions } = apiActions
+  const { charactersActions } = apiActions
   const [name, setName] = React.useState('')
   const [job, setJob] = React.useState('')
   const [civilState, setCivilState] = React.useState('single')
@@ -16,7 +16,7 @@ const CreateCharacter = () => {
 
   const create = () => {
     console.log('called')
-    dispatch(characterActions.create({nome: name, job})).then(() => {
+    dispatch(charactersActions.create({name: name, job: job, civilState: civilState})).then(() => {
         alert.success('Character created!')
     })
     .catch(error => {
