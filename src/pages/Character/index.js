@@ -10,18 +10,18 @@ const Character = ({character}) => {
   }
   return(
     <div>
-      <div>
+      <div class="character">
         <span>{character.name}</span> <span>{character.civilState}</span> <span>{character.job}</span>
       </div>
       <div>
-        <div> Missões que participa: </div>
+        <div class="missions"> Missões que participa: </div>
         {character.missions && character.missions.map((mission, index)=>
           <div key={index}>
-            <div>{index+1}: {mission.name}</div>
+            <h2 class="mission-name">{index+1}: {mission.name}</h2>
             {mission.questions.map((question, qIndex) =>
               <div key={qIndex}>
-                <div>Pergunta: {question.question}</div>
-                <div>Resposta: {getAnswer(question.id)}</div>
+                <h3 class="mission-question">Pergunta: {question.question}</h3>
+                <h4 class="mission-answer">Resposta: {getAnswer(question.id)}</h4>
               </div>
             )}
           </div>

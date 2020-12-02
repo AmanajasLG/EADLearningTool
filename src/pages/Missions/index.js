@@ -36,7 +36,7 @@ const Missions = () => {
 
   return(
     <div>
-      <div>Missões</div>
+      <h1>Missões</h1>
       {missions.items && missions.items.length > 0 && missions.items.map((mission, index) =>
         <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
           {edit !== index ?

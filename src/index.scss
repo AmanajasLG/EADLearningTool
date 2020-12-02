@@ -12,30 +12,42 @@
 
 body {
   margin: 0;
-  font-family: var(--font-text);
+  font-family: var(--font-text) !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
-  color: var(--color-text);
+  color: var(--color-text) !important;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-h1, h2, h3, h4, h5, h6 {
+/*h1, h2, h3, h4, h5, h6 {
   font-family: inherit;
   font-size: inherit;
   font-weight: 300;
-}
+}*/
 
-.type-l {font-size: 2rem;}
-.type-m {font-size: 1.75rem}
-.type-s {font-size: 1rem;}
-.type-xs {font-size: 0.8rem;}
+h1 {font-family: var(--font-title);}
+
+
+.type-l {font-size: 2rem !important;}
+.type-m, h2 {font-size: 1.75rem !important; font-weight: 700 !important;}
+.type-s, h3 {font-size: 1rem !important;}
+.type-xs, h4 {font-size: 0.8rem !important;}
 
 .type-display {font-family: var(--font-title);}
 .type-center {text-align: center;}
+
+
+.color-lightest {color: #ede6f0;}
+.color-main {color: #f9afa1;}
+.color-accent {color: #535c89;}
+.color-second {color: #d6e3f4;}
+.color-third {color: #cbe7de;}
+.color-fourth {color: #ffcca9;}
+.color-text {color: #59316d;}
 
 /* ATOMS */
 
@@ -46,7 +58,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 2.5rem;
 }
 
-.btn {
+.btn, .MuiButton-label {
   padding: 10px 20px;
   background-color: var(--color-accent);
   border-radius: 50px 50px 50px 0;
@@ -67,12 +79,12 @@ h1, h2, h3, h4, h5, h6 {
   border: 2px solid var(--color-accent)
 }
 
-.btn:hover {
+.btn:hover, .MuiButton-label {
   background-color: var(--color-text);
   transition: linear 0.2s;
 }
 
-.btn.btn-center {
+.btn-center {
   margin-left: auto;
   margin-right: auto;
   display: inline-block;
@@ -101,7 +113,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* TEMPLATES */
-
+.App > div {
+  padding: 2rem;
+  max-width: 80rem;
+  margin: 0 auto;
+}
 
 /* BACKGROUNDS */
 
@@ -133,3 +149,18 @@ h1, h2, h3, h4, h5, h6 {
 @media screen and (max-width: 40rem) {
   .bg-shape-bottom {background-size: 70%;}
 }
+
+
+/* CREATE GAME */
+.missions {}
+.mission {
+  padding: 2rem;
+  margin: 1rem;
+  border: solid 1px var(--color-main);
+  border-radius: 0.5rem;
+}
+.character {}
+.mission-name {}
+.mission-desc {}
+.mission-question {}
+.mission-answer {}
