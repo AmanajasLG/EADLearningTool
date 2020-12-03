@@ -63,6 +63,8 @@ const EditCharacter = ({character, onDone}) => {
               </div>
             </div>
           )}
+          Resposta final:
+          <input type='text' value={character.finalAnswer} onChange={e => setState({...state, finalAnswer: e.target.value})} placeholder='Resposta final'/>
         </div>
         <button onClick={onDone(state)}>Salvar</button>
       </div>

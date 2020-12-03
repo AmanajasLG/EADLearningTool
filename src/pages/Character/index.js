@@ -26,6 +26,7 @@ const Character = ({character}) => {
             )}
           </div>
         )}
+        <div>Resposta final: {character.finalAnswer}</div>
       </div>
       {/*
       <div>

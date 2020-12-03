@@ -13,6 +13,9 @@ const UserSpace = () => {
       <div>
         <Link to='/missions'>Missões</Link>
       </div>
+      <div>
+        <Link to='/characters'>Personagens</Link>
+      </div>
     </div>
   )
 }
