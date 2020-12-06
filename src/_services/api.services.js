@@ -10,7 +10,7 @@ const getAllBuilder = (routeName) => function getAll() {
     return api(
       {
         method: 'get',
-        url: `/${routeName.toLowerCase()}`,
+        url: `/${routeName.toLowerCase().replace('_', '-')}`,
         headers: authHeader()
       })
       .then(handleResponse)
@@ -20,7 +20,7 @@ const getByIdBuilder = (routeName) => function getById(id){
     return api(
         {
           method: 'get',
-          url: `/${routeName.toLowerCase()}/${id}`,
+          url: `/${routeName.toLowerCase().replace('_', '-')}/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
@@ -30,7 +30,7 @@ const createBuilder = (routeName) => function create(data) {
     return api(
       {
         method: 'post',
-        url: `/${routeName.toLowerCase()}`,
+        url: `/${routeName.toLowerCase().replace('_', '-')}`,
         headers: authHeader(),
         data: data
       })
@@ -42,7 +42,7 @@ const updateBuilder = (routeName) => function update(data){
     return api(
         {
           method: 'put',
-          url: `/${routeName.toLowerCase()}/${data.id}`,
+          url: `/${routeName.toLowerCase().replace('_', '-')}/${data.id}`,
           headers:  {
             ...authHeader(),
           'Content-Type': 'application/json'
@@ -56,13 +56,15 @@ const deleteBuilder = (routeName) => function _delete(id){
     return api(
         {
           method: 'delete',
-          url: `/${routeName.toLowerCase()}/${id}`,
+          url: `/${routeName.toLowerCase().replace('_', '-')}/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
 }
 
 function handleResponse(response) {
+
+  console.log(response)
 
   if(response.status !== 200){
       if(response.status === 401){
