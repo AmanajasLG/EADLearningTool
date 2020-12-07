@@ -31,17 +31,17 @@ const UserHeader = ({pageInfo}) => {
     return (
         <header id="app-header">
 			<div className="group-btns" id="left-btns">
-				<div id="profilePic" onClick={clickProfile}>Foto</div>
-				<div className="header-btn" id="home-btn" onClick={clickHome}>Home</div>
+				<div id="profilePic" onClick={clickProfile}><i class="ic">face</i></div>
+				<div className="header-btn" id="home-btn" onClick={clickHome}><i class="ic">home</i></div>
 			</div>
 			<div id="pageTitle">
-				<div id="mainTitle">{state.pageTitle}</div>
-				<div id="subTitle">{state.pageSubTitle}</div>
+				<div id="mainTitle" class="center">{state.pageTitle}</div>
+				<div id="subTitle" class="center">{state.pageSubTitle}</div>
 			</div>
 			<div className="group-btns" id="right-btns">
-				<div className="header-btn" id="notif-btn" onClick={clickNotif}>Notificações</div>
-				<div className="header-btn" id="settings-btn" onClick={clickSettings}>Configurações</div>
-				<div className="header-btn" id="settings-btn" onClick={() => {dispatch(logout())}}>Logout</div>
+				<div className="header-btn" id="notif-btn" onClick={clickNotif}><i class="ic">notification_important</i></div>
+				<div className="header-btn" id="settings-btn" onClick={clickSettings}><i class="ic">settings</i></div>
+				<div className="header-btn" id="settings-btn" onClick={() => {dispatch(logout())}}><i class="ic">exit_to_app</i></div>
 			</div>
 		</header>
     )

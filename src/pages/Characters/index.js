@@ -28,11 +28,11 @@ const Characters = ({onAdd}) => {
 
   return (
     <div>
-      <div>Área de personagens</div>
+      <h1>Área de personagens</h1>
       <button onClick={() => setCreateCharacter(!createCharacter)}>{createCharacter? 'Cancelar' : 'Criar personagem'} </button>
       { createCharacter && <CreateCharacter /> }
-      <div>
-        <div>All Characters:</div>
+      <div class="margin-top">
+        <h2>All Characters:</h2>
         <div>
           <span>Nome</span> <span>Estado civil</span> <span>Trabalho</span>
         </div>

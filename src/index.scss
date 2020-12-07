@@ -1,10 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import './colorPalettes';
+@import url('https://fonts.googleapis.com/css2?family=Material+Icons+Round');
 
 /* VARIABLES */
 :root {
 	--font-title: 'abril fatface', serif;
-  --font-text: 'assistant', sans-serif;
+  --font-text: 'Barlow', sans-serif;
+  --font-icons: 'Material Icons Round';
 }
 
 
@@ -31,14 +34,16 @@ code {
 
 h1 {font-family: var(--font-title);}
 
+i.ic {font-family: var(--font-icons); font-style: normal;}
+
 
 .type-l {font-size: 2rem !important;}
-.type-m, h2 {font-size: 1.75rem !important; font-weight: 700 !important;}
+.type-m, h2 {font-size: 1.5rem !important; font-weight: 700 !important;}
 .type-s, h3 {font-size: 1rem !important;}
 .type-xs, h4 {font-size: 0.8rem !important;}
 
 .type-display {font-family: var(--font-title);}
-.type-center {text-align: center;}
+.type-center, .center {text-align: center;}
 
 
 .color-lightest {color: #ede6f0;}
@@ -58,16 +63,27 @@ h1 {font-family: var(--font-title);}
   margin-top: 2.5rem;
 }
 
-.btn, .MuiButton-label {
+ul.no-bullet > li {
+  list-style-type: none;
+  margin-bottom: 0.5rem
+}
+.btn, %btn, button {
+  border: 0;
   padding: 10px 20px;
   background-color: var(--color-accent);
-  border-radius: 50px 50px 50px 0;
+  border-radius: 50px 50px 50px 0 !important;
   color: white;
   text-decoration: none;
   font-weight: 800;
   text-transform: lowercase;
   font-size: 1.25rem;
   transition: linear 0.2s;
+}
+
+.MuiButton-label {
+  @extend %btn;
+  padding: 5px 10px;
+  font-size: 1rem;
 }
 
 .RoomBtn {
@@ -78,10 +94,19 @@ h1 {font-family: var(--font-title);}
   color: var(--color-accent);
   border: 2px solid var(--color-accent)
 }
+.MuiButton-containedPrimary {
+  padding: 0;
+  border: 0;
+  background: none;
+}
 
 .btn:hover, .MuiButton-label {
   background-color: var(--color-text);
   transition: linear 0.2s;
+}
+
+.MuiButton-root:hover {
+  background: none
 }
 
 .btn-center {
@@ -150,17 +175,41 @@ h1 {font-family: var(--font-title);}
   .bg-shape-bottom {background-size: 70%;}
 }
 
+/**/
+#app-header {
+  .ic {
+    font-size: 1.5rem;
+  }
+}
 
 /* CREATE GAME */
 .missions {}
-.mission {
+.mission, .character, .edit-character {
   padding: 2rem;
   margin: 1rem;
   border: solid 1px var(--color-main);
   border-radius: 0.5rem;
 }
-.character {}
+.character-desc { 
+  border-bottom: solid 1px var(--color-main);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem
+}
 .mission-name {}
 .mission-desc {}
 .mission-question {}
 .mission-answer {}
+
+.navigation {
+  display: flex;
+  justify-content: center;
+  .btn {
+    display: block; 
+    @extend %btn;
+    margin: 1rem;
+    a {
+      text-decoration: none;
+      color: white
+    }
+}
+}

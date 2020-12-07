@@ -6,12 +6,11 @@ const UserSpace = () => {
   const user = useSelector(state => state.authentication.user.user)
   return(
     <div>
-      Oi {user.username}!
-      <div>
-        <Link to='/game'>Jogar jogo 1</Link>
-      </div>
-      <div>
-        <Link to='/missions'>Missões</Link>
+      <h1 class="center">Oi {user.username}!</h1>
+ <div class="navigation">
+        <div class="btn"><Link to='/game'>Jogar jogo 1</Link></div>
+
+        <div class="btn"><Link to='/missions'>Missões</Link></div>
       </div>
     </div>
   )

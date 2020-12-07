@@ -3,7 +3,10 @@
 	/* position: fixed; */
 	display: flex;
 	flex-direction: row;
-	background-color: var(--color-main);
+	/*background-color: var(--color-main);*/
+	background-image: url('capa-top.svg');
+	background-position: bottom right;
+	background-size: cover;
 	color: var(--color-text);
 	padding: 25px 50px;
 	justify-content: space-between;

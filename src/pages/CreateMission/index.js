@@ -79,7 +79,7 @@ const CreateMissionGame1 = () => {
       <Button onClick={createMission}>Criar Missão</Button>
 
       <div>
-        <div>Personagens na missão:</div>
+        <h2>Personagens na missão:</h2>
         {charList.map( ( character, index) =>
           <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
             <Button onClick={removeFromMission(character)}><RemoveIcon /></Button>
@@ -89,11 +89,11 @@ const CreateMissionGame1 = () => {
       </div>
 
       <div>
-        <div>Personagens disponíveis</div>
+        <h3 class="characters">Personagens disponíveis</h3>
         {characters.items && characters.items.length > 0 && characters.items
           .filter( character => !charList.find( c => c.id === character.id) )
           .map( (character, index) =>
-          <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
+          <div class="character" key={index} style={{display: 'flex', flexDirection: 'row'}}>
             <Button onClick={addToMission(character)}>
               <AddIcon />
             </Button>
@@ -107,7 +107,7 @@ const CreateMissionGame1 = () => {
       </div>
 
       <div>
-        <div>Locais na missão:</div>
+        <h2>Locais na missão:</h2>
         {locationList.map((location, index) =>
           <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
             <Button onClick={removeLocationFromMission(location)}><RemoveIcon /></Button>
@@ -117,7 +117,7 @@ const CreateMissionGame1 = () => {
       </div>
 
       <div>
-        <div>Locais disponíveis</div>
+        <h3>Locais disponíveis</h3>
         {locations.items && locations.items.length > 0 && locations.items
           .filter( location => !locationList.find( l => l.id === location.id) )
           .map( (location, index) =>
@@ -136,7 +136,7 @@ const CreateMissionGame1 = () => {
 
       
       <div>
-        <div>Questions:</div>
+        <h2>Questions:</h2>
         {questionList.map( ( question, index) =>
           <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
             <Button onClick={removeQuestionFromMission(question)}><RemoveIcon /></Button>
@@ -146,7 +146,7 @@ const CreateMissionGame1 = () => {
       </div>
 
       <div>
-        <div>Preset questions</div>
+        <h3>Preset questions</h3>
         {questions.items && questions.items.length > 0 && questions.items
           .filter( question => !questionList.find( c => c.id === question.id) )
           .map( (question, index) =>

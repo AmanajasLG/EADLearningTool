@@ -9,18 +9,19 @@ const Character = ({character}) => {
     return a ? a.answer : ''
   }
   return(
-    <div>
-      <div class="character">
-        <span>{character.name}</span> <span>{character.civilState}</span> <span>{character.job}</span>
+    <div class="character">
+      <div class="character-desc">
+        <h2>{character.name}</h2> 
+        <span>{character.civilState}</span> <span>{character.job}</span>
       </div>
       <div>
         <div class="missions"> Missões que participa: </div>
         {character.missions && character.missions.map((mission, index)=>
           <div key={index}>
-            <h2 class="mission-name">{index+1}: {mission.name}</h2>
+            <h3 class="mission-name">{index+1}: {mission.name}</h3>
             {mission.questions.map((question, qIndex) =>
               <div key={qIndex}>
-                <h3 class="mission-question">Pergunta: {question.question}</h3>
+                <h4 class="mission-question">Pergunta: {question.question}</h4>
                 <h4 class="mission-answer">Resposta: {getAnswer(question.id)}</h4>
               </div>
             )}

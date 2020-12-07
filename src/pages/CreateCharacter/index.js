@@ -28,17 +28,19 @@ const CreateCharacter = () => {
 
   return (
     <div>
-      <div>Criador de personagens:</div>
-      <div>Nome: <input type='text' value={name} onChange={ e => setName(e.target.value)} /> </div>
-      <div>Trabalho: <input type='text' value={job} onChange={ e => setJob(e.target.value)} /> </div>
-      <div>Estado civil:
-        {civilStates.map((cs, index) =>
-          <div key={index}>
-            <Radio checked={civilState === civilStates[index]} value={civilStates[index]} onChange={ e => setCivilState(e.target.value)}/>
-            {estadosCivis[index]}
-          </div>
-        )}
-      </div>
+      <h2>Criador de personagens:</h2>
+      <ul class="no-bullet">
+        <li>Nome: <input type='text' value={name} onChange={ e => setName(e.target.value)} /> </li>
+        <li>Trabalho: <input type='text' value={job} onChange={ e => setJob(e.target.value)} /> </li>
+        <li>Estado civil:
+          {civilStates.map((cs, index) =>
+            <div key={index}>
+              <Radio checked={civilState === civilStates[index]} value={civilStates[index]} onChange={ e => setCivilState(e.target.value)}/>
+              {estadosCivis[index]}
+            </div>
+          )}
+        </li>
+      </ul>
       <button onClick={create}>Criar</button>
     </div>
   )

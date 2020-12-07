@@ -42,16 +42,16 @@ const EditCharacter = ({character, onDone}) => {
   }
 
   return(
-    <div>
-      <div>
+ 
+      <div class="edit-character">
         <input type='text' value={state.name} onChange={ e => setState({...state, nome: e.target.value}) }/>
         <input type='text' value={state.job} onChange={ e => setState({...state, job: e.target.value}) } />
         <div>{character.civilState}</div>
         <div>
-          <div>Missões que participa:</div>
+          <h5>Missões que participa:</h5>
           {character.missions.map((mission, mIndex) =>
             <div key={mIndex}>
-              <div>{mIndex+1}: {mission.name}</div>
+              <h6>{mIndex+1}: {mission.name}</h6>
               <div>
                 {mission.questions.map( (question, qIndex) =>
                   <div key={qIndex}>
@@ -66,7 +66,7 @@ const EditCharacter = ({character, onDone}) => {
         </div>
         <button onClick={onDone(state)}>Salvar</button>
       </div>
-    </div>
+
   )
 }
 export default EditCharacter
