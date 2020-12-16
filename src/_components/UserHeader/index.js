@@ -1,40 +1,38 @@
 import React from 'react'
-import { userActions } from '../../_actions'
-import { useDispatch, useSelector } from 'react-redux'
 import avatar from '../../img/avatar1.svg'
 import home from '../../img/i-home.svg'
 import notifications from '../../img/i-notification.svg'
 import settings from '../../img/i-settings.svg'
+import { logout } from '../../_actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { useAlert } from 'react-alert';
 
 const UserHeader = ({pageInfo}) => {
 	let headerInfo = useSelector(state => state.header)
     const [state, setState] = React.useState( {view: 'default'} );
 	const dispatch = useDispatch()
+	const alert = useAlert()
 
 	const clickProfile = () => {
 		setState({...state, view: 'profile'});
-		alert("Vc achou onde faz para abrir o seu perfil! \n\n Ending 3/15");
+		alert.show("Vc achou onde faz para abrir o seu perfil! \n\n Ending 3/15");
 	}
 
 	const clickHome = () => {
 		setState({...state, view: 'home'});
-		alert("Vc achou onde faz para voltar ao início! \n\n Ending 1/15");
+		alert.show("Vc achou onde faz para voltar ao início! \n\n Ending 1/15");
 	}
 
 	const clickNotif = () => {
 		setState({...state, view: 'notif'});
-		alert("Vc achou onde faz para ver suas notificações! \n\n Ending 7/15");
+		alert.show("Vc achou onde faz para ver suas notificações! \n\n Ending 7/15");
 	}
 
 	const clickSettings = () => {
 		setState({...state, view: 'settings'});
-		alert("Vc achou onde faz para abrir suas configurações! \n\n Ending 8/15");
+		alert.show("Vc achou onde faz para abrir suas configurações! \n\n Ending 8/15");
 	}
-
-	const logout = () => {
-		dispatch(userActions.logout())
-	}
-
+	
     return (
         <header id="app-header">
 			<div className="group-btns" id="left-btns">
@@ -48,7 +46,7 @@ const UserHeader = ({pageInfo}) => {
 			<div className="group-btns" id="right-btns">
 				<div className="header-btn" id="notif-btn" onClick={clickNotif}><img src={notifications} alt="Notifications"></img></div>
 				<div className="header-btn" id="settings-btn" onClick={clickSettings}><img src={settings} alt="Settings"></img></div>
-				<div className="header-btn" id="settings-btn" onClick={logout}>Logout</div>
+				<div className="header-btn" id="settings-btn" onClick={() => {dispatch(logout())}}>Logout</div>
 			</div>
 		</header>
     )

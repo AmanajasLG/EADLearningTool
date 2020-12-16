@@ -1,19 +1,27 @@
 import React from 'react'
 import Radio from '@material-ui/core/Radio'
 import { useDispatch } from 'react-redux'
-import { characterActions } from '../../_actions'
+import { apiActions } from '../../_actions'
+import { useAlert } from 'react-alert'
 
 const CreateCharacter = () => {
+  const { charactersActions } = apiActions
   const [name, setName] = React.useState('')
   const [job, setJob] = React.useState('')
   const [civilState, setCivilState] = React.useState('single')
   const civilStates = ['single', 'married', 'divorced', 'widowed']
   const estadosCivis = ['solteir@', 'casad@', 'divorciad@', 'viúv@']
   const dispatch = useDispatch()
+  const alert = useAlert()
 
   const create = () => {
     console.log('called')
-    dispatch(characterActions.create({nome: name, job}))
+    dispatch(charactersActions.create({name: name, job: job, civilState: civilState})).then(() => {
+        alert.success('Character created!')
+    })
+    .catch(error => {
+        alert.error(error)
+    })
     setName('')
     setJob('')
   }

@@ -11,7 +11,7 @@ const UserSpace = () => {
         <Link to='/game'>Jogar jogo 1</Link>
       </div>
       <div>
-        <Link to='/createMission1'>Criar missão para jogo1</Link>
+        <Link to='/missions'>Missões</Link>
       </div>
     </div>
   )
