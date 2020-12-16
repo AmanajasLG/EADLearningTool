@@ -5,6 +5,7 @@ import { registration } from './registration.reducer'
 import { users } from './users.reducer'
 import { alert } from './alert.reducer'
 import { characters } from './characters.reducer'
+import { header } from './headerTitle.reducer'
 
 
 const rootReducer = combineReducers({
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     registration,
     users,
     characters,
-    alert
+    alert,
+    header
 })
 
 export default rootReducer

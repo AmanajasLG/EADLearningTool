@@ -1,14 +1,14 @@
 import React from 'react'
 import { userActions } from '../../_actions'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import avatar from '../../img/avatar1.svg'
 import home from '../../img/i-home.svg'
 import notifications from '../../img/i-notification.svg'
 import settings from '../../img/i-settings.svg'
 
 const UserHeader = ({pageInfo}) => {
-
-    const [state, setState] = React.useState( {view: 'default', pageTitle: pageInfo.title, pageSubTitle: pageInfo.subTitle} );
+	let headerInfo = useSelector(state => state.header)
+    const [state, setState] = React.useState( {view: 'default'} );
 	const dispatch = useDispatch()
 
 	const clickProfile = () => {
@@ -42,8 +42,8 @@ const UserHeader = ({pageInfo}) => {
 				<div className="header-btn" id="home-btn" onClick={clickHome}><img src={home} alt="Home"></img></div>
 			</div>
 			<div id="pageTitle">
-				<div id="mainTitle">{state.pageTitle}</div>
-				<div id="subTitle">{state.pageSubTitle}</div>
+				<div id="mainTitle">{headerInfo.title}</div>
+				<div id="subTitle">{headerInfo.subtitle}</div>
 			</div>
 			<div className="group-btns" id="right-btns">
 				<div className="header-btn" id="notif-btn" onClick={clickNotif}><img src={notifications} alt="Notifications"></img></div>
