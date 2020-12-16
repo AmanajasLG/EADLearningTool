@@ -10,8 +10,12 @@ import AppHeader from '../../../_components/AppHeader'
 import rooms from './rooms.js'
 import quizOptions from './quizOptions.js'
 import './index.scss'
+import { useDispatch } from 'react-redux'
+import { headerTitleActions } from '../../../_actions'
+
 
 const Game = () => {
+	const dispatch = useDispatch();
 	const [state, setState] = React.useState({
 		currentRoom: 0,
 		targetName: 'Juslecino',
@@ -75,11 +79,12 @@ const Game = () => {
 		}
 	}
 
+
 	// Essa return aqui tá um BAD SMELL absurdo. Temos que refatorar esse trecho de código.
 	return (
 		<div>
 			<div style={{width: '100%', height: '100%'}}>
-				<div id="RoomName">{rooms[state.currentRoom].nome}</div>
+				{/* <div id="RoomName">{rooms[state.currentRoom].nome}</div> */}
 					{ !state.gameEndState ? // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
 						<div>
 							{missionOpen && <Init onClose={ () => setMissionOpen(false) }/>}
@@ -87,7 +92,8 @@ const Game = () => {
 							<RoomSelect
 								roomsData={rooms}
 								onChange={(num) => {
-									setState({...state, currentRoom: num}) 
+									setState({...state, currentRoom: num})
+									dispatch(headerTitleActions.changeTitle(rooms[num].nome))
 								}}
 							/>
 							<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
