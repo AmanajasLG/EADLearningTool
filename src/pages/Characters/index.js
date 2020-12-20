@@ -37,8 +37,7 @@ const Characters = ({onAdd}) => {
           <span>Nome</span> <span>Estado civil</span> <span>Trabalho</span>
         </div>
         <div>
-          {characters.items && characters.items.length > 0 ?
-            characters.items.map((character, index) =>
+          {characters.items.map((character, index) =>
             <React.Fragment key={index}>
               {edit === index ?
                 <div>
@@ -52,7 +51,7 @@ const Characters = ({onAdd}) => {
               }
               <br/>
             </React.Fragment>
-          ):null}
+          )}
         </div>
       </div>
     </div>

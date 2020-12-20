@@ -35,6 +35,10 @@ const UserSpace = () => {
         <div>
           <Link to='/characters'>Personagens</Link>
         </div>
+
+        <div>
+          <Link to='/questions'>Perguntas</Link>
+        </div>
       </div>
 
     </div>

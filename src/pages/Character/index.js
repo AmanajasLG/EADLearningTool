@@ -2,15 +2,12 @@ import React from 'react'
 import { baseURL } from '../../_services'
 
 const Character = ({character}) => {
-  console.log('character:', character)
   const getAnswer = (qId) => {
-    if(!character.answers) return ''
-
-    let a = character.answers.find( answer => answer.question.id === qId)
+    let a = character.answers.find( answer => answer.question && answer.question.id === qId)
     return a ? a.answer : ''
   }
   return(
-    <div>
+    <div style={{borderStyle: 'groove', borderRadius: 5}}>
       <div style={{borderStyle: 'groove', borderRadius: 5}}>
         <div>Name: {character.name}</div>
         <div>

@@ -38,7 +38,6 @@ const createBuilder = (routeName) => function create(data) {
 }
 
 const updateBuilder = (routeName) => function update(data){
-    console.log('data:', data)
     return api(
         {
           method: 'put',
@@ -63,9 +62,6 @@ const deleteBuilder = (routeName) => function _delete(id){
 }
 
 function handleResponse(response) {
-
-  console.log(response)
-
   if(response.status !== 200){
       if(response.status === 401){
           window.location.reload()

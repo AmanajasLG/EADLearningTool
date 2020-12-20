@@ -45,26 +45,9 @@ const CreateQuestion = () => {
     const creating = useSelector(state => state.authentication.registering)
 
     function handleSubmit(e) {
-        e.preventDefault()       
-        
-        console.log(inputs)
-        
-
-        // setSubmitted(true)
-
-        // if(inputs.question && inputs.group && inputs.correct){
-            
-        //     dispatch(questionsActions.create(inputs))
-        //     .then(() => {
-        //         alert.success('Question created!')
-        //         document.getElementById('create-question-form').reset()
-        //     })
-        //     .catch(error => {
-        //         alert.error(error)
-        //     })
-        // } else {
-        //     alert.error('Required fields missing! Please, check your inputs and try again!')
-        // }
+        e.preventDefault()
+        console.log('inputs', inputs)
+        dispatch(questionsActions.create(inputs))
     }
 
     return (
@@ -84,7 +67,7 @@ const CreateQuestion = () => {
                             id="question"
                             label="Question"
                             fullWidth
-                            required                            
+                            required
                             className={submitted && (inputs.question === "") ? 'danger' : ''}
                             onChange={e => {setInputs(inputs => ({...inputs, question: e.target.value}))}}
                             />
@@ -106,7 +89,7 @@ const CreateQuestion = () => {
                         </Grid>
                         <Grid item xs={12} sm={6} justify="center">
                             <FormLabel component="legend">Is question correct?</FormLabel>
-                            
+
                             <RadioGroup
                             aria-label="correct"
                             id="correct"
