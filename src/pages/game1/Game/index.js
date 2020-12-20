@@ -145,12 +145,13 @@ const Game = (props) => {
 											}}
 										/>
 									<Sala roomData={state.locations[state.currentRoom]} setCurrentChar={setCurrentChar}/>
-										{ state.currentChar && !state.gameEndState &&
-											<Conversa endGame={state.endGame}
-												handleSubmit={handleSubmit} quizOptions={quizOptions}
-												charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
-											/>
-										}
+									{ state.currentChar && !state.gameEndState &&
+										<Conversa character={state.currentChar} 
+											endGame={state.endGame}
+											handleSubmit={handleSubmit} quizOptions={quizOptions}
+											 checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
+										/>
+									}
 									</div>)
 						}
 					}())}
