@@ -17,13 +17,12 @@ import quizOptions from './quizOptions.js'
 import './index.scss'
 
 const Game = (props) => {
+	const id = props.match.params.id
 	const mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
-	console.log('props:', props)
 	const dispatch = useDispatch()
 	const { missionsActions } = apiActions
 	React.useEffect(()=>{
-		console.log('bola')
-		dispatch(missionsActions.getById(props.match.params.id))
+		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
 	}, [])
 
 	const gameScenes = ["INIT", "ROOM"]
@@ -35,6 +34,7 @@ const Game = (props) => {
 		isOnDialog: false,
 		endGame: false,
 		found: false,
+		locations:[],
 //DIALOG
 		currentChar: null,
 		targetName: 'Juslecino',
@@ -47,9 +47,27 @@ const Game = (props) => {
 		back: false
 	});
 
-	React.useEffect(()=>{
+	//Randomizar personagens para aparecer nas salas
+	//	Enquanto houver personagens na lista de personagens disponíveis
+	//		Escolhe um local ao acaso
+	//		Escolhe um personagem dentre a lista de personagens disponíveis ao acaso
+	//		Adiciona personagem ao local
+	//		Retira personagem da lista de personagens disponíveis
 
-	}, [])
+	if(mission && state.locations.length === 0){
+		// safe copies
+		let availableCharacters = mission.characters.slice(0)
+		let locations = mission.locations.map( location => { return {location: location, characters: []} })
+
+		//distribute on locations
+		while(availableCharacters.length > 0){
+			const locationIndex = Math.floor(Math.random(0, locations.length))
+			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
+			locations[locationIndex].characters.push(availableCharacters[characterIndex])
+			availableCharacters.splice(characterIndex, 1)
+		}
+		setState({...state, locations: locations})
+	}
 
 	const [missionOpen, setMissionOpen] = React.useState(true)
 	const _minTimeBonus = 2*60*1000; // Se terminar antes desse tempo (em ms), ganha o bônus máximo
@@ -104,44 +122,48 @@ const Game = (props) => {
 	// Essa return aqui tá um BAD SMELL absurdo. Temos que refatorar esse trecho de código.
 	return (
 		<div>
-			<div style={{width: '100%', height: '100%'}}>
-				<div id="RoomName">{mission.locations.length > 0 && mission.locations[state.currentRoom].name}</div>
-				{(function renderScene(){
-					switch(state.scene){
-						case "INIT":
-							return <Init
-												name={mission.name} description={mission.description}
-												onStart={ () => setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"}) }
-												onBack={ ()=> setState({...state, back: true}) }
-											/>
-						case "ROOM":
-							return (
-								<div>
-									<RoomSelect
-										roomsData={mission.locations}
-										onChange={(num) => {
-											setState({...state, currentRoom: num})
-										}}
-									/>
-								<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
-									{ state.currentChar && !state.gameEndState &&
-
-										<Conversa endGame={state.endGame}
-											handleSubmit={handleSubmit} quizOptions={quizOptions}
-											charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
+			{!mission ? <div>Loading...</div>
+			:
+			<div>
+				<div style={{width: '100%', height: '100%'}}>
+					<div id="RoomName">{mission.locations.length > 0 && mission.locations[state.currentRoom].name}</div>
+					{(function renderScene(){
+						switch(state.scene){
+							case "INIT":
+								return <Init
+													name={mission.name} description={mission.description}
+													onStart={ () => setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"}) }
+													onBack={ ()=> setState({...state, back: true}) }
+												/>
+							case "ROOM":
+								return (
+									<div>
+										<RoomSelect
+											roomsData={mission.locations}
+											onChange={(num) => {
+												setState({...state, currentRoom: num})
+											}}
 										/>
-									}
-								</div>)
-					}
-				}())}
+									<Sala roomData={state.locations[state.currentRoom]} setCurrentChar={setCurrentChar}/>
+										{ state.currentChar && !state.gameEndState &&
+											<Conversa endGame={state.endGame}
+												handleSubmit={handleSubmit} quizOptions={quizOptions}
+												charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
+											/>
+										}
+									</div>)
+						}
+					}())}
 
-				{ !state.gameEndState && // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
-					<div></div>
-				}
-				{	state.endGame ? <Result gameEndState={state.gameEndState}/> : null }
-				{ state.tries > 0 ? <div>{state.tries} tentativa{state.tries > 1? 's' : ''}!</div> : null}
-				{ state.back && <Redirect to='/userspace' />}
+					{ !state.gameEndState && // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
+						<div></div>
+					}
+					{	state.endGame ? <Result gameEndState={state.gameEndState}/> : null }
+					{ state.tries > 0 ? <div>{state.tries} tentativa{state.tries > 1? 's' : ''}!</div> : null}
+					{ state.back && <Redirect to='/userspace' />}
+				</div>
 			</div>
+			}
 		</div>
   )
 }

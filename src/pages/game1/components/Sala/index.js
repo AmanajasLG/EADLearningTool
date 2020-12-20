@@ -9,11 +9,10 @@ const Sala = ({roomData, setCurrentChar}) => {
 
   return (
       <div id="sala" className={roomData.className} onDragOver={onDragOver}>
-          {roomData.personagens.map((data, index) =>
+          {roomData.characters.map((character, index) =>
             <Character key={index}
-              dragPosition={pos}
-              position={data.metaData.position} charData={data.charData}
-              diagData={data.diagData} setCurrentChar={setCurrentChar}
+              character={character}
+              setCurrentChar={setCurrentChar}
             />
           )}
       </div>
