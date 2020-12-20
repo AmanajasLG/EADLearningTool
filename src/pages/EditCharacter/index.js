@@ -44,7 +44,7 @@ const EditCharacter = ({character, onDone}) => {
   return(
     <div>
       <div>
-        <input type='text' value={state.name} onChange={ e => setState({...state, nome: e.target.value}) }/>
+        <input type='text' value={state.name} onChange={ e => setState({...state, name: e.target.value}) }/>
         <input type='text' value={state.job} onChange={ e => setState({...state, job: e.target.value}) } />
         <div>{character.civilState}</div>
         <div>

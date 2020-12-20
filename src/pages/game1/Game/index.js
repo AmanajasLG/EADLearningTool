@@ -1,4 +1,9 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+
+import { apiActions } from '../../../_actions'
+
 import Init from '../components/Init'
 import Result from '../components/Result'
 import RoomSelect from '../components/RoomSelect'
@@ -11,20 +16,41 @@ import rooms from './rooms.js'
 import quizOptions from './quizOptions.js'
 import './index.scss'
 
-const Game = () => {
+const Game = (props) => {
+	const mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
+	console.log('props:', props)
+	const dispatch = useDispatch()
+	const { missionsActions } = apiActions
+	React.useEffect(()=>{
+		console.log('bola')
+		dispatch(missionsActions.getById(props.match.params.id))
+	}, [])
+
+	const gameScenes = ["INIT", "ROOM"]
 	const [state, setState] = React.useState({
+//GAME STATE
+		tutorialStep: 0,
+		scene: "INIT",
 		currentRoom: 0,
-		targetName: 'Juslecino',
+		isOnDialog: false,
 		endGame: false,
-		currentChar: null,
 		found: false,
+//DIALOG
+		currentChar: null,
+		targetName: 'Juslecino',
 		quizAnswer: 0,
 		gameEndState: null,
 		tries: 0,
 		score: 0,
 		startedTimestamp: new Date(Date.now()),
-		elapsedTime: null
+		elapsedTime: null,
+		back: false
 	});
+
+	React.useEffect(()=>{
+
+	}, [])
+
 	const [missionOpen, setMissionOpen] = React.useState(true)
 	const _minTimeBonus = 2*60*1000; // Se terminar antes desse tempo (em ms), ganha o bônus máximo
 	const _maxTimeBonus = 5*60*1000; // Se terminar em até esse tempo (em ms), ganha um bônus no score proporcional. Terminar depois garante 0 de bônus
@@ -37,7 +63,7 @@ const Game = () => {
 		// seja 1 em t = _minTimeBonus e 0 em t = _maxTimeBonus
 		let bonusAmnt = (_maxTimeBonus - diff)/(_maxTimeBonus - _minTimeBonus);
 		bonusAmnt = Math.max(Math.min(bonusAmnt, 1.0), 0.0); // Clampa para que bonusAmnt = [0,1]
-		
+
 		// Sim, eu sei. Essa linha está 3x maior que o ideal por culpa da string. Mas ela é para ser temporária.
 		// Se estivermos em produção e essa linha ainda estiver existente, algo deu muito errado.
 		let msgFinal = `Você encontrou ${state.targetName}!\nVocê levou ${Math.trunc(diff / 60000)}:` + `${Math.trunc(diff/1000)%60}`.padStart(2, '0') + ` para encontrar. Isso te garante ${Math.round(_maxBonusPts*bonusAmnt)} pontos de bonus.`
@@ -79,32 +105,42 @@ const Game = () => {
 	return (
 		<div>
 			<div style={{width: '100%', height: '100%'}}>
-				<div id="RoomName">{rooms[state.currentRoom].nome}</div>
-					{ !state.gameEndState ? // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
-						<div>
-							{missionOpen && <Init onClose={ () => setMissionOpen(false) }/>}
-							<button onClick={ () => setMissionOpen(true) }>Abrir resumo da missão</button>
-							<RoomSelect
-								roomsData={rooms}
-								onChange={(num) => {
-									setState({...state, currentRoom: num}) 
-								}}
-							/>
-							<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
-							{ state.currentChar && !state.gameEndState ?
+				<div id="RoomName">{mission.locations.length > 0 && mission.locations[state.currentRoom].name}</div>
+				{(function renderScene(){
+					switch(state.scene){
+						case "INIT":
+							return <Init
+												name={mission.name} description={mission.description}
+												onStart={ () => setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"}) }
+												onBack={ ()=> setState({...state, back: true}) }
+											/>
+						case "ROOM":
+							return (
+								<div>
+									<RoomSelect
+										roomsData={mission.locations}
+										onChange={(num) => {
+											setState({...state, currentRoom: num})
+										}}
+									/>
+								<Sala roomData={rooms[state.currentRoom]} setCurrentChar={setCurrentChar}/>
+									{ state.currentChar && !state.gameEndState &&
 
-								<Conversa endGame={state.endGame}
-									handleSubmit={handleSubmit} quizOptions={quizOptions}
-									charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
-								/>
-								: null
-							}
-						</div>
-						:
-						null
+										<Conversa endGame={state.endGame}
+											handleSubmit={handleSubmit} quizOptions={quizOptions}
+											charData={state.currentChar} checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
+										/>
+									}
+								</div>)
 					}
-					{	state.endGame ? <Result gameEndState={state.gameEndState}/> : null }
-					{ state.tries > 0 ? <div>{state.tries} tentativa{state.tries > 1? 's' : ''}!</div> : null}
+				}())}
+
+				{ !state.gameEndState && // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
+					<div></div>
+				}
+				{	state.endGame ? <Result gameEndState={state.gameEndState}/> : null }
+				{ state.tries > 0 ? <div>{state.tries} tentativa{state.tries > 1? 's' : ''}!</div> : null}
+				{ state.back && <Redirect to='/userspace' />}
 			</div>
 		</div>
   )

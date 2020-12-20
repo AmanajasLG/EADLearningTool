@@ -16,7 +16,7 @@ const RoomSelect = ({roomsData, onChange}) => {
 							id={ state === index ? "selected" : "" }
 							onClick={buttonClick(index)}
 						>
-							{data.nome}
+							{data.name}
 						</button> )}
         </div>
     )

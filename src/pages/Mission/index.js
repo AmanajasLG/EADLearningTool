@@ -5,7 +5,10 @@ const Mission = ({mission}) => {
   return(
     <div>
       <div>Nome: {mission.name}</div>
-      <div>Descrição: {mission.description}</div>
+      <div>
+        <div>Descrição:</div>
+        <div>{mission.description}</div>
+      </div>
     </div>
   )
 }

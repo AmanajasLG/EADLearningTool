@@ -1,4 +1,5 @@
 import React from 'react'
+import { baseURL } from '../../_services'
 
 const Character = ({character}) => {
   console.log('character:', character)
@@ -10,8 +11,20 @@ const Character = ({character}) => {
   }
   return(
     <div>
-      <div>
-        <span>{character.name}</span> <span>{character.civilState}</span> <span>{character.job}</span>
+      <div style={{borderStyle: 'groove', borderRadius: 5}}>
+        <div>Name: {character.name}</div>
+        <div>
+          {character.characterAssets && character.characterAssets.length > 0 ?
+            character.characterAssets.map((characterAsset, index) =>
+              <div key={index}>
+                <img src={`${characterAsset.link}`} alt={characterAsset.name}/>
+              </div>
+            ):'nenhum'
+          }
+          {character.characterAssets && <div>Layers: {character.characterAssets.length}</div>}
+        </div>
+        <div>Job: {character.job}</div>
+        <div>Civil state: {character.civilState}</div>
       </div>
       <div>
         <div> Missões que participa: </div>
@@ -28,21 +41,6 @@ const Character = ({character}) => {
         )}
         <div>Resposta final: {character.finalAnswer}</div>
       </div>
-      {/*
-      <div>
-        Character_assets:
-          {character.character_assets && character.character_assets.length > 0 ?
-            character.character_assets.map((character_asset, index) =>
-            <div key={index}>
-              <div>Layer: {character_asset.layerDepth}</div>
-              <img src={`${baseURL}${character_asset.image[0].url}`} alt={character_asset.name}/>
-            </div>
-          ):'nenhum'}
-      </div>
-
-      <Button onClick={() => setEdit(true) }><EditIcon /></Button>
-      <Button onClick={() => dispatch(characterActions.delete(character.id)) }><DeleteIcon /></Button>
-      */}
     </div>
   )
 }

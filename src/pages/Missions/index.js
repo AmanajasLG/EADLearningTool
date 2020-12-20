@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { apiActions } from '../../_actions'
@@ -16,7 +16,7 @@ import EditMission from '../EditMission'
 
 
 const Missions = () => {
-  const { missionsActions, charactersActions, locationsActions, questionsActions } = apiActions
+  const { missionsActions } = apiActions
   const dispatch = useDispatch()
   const missions = useSelector( state => state.missions)
   const [ createMission, setCreateMission ] = React.useState(false)
@@ -29,9 +29,6 @@ const Missions = () => {
 
   React.useEffect(() => {
     dispatch(missionsActions.getAll())
-    dispatch(charactersActions.getAll())
-    dispatch(locationsActions.getAll())
-    dispatch(questionsActions.getAll())
   }, [])
 
   return(
@@ -47,7 +44,7 @@ const Missions = () => {
               }} /> }
 
           {edit !== index ?
-            <Button onClick={ () => setEdit(index)}><EditIcon/></Button>
+            <Button><Link to={`missions/edit/${mission.id}`}><EditIcon/></Link></Button>
             : <Button onClick={() => setEdit(-1) }><CancelIcon/></Button>
            }
 
@@ -57,7 +54,7 @@ const Missions = () => {
       <Button onClick={() => setCreateMission(!createMission)}>
         {createMission? 'Cancelar' : 'Criar Missão'}
       </Button>
-      {createMission &&  <CreateMission />}
+      {createMission &&  <Redirect to='missions/create'/>}
     </div>
   )
 }

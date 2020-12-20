@@ -19,6 +19,7 @@ import Login from './pages/Login'
 import UserSpace from './pages/UserSpace'
 import UsersCRUD from './pages/UsersCRUD'
 import Missions from './pages/Missions'
+import CreateMission from './pages/CreateMission'
 import Characters from './pages/Characters'
 import Register from './pages/Register'
 
@@ -39,9 +40,11 @@ const App = () => {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/EADLearningTool" component={Home}/>
-          <PrivateRoute exact path="/game" component={Game} />
+          <PrivateRoute exact path="/game/:id" component={Game} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />
           <PrivateRoute exact path="/missions" component={Missions} />
+          <PrivateRoute exact path="/missions/create" component={CreateMission} />
+          <PrivateRoute exact path="/missions/edit/:id" component={CreateMission} />
           <PrivateRoute exact path="/characters" component={Characters} />
           <PrivateRoute exact path="/users" component={UsersCRUD} />
         </Switch>
