@@ -14,22 +14,34 @@ import CreateQuestion from '../CreateQuestion'
 import { apiActions } from '../../_actions'
 
 const CreateMissionGame1 = (props) => {
-  const id = props && props.match ? props.match.params.id : null
   const dispatch = useDispatch()
-  const mission = useSelector( state => id && state.missions.items.length > 0 ? state.missions.items.filter(m => m.id == id)[0] : null )
+
+  //for edit
+  const id = props && props.match ? props.match.params.id : null
+  const originalMission = useSelector( state => id && state.missions.items.length > 0 ? state.missions.items.filter(m => m.id == id)[0] : null )
+
   const characters = useSelector( state => state.characters)
   const locations = useSelector( state => state.locations)
   const questions = useSelector( state => state.questions)
 
   const [state, setState] = React.useState({
-    mission: {name: '', description: ''},
+    mission: {
+      name: '',
+      description: '',
+      characters: [],
+      locations: [],
+      questions:[]
+    },
     characterDetails: null
   })
 
-  if(mission && state.mission.name == '') setState({...state, mission: mission})
+  //for edit
+  if(originalMission && !state.mission.id)
+    setState({...state, mission: {...originalMission}})
 
+  //refrashed route
   React.useEffect(() => {
-    if(id && !mission)
+    if(id && !originalMission)
       dispatch(apiActions.missionsActions.getById(id))
     if(characters.items.length == 0)
       dispatch(apiActions.charactersActions.getAll())
@@ -39,45 +51,26 @@ const CreateMissionGame1 = (props) => {
       dispatch(apiActions.questionsActions.getAll())
   }, [])
 
-  const [charList, setCharList] = React.useState([])
-  const [locationList, setLocationList] = React.useState([])
-  const [questionList, setQuestionList] = React.useState([])
-
   const [createCharacter, setCreateCharacter] = React.useState(false)
   const [createLocation, setCreateLocation] = React.useState(false)
   const [createQuestion, setCreateQuestion] = React.useState(false)
 
   const createMission = () => {
-    let data = {...state,
-      characters: charList.reduce((acc,  item) => [...acc, item.id], [] ),
-      locations: locationList.reduce((acc, item) => [...acc, item.id], [] ),
-      questions: questionList.reduce((acc, item) => [...acc, item.id], [] )
-    }
+    let data = {...state.mission}
     dispatch(apiActions.missionsActions.create(data))
   }
 
-  const addToMission = (character) => () => {
-    setCharList([...charList, character])
+  const editMission = () => {
+    let data = {...state.mission}
+    dispatch(apiActions.missionsActions.update(data))
   }
 
-  const removeFromMission = (character) => () => {
-    setCharList(charList.filter(c => c.id !== character.id))
+  const addToMission = (type, data) => () => {
+    setState({...state, mission: {...state.mission, [type]:[...state.mission[type], data]}})
   }
 
-  const addLocationToMission = (location) => () => {
-    setLocationList([...locationList, location])
-  }
-
-  const removeLocationFromMission = (location) => () => {
-    setLocationList(locationList.filter(c => c.id !== location.id))
-  }
-
-  const addQuestionToMission = (question) => () => {
-    setQuestionList([...questionList, question])
-  }
-
-  const removeQuestionFromMission = (question) => () => {
-    setQuestionList(questionList.filter(c => c.id !== question.id))
+  const removeFromMission = (type, data) => () => {
+    setState({...state, mission: {...state.mission, [type]: state.mission[type].filter(d => d.id !== data.id)}})
   }
 
   const viewDetails = (character) => () => {
@@ -102,14 +95,17 @@ const CreateMissionGame1 = (props) => {
           <div>Texto da missão:</div>
           <textarea value={state.mission.description} onChange={e => setState({...state, mission: {...state.mission, description: e.target.value}})} />
           <div>
-            <Button onClick={createMission}>{id ? 'Salvar Missão' : 'Criar Missão'}</Button>
+            {id ?
+              <Button onClick={editMission}>{'Salvar Missão'}</Button>
+              :<Button onClick={createMission}>{'Criar Missão'}</Button>
+            }
           </div>
 
           <div>
             <div>Personagens na missão:</div>
-            {charList.map( ( character, index) =>
+            {state.mission.characters.map( ( character, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                <Button onClick={removeFromMission(character)}><RemoveIcon /></Button>
+                <Button onClick={removeFromMission('characters', character)}><RemoveIcon /></Button>
                 <Button onClick={viewDetails(character)}>
                   {character.name}
                 </Button>
@@ -119,9 +115,9 @@ const CreateMissionGame1 = (props) => {
 
           <div>
             <div>Locais na missão:</div>
-            {locationList.map((location, index) =>
+            {state.mission.locations.map((location, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                <Button onClick={removeLocationFromMission(location)}><RemoveIcon /></Button>
+                <Button onClick={removeFromMission('locations', location)}><RemoveIcon /></Button>
                 <div>{location.name}</div>
               </div>
             )}
@@ -129,9 +125,9 @@ const CreateMissionGame1 = (props) => {
 
           <div>
             <div>Questions:</div>
-            {questionList.map( ( question, index) =>
+            {state.mission.questions.map( ( question, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                <Button onClick={removeQuestionFromMission(question)}><RemoveIcon /></Button>
+                <Button onClick={removeFromMission('questions', question)}><RemoveIcon /></Button>
                 <Question question={question}/>
               </div>
             )}
@@ -142,10 +138,10 @@ const CreateMissionGame1 = (props) => {
           <div>
             <div>Personagens disponíveis</div>
             {characters.items && characters.items.length > 0 && characters.items
-              .filter( character => !charList.find( c => c.id === character.id) )
+              .filter( character => !state.mission.characters.find( c => c.id === character.id) )
               .map( (character, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                <Button onClick={addToMission(character)}>
+                <Button onClick={addToMission('characters', character)}>
                   <AddIcon />
                 </Button>
                 <Button onClick={viewDetails(character)}>
@@ -162,10 +158,10 @@ const CreateMissionGame1 = (props) => {
           <div>
             <div>Locais disponíveis</div>
             {locations.items && locations.items.length > 0 && locations.items
-              .filter( location => !locationList.find( l => l.id === location.id) )
+              .filter( location => !state.mission.locations.find( l => l.id === location.id) )
               .map( (location, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                <Button onClick={addLocationToMission(location)}>
+                <Button onClick={addToMission('locations', location)}>
                   <AddIcon />
                 </Button>
                 <div>{location.name}</div>
@@ -180,10 +176,10 @@ const CreateMissionGame1 = (props) => {
           <div>
             <div>Preset questions</div>
             {questions.items && questions.items.length > 0 && questions.items
-              .filter( question => !questionList.find( c => c.id === question.id) )
+              .filter( question => !state.mission.questions.find( c => c.id === question.id) )
               .map( (question, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                <Button onClick={addQuestionToMission(question)}>
+                <Button onClick={addToMission('questions', question)}>
                   <AddIcon />
                 </Button>
                 <Question question={question}/>
