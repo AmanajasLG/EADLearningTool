@@ -5,7 +5,7 @@ import './conversa.scss'
 
 import Button from '@material-ui/core/Button'
 
-const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clearCurrentChar}) => {
+const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clearCurrentChar, close}) => {
 
   //Randomization
   let availableAnswers = character.answers.slice(0)
@@ -50,6 +50,7 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
 
   return (
     <div id="conversa">
+      <Button onClick={close ? close : ()=>{}} >X</Button>
       <div>
         {state.dialog.map((dialog, index) =>
           <div key={index}>{dialog}</div>
@@ -68,6 +69,11 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
           : null
         }
       </div>
+      {state.questionStep == 2 &&
+        <div>
+          <Button>Continuar procurando</Button>
+          <Button>É você!</Button>
+        </div>}
     </div>
   )
 }

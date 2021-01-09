@@ -151,6 +151,7 @@ const Game = (props) => {
 									<Sala roomData={state.locations[state.currentRoom]} setCurrentChar={setCurrentChar}/>
 									{ state.currentChar && !state.gameEndState &&
 										<Conversa character={state.currentChar}
+											close={() => setState({...state, currentChar: null})}
 											endGame={state.endGame}
 											handleSubmit={handleSubmit} quizOptions={quizOptions}
 											 checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
