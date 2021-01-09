@@ -129,7 +129,7 @@ const Game = (props) => {
 			:
 			<div>
 				<div style={{width: '100%', height: '100%'}}>
-					<div id="RoomName">{mission.locations.length > 0 && mission.locations[state.currentRoom].name}</div>
+					{/*<div id="RoomName">{mission.locations.length > 0 && mission.locations[state.currentRoom].name}</div>*/}
 					{(function renderScene(){
 						switch(state.scene){
 							case "INIT":
