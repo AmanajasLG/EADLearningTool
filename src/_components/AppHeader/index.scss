@@ -1,12 +1,16 @@
 
 #app-header {
-	/* position: fixed; */
+	// position: fixed;
 	display: flex;
 	flex-direction: row;
-	background-color: var(--color-main);
+	background-image: url('../../img/capa-top.svg');
+	background-repeat: no-repeat;
+	background-position: bottom;
+	background-size: cover;
 	color: var(--color-text);
 	padding: 25px 50px;
 	justify-content: space-between;
+	max-height: 100px;
 }
 
 .group-btns {
@@ -30,4 +34,9 @@
 #subTitle {
 	font-weight: bold;
 	font-size: 80%;
+}
+
+#profilePic {
+	transform-origin: top;
+	transform: scale(0.5) translateY(-25px);
 }

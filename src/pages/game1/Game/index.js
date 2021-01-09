@@ -15,6 +15,8 @@ import AppHeader from '../../../_components/AppHeader'
 import rooms from './rooms.js'
 import quizOptions from './quizOptions.js'
 import './index.scss'
+import { headerTitleActions } from '../../../_actions'
+
 
 const Game = (props) => {
 	const id = props.match.params.id
@@ -119,6 +121,7 @@ const Game = (props) => {
 		}
 	}
 
+
 	// Essa return aqui tá um BAD SMELL absurdo. Temos que refatorar esse trecho de código.
 	return (
 		<div>
@@ -142,11 +145,12 @@ const Game = (props) => {
 											roomsData={mission.locations}
 											onChange={(num) => {
 												setState({...state, currentRoom: num})
+												dispatch(headerTitleActions.changeTitle(rooms[num].nome))
 											}}
 										/>
 									<Sala roomData={state.locations[state.currentRoom]} setCurrentChar={setCurrentChar}/>
 									{ state.currentChar && !state.gameEndState &&
-										<Conversa character={state.currentChar} 
+										<Conversa character={state.currentChar}
 											endGame={state.endGame}
 											handleSubmit={handleSubmit} quizOptions={quizOptions}
 											 checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}

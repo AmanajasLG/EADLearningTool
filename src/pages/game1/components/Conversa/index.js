@@ -6,7 +6,8 @@ import './conversa.scss'
 import Button from '@material-ui/core/Button'
 
 const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clearCurrentChar}) => {
-  console.log('character:', character)
+
+  //Randomization
   let availableAnswers = character.answers.slice(0)
   let correct = availableAnswers.filter(answer => answer.question.correct)
   let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
@@ -29,6 +30,15 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
     selectedQuestions[3] = temp
   }
 
+  const [state, setState] = React.useState({
+    dialog:[],
+    selectedQuestions: selectedQuestions,
+    questionStep: 0,
+    maxQuestionSteps: 2,
+    correct: 0,
+    ncorrect: 0
+  })
+
   const selectOption = (option) => () => {
     setState({...state,
       dialog:[...state.dialog, option.question.question, option.answer],
@@ -38,14 +48,6 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
     })
   }
 
-  const [state, setState] = React.useState({
-    dialog:[],
-    selectedQuestions: selectedQuestions,
-    questionStep: 0,
-    maxQuestionSteps: 2,
-    correct: 0,
-    ncorrect: 0
-  })
   return (
     <div id="conversa">
       <div>

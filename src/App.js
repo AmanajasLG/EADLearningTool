@@ -35,7 +35,7 @@ const App = () => {
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }       */}
       <Router>
-        <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn),title: 'Teste com um nome bem grande', subTitle: 'Teste com outro nome grande'}} />
+        <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn)}} />
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
