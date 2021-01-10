@@ -1,6 +1,5 @@
 import React from 'react'
-import ConversaQuiz from '../ConversaQuiz'
-import ConversaInicial from '../ConversaInicial'
+import Confirmation from '../Confirmation'
 import './conversa.scss'
 
 import Button from '@material-ui/core/Button'
@@ -48,6 +47,9 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
     })
   }
 
+  const onConfirmationYes = () => close()
+  const onConfirmationNo = () => close()
+
   return (
     <div id="conversa">
       <Button onClick={close ? close : ()=>{}} >X</Button>
@@ -72,9 +74,12 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
           : null
         }
       </div>
+      <div style={{width: 100}}>
+        {<img src={character.characterAssets[1].image[0].url} alt="portrait" />}
+        {<img src={character.characterAssets[2].image[0].url} alt="portrait" />}
+      </div>
 
-      {<img src={character.characterAssets[1].image[0].url} alt="portrait" />}
-      {<img src={character.characterAssets[2].image[0].url} alt="portrait" />}
+      {state.questionStep === 2 && <Confirmation onYes={onConfirmationYes} onNo={onConfirmationNo} />}
     </div>
   )
 }

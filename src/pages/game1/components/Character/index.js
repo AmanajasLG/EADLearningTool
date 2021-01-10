@@ -9,7 +9,7 @@ const Character = ({character, dragPosition, position, setCurrentChar}) => {
     React.useEffect(()=>{
       if(dragging) setPos(dragPosition)
     }, [dragPosition])
-    console.log('character:', character)
+    
     return (
     <div className="CharDiv" style={pos.x ? {position: 'absolute', left:pos.x, top: pos.y} : null}
       draggable onDragStart={()=>setDragging(true)} onDragEnd={()=>setDragging(false)}>
