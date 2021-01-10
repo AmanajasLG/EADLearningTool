@@ -9,13 +9,13 @@ const Character = ({character, dragPosition, position, setCurrentChar}) => {
     React.useEffect(()=>{
       if(dragging) setPos(dragPosition)
     }, [dragPosition])
-
+    console.log('character:', character)
     return (
     <div className="CharDiv" style={pos.x ? {position: 'absolute', left:pos.x, top: pos.y} : null}
       draggable onDragStart={()=>setDragging(true)} onDragEnd={()=>setDragging(false)}>
         <div onClick={setCurrentChar(character)}>
           <div>{character.name}</div>
-          <img src={charImage} alt="Kimpossible"/>
+          <img src={character.characterAssets[0].image[0].url} alt={`${character.name}`}/>
         </div>
     </div>
     )
