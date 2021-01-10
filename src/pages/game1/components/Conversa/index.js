@@ -35,7 +35,8 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
     questionStep: 0,
     maxQuestionSteps: 2,
     correct: 0,
-    ncorrect: 0
+    ncorrect: 0,
+    acusation: false
   })
 
   const selectOption = (option) => () => {
@@ -47,13 +48,19 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
     })
   }
 
-  const onConfirmationYes = () => close()
-  const onConfirmationNo = () => close()
+  const onConfirmationYes = () => {
+    setState({...state, acusation: false})
+    close()
+  }
+  const onConfirmationNo = () => {
+    setState({...state, acusation: false})
+    close()
+  }
 
   return (
     <div id="conversa">
       <Button onClick={close ? close : ()=>{}} >X</Button>
-      <Button>É você!</Button>
+      <Button onClick={()=> setState({...state, acusation: true})}>É você!</Button>
 
       <div>
         {state.dialog.map((dialog, index) =>
@@ -79,7 +86,7 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
         {<img src={character.characterAssets[2].image[0].url} alt="portrait" />}
       </div>
 
-      {state.questionStep === 2 && <Confirmation onYes={onConfirmationYes} onNo={onConfirmationNo} />}
+      {state.questionStep === 2 || state.acusation && <Confirmation onYes={onConfirmationYes} onNo={onConfirmationNo} />}
     </div>
   )
 }
