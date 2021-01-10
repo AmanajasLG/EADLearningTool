@@ -51,11 +51,14 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
   return (
     <div id="conversa">
       <Button onClick={close ? close : ()=>{}} >X</Button>
+      <Button>É você!</Button>
+
       <div>
         {state.dialog.map((dialog, index) =>
           <div key={index}>{dialog}</div>
         )}
       </div>
+
       <div>
         {state.questionStep < state.maxQuestionSteps ?
           <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -69,11 +72,9 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
           : null
         }
       </div>
-      {state.questionStep == 2 &&
-        <div>
-          <Button>Continuar procurando</Button>
-          <Button>É você!</Button>
-        </div>}
+
+      {<img src={character.characterAssets[1].image[0].url} alt="portrait" />}
+      {<img src={character.characterAssets[2].image[0].url} alt="portrait" />}
     </div>
   )
 }

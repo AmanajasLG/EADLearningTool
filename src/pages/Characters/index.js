@@ -33,6 +33,7 @@ const Characters = ({onAdd}) => {
       { createCharacter && <CreateCharacter /> }
       <div>
         <div>All Characters:</div>
+        { characters.loading && <div>Loading...</div> }
         <div>
           <span>Nome</span> <span>Estado civil</span> <span>Trabalho</span>
         </div>

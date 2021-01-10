@@ -6,6 +6,7 @@ const Character = ({character}) => {
     let a = character.answers.find( answer => answer.question && answer.question.id === qId)
     return a ? a.answer : ''
   }
+
   return(
     <div style={{borderStyle: 'groove', borderRadius: 5}}>
       <div style={{borderStyle: 'groove', borderRadius: 5}}>
@@ -14,7 +15,7 @@ const Character = ({character}) => {
           {character.characterAssets && character.characterAssets.length > 0 ?
             character.characterAssets.map((characterAsset, index) =>
               <div key={index}>
-                <img src={`${characterAsset.link}`} alt={characterAsset.name}/>
+                <img src={`${character.characterAssets[index].image[0].url}`} alt={characterAsset.name}/>
               </div>
             ):'nenhum'
           }
