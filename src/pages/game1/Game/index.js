@@ -37,6 +37,7 @@ const Game = (props) => {
 		endGame: false,
 		found: false,
 		locations:[],
+		tips: [],
 //DIALOG
 		currentChar: null,
 		targetName: 'Juslecino',
@@ -155,6 +156,8 @@ const Game = (props) => {
 											endGame={state.endGame}
 											handleSubmit={handleSubmit} quizOptions={quizOptions}
 											 checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
+											 addTip={(newTip) => !state.tips.find((t) => t === newTip ) && setState({...state, tips: [...state.tips, newTip]})}
+											 tips={state.tips}
 										/>
 									}
 									</div>)

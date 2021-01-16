@@ -4,7 +4,7 @@ import './conversa.scss'
 
 import Button from '@material-ui/core/Button'
 
-const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clearCurrentChar, close}) => {
+const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clearCurrentChar, close, addTip, tips}) => {
 
   //Randomization
   let availableAnswers = character.answers.slice(0)
@@ -41,7 +41,7 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
 
   const selectOption = (option) => () => {
     setState({...state,
-      dialog:[...state.dialog, option.question.question, option.answer],
+      dialog: [...state.dialog, option.question.question, option.answer],
       questionStep: state.questionStep + 1,
       correct: option.question.correct ? state.correct + 1 : state.correct,
       ncorrect: !option.question.correct ? state.ncorrect + 1 : state.ncorrect
@@ -57,6 +57,21 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
     close()
   }
 
+  const restartConversation = () => {
+    setState({...state,
+      dialog: [],
+      questionStep: 0,
+      correct: 0,
+      ncorrect: 0
+    })
+  }
+
+  const lastQuestion = () => {
+    setState({...state, dialog: [...state.dialog, character.rightAnswer], lastQuestionClicked: true })
+
+    if(addTip) addTip(character.tip)
+  }
+
   return (
     <div id="conversa">
       <Button onClick={close ? close : ()=>{}} >X</Button>
@@ -69,24 +84,41 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
       </div>
 
       <div>
-        {state.questionStep < state.maxQuestionSteps ?
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-            <Button onClick={selectOption(selectedQuestions[state.questionStep * 2])}>
-              {selectedQuestions[state.questionStep * 2].question.question}
-            </Button>
-            <Button onClick={selectOption(selectedQuestions[state.questionStep * 2 + 1])}>
-              {selectedQuestions[state.questionStep * 2 + 1].question.question}
-            </Button>
-          </div>
-          : null
-        }
+        <div>
+          { state.questionStep < 2 ?
+            <div  style={{display: 'flex', flexDirection: 'column'}}>
+              <Button onClick={selectOption(selectedQuestions[state.questionStep * 2])}>
+                {selectedQuestions[state.questionStep * 2].question.question}
+              </Button>
+              <Button onClick={selectOption(selectedQuestions[state.questionStep * 2 + 1])}>
+                {selectedQuestions[state.questionStep * 2 + 1].question.question}
+              </Button>
+            </div>
+            :
+            state.ncorrect > 0 ?
+              <div  style={{display: 'flex', flexDirection: 'column'}}>
+                <Button onClick={restartConversation}>
+                  Sim
+                </Button>
+                <Button onClick={close ? close : ()=>{}}>
+                  Não
+                </Button>
+              </div>
+              : !state.lastQuestionClicked &&
+              <div>
+                <Button onClick={lastQuestion}>
+                  Estou procurando alguém. Você pode me ajudar?
+                </Button>
+              </div>
+          }
+        </div>
       </div>
       <div style={{width: 100}}>
         {<img src={character.characterAssets[1].image[0].url} alt="portrait" />}
         {<img src={character.characterAssets[2].image[0].url} alt="portrait" />}
       </div>
 
-      {state.questionStep === 2 || state.acusation && <Confirmation onYes={onConfirmationYes} onNo={onConfirmationNo} />}
+      {state.acusation && <Confirmation onYes={onConfirmationYes} onNo={onConfirmationNo} tips={tips} />}
     </div>
   )
 }
