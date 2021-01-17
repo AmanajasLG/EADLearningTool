@@ -97,6 +97,7 @@ const Conversa = ({character, endGame, handleSubmit, quizOptions, checkEnd, clea
             :
             state.ncorrect > 0 ?
               <div  style={{display: 'flex', flexDirection: 'column'}}>
+                {character.wrongAnswer}
                 <Button onClick={restartConversation}>
                   Sim
                 </Button>
