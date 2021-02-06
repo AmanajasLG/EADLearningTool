@@ -23,8 +23,19 @@ const Game = (props) => {
 	const mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
 	const dispatch = useDispatch()
 	const { missionsActions } = apiActions
-	React.useEffect(()=>{
+	const getClickedObject = (e) => {
+		let noChildren = {tag: e.target.nodeName, alt: e.target.alt, className: e.target.className, innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date() }
+		//noChildren.children = null
+		console.log('target:', noChildren)
+	}
+
+	React.useEffect(() => {
+		document.addEventListener("mousedown", getClickedObject)
+
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
+
+		//cleanup function
+		return () => document.removeEventListener("mousedown", getClickedObject)
 	}, [])
 
 	const gameScenes = ["INIT", "ROOM"]
