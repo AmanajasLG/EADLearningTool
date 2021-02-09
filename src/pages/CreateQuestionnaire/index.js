@@ -1,147 +1,71 @@
-import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { apiActions } from '../../_actions'
-import Button from '@material-ui/core/Button'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
-import { useAlert } from 'react-alert'
-import { makeStyles } from '@material-ui/core/styles'
-import AddIcon from '@material-ui/icons/Add'
-import { FormControl, Select, InputLabel, MenuItem } from '@material-ui/core'
-import CreateQuestionnaireQuestion from '../CreateQuestionnaireQuestion'
-import QuestionnaireQuestion from '../QuestionnaireQuestion'
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}))
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { ReactFormBuilder, ElementStore } from 'react-form-builder2';
+import DemoBar from './demobar';
+import * as variables from './variables';
+import { get, post } from './requests';
 
-const CreateQuestionnaire = () => {
-    const { questionnairesActions, gamesActions }= apiActions
-    const dispatch = useDispatch()
-    const [inputs, setInputs] = useState({
-        game: ''
-    })
-    const [game, setGame] = useState('')
-    const [submitted, setSubmitted ] = useState(false)
-    const [createQuestionnaireQuestion, setCreateQuestionnaireQuestion] = useState(false)
-    const classes = useStyles()
-    const alert = useAlert()
-    const creating = useSelector(state => state.authentication.registering)
-    const games = useSelector(state => state.games)
+const getUrl = (cid) => `https://safe-springs-35306.herokuapp.com/api/formdata?cid=${cid}`;
 
-    const [state, setState] = useState({
-        questionnaire: {
-          game: -1,
-          questionnaireQuestions: []
-        }
-      })
-    
-    // //for edit
-    // if(originalMission && !state.mission.id)
-    // setState({...state, mission: {...originalMission}})
+class createQuestionnaire extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { formId: '1' };
+    this.formId = this.state.formId;
+    this.handleChange = this.handleChange.bind(this);
+  }
 
-    useEffect(()=>{
-        dispatch(gamesActions.getAll())
-    }, [])
+  formId;
 
-    function handleSubmit(e) {        
-        e.preventDefault()
-        console.log('inputs', inputs)
-        // dispatch(questionnairesActions.create(inputs))
-    }
+  handleChange(event) {
+    this.formId = event.target.value;
+    const url = getUrl(this.formId);
+    console.log('handleChange', url);
+    ElementStore.dispatch('load', { loadUrl: url });
+    this.setState({ formId: this.formId });
+  }
 
-    const handleChange = (e) => {
-        setGame(e.target.value);
-        setInputs(inputs => ({...inputs, game: e.target.value}))
-      };
+  onLoad = () => {
+    const url = getUrl(this.formId);
+    console.log('onLoad', url);
+    return get(url);
+  };
 
-    const questions = useSelector( state => state.questionnaire_questions) 
+  onPost = (data) => {
+    const saveUrl = getUrl(this.formId);
+    console.log('onPost', saveUrl, data);
+    post(saveUrl, data);
+  };
 
-    const addToQuestionnaire = (type, data) => () => {
-        setState({...state, questionnaire: {...state.questionnaire, [type]:[...state.questionnaire[type], data]}})
-      }
-    
+  render() {
     return (
-        <Container component="main" maxWidth="sm">
-            <CssBaseline />
-            <div className={classes.paper}>
-                <Typography component="h1" variant="h5">
-                Create Questionnaire
-                </Typography>
-                <form id="create-questionnaire-form" onSubmit={handleSubmit} className={classes.form} noValidate>
-                    <Grid container spacing={2}>
-                    <FormControl className={classes.formControl}>
-                    <InputLabel id="game-label">Game</InputLabel>
-                    <Select
-                    labelId="game-label"
-                    id="game"
-                    name="game"
-                    value={game}
-                    onChange={handleChange}
-                    className={submitted && !inputs.game ? 'danger' : ''}
-                    >
-                    {games.items.map((game) =>
-                        <MenuItem value={game.id}>{game.name}</MenuItem>
-                    )}
-                    </Select>
-                    </FormControl>
-                    </Grid>
-
-                    <div>
-                        <div>Preset questions</div>
-                        {questions.items && questions.items.length > 0 && questions.items
-                        .filter( question => !state.questionnaire.questionnaireQuestions.find( c => c.id === question.id) )
-                        .map( (question, index) =>
-                        <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                            <Button onClick={addToQuestionnaire('questionnaireQuestions', question)}>
-                            <AddIcon />
-                            </Button>
-                            <QuestionnaireQuestion question={question}/>
-                        </div>
-                        )}
-                        <Button onClick={() => setCreateQuestionnaireQuestion(!createQuestionnaireQuestion)}>{createQuestionnaireQuestion? 'Cancel' : 'Create Questionnaire Question'} </Button>
-                    { createQuestionnaireQuestion && <CreateQuestionnaireQuestion /> }
-                    </div> 
-                    
-                    <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    >
-                    {creating && <span className="spinner-border spinner-border-sm mr-1"></span>}
-                    Create
-                    </Button>
-                </form>
-            </div>
-        </Container>
-    )
+      <div className="App">
+        <label>
+          Select your form:          
+        </label>
+        <select className="form-control" 
+            value={this.state.formId} 
+            onChange={this.handleChange} >
+          <option value="1">Form 1</option>
+          <option value="2">Form 2</option>
+        </select>
+        <hr></hr>
+        <ReactFormBuilder
+          onLoad={this.onLoad}
+          onPost={this.onPost}
+        />,
+      </div>
+    );
+  }
 }
 
-export default CreateQuestionnaire
+ReactDOM.render(
+  <createQuestionnaire />,
+  document.getElementById('form-builder'),
+);
+
+ReactDOM.render(
+  <DemoBar variables={variables} />,
+  document.getElementById('demo-bar'),
+);

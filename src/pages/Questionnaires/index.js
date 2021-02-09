@@ -4,7 +4,7 @@ import { useDispatch, useSelector} from 'react-redux'
 import { apiActions } from '../../_actions'
 
 import Questionnaire from '../Questionnaire'
-import CreateQuestionnaire from '../CreateQuestionnaire'
+// import CreateQuestionnaire from '../CreateQuestionnaire'
 
 import Button from '@material-ui/core/Button'
 import EditIcon from '@material-ui/icons/Edit'
@@ -31,8 +31,8 @@ const Questionnaires = ({onAdd}) => {
   return (
     <div>
       <div>Questionnaires</div>
-      <button onClick={() => setCreateQuestionnaire(!createQuestionnaire)}>{createQuestionnaire? 'Cancel' : 'Create Questionnaire'} </button>
-      { createQuestionnaire && <CreateQuestionnaire /> }
+      {/* <button onClick={() => setCreateQuestionnaire(!createQuestionnaire)}>{createQuestionnaire? 'Cancel' : 'Create Questionnaire'} </button>
+      { createQuestionnaire && <CreateQuestionnaire /> } */}
       <div>
         <div>All questionnaires:</div>
         <div>

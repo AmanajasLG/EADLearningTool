@@ -36,8 +36,8 @@ const CreateQuestionnaireQuestion = () => {
     const dispatch = useDispatch()
     const [inputs, setInputs] = useState({
         question: '',
-        group: 0,
-        correct: true
+        deafult: true,
+        questionnaireAnswers: []
     })
     const [submitted, setSubmitted ] = useState(false)
     const classes = useStyles()
@@ -48,7 +48,7 @@ const CreateQuestionnaireQuestion = () => {
         e.preventDefault()
         console.log('inputs', inputs)
         dispatch(questionnaire_questionsActions.create(inputs))
-    }
+    }    
 
     return (
         <Container component="main" maxWidth="sm">
