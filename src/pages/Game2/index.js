@@ -53,8 +53,6 @@ const Game = (props) => {
 		const	getClickedObject = (e) => {
 				dispatch(player_actionsActions.create({
 					'play_session': currentPlaySession.id,
-					usersPermissionsUser: userId,
-					mission: mission.id,
 					data:
 							{
 								tag: e.target.nodeName,
@@ -64,11 +62,14 @@ const Game = (props) => {
 							}
 				}))
 			}
-
+		console.log('Listening mouse clicks with', getClickedObject)
 		document.addEventListener("mousedown", getClickedObject)
 
 		setState({...state, currentPlaySession, getClickedObject})
-		return () => document.removeEventListener("mousedown", state.getClickedObject)
+		return () => {
+			console.log('Unlistening mouse events with', getClickedObject)
+			document.removeEventListener("mousedown", getClickedObject)
+		}
 	}, [currentPlaySession])
 
 	React.useEffect(() => {
