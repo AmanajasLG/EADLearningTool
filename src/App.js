@@ -25,6 +25,7 @@ import Characters from './pages/Characters'
 import Questions from './pages/Questions'
 import Register from './pages/Register'
 import Questionnaires from './pages/Questionnaires'
+import PlaySessions from './pages/PlaySessions'
 
 const App = () => {
   // const dispatch = useDispatch()
@@ -53,6 +54,7 @@ const App = () => {
           <PrivateRoute exact path="/missions/edit/:id" component={CreateMission} />
           <PrivateRoute exact path="/characters" component={Characters} />
           <PrivateRoute exact path="/users" component={UsersCRUD} />
+          <PrivateRoute exact path="/playSessions" component={PlaySessions}/>
         </Switch>
       </Router>
 

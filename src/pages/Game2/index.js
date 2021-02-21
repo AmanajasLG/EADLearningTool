@@ -37,7 +37,6 @@ const Game = (props) => {
 		startedTimestamp: new Date(Date.now()),
 		elapsedTime: null,
 		back: false,
-		playSession:{}
 	});
 
 	const id = props.match.params.id
@@ -45,45 +44,35 @@ const Game = (props) => {
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const dispatch = useDispatch()
-	const { missionsActions, play_sessionsActions } = apiActions
+	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
 
 	React.useEffect(() => {
-		console.log('currentPlaySession:', currentPlaySession)
 		if(!currentPlaySession)
 			return
 
-		let playSession = {
-			currentPlaySession,
-			getClickedObject: state.playSession.getClickedObject? state.playSession.getClickedObject:
-			 function(e){
-		 				dispatch(play_sessionsActions.update({
-		 					id: this.currentPlaySession.id,
-		 					playerActions:
-							{clicks:
-								[...this.currentPlaySession.playerActions.clicks,
-		 							{
-		 								tag: e.target.nodeName,
-		 								alt: e.target.alt,
-		 								className: e.target.className,
-		 								innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
-		 							}
-		 						]
+		const	getClickedObject = (e) => {
+				dispatch(player_actionsActions.create({
+					'play_session': currentPlaySession.id,
+					usersPermissionsUser: userId,
+					mission: mission.id,
+					data:
+							{
+								tag: e.target.nodeName,
+								alt: e.target.alt,
+								className: e.target.className,
+								innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
 							}
-		 				}))
- 				}
-		}
+				}))
+			}
 
-		document.removeEventListener("mousedown", state.playSession.getClickedObject)
-		document.addEventListener("mousedown", playSession.getClickedObject.bind(playSession))
+		document.addEventListener("mousedown", getClickedObject)
 
-		setState({...state, playSession})
-
+		setState({...state, currentPlaySession, getClickedObject})
+		return () => document.removeEventListener("mousedown", state.getClickedObject)
 	}, [currentPlaySession])
 
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-		//cleanup function
-		return () => document.removeEventListener("mousedown", state.getClickedObject)
 	}, [])
 
 	//Randomizar personagens para aparecer nas salas
@@ -159,19 +148,10 @@ const Game = (props) => {
 	}
 
 	const onStartGame = (e) => {
-		let noChildren = {
-			tag: e.target.nodeName,
-			alt: e.target.alt,
-			className: e.target.className,
-			innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
-		}
-		const data = {
+		dispatch(play_sessionsActions.create({
 			usersPermissionsUser: userId,
-			mission: mission.id,
-			playerActions: {clicks: [noChildren]}
-		}
-		console.log(data)
-		dispatch(play_sessionsActions.create(data))
+			mission: mission.id
+		}))
 		setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"})
 	}
 
