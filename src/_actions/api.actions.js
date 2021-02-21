@@ -15,7 +15,6 @@ function requester(service, request, success, failure, payload){
               },
             error => {
                 dispatch(failure(error.toString()))
-                console.log(error.response.data)
 
                 try {
                   return Promise.reject(error.response.data.data[0].messages[0].message)
@@ -52,7 +51,7 @@ const createConstructor = (service, apiDataType) => {
   return function(createData){
     return requester(service.create, request, success, failure, createData)
 
-    function request(data) { return {type: apiConstants[apiDataType].CREATE_REQUEST, [apiDataType]: data} }
+    function request(data) { return {type: apiConstants[apiDataType].CREATE_REQUEST, [apiDataType]: data}}
     function success(data) { return {type: apiConstants[apiDataType].CREATE_SUCCESS, data} }
     function failure(error) { return {type: apiConstants[apiDataType].CREATE_FAILURE, error} }
   }

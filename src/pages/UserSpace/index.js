@@ -16,13 +16,20 @@ const UserSpace = () => {
   return(
     <div>
       Oi {user.username}!
+
       <div>
         Jogar jogo 1
+        <div>Missões:</div>
+        <Link to={'/game1/0'}>Em construção</Link>
+      </div>
+
+      <div>
+        Jogar jogo 2
         <div>Missões:</div>
         {missions.loading ? <div>Loading...</div> :
           missions && missions.items.map( (mission, index) =>
           <div key={index}>
-            <Link to={`/game/${mission.id}`}>{mission.name}</Link>
+            <Link to={`/game2/${mission.id}`}>{mission.name}</Link>
           </div>
         )}
       </div>

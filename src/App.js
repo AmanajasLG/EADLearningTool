@@ -2,7 +2,8 @@
 import './App.scss'
 import AppHeader from './_components/AppHeader'
 import Home from './pages/Home'
-import Game from './pages/game1/Game'
+import Game1 from './pages/Game1'
+import Game2 from './pages/Game2'
 
 import {
   BrowserRouter as Router,
@@ -41,7 +42,8 @@ const App = () => {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <Route path="/EADLearningTool" component={Home}/>
-          <PrivateRoute exact path="/game/:id" component={Game} />
+          <PrivateRoute exact path="/game1/:id" component={Game1} />
+          <PrivateRoute exact path="/game2/:id" component={Game2} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />
           <PrivateRoute exact path="/missions" component={Missions} />
           <PrivateRoute exact path="/questions" component={Questions} />

@@ -2,42 +2,20 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions } from '../../../_actions'
+import { apiActions , headerTitleActions } from '../../_actions'
 
-import Init from '../components/Init'
-import Result from '../components/Result'
-import RoomSelect from '../components/RoomSelect'
-import Sala from '../components/Sala'
-import Conversa from '../components/Conversa'
+import Init from './components/Init'
+import Result from './components/Result'
+import RoomSelect from './components/RoomSelect'
+import Sala from './components/Sala'
+import Conversa from './components/Conversa'
 // import ConversaInicial from '../components/ConversaInicial'
 // import ConversaQuiz from '../components/ConversaQuiz'
-import AppHeader from '../../../_components/AppHeader'
-import rooms from './rooms.js'
-import quizOptions from './quizOptions.js'
+import AppHeader from '../../_components/AppHeader'
 import './index.scss'
-import { headerTitleActions } from '../../../_actions'
 
 
 const Game = (props) => {
-	const id = props.match.params.id
-	const mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
-	const dispatch = useDispatch()
-	const { missionsActions } = apiActions
-	const getClickedObject = (e) => {
-		let noChildren = {tag: e.target.nodeName, alt: e.target.alt, className: e.target.className, innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date() }
-		//noChildren.children = null
-		console.log('target:', noChildren)
-	}
-
-	React.useEffect(() => {
-		document.addEventListener("mousedown", getClickedObject)
-
-		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-
-		//cleanup function
-		return () => document.removeEventListener("mousedown", getClickedObject)
-	}, [])
-
 	const gameScenes = ["INIT", "ROOM"]
 	const [state, setState] = React.useState({
 //GAME STATE
@@ -58,8 +36,55 @@ const Game = (props) => {
 		score: 0,
 		startedTimestamp: new Date(Date.now()),
 		elapsedTime: null,
-		back: false
+		back: false,
+		playSession:{}
 	});
+
+	const id = props.match.params.id
+	const mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
+	const userId = useSelector( state => state.authentication.user.user.id )
+	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
+	const dispatch = useDispatch()
+	const { missionsActions, play_sessionsActions } = apiActions
+
+	React.useEffect(() => {
+		console.log('currentPlaySession:', currentPlaySession)
+		if(!currentPlaySession)
+			return
+
+		let playSession = {
+			currentPlaySession,
+			getClickedObject: state.playSession.getClickedObject? state.playSession.getClickedObject:
+			 function(e){
+		 				dispatch(play_sessionsActions.update({
+		 					id: this.currentPlaySession.id,
+		 					playerActions:
+							{clicks:
+								[...this.currentPlaySession.playerActions.clicks,
+		 							{
+		 								tag: e.target.nodeName,
+		 								alt: e.target.alt,
+		 								className: e.target.className,
+		 								innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
+		 							}
+		 						]
+							}
+		 				}))
+ 				}
+		}
+
+		document.removeEventListener("mousedown", state.playSession.getClickedObject)
+		document.addEventListener("mousedown", playSession.getClickedObject.bind(playSession))
+
+		setState({...state, playSession})
+
+	}, [currentPlaySession])
+
+	React.useEffect(() => {
+		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
+		//cleanup function
+		return () => document.removeEventListener("mousedown", state.getClickedObject)
+	}, [])
 
 	//Randomizar personagens para aparecer nas salas
 	//	Enquanto houver personagens na lista de personagens disponíveis
@@ -133,6 +158,23 @@ const Game = (props) => {
 		}
 	}
 
+	const onStartGame = (e) => {
+		let noChildren = {
+			tag: e.target.nodeName,
+			alt: e.target.alt,
+			className: e.target.className,
+			innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
+		}
+		const data = {
+			usersPermissionsUser: userId,
+			mission: mission.id,
+			playerActions: {clicks: [noChildren]}
+		}
+		console.log(data)
+		dispatch(play_sessionsActions.create(data))
+		setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"})
+	}
+
 
 	// Essa return aqui tá um BAD SMELL absurdo. Temos que refatorar esse trecho de código.
 	return (
@@ -147,7 +189,7 @@ const Game = (props) => {
 							case "INIT":
 								return <Init
 													name={mission.name} description={mission.description}
-													onStart={ () => setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"}) }
+													onStart={ onStartGame }
 													onBack={ ()=> setState({...state, back: true}) }
 												/>
 							case "ROOM":
@@ -157,7 +199,7 @@ const Game = (props) => {
 											roomsData={mission.locations}
 											onChange={(num) => {
 												setState({...state, currentRoom: num})
-												dispatch(headerTitleActions.changeTitle(rooms[num].nome))
+												dispatch(headerTitleActions.changeTitle(state.locations[num]))
 											}}
 										/>
 									<Sala roomData={state.locations[state.currentRoom]} setCurrentChar={setCurrentChar}/>
@@ -165,7 +207,7 @@ const Game = (props) => {
 										<Conversa character={state.currentChar}
 											close={() => setState({...state, currentChar: null})}
 											endGame={state.endGame}
-											handleSubmit={handleSubmit} quizOptions={quizOptions}
+											handleSubmit={handleSubmit}
 											 checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
 											 addTip={(newTip) => !state.tips.find((t) => t === newTip ) && setState({...state, tips: [...state.tips, newTip]})}
 											 tips={state.tips}
