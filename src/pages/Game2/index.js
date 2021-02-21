@@ -47,7 +47,7 @@ const Game = (props) => {
 	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
 
 	React.useEffect(() => {
-		if(!currentPlaySession)
+		if(!state.tracking || !currentPlaySession)
 			return
 
 		const	getClickedObject = (e) => {
@@ -149,10 +149,12 @@ const Game = (props) => {
 	}
 
 	const onStartGame = (e) => {
-		dispatch(play_sessionsActions.create({
-			usersPermissionsUser: userId,
-			mission: mission.id
-		}))
+		if(state.tracking){
+			dispatch(play_sessionsActions.create({
+				usersPermissionsUser: userId,
+				mission: mission.id
+			}))
+		}
 		setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"})
 	}
 
@@ -164,6 +166,7 @@ const Game = (props) => {
 			:
 			<div>
 				<div style={{width: '100%', height: '100%'}}>
+					<div>TrackInput: <input type="checkbox" onChange={(e)=>{ setState({...state, tracking: e.target.checked}) }} /></div>
 					{/*<div id="RoomName">{mission.locations.length > 0 && mission.locations[state.currentRoom].name}</div>*/}
 					{(function renderScene(){
 						switch(state.scene){
