@@ -24,6 +24,7 @@ import CreateMission from './pages/CreateMission'
 import Characters from './pages/Characters'
 import Questions from './pages/Questions'
 import Register from './pages/Register'
+import Questionnaires from './pages/Questionnaires'
 
 const App = () => {
   // const dispatch = useDispatch()
@@ -47,6 +48,7 @@ const App = () => {
           <PrivateRoute exact path="/userspace" component={UserSpace} />
           <PrivateRoute exact path="/missions" component={Missions} />
           <PrivateRoute exact path="/questions" component={Questions} />
+          <PrivateRoute exact path="/questionnaires" component={Questionnaires} />
           <PrivateRoute exact path="/missions/create" component={CreateMission} />
           <PrivateRoute exact path="/missions/edit/:id" component={CreateMission} />
           <PrivateRoute exact path="/characters" component={Characters} />

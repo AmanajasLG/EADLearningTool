@@ -47,6 +47,9 @@ const UserSpace = () => {
         <div>
           <Link to='/questions'>Perguntas</Link>
         </div>
+        <div>
+          <Link to='/questionnaires'>Questionnaires</Link>
+        </div>
       </div>
 
     </div>

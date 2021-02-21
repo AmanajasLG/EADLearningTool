@@ -18,11 +18,11 @@ const CreateMissionGame1 = (props) => {
 
   //for edit
   const id = props && props.match ? props.match.params.id : null
-  const originalMission = useSelector( state => id && state.missions.items.length > 0 ? state.missions.items.filter(m => m.id == id)[0] : null )
+  const originalMission = useSelector( state => id && state.missions.items.length > 0 ? state.missions.items.filter(m => m.id === id)[0] : null )
 
   const characters = useSelector( state => state.characters)
   const locations = useSelector( state => state.locations)
-  const questions = useSelector( state => state.questions)
+  const questions = useSelector( state => state.questions)  
 
   const [state, setState] = React.useState({
     mission: {
@@ -43,11 +43,11 @@ const CreateMissionGame1 = (props) => {
   React.useEffect(() => {
     if(id && !originalMission)
       dispatch(apiActions.missionsActions.getById(id))
-    if(characters.items.length == 0)
+    if(characters.items.length === 0)
       dispatch(apiActions.charactersActions.getAll())
-    if(locations.items.length == 0)
+    if(locations.items.length === 0)
       dispatch(apiActions.locationsActions.getAll())
-    if(questions.items.length == 0)
+    if(questions.items.length === 0)
       dispatch(apiActions.questionsActions.getAll())
   }, [])
 
@@ -125,7 +125,7 @@ const CreateMissionGame1 = (props) => {
 
           <div>
             <div>Questions:</div>
-            {state.mission.questions.map( ( question, index) =>
+            {state.mission.questions.map((question, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
                 <Button onClick={removeFromMission('questions', question)}><RemoveIcon /></Button>
                 <Question question={question}/>
