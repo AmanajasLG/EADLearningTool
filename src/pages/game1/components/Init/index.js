@@ -9,15 +9,15 @@ const Init = ({name, description, onClose, onStart, onBack}) => {
             <div>
               <img className="classImage" src={classImage}/>
               <h1 className="margin-half-top type-l type-display type-center">{name}</h1>
-              <h1 className="margin-half-top type-l type-display type-center">em inglês</h1>
+              <h1 className="type-m type-display type-center subtitle">Em inglês</h1>
 
-              <h2 className="type-m type-center">{description}</h2>
-              <h2 className="type-m type-center">em inglês</h2>
+              <h2 className="margin-half-top type-s type-center">{description}</h2>
+              <h2 className="type-s type-center subdescription">Em inglês</h2>
             </div>
-            <div>
-              { onBack && <button className="margin-half-top btn btn-center" onClick={onBack}>{'< Voltar'}</button> }
-              { onStart && <button className="margin-half-top btn btn-center" onClick={onStart}>{'Iniciar >'}</button> }
-              { onClose && <button className="margin-half-top btn btn-center" onClick={onClose}>Fechar</button> }
+            <div id="btns">
+              { onBack && <button className="btn btn-center" id="btn-back" onClick={onBack}>Voltar</button> }
+              { onStart && <button className="btn btn-center" id="btn-start" onClick={onStart}>Iniciar</button> }
+              { onClose && <button className="btn btn-center" id="btn-close" onClick={onClose}>Fechar</button> }
             </div>
         </div>
     )
