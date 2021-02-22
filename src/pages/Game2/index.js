@@ -113,22 +113,10 @@ const Game2 = (props) => {
 	}
 
 	const setCurrentChar = (charData) => () =>
-		setState({...state, currentChar: charData, found: charData.nome === state.targetName})
+		setState({...state, currentChar: charData})
 
 	const clearCurrentChar = () =>
 		setState({...state, currentChar: null})
-
-
-	const checkEnd = () => {
-		let newState = {...state, tries: state.tries+1}
-		if (state.found){
-			setState({...newState, endGame: true})
-		} else {
-			setState({...newState, currentChar: null})
-		}
-	}
-
-
 
 	const onStartGame = (e) => {
 		if(state.tracking){
