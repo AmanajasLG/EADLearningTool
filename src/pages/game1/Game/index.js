@@ -145,7 +145,7 @@ const Game = (props) => {
 											roomsData={mission.locations}
 											onChange={(num) => {
 												setState({...state, currentRoom: num})
-												dispatch(headerTitleActions.changeTitle(rooms[num].nome))
+												dispatch(headerTitleActions.changeTitle(state.locations[num].name))
 											}}
 										/>
 									<Sala roomData={state.locations[state.currentRoom]} setCurrentChar={setCurrentChar}/>

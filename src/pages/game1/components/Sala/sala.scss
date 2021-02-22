@@ -5,6 +5,11 @@
 	background-repeat: no-repeat;
 	background-position: center;
 	padding: 5px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
 }
 
 .bar {

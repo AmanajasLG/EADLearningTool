@@ -1,5 +1,13 @@
 .CharDiv {
-	width: 125px;
+	width: 225px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 200px;
+	transition-duration: 100ms;
+}
+
+.CharDiv * {
+	transition: 100ms linear;
 }
 
 .CharDiv > div {
@@ -7,14 +15,18 @@
 	justify-content: center;
 	flex-flow: column;
 	align-content: center;
+	align-items: center;
 }
 
 .CharDiv img {
 	width: 100%;
 	height: auto;
-	transition-duration: 0.1s;
 }
 
 .CharDiv img:hover {
-	filter: drop-shadow(0px 0px 5px var(--color-accent));
+	filter: drop-shadow(8px 4px 0px var(--color-fourth));
+}
+
+.CharDiv:hover > div > div {
+	font-weight: bolder;
 }
