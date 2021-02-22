@@ -1,3 +1,4 @@
+import './index.scss'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -14,20 +15,21 @@ const UserSpace = () => {
   const { missionsActions } = apiActions
 
   return(
-    <div>
+    <div id="userspace">
       Oi {user.username}!
       <div>
-        Jogar jogo 1
-        <div>Missões:</div>
-        {missions.loading ? <div>Loading...</div> :
-          missions && missions.items.map( (mission, index) =>
-          <div key={index}>
-            <Link to={`/game/${mission.id}`}>{mission.name}</Link>
-          </div>
-        )}
+        <p>Jogar jogo 1</p>
+        <div id="missoes">Missões:
+          {missions.loading ? <div>Loading...</div> :
+            missions && missions.items.map( (mission, index) =>
+            <div key={index}>
+              <Link to={`/game/${mission.id}`}>{mission.name}</Link>
+            </div>)
+          }
+        </div>
       </div>
 
-      <div>
+      <div id="area-criacao">
         Área de criação
         <div>
           <Link to='/missions'>Ver Missões</Link>
