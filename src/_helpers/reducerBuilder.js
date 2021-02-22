@@ -1,5 +1,6 @@
 
 const initialState = {
+  loading: false,
   items: []
 }
 
@@ -7,14 +8,25 @@ export const reducerBuilder = constants => (state = initialState, action) =>
 {
   switch (action.type) {
       case constants.CREATE_REQUEST:
-          return {...state, creating: true}
+          return {...state,
+            error: null,
+            creating: true
+          }
       case constants.CREATE_SUCCESS:
-          return {...state, creating: false, items: [...state.items, action.data]}
+          return {...state,
+            creating: false,
+            items: [...state.items, action.data]
+          }
       case constants.CREATE_FAILURE:
-          return {}
+          return {
+            error: action.error
+          }
 
       case constants.UPDATE_REQUEST:
-          return {...state, updating: true}
+          return {...state,
+            error: null,
+            updating: true
+          }
       case constants.UPDATE_SUCCESS:
           let index = state.items.findIndex( item => item.id === action.data.id )
           let copy = [...state.items.slice(0, index), action.data, ...state.items.slice(index + 1)]
@@ -26,6 +38,7 @@ export const reducerBuilder = constants => (state = initialState, action) =>
 
       case constants.GETALL_REQUEST:
           return {...state,
+              error: null,
               loading: true
           };
       case constants.GETALL_SUCCESS:
@@ -41,14 +54,17 @@ export const reducerBuilder = constants => (state = initialState, action) =>
 
       case constants.GETBYID_REQUEST:
           return {...state,
+              error: null,
               loading: true
           };
       case constants.GETBYID_SUCCESS:
           return {...state,
-              items: [...state.items, action.data]
+              items: [...state.items, action.data],
+              loading: false
           };
       case constants.GETBYID_FAILURE:
           return {...state,
+              loading: false,
               error: action.error
           };
 

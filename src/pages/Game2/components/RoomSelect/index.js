@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.scss'
 
-const RoomSelect = ({roomsData, onChange}) => {
+const RoomSelect = ({buttonList, onChange}) => {
 	const [state, setState] = React.useState(0)
 
 	const buttonClick = (num) => () => {
@@ -11,12 +11,12 @@ const RoomSelect = ({roomsData, onChange}) => {
 
     return (
         <div id="RoomSelect">
-					{roomsData.map( (data, index) =>
+					{buttonList.map( (name, index) =>
 						<button className="RoomBtn" key={index}
 							id={ state === index ? "selected" : "" }
 							onClick={buttonClick(index)}
 						>
-							{data.name}
+							{name}
 						</button> )}
         </div>
     )
