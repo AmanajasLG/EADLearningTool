@@ -16,7 +16,7 @@ const UserSpace = () => {
 
   return(
     <div id="userspace">
-      Oi {user.username}!
+      <p>Oi {user.username}!</p>
       <div>
         <p>Jogar jogo 1</p>
         <div id="missoes">Missões:
