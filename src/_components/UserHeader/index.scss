@@ -1,0 +1,13 @@
+#logout-btn {
+	font-family: 'barlow semibold';
+}
+
+.header-btn {
+	transition: linear 100ms;
+	height: 100%;
+}
+
+.header-btn:hover {
+	color: white;
+	filter: saturate(0%) brightness(999%);
+}
