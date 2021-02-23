@@ -65,8 +65,8 @@ const UserHeader = ({pageInfo}) => {
 				<div id="subTitle">{headerInfo.subtitle}</div>
 			</div>
 			<div className="group-btns" id="right-btns">
-				<div className="header-btn" id="logout-btn" onClick={() => {dispatch(logout())}}>Logout</div>
 				<div id="profilePic" onClick={clickProfile}><img src={avatar} alt="Profile Picture"></img></div>
+				<div className="header-btn" id="logout-btn" onClick={() => {dispatch(logout())}}>Logout</div>
 			</div>
 		</header>
     )
