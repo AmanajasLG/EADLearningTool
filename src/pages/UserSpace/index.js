@@ -1,3 +1,4 @@
+import './index.scss'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -14,28 +15,10 @@ const UserSpace = () => {
   const { missionsActions } = apiActions
 
   return(
-    <div>
+    <div id="userspace">
       Oi {user.username}!
 
-      <div>
-        Jogar jogo 1
-        <div>Missões:</div>
-        <Link to={'/game1/0'}>Em construção</Link>
-      </div>
-
-      <div>
-        Jogar jogo 2
-        <div>Missões:</div>
-        <Link to={'/game2/0'}>Stub</Link>
-        {missions.loading ? <div>Loading...</div> :
-          missions && missions.items.map( (mission, index) =>
-          <div key={index}>
-            <Link to={`/game2/${mission.id}`}>{mission.name}</Link>
-          </div>
-        )}
-      </div>
-
-      <div>
+      <div id="area-criacao">
         Área de criação
         <div>
           <Link to='/missions'>Ver Missões</Link>
@@ -53,6 +36,48 @@ const UserSpace = () => {
         </div>
         <div>
           <Link to='/playSessions'>Ver PlaySessions</Link>
+        </div>
+      </div>
+
+      <div id="jogos">
+        <p>Jogar jogo 1</p>
+        <p>Missões:</p>
+        <Link to={'/game1/0'}>Stub</Link>
+        <div id="missoes">
+          {missions.loading ? <div id="loading">Loading...</div> :
+            missions && missions.items.map( (mission, index) =>
+            <div key={index} class="missao">
+              <Link to={`/game1/${mission.id}`}>
+                <div id="imagem"></div>
+                <div id="card-text-wrapper">
+                  <div id="nome-missao">{mission.name}</div>
+                  <div id="descricao">Descrição</div>
+                  <div id="recompensas">Recompensas</div>
+                </div>
+              </Link>
+            </div>)
+          }
+        </div>
+
+        <div>
+          <p>Jogar jogo 2</p>
+          <p>Missões:</p>
+          <Link to={'/game2/0'}>Stub</Link>
+          <div id="missoes">
+            {missions.loading ? <div>Loading...</div> :
+              missions && missions.items.map( (mission, index) =>
+              <div key={index} class="missao">
+                <Link to={`/game2/${mission.id}`}>
+                  <div id="imagem"></div>
+                  <div id="card-text-wrapper">
+                    <div id="nome-missao">{mission.name}</div>
+                    <div id="descricao">Descrição</div>
+                    <div id="recompensas">Recompensas</div>
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

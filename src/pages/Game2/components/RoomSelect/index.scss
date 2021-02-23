@@ -9,6 +9,18 @@
 }
 
 .RoomBtn {
+	margin-left: 5px;
+	margin-right: 5px;
+	color: #535C89;
+	border-color: #535C89;;
+	background-color: white;
+	transition: 100ms linear;
+}
+
+.RoomBtn:hover {
+	color: white;
+	border-color: white;
+	background-color: #535C89;
 }
 
 #selected {

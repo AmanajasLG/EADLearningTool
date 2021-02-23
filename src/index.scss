@@ -1,15 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
 @import './colorPalettes';
 
+/* RESETS */
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 /* VARIABLES */
 :root {
 	--font-title: 'abril fatface', serif;
   --font-text: 'assistant', sans-serif;
 }
 
-
 /* TYPE */
-
 body {
   margin: 0;
   font-family: var(--font-text);
@@ -23,6 +30,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
 h1, h2, h3, h4, h5, h6 {
   font-family: inherit;
   font-size: inherit;
@@ -38,7 +46,6 @@ h1, h2, h3, h4, h5, h6 {
 .type-center {text-align: center;}
 
 /* ATOMS */
-
 .margin-top {
   margin-top: 5rem;
 }

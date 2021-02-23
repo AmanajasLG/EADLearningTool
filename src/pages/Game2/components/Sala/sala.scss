@@ -1,28 +1,12 @@
-
 #sala {
 	color: var(--color-accent);
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: center;
 	padding: 5px;
-}
-
-.bar {
-	background-image: url('../../../../img/bg-pic-bar.svg');
-}
-
-.sala-aula {
-	background-image: url('../../../../img/bg-pic-class.svg');
-}
-
-.biblioteca {
-	background-image: url('../../../../img/bg-pic-library.svg');
-}
-
-.mapa {
-	background-image: url('../../../../img/bg-pic-map.svg');
-}
-
-.sala-estudos {
-	background-image: url('../../../../img/bg-pic-study.svg');
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
 }

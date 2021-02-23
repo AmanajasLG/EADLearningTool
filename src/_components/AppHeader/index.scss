@@ -8,9 +8,20 @@
 	background-position: bottom;
 	background-size: cover;
 	color: var(--color-text);
-	padding: 25px 50px;
+	padding: 20px 30px 50px 30px;
 	justify-content: space-between;
-	max-height: 100px;
+	max-height: 120px;
+	align-items: center;
+}
+
+.header-btn {
+	transition: linear 100ms;
+	height: 100%;
+}
+
+.header-btn:hover {
+	color: white;
+	filter: saturate(0%) brightness(999%);
 }
 
 .group-btns {
@@ -36,7 +47,17 @@
 	font-size: 80%;
 }
 
+#right-btns {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
 #profilePic {
-	transform-origin: top;
-	transform: scale(0.5) translateY(-25px);
+	transform: scale(0.5);
+}
+
+#logout-btn {
+	font-family: 'barlow semibold';
+	vertical-align: middle;
 }
