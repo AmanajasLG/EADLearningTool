@@ -1,0 +1,44 @@
+#phone {
+	position: fixed;
+	background-color: white;
+	width: 140px;
+	height: 170px;
+	bottom: -20px;
+	right: 125px;
+	border-top: 6px solid #59316d;
+	border-left: 6px solid #59316d;
+	border-right: 6px solid #59316d;
+	border-radius: 25px 25px 0 0;
+	transition: 333ms cubic-bezier(0.66, 0.0, 0.33, 1);
+	padding: 25px 10px 0px 10px;
+	transform-origin: center bottom;
+}
+
+#phone:hover {
+	transform: scale(1.075) translateY(-15px);
+}
+
+#phone::before {
+	content: "";
+	border-bottom: 20px solid #59316d;
+	position: absolute;
+	left: 33%;
+	right: 33%;
+	top: -6px;
+	border-radius: 0 0 5px 5px;
+}
+
+#phone p {
+	margin-top: 25px;
+	visibility: hidden;
+	color: #59316d00;
+	font-family: 'Assistant';
+	font-weight: bold;
+	transition: 250ms cubic-bezier(0.66, 0.0, 0.33, 1);
+	text-align: center;
+}
+
+#phone:hover p {
+	visibility: visible;
+	color: #59316dFF;
+}

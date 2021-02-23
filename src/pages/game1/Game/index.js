@@ -157,6 +157,7 @@ const Game = (props) => {
 											 checkEnd={checkEnd} clearCurrentChar={clearCurrentChar}
 										/>
 									}
+									<div id="phone"><p>Agenda de contatos</p></div>
 									</div>)
 						}
 					}())}
