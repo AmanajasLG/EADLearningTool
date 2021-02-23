@@ -14,6 +14,7 @@ import AppHeader from '../../_components/AppHeader'
 import '../Game2/index.scss'
 import initialState from './initialState.js'
 import stub from './stub.js'
+import './index.scss'
 
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -151,6 +152,7 @@ const Game1 = (props) => {
 												</div>
 											</div>
 										}
+										<div id="phone"><p>Agenda de contatos</p></div>
 									</div>)
 						}
 					}())}
