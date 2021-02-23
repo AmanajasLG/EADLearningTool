@@ -28,6 +28,12 @@ const Game2 = (props) => {
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
 
+	//fetch mission if doesn't already have
+	React.useEffect(() => {
+		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
+	}, [])
+
+	//track player actions
 	React.useEffect(() => {
 		if(!state.tracking || !currentPlaySession)
 			return
@@ -51,24 +57,19 @@ const Game2 = (props) => {
 			document.removeEventListener("mousedown", getClickedObject)
 		}
 	}, [currentPlaySession])
-
-	React.useEffect(() => {
-
-		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-	}, [])
-
+	/*//Testing tool
+	if(error){
+		error = null
+		mission = stub
+	}
+	*/
 	//Randomizar personagens para aparecer nas salas
 	//	Enquanto houver personagens na lista de personagens disponíveis
 	//		Escolhe um local ao acaso
 	//		Escolhe um personagem dentre a lista de personagens disponíveis ao acaso
 	//		Adiciona personagem ao local
 	//		Retira personagem da lista de personagens disponíveis
-/*
-	if(error){
-		error = null
-		mission = stub
-	}
-	*/
+
 	if(mission && state.locations.length === 0){
 		// safe copies
 		let availableCharacters = mission.characters.slice(0)
@@ -131,7 +132,7 @@ const Game2 = (props) => {
 	//shows only selected questions
 	const menuQuestionsFiltering = (answer, index) =>
 		(state.dialogStep) * state.questionsByStep <= index &&
-		index < (state.dialogStep+1) * state.questionsByStep
+		index < (state.dialogStep + 1) * state.questionsByStep
 
 	const setCurrentCharacter = (character) => {
 		return () => setState({...state, currentChar: character, answers: character.answers.filter(menuQuestionsFiltering)})
@@ -240,12 +241,6 @@ const Game2 = (props) => {
 									</div>)
 						}
 					}())}
-
-					{ !state.gameEndState && // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
-						<div></div>
-					}
-					{	state.endGame ? <Result gameEndState={state.gameEndState}/> : null }
-					{ state.tries > 0 ? <div>{state.tries} tentativa{state.tries > 1? 's' : ''}!</div> : null}
 					{ state.back && <Redirect to='/userspace' />}
 				</div>
 			</div>
@@ -255,8 +250,6 @@ const Game2 = (props) => {
 }
 
 export default Game2
-
-
 
 /*
 
