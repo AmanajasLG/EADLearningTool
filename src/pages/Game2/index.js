@@ -185,7 +185,7 @@ const Game2 = (props) => {
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
 			<div>
 				<div style={{width: '100%', height: '100%'}}>
-					<div>TrackInput: <input type="checkbox" onChange={(e)=>{ setState({...state, tracking: e.target.checked}) }} /></div>
+					<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e)=>{ setState({...state, tracking: e.target.checked}) }} /></div>
 					{(function renderScene(){
 						switch(state.scene){
 							case "INIT":

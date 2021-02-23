@@ -16,7 +16,7 @@ const UserSpace = () => {
 
   return(
     <div id="userspace">
-      Oi {user.username}!
+      <p>Oi {user.username}!</p>
 
       <div id="area-criacao">
         Área de criação
@@ -39,7 +39,7 @@ const UserSpace = () => {
         </div>
       </div>
 
-      <div id="jogos">
+      <div class="jogos">
         <p>Jogar jogo 1</p>
         <p>Missões:</p>
         <Link to={'/game1/0'}>Stub</Link>
@@ -58,26 +58,26 @@ const UserSpace = () => {
             </div>)
           }
         </div>
+      </div>
 
-        <div>
-          <p>Jogar jogo 2</p>
-          <p>Missões:</p>
-          <Link to={'/game2/0'}>Stub</Link>
-          <div id="missoes">
-            {missions.loading ? <div>Loading...</div> :
-              missions && missions.items.map( (mission, index) =>
-              <div key={index} class="missao">
-                <Link to={`/game2/${mission.id}`}>
-                  <div id="imagem"></div>
-                  <div id="card-text-wrapper">
-                    <div id="nome-missao">{mission.name}</div>
-                    <div id="descricao">Descrição</div>
-                    <div id="recompensas">Recompensas</div>
-                  </div>
-                </Link>
-              </div>
-            )}
-          </div>
+      <div class="jogos">
+        <p>Jogar jogo 2</p>
+        <p>Missões:</p>
+        <Link to={'/game2/0'}>Stub</Link>
+        <div id="missoes">
+          {missions.loading ? <div>Loading...</div> :
+            missions && missions.items.map( (mission, index) =>
+            <div key={index} class="missao">
+              <Link to={`/game2/${mission.id}`}>
+                <div id="imagem"></div>
+                <div id="card-text-wrapper">
+                  <div id="nome-missao">{mission.name}</div>
+                  <div id="descricao">Descrição</div>
+                  <div id="recompensas">Recompensas</div>
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
