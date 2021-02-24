@@ -207,34 +207,35 @@ const Game2 = (props) => {
 
 										<Sala roomData={state.locations[state.currentRoom]} setCurrentChar={setCurrentChar}>
 											{state.locations[state.currentRoom].characters.map((character, index) =>
-						            <Character key={index}
-						              character={character}
-						              onClick={setCurrentCharacter(character)}
-						            />
+									<Character key={index}
+									  character={character}
+									  onClick={setCurrentCharacter(character)}
+									/>
 											)}
 										</Sala>
 
 										{ state.currentChar &&
 											<div id="conversa" className='DialogPopUp'>
 
-												<Button onClick={closeDialog}>X</Button>
-									      <Button onClick={() => setState({...state, acusation: true})}>É você!</Button>
+												<div id="acusar" onClick={() => setState({...state, acusation: true})}><span>É você!</span></div>
+												<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
-												<div className='CharacterPortrait' style={{width: 100}}>
-									        {<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[1].image[0].url: ""} alt="portrait" />}
- 									        {<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[2].image[0].url : ""} alt="portrait" />}
-									      </div>
-
-												<div className='DialogHistory'>
-													{state.dialogHistory.map((dialog, index)=>
-														<div key={index}>{dialog}</div>
-													)}
+												<div id='CharacterPortrait'>
+													{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[1].image[0].url: ""} alt="portrait" />}
+													{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[2].image[0].url : ""} alt="portrait" />}
 												</div>
-
-												<div className='Menu'>
-													{state.answers.map( (answer,index) =>
-														<Button key={index} onClick={onMenuButtonClick(answer)}>{answer.question.question}</Button>
-													)}
+												<div id="dialogos">
+													<div id='DialogHistory'>
+														<span></span>
+														{state.dialogHistory.map((dialog, index)=>
+															<div className={"mensagem"+(index%2)} key={index}>{dialog}</div>
+															)}
+													</div>
+													<div id='Menu'>
+														{state.answers.map( (answer,index) =>
+															<Button key={index} onClick={onMenuButtonClick(answer)}>{answer.question.question}</Button>
+															)}
+													</div>
 												</div>
 											</div>
 										}
