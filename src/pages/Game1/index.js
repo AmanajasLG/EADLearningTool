@@ -233,6 +233,7 @@ const Game1 = (props) => {
 														</div>
 													</div>
 												</div>
+												<div id="btn-terminei">Terminei!</div>
 											</div>
 										}
 										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }

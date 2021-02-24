@@ -203,3 +203,27 @@
 	background-color: #59316D;
 	color: #FFFFFF;
 }
+
+#btn-terminei {
+	position: absolute;
+	background-color: #DDD;
+	border-radius: 2em;
+	color: #59316D;
+	text-align: center;
+	font-family: 'Barlow';
+	font-weight: 600;
+	cursor: pointer;
+	padding: 15px 20px;
+	bottom: 0px;
+	min-width: max-content;
+	width: 100%;
+	max-width: 150px;
+	left: calc(50% - 150px/2);
+	bottom: calc(50% - 650px/2 - 20px);
+	transition: 100ms linear;
+}
+
+#btn-terminei:hover {
+	background-color: #59316D;
+	color: #FFFFFF;
+}
