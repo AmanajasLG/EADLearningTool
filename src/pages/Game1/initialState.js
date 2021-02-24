@@ -9,4 +9,5 @@ export default {
 //DIALOG
   dialogHistory: [],
   currentChar: null,
+  showContacts: false,
 }

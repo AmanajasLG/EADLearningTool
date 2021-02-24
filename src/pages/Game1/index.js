@@ -80,12 +80,12 @@ const Game1 = (props) => {
 
 		setState({...state, scene: 'ROOM'})
 	}
-
+	
 	const onMenuButtonClick = (answer) => () =>{
 		//
 		//	Aplicar lógica adicional de click nos botões do menu
 		//
-
+		
 		setState({...state,
 			dialogHistory:
 			[...state.dialogHistory,
@@ -93,6 +93,14 @@ const Game1 = (props) => {
 				answer.answer
 			]
 		})
+	}
+	
+	const onPhoneEnterClick = () => {
+		setState({...state, showContacts: true})
+	}
+
+	const onPhoneExitClick = () => {
+		setState({...state, showContacts: false})
 	}
 
 	return (
@@ -152,7 +160,39 @@ const Game1 = (props) => {
 												</div>
 											</div>
 										}
-										<div id="phone"><p>Agenda de contatos</p></div>
+										{ state.showContacts &&
+											<div id="contacts">
+												<div id="btn-fechar" onClick={onPhoneExitClick}>×</div>
+												<div id="fullPhone">
+													<p>Lista de contatos</p>
+													<div id="lista-contatos">
+														{/* { state.dialogHistory.map((contact, index)=>
+															<div className="contato" key={index}>
+																<div className="contact-profile-pic">
+																	<span>{index}</span>
+																	<img>{contact.pic}</img>
+																</div>
+																<div className="contact-info">
+																	<div className="name">
+																		<p>Nome</p>
+																		<p>{contact.name}</p>
+																	</div>
+																	<div className="profession">
+																		<p>Profissão</p>
+																		<p>{contact.profession}</p>
+																	</div>
+																	<div className="nationality">
+																		<p>Nacionalidade</p>
+																		<p>{contact.nationality}</p>
+																	</div>
+																</div>
+															</div>
+														) } */}
+													</div>
+												</div>
+											</div>
+										}
+										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }
 									</div>)
 						}
 					}())}
