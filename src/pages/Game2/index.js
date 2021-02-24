@@ -225,6 +225,7 @@ const Game2 = (props) => {
 													<img id="lamp-acesa" src={lamp_acesa}></img>
 													<span>É você!</span>
 												</div>
+
 												<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
 												<div id='CharacterPortrait'>
@@ -247,8 +248,41 @@ const Game2 = (props) => {
 											</div>
 										}
 									</div>)
+								case "ENDGAME":
+									return(
+										<div>
+											<div className="Title">
+												<div>{mission.name}</div>
+												<div>nome em inglês</div>
+											</div>
+											<div className="Mensagem">
+												<div>Texto</div>
+												<div>Texto</div>
+											</div>
+
+											<div className="ClueCounter">
+												<div><span>{1}</span>/<span>{1}</span></div>
+												<div>clues</div>
+											</div>
+
+											<div>
+												<div>After talking to {1} people, you found {1} of the {1} existing clues.</div>
+												<div>Regarding the questions you asked, {1} of them were useful. Try asking more relevant questions!</div>
+											</div>
+
+											<Button onClick={() => setState({...initialState}) }>Tentar novamente</Button>
+											<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+										</div>
+									)
 						}
 					}())}
+					{ state.acusation &&
+						<div>
+							Tem certeza?
+							<Button onClick={() => setState({...state, acusation: false, scene: "ENDGAME"}) }>Yes</Button>
+							<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
+						</div>
+					}
 					{ state.back && <Redirect to='/userspace' />}
 				</div>
 			</div>
