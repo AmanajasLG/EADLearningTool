@@ -15,6 +15,9 @@ import './index.scss'
 import initialState from './initialState'
 import stub from './stub'
 
+import lamp_apagada from '../../img/lampada_apagada.svg'
+import lamp_acesa from '../../img/lampada_acesa.svg'
+
 
 const Game2 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -217,7 +220,11 @@ const Game2 = (props) => {
 										{ state.currentChar &&
 											<div id="conversa" className='DialogPopUp'>
 
-												<div id="acusar" onClick={() => setState({...state, acusation: true})}><span>É você!</span></div>
+												<div id="acusar" onClick={() => setState({...state, acusation: true})}>
+													<img id="lamp-apagada" src={lamp_apagada}></img>
+													<img id="lamp-acesa" src={lamp_acesa}></img>
+													<span>É você!</span>
+												</div>
 												<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
 												<div id='CharacterPortrait'>

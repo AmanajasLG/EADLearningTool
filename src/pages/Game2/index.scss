@@ -4,7 +4,7 @@
 	left: 0px;
 	height: 100vh;
 	width: 100vw;
-	background-color: #FFFFFF80;
+	background-color: #FFFFFFA0;
 }
 
 #acusar,
@@ -30,18 +30,51 @@
 }
 
 #fechar:hover {
-	transform: rotate(90deg);
+	color: #535c89;
+	transform: scale(1.2);
 }
 
 #acusar {
-	left: 30px;
-	top: 30px;
-	padding: 10px;
+	position: absolute;
+	top: 5vh;
+	left: 5vh;
+	height: 100px;
 }
-#acusar:hover {
-	background-color: #59316DA0;
-	border-radius: 10px;
-	color: white;
+
+#lamp-acesa,
+#lamp-apagada {
+	z-index: 1;
+}
+
+#acusar #lamp-apagada {
+	position: absolute;
+	height: 100%;
+}
+
+#acusar #lamp-acesa,
+#acusar span {
+	position: relative;
+	height: 100%;
+	opacity: 0;
+	transition: 100ms linear;
+}
+
+#acusar:hover #lamp-acesa,
+#acusar:hover span {
+	opacity: 1;
+}
+
+#acusar span {
+	background-color: #F9AFA100;
+	border-radius: 0 2em 2em 0;
+	padding: 15px 20px 15px 30px;
+	margin-left: -20px;
+	z-index: 0;
+	color: #59316D;
+}
+
+#acusar:hover span {
+	background-color: #F9AFA1;
 }
 
 #CharacterPortrait {
@@ -65,7 +98,7 @@
 	margin-left: auto;
 	margin-right: 50px;
 	padding-bottom: 75px;
-	max-width: calc(82% - 50px);
+	max-width: calc(83% - 50px);
 	display: flex;
 	flex-direction: column;
 }
