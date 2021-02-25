@@ -30,6 +30,9 @@ const Game2 = (props) => {
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
+	let tipsCount = mission.characters.filter(character => {
+		return character.tip
+	}).length
 
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
@@ -183,6 +186,21 @@ const Game2 = (props) => {
 		}
 	}
 
+	const checkEnd = () => {
+		if(state.tries < 3 && state.currentChar.name !== state.targetName){
+			state.tries++
+			setState({...state, acusation: false})
+		} else {
+			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName})
+		}
+	}
+	
+	console.log(state)
+
+	if(state.dialogHistory.length && state.spokenCharacters.indexOf(state.currentChar.name) === -1){
+		state.spokenCharacters.push(state.currentChar.name)
+	}
+
 	return (
 		<div>
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
@@ -190,6 +208,7 @@ const Game2 = (props) => {
 				<div style={{width: '100%', height: '100%'}}>
 					<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e)=>{ setState({...state, tracking: e.target.checked}) }} /></div>
 					{(function renderScene(){
+						// eslint-disable-next-line default-case
 						switch(state.scene){
 							case "INIT":
 								return <Init
@@ -250,23 +269,51 @@ const Game2 = (props) => {
 									</div>)
 								case "ENDGAME":
 									return(
+										state.gameEndState ?
 										<div>
 											<div className="Title">
 												<div>{mission.name}</div>
-												<div>nome em inglês</div>
+												<div>{mission.nameTranslate}</div>
 											</div>
-											<div className="Mensagem">
-												<div>Texto</div>
-												<div>Texto</div>
-											</div>
+											
+											{state.tries === 0 ? <div>
+												<div>Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</div>
+												<div>Well done! You have found the right person on your first try. You're going to rock on your new career!</div>
+											</div> : <div>
+												<div>Você encontrou a pessoa certa! Parabéns!</div>
+												<div>You have found the right person! Congrats!</div>
+											</div>}
 
 											<div className="ClueCounter">
-												<div><span>{1}</span>/<span>{1}</span></div>
+												<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
 												<div>clues</div>
 											</div>
 
 											<div>
-												<div>After talking to {1} people, you found {1} of the {1} existing clues.</div>
+												<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
+												<div>Regarding the questions you asked, {1} of them were useful. Try asking more relevant questions!</div>
+											</div>
+
+											<Button onClick={() => setState({...initialState}) }>Tentar novamente</Button>
+											<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+										</div> :
+										<div>
+											<div className="Title">
+												<div>{mission.name}</div>
+												<div>{mission.nameTranslate}</div>
+											</div>
+											<div className="Mensagem">
+												<div>Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</div>
+												<div>You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</div>
+											</div>
+
+											<div className="ClueCounter">
+												<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
+												<div>clues</div>
+											</div>
+
+											<div>
+												<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
 												<div>Regarding the questions you asked, {1} of them were useful. Try asking more relevant questions!</div>
 											</div>
 
@@ -279,7 +326,7 @@ const Game2 = (props) => {
 					{ state.acusation &&
 						<div>
 							Tem certeza?
-							<Button onClick={() => setState({...state, acusation: false, scene: "ENDGAME"}) }>Yes</Button>
+							<Button onClick={checkEnd}>Yes</Button>
 							<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
 						</div>
 					}
