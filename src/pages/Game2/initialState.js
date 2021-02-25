@@ -11,6 +11,7 @@ export default {
   tips: [],
   acusation: false,
   tries: 0,
+  validQuestions: [],
 //DIALOG
   dialogHistory: [],
   dialogStep: 0,

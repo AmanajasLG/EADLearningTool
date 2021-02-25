@@ -167,6 +167,14 @@ const Game2 = (props) => {
 			closeDialog()
 		else{
 
+			if(answer.question.correct){
+				if(state.validQuestions.hasOwnProperty(answer.question.question)){
+					state.validQuestions[answer.question.question]++
+				} else {
+					state.validQuestions[answer.question.question] = 0
+				}
+			}
+
 			let updateState = {
 				dialogHistory: [...state.dialogHistory,
 					answer.question.question,
@@ -299,7 +307,7 @@ const Game2 = (props) => {
 
 											<div>
 												<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
-												<div>Regarding the questions you asked, {1} of them were useful. Try asking more relevant questions!</div>
+												<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</div>
 											</div>
 
 											<Button onClick={() => setState({...initialState}) }>Tentar novamente</Button>
@@ -322,7 +330,7 @@ const Game2 = (props) => {
 
 											<div>
 												<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
-												<div>Regarding the questions you asked, {1} of them were useful. Try asking more relevant questions!</div>
+												<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
 											</div>
 
 											<Button onClick={() => setState({...initialState}) }>Tentar novamente</Button>
