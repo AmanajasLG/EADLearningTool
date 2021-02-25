@@ -87,9 +87,13 @@ const Game2 = (props) => {
 			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
 
 			//each character has some good and bad questions that can be asked
-			let availableAnswers = availableCharacters[characterIndex].answers.slice(0)
+			let availableAnswers = [...availableCharacters[characterIndex].answers]
+			console.log('availableAnswers:', availableAnswers)
 		  let correct = availableAnswers.filter(answer => answer.question.correct)
 		  let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
+			console.log('correct', correct)
+			console.log('ncorrect', ncorrect)
+
 		  let selectedQuestions = []
 		  while(selectedQuestions.length < 4){
 		    let source = selectedQuestions.length % 2 === 0? correct : ncorrect
@@ -108,6 +112,8 @@ const Game2 = (props) => {
 		    selectedQuestions[2] = selectedQuestions[3]
 		    selectedQuestions[3] = temp
 		  }
+
+			console.log('selectedQuestions:', selectedQuestions)
 
 			locations[locationIndex].characters = [...locations[locationIndex].characters,
 				{...availableCharacters[characterIndex],
@@ -136,13 +142,13 @@ const Game2 = (props) => {
 	}
 
 	//shows only selected questions
-	const menuQuestionsFiltering = (answer, index) =>
-		(state.dialogStep) * state.questionsByStep <= index &&
-		index < (state.dialogStep + 1) * state.questionsByStep
-
-	const setCurrentCharacter = (character) => {
-		return () => setState({...state, currentChar: character, answers: character.answers.filter(menuQuestionsFiltering)})
-	}
+	const setCurrentCharacter = (character) => () => setState(
+		{...state,
+			currentChar: character,
+			answers: state.locations[state.currentRoom].characters
+										.find(c => c.id === character.id).selectedQuestions
+										.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
+		})
 
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0 }
 	const closeDialog = () =>
@@ -171,7 +177,9 @@ const Game2 = (props) => {
 			}
 
 			if(updateState.dialogStep !== state.totalDialogSteps){
-				updateState.answers = state.currentChar.answers.filter((answer, index) => (state.dialogStep + 1) * state.questionsByStep <= index && index < (state.dialogStep + 2) * state.questionsByStep )
+				updateState.answers = state.locations[state.currentRoom].characters
+											.find(c => c.id === state.currentChar.id).selectedQuestions
+											.slice(state.questionsByStep * updateState.dialogStep, state.questionsByStep * (updateState.dialogStep + 1))
 			}else{
 				if(updateState.correct < state.correctMinimum){
 					updateState.dialogHistory.push('Não estou entendendo. Quer começar de novo?')
