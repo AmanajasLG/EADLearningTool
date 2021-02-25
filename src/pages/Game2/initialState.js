@@ -19,7 +19,7 @@ export default {
   questionsByStep: 2,
   currentChar: null,
   questions: [],
-  targetName: 'Fuyuka',
+  targetName: 'Leila',
   correct: 0,
   ncorrect: 0,
   correctMinimum: 2,
