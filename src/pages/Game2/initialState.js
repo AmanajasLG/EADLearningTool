@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
 //GAME STATE
   tutorialStep: 0,
@@ -9,6 +10,8 @@ export default {
   locations:[],
   tips: [],
   acusation: false,
+  tries: 0,
+  validQuestions: [],
 //DIALOG
   dialogHistory: [],
   dialogStep: 0,
@@ -16,14 +19,14 @@ export default {
   questionsByStep: 2,
   currentChar: null,
   questions: [],
-  targetName: 'Juslecino',
+  targetName: 'Fuyuka',
   correct: 0,
   ncorrect: 0,
   correctMinimum: 2,
   gameEndState: null,
-  tries: 0,
   score: 0,
   startedTimestamp: new Date(Date.now()),
   elapsedTime: null,
   back: false,
+  spokenCharacters: [],
 }
