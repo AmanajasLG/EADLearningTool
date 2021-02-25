@@ -63,8 +63,36 @@ const EditCharacter = ({character, onDone}) => {
               </div>
             </div>
           )}
-          Resposta final:
-          <input type='text' value={character.finalAnswer} onChange={e => setState({...state, finalAnswer: e.target.value})} placeholder='Resposta final'/>
+          <div>
+            <div>
+              Errou alguma opção:
+            </div>
+            <input type='text' value={character.wrongAnswer} onChange={e => setState({...state, wrongAnswer: e.target.value})} placeholder='Errou alguma'/>
+          </div>
+          <div>
+            <div>
+              Acertou o suficiente:
+            </div>
+            <input type='text' value={character.rightAnswer} onChange={e => setState({...state, rightAnswer: e.target.value})} placeholder='Acertou o suficiente'/>
+          </div>
+          <div>
+            <div>
+              Dica:
+            </div>
+            <input type='text' value={character.tip} onChange={e => setState({...state, tip: e.target.value})} placeholder='Dica'/>
+          </div>
+          <div>
+            <div>
+              Resposta da acusação:
+            </div>
+            <input type='text' value={character.acusationAnswer} onChange={e => setState({...state, acusationAnswer: e.target.value})} placeholder='Resposta à acusação'/>
+          </div>
+          <div>
+            <div>
+              Despedida:
+            </div>
+            <input type='text' value={character.endDialog} onChange={e => setState({...state, endDialog: e.target.value})} placeholder='Despedida'/>
+          </div>
         </div>
         <button onClick={onDone(state)}>Salvar</button>
       </div>

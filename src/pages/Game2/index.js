@@ -80,16 +80,14 @@ const Game2 = (props) => {
 
 		//distribute on locations
 		while(availableCharacters.length > 0){
-			const locationIndex = Math.floor(Math.random(0, locations.length))
+
+			const locationIndex = Math.floor((Math.random() * 100)) % locations.length
 			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
 
 			//each character has some good and bad questions that can be asked
 			let availableAnswers = [...availableCharacters[characterIndex].answers]
-			console.log('availableAnswers:', availableAnswers)
 		  let correct = availableAnswers.filter(answer => answer.question.correct)
 		  let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
-			console.log('correct', correct)
-			console.log('ncorrect', ncorrect)
 
 		  let selectedQuestions = []
 		  while(selectedQuestions.length < 4){
@@ -212,7 +210,7 @@ const Game2 = (props) => {
 											buttonList={mission.locations.map((location) => location.name)}
 											onChange={(num) => {
 												setState({...state, currentRoom: num})
-												dispatch(headerTitleActions.changeTitle(state.locations[num]))
+												dispatch(headerTitleActions.changeTitle(state.locations[num].location.name))
 											}}
 										/>
 
