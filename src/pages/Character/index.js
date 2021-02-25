@@ -37,7 +37,11 @@ const Character = ({character}) => {
             )}
           </div>
         )}
-        <div>Resposta final: {character.finalAnswer}</div>
+        <div>Errou alguma: {character.wrongAnswer}</div>
+        <div>Acertou o suficiente: {character.rightAnswer}</div>
+        <div>Dica: {character.tip}</div>
+        <div>Resposta à acusação: {character.acusationAnswer}</div>
+        <div>Despedida: {character.endDialog}</div>
       </div>
     </div>
   )
