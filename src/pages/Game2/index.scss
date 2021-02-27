@@ -1,4 +1,5 @@
-#game2-wrapper {
+#game2-wrapper,
+#game2-wrapper > div:first-child {
 	width: 100%;
 	height: 100%;
 }
