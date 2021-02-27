@@ -139,6 +139,10 @@ const Game2 = (props) => {
 		setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"})
 	}
 
+	const onExitGame = () => {
+		dispatch(headerTitleActions.showHeader(false));
+	}
+
 	//shows only selected questions
 	const setCurrentCharacter = (character) => () => setState(
 		{...state,
@@ -215,8 +219,9 @@ const Game2 = (props) => {
 		state.spokenCharacters.push(state.currentChar.name)
 	}
 
+	dispatch(headerTitleActions.showHeader(false))
 	return (
-		<div>
+		<div id="game2-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
 			<div>
 				<div style={{width: '100%', height: '100%'}}>
@@ -228,7 +233,7 @@ const Game2 = (props) => {
 								return <Init
 													name={mission.name} description={mission.description}
 													onStart={ onStartGame }
-													onBack={ ()=> setState({...state, back: true}) }
+													onBack={ () => setState({...state, back: true}) }
 												/>
 							case "ROOM":
 								return (
@@ -237,7 +242,6 @@ const Game2 = (props) => {
 											buttonList={mission.locations.map((location) => location.name)}
 											onChange={(num) => {
 												setState({...state, currentRoom: num})
-												dispatch(headerTitleActions.changeTitle(state.locations[num].location.name))
 											}}
 										/>
 

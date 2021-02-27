@@ -33,28 +33,9 @@ const UserHeader = ({pageInfo}) => {
 		setState({...state, view: 'settings'});
 		alert.show("Vc achou onde faz para abrir suas configurações! \n\n Ending 8/15");
 	}
-	/*/
+	
     return (
-        <header id="app-header">
-			<div className="group-btns" id="left-btns">
-				<div id="profilePic" onClick={clickProfile}><img src={avatar} alt="Profile Picture"></img></div>
-				<div className="header-btn" id="home-btn" onClick={clickHome}><img src={home} alt="Home"></img></div>
-			</div>
-			<div id="pageTitle">
-				<div id="mainTitle">{headerInfo.title}</div>
-				<div id="subTitle">{headerInfo.subtitle}</div>
-			</div>
-			<div className="group-btns" id="right-btns">
-				<div className="header-btn" id="notif-btn" onClick={clickNotif}><img src={notifications} alt="Notifications"></img></div>
-				<div className="header-btn" id="settings-btn" onClick={clickSettings}><img src={settings} alt="Settings"></img></div>
-				<div className="header-btn" id="logout-btn" onClick={() => {dispatch(logout())}}>Logout</div>
-			</div>
-		</header>
-    )
-	/**/
-	/**/
-    return (
-        <header id="app-header">
+        <header id="app-header" className={ headerInfo.isVisible ? "" : "hidden" }>
 			<div className="group-btns" id="left-btns">
 				<div className="header-btn" id="home-btn" onClick={clickHome}><img src={home} alt="Home"></img></div>
 				<div className="header-btn" id="notif-btn" onClick={clickNotif}><img src={notifications} alt="Notifications"></img></div>

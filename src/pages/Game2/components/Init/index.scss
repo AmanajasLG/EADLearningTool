@@ -1,12 +1,17 @@
-#input-tracker {
-	position: absolute;
-	top: 120px;
-	left: 10px;
+.main-wrapper {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	background-image: url('../../../../img/formas-bottom-2.svg');
 }
 
-.main-wrapper {
-	margin-top: -125px;
-	padding-top: 125px;
+#input-tracker {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	height: auto;
+	width: auto;
 }
 
 .type-display {

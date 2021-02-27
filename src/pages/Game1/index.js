@@ -109,6 +109,7 @@ const Game1 = (props) => {
 		// colocar em state.contactList e limpar o form
 	}
 
+	dispatch(headerTitleActions.showHeader(false))
 	return (
 		<div>
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&

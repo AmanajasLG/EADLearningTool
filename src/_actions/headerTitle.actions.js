@@ -8,11 +8,14 @@ const clearTitle = () => {return {type: headerTitleConstants.CLEAR_TITLE}};
 const clearSubtitle = () => {return {type: headerTitleConstants.CLEAR_SUBTITLE}};
 const clearAll = () => {return {type: headerTitleConstants.CLEAR_ALL}};
 
+const showHeader = (isToShow = true) => {return isToShow ? {type: headerTitleConstants.SHOW_HEADER} : {type: headerTitleConstants.HIDE_HEADER}};
+
 export const headerTitleActions = {
 	changeTitle,
 	changeSubtitle,
 	changeAll,
 	clearTitle,
 	clearSubtitle,
-	clearAll
+	clearAll,
+	showHeader
 }

@@ -130,13 +130,6 @@ h1, h2, h3, h4, h5, h6 {
   top: 0;
 }
 
-.bg-shape-bottom {
-  background-image: url('img/formas-bottom-2.svg');
-  background-repeat: no-repeat;
-  background-position: bottom;
-  background-size: 90%;
-}
-
 @media screen and (max-width: 40rem) {
   .bg-shape-bottom {background-size: 70%;}
 }
