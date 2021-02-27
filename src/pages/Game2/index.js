@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions , headerTitleActions } from '../../_actions'
+import { apiActions , headerTitleActions, platformConfigActions } from '../../_actions'
 
 import Init from './components/Init'
 import Result from './components/Result'
@@ -220,6 +220,7 @@ const Game2 = (props) => {
 	}
 
 	dispatch(headerTitleActions.showHeader(false))
+	dispatch(platformConfigActions.setGameMode(true))
 	return (
 		<div id="game2-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
@@ -237,7 +238,7 @@ const Game2 = (props) => {
 												/>
 							case "ROOM":
 								return (
-									<div>
+									<div id="room-itself">
 										<RoomSelect
 											buttonList={mission.locations.map((location) => location.name)}
 											onChange={(num) => {

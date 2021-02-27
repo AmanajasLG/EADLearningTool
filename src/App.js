@@ -32,8 +32,10 @@ const App = () => {
   let palette = "palette01"
   document.getElementsByTagName('html')[0].className = palette
 
+  let gameMode = useSelector( state => state.platformConfig.gameMode )
+
   return (
-    <div className="App">
+    <div className={ "App" + (gameMode? " game-mode" : "")}>
       {/* { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }       */}

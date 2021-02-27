@@ -10,15 +10,21 @@ const RoomSelect = ({buttonList, onChange}) => {
 	}
 
     return (
-        <div id="RoomSelect">
-					{buttonList.map( (name, index) =>
-						<button className="RoomBtn" key={index}
-							id={ state === index ? "selected" : "" }
-							onClick={buttonClick(index)}
-						>
-							{name}
-						</button> )}
-        </div>
+		<div id="RoomSelect">
+			<div className="section-title">
+				<span lang="pt-br">Salas</span>
+				<span lang="en">Rooms</span>
+			</div>
+			<div id="button-rows">
+				{buttonList.map( (name, index) =>
+					<button className="RoomBtn" key={index}
+					id={ state === index ? "selected" : "" }
+					onClick={buttonClick(index)}
+					>
+						{index+1}
+					</button> )}
+			</div>
+		</div>
     )
 }
 
