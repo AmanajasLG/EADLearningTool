@@ -18,6 +18,8 @@ import stub from './stub'
 import lamp_apagada from '../../img/lampada_apagada.svg'
 import lamp_acesa from '../../img/lampada_acesa.svg'
 
+import ReactAudioPlayer from 'react-audio-player';
+
 
 const Game2 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -213,7 +215,7 @@ const Game2 = (props) => {
 		}
 	}
 	
-	console.log(state)
+	console.log(mission)
 
 	if(state.dialogHistory.length && state.spokenCharacters.indexOf(state.currentChar.name) === -1){
 		state.spokenCharacters.push(state.currentChar.name)
@@ -221,6 +223,10 @@ const Game2 = (props) => {
 
 	return (
 		<div>
+			<ReactAudioPlayer
+				src={mission.backgroundAudios[0].music[0].url}
+				autoPlay
+			/>
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
 			<div>
 				<div style={{width: '100%', height: '100%'}}>
