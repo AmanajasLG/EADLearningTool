@@ -14,7 +14,8 @@ const Character = ({character, dragPosition, position, onClick}) => {
     <div className="CharDiv" style={pos.x ? {position: 'absolute', left:pos.x, top: pos.y} : null}
       draggable onDragStart={()=>setDragging(true)} onDragEnd={()=>setDragging(false)}>
       <div onClick={onClick}>
-        <img src={character.characterAssets.length > 0 ? character.characterAssets[0].image[0].url : ""} alt={`${character.name}`}/>
+        <img src={character.characterAssets.length > 0 ? character.characterAssets.find(asset => asset.bodyPart === 'fullBody'
+													).image[0].url : ""} alt={`${character.name}`}/>
         <div>{character.name}</div>
       </div>
     </div>

@@ -150,7 +150,7 @@ const Game2 = (props) => {
 
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0 }
 	const closeDialog = () =>
-		setState({...state, currentChar: null, ...dialogInitialState, })
+		setState({...state, currentChar: null, ...dialogInitialState, faceState: 'init' })
 	const refreshDialog = () =>
 		setState({...state, ...dialogInitialState, answers: state.currentChar.answers.slice(0, state.questionsByStep)})
 
@@ -171,6 +171,9 @@ const Game2 = (props) => {
 				} else {
 					state.validQuestions[answer.question.question] = 0
 				}
+				state.faceState = 'rightQuestion'
+			} else {
+				state.faceState = 'wrongQuestion'
 			}
 
 			let updateState = {
@@ -203,9 +206,10 @@ const Game2 = (props) => {
 	const checkEnd = () => {
 		if(state.tries < 3 && state.currentChar.name !== state.targetName){
 			state.tries++
-			setState({...state, acusation: false})
+			setState({...state, acusation: false, faceState: 'wrongAccusation'})
 		} else {
-			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName})
+			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, faceState: state.currentChar.name === state.targetName ? 
+			'rightAccusation' : 'wrongAccusation' })
 		}
 	}
 	
@@ -262,8 +266,10 @@ const Game2 = (props) => {
 												<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
 												<div id='CharacterPortrait'>
-													{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[1].image[0].url: ""} alt="portrait" />}
-													{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[2].image[0].url : ""} alt="portrait" />}
+													{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'upperBody'
+													).image[0].url: ""} alt="portrait" />}
+													{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'face' && asset.type === state.faceState
+													).image[0].url : ""} alt="portrait" />}
 												</div>
 												<div id="dialogos">
 													<div id='DialogHistory'>

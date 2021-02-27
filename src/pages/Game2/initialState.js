@@ -15,6 +15,7 @@ export default {
 //DIALOG
   dialogHistory: [],
   dialogStep: 0,
+  faceState: 'init',
   totalDialogSteps: 2,
   questionsByStep: 2,
   currentChar: null,
