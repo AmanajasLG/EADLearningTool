@@ -12,6 +12,10 @@ export default {
   acusation: false,
   tries: 0,
   validQuestions: [],
+  volume: 100,
+  fontSize: 12,
+  assistMode: false,
+  accessibility: 'NONE',
 //DIALOG
   dialogHistory: [],
   dialogStep: 0,

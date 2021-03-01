@@ -11,15 +11,20 @@ import Sala from './components/Sala'
 import Character from './components/Character'
 import Button from '@material-ui/core/Button'
 import AppHeader from '../../_components/AppHeader'
+import Config from '../../_components/Config'
 import './index.scss'
 import initialState from './initialState'
 import stub from './stub'
+import Slider from '@material-ui/core/Slider'
+import VolumeDown from '@material-ui/icons/VolumeDown'
+import VolumeUp from '@material-ui/icons/VolumeUp'
+import Checkbox from '@material-ui/core/Checkbox'
 
 import lamp_apagada from '../../img/lampada_apagada.svg'
 import lamp_acesa from '../../img/lampada_acesa.svg'
 
 import ReactAudioPlayer from 'react-audio-player';
-
+import config from '../../img/i-settings.svg'
 
 const Game2 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -138,7 +143,8 @@ const Game2 = (props) => {
 				mission: mission.id
 			}))
 		}
-		setState({...state, tutorialStep: state.tutorialStep + 1, scene: "ROOM"})
+
+		setState({...state, tutorialStep: state.tutorialStep + 1, scene: "TUTORIAL"})
 	}
 
 	//shows only selected questions
@@ -210,11 +216,11 @@ const Game2 = (props) => {
 			state.tries++
 			setState({...state, acusation: false, faceState: 'wrongAccusation'})
 		} else {
-			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, faceState: state.currentChar.name === state.targetName ? 
+			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, faceState: state.currentChar.name === state.targetName ?
 			'rightAccusation' : 'wrongAccusation' })
 		}
 	}
-	
+
 	console.log(mission)
 
 	if(state.dialogHistory.length && state.spokenCharacters.indexOf(state.currentChar.name) === -1){
@@ -223,9 +229,12 @@ const Game2 = (props) => {
 
 	return (
 		<div>
+			<div style={{float: 'right', backgroundColor: '#eeaaaa'}}>
+				<img className="header-btn" src={config} onClick={() => setState({...state, config: true}) } alt='config' />
+			</div>
 			<ReactAudioPlayer
 				src={mission.backgroundAudios[0].music[0].url}
-				autoPlay
+				autoPlay volume={state.volume/100}
 			/>
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
 			<div>
@@ -240,6 +249,12 @@ const Game2 = (props) => {
 													onStart={ onStartGame }
 													onBack={ ()=> setState({...state, back: true}) }
 												/>
+							case "TUTORIAL":
+								return (
+									<div>
+										Tutorial
+									</div>
+								)
 							case "ROOM":
 								return (
 									<div>
@@ -301,7 +316,7 @@ const Game2 = (props) => {
 												<div>{mission.name}</div>
 												<div>{mission.nameTranslate}</div>
 											</div>
-											
+
 											{state.tries === 0 ? <div>
 												<div>Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</div>
 												<div>Well done! You have found the right person on your first try. You're going to rock on your new career!</div>
@@ -355,6 +370,43 @@ const Game2 = (props) => {
 							<Button onClick={checkEnd}>Yes</Button>
 							<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
 						</div>
+					}
+					{ state.config &&
+						<Config>
+							<Button onClick={()=>setState({...state, config: false, gameConfig: true})}>Configurações de jogo</Button>
+							<Button onClick={()=>{}}>Estatísticas</Button>
+							<Button onClick={()=>setState({...state, back: true})}>Sair do jogo</Button>
+							<Button onClick={()=>setState({...state, config: false})}>X</Button>
+						</Config>
+					}
+					{
+						state.gameConfig &&
+						<Config>
+							<div>
+								Volume
+								<Button onClick={()=> setState({...state, volume: 0})}>
+									<VolumeDown />
+								</Button>
+									<Slider value={state.volume} onChange={(e, newValue)=> {
+										setState({...state, volume: newValue})}
+									}/>
+								<Button onClick={()=> setState({...state, volume: 100})}>
+									<VolumeUp />
+								</Button>
+							</div>
+							<div>
+								Tamanho da fonte
+								<Slider value={state.fontSize} onChange={(e, newValue) => setState({...state, fontSize: newValue})}/>
+							</div>
+							<div>
+								Modo assistência <Checkbox checked={state.assistMode} onChange={(e)=>setState({...state, assistMode: e.target.checked})}/>
+							</div>
+							<div>
+								Acessibilidade <Button> {'<'} </Button> Tipo <Button> {'>'} </Button>
+							</div>
+							<Button onClick={()=>setState({...state, gameConfig: false})}>X</Button>
+							<Button onClick={()=>setState({...state, gameConfig: false, config: true})}>Voltar</Button>
+						</Config>
 					}
 					{ state.back && <Redirect to='/userspace' />}
 				</div>
