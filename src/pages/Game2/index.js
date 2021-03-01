@@ -37,7 +37,9 @@ const Game2 = (props) => {
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
-	let tipsCount = mission.characters.filter(character => {
+	let tipsCount
+	if(mission)
+		tipsCount = mission.characters.filter(character => {
 		return character.tip
 	}).length
 
@@ -187,8 +189,11 @@ const Game2 = (props) => {
 
 		if(answer.refresh)
 			refreshDialog()
-		else if(answer.close)
+		else if(answer.close){
+			if(answer.tip)
+				setState({...state, tips: [...state, answer.tip]})
 			closeDialog()
+		}
 		else{
 
 			if(answer.question.correct){
@@ -221,7 +226,7 @@ const Game2 = (props) => {
 					updateState.answers = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
 				}
 				else{
-					updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?'}}]
+					updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
 				}
 			}
 			// e então atualiza
@@ -394,8 +399,15 @@ const Game2 = (props) => {
 					{ state.acusation &&
 						<div>
 							Tem certeza?
+							<div>
+								Dicas recebidas
+								{state.tips.map((tip, index)=>
+									<div key={index}>{tip}</div>
+								)}
+							</div>
 							<Button onClick={checkEnd}>Yes</Button>
 							<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
+
 						</div>
 					}
 					{ state.config &&
