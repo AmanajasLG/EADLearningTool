@@ -144,9 +144,27 @@ const Game2 = (props) => {
 			}))
 		}
 
-		setState({...state, tutorialStep: state.tutorialStep + 1, scene: "TUTORIAL"})
+		//check if should start or skip tutorial
+		setState({...state, tutorialStep: 0, scene: "ROOM"})
 	}
 
+	const setTutorialCharacter = (character) => () => {
+		setState(
+			{...state,
+				tutorialStep: state.tutorialStep + 1,
+				currentChar: character,
+				answers:
+				[
+					{
+						answer: 'Olha, não sei quem você está procurando, cheguei aqui semana passada. A cabelereira deve saber!',
+						question: {
+							question: 'Estou procurando alguém. Você pode me ajudar?'
+						},
+						close: true
+					}
+				]
+			})
+	}
 	//shows only selected questions
 	const setCurrentCharacter = (character) => () => setState(
 		{...state,
@@ -253,60 +271,31 @@ const Game2 = (props) => {
 								return (
 									<div>
 										Tutorial
+										<Character
+											character={mission.characters.find(character => character.name === 'Fuyuka')}
+											onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuka'))}
+										/>
 									</div>
 								)
 							case "ROOM":
 								return (
 									<div>
 										<RoomSelect
-											buttonList={mission.locations.map((location) => location.name)}
+											buttonList={mission.locations.map((location, index) => index)}
 											onChange={(num) => {
 												setState({...state, currentRoom: num})
 												dispatch(headerTitleActions.changeTitle(state.locations[num].location.name))
 											}}
 										/>
 
-										<Sala roomData={state.locations[state.currentRoom]} setCurrentChar={setCurrentChar}>
+										<Sala roomData={state.locations[state.currentRoom]}>
 											{state.locations[state.currentRoom].characters.map((character, index) =>
-									<Character key={index}
-									  character={character}
-									  onClick={setCurrentCharacter(character)}
-									/>
+												<Character key={index}
+												  character={character}
+												  onClick={setCurrentCharacter(character)}
+												/>
 											)}
 										</Sala>
-
-										{ state.currentChar &&
-											<div id="conversa" className='DialogPopUp'>
-
-												<div id="acusar" onClick={() => setState({...state, acusation: true})}>
-													<img id="lamp-apagada" src={lamp_apagada}></img>
-													<img id="lamp-acesa" src={lamp_acesa}></img>
-													<span>É você!</span>
-												</div>
-
-												<div id="fechar" onClick={closeDialog}><span>×</span></div>
-
-												<div id='CharacterPortrait'>
-													{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'upperBody'
-													).image[0].url: ""} alt="portrait" />}
-													{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'face' && asset.type === state.faceState
-													).image[0].url : ""} alt="portrait" />}
-												</div>
-												<div id="dialogos">
-													<div id='DialogHistory'>
-														<span></span>
-														{state.dialogHistory.map((dialog, index)=>
-															<div className={"mensagem"+(index%2)} key={index}>{dialog}</div>
-															)}
-													</div>
-													<div id='Menu'>
-														{state.answers.map( (answer,index) =>
-															<Button key={index} onClick={onMenuButtonClick(answer)}>{answer.question.question}</Button>
-															)}
-													</div>
-												</div>
-											</div>
-										}
 									</div>)
 								case "ENDGAME":
 									return(
@@ -364,6 +353,44 @@ const Game2 = (props) => {
 									)
 						}
 					}())}
+					{state.tutorialStep === 0 && state.scene === 'TUTORIAL' &&
+						<div style={{position: 'absolute', top: 100, left: 100, width: 500, height: 300, backgroundColor: '#ddddee'}}>
+							Balão tutorial
+						</div>
+					}
+					{ state.currentChar &&
+						<div id="conversa" className='DialogPopUp'>
+
+							<div id="acusar" onClick={() => setState({...state, acusation: true})}>
+								<img id="lamp-apagada" src={lamp_apagada}></img>
+								<img id="lamp-acesa" src={lamp_acesa}></img>
+								<span>É você!</span>
+							</div>
+
+							<div id="fechar" onClick={closeDialog}><span>×</span></div>
+
+							<div id='CharacterPortrait'>
+								{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'upperBody'
+								).image[0].url: ""} alt="portrait" />}
+								{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'face' && asset.type === state.faceState
+								).image[0].url : ""} alt="portrait" />}
+							</div>
+
+							<div id="dialogos">
+								<div id='DialogHistory'>
+									<span></span>
+									{state.dialogHistory.map((dialog, index)=>
+										<div className={"mensagem"+(index%2)} key={index}>{dialog}</div>
+										)}
+								</div>
+								<div id='Menu'>
+									{state.answers.map( (answer,index) =>
+										<Button key={index} onClick={onMenuButtonClick(answer)}>{answer.question.question}</Button>
+										)}
+								</div>
+							</div>
+						</div>
+					}
 					{ state.acusation &&
 						<div>
 							Tem certeza?
