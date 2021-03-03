@@ -1,27 +1,35 @@
 .CharDiv {
-	width: 225px;
-	margin-left: 20px;
-	margin-right: 20px;
-	margin-top: 200px;
 	transition-duration: 100ms;
 	cursor: pointer;
+	display: flex;
+	justify-content: flex-end;
+	flex-flow: column;
+	align-items: center;
+	// margin: 0px 20px;
+	flex: 1 1 auto;
+	min-width: 0;
+	min-height: 0;
+	max-height: 100%;
 }
 
 .CharDiv * {
 	transition: 100ms linear;
 }
 
-.CharDiv > div {
-	display: flex;
-	justify-content: center;
-	flex-flow: column;
-	align-content: center;
-	align-items: center;
+/* Simulando perspectiva e distância. origin é fixo
+   mas o scale é pra ser entre 80% e 100% */
+.CharDiv:nth-child(2) {
+	transform-origin: 50% 35%;
+	transform: scale(0.8);
 }
 
 .CharDiv img {
-	width: 100%;
-	height: auto;
+	object-fit: contain;
+	flex: 0 1 auto;
+	min-height: 0;
+	min-width: 0;
+	max-height: 100%;
+	max-width: 100%;
 }
 
 .CharDiv img:hover {
