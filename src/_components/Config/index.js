@@ -1,9 +1,9 @@
 import React from 'react'
+import './index.scss'
 
 const Config = (props) => {
   return(
-    <div style={{position: 'absolute', backgroundColor: '#ddddee', top: '20%', left: '200', width: '50%', height: 500}}>
-      Configurações de jogo
+    <div id="config-dialog">
       {props.children}
     </div>
   )

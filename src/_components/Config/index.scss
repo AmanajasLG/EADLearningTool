@@ -1,0 +1,58 @@
+#config-dialog {
+	position: absolute;
+	background-color: #F9AFA1;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+#config-fechar {
+	position: absolute;
+	cursor: pointer;
+	right: 15px;
+	top: 15px;
+	width: 60px;
+	height: 60px;
+	font-size: 4em;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding-bottom: 15px;
+	transition: 100ms ease-in-out;
+	overflow: hidden;
+	color: #FFFFFF;
+}
+
+#config-fechar:hover {
+	color: #59316D;
+	transform: scale(1.2);
+}
+
+.config-option {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	width: 100%;
+	max-width: 400px;
+	background-color: #FFFFFF60;
+	padding: 20px;
+	margin: 15px;
+}
+
+.config-option:hover {
+	background-color: #00000060;
+}
+
+.config-option span {
+	display: block;
+}
+
