@@ -1,5 +1,4 @@
 import React from 'react'
-import {Link} from 'react-router-dom'
 import './index.scss'
 import classImage from '../../../../img/pic-people-talk.svg'
 
@@ -8,7 +7,7 @@ const Init = ({name, description, onClose, onStart, onBack}) => {
         <div className="main-wrapper">
           <div className="inner-content">
             <div name="infos">
-              <img className="classImage" src={classImage}/>
+              <img className="classImage" src={classImage} alt=""/>
               <h1 className="margin-half-top type-l type-display type-center">{name}</h1>
               <h1 className="type-m type-display type-center subtitle">Em inglês</h1>
 

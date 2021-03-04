@@ -7,6 +7,4 @@ export const headerTitleConstants = {
     CLEAR_SUBTITLE:	'CLEAR_SUBTITLE',
     CLEAR_ALL:		'CLEAR_ALL',
 
-    SHOW_HEADER:	'SHOW_HEADER',
-    HIDE_HEADER:	'HIDE_HEADER',
 }

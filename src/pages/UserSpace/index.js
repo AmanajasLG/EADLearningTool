@@ -16,7 +16,6 @@ const UserSpace = () => {
   
   // O ideal seria o próprio jogo chamar isso quando
   // for se encerrar, mas aqui funciona, por enquanto
-  dispatch(headerTitleActions.showHeader())
   dispatch(platformConfigActions.setGameMode(false))
 
   return(

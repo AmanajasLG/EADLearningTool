@@ -10,7 +10,6 @@ import RoomSelect from './components/RoomSelect'
 import Sala from './components/Sala'
 import Character from './components/Character'
 import Button from '@material-ui/core/Button'
-import AppHeader from '../../_components/AppHeader'
 import Config from '../../_components/Config'
 import './index.scss'
 import initialState from './initialState'
@@ -254,7 +253,6 @@ const Game2 = (props) => {
 		state.spokenCharacters.push(state.currentChar.name)
 	}
 
-	dispatch(headerTitleActions.showHeader(false))
 	dispatch(platformConfigActions.setGameMode(true))
 	return (
 		<div id="game2-wrapper">
@@ -371,8 +369,8 @@ const Game2 = (props) => {
 					<div id="conversa" className='DialogPopUp'>
 
 						<div id="acusar" onClick={() => setState({...state, acusation: true})}>
-							<img id="lamp-apagada" src={lamp_apagada}></img>
-							<img id="lamp-acesa" src={lamp_acesa}></img>
+							<img id="lamp-apagada" src={lamp_apagada} alt=""></img>
+							<img id="lamp-acesa" src={lamp_acesa} alt=""></img>
 							<span>É você!</span>
 						</div>
 

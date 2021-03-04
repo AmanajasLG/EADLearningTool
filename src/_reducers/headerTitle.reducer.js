@@ -17,15 +17,9 @@ export function header (state = {isVisible: true, title: "", subtitle: ""}, acti
 		case headerTitleConstants.CLEAR_SUBTITLE:
 			return {...state, subtitle: ""};
 
-		case headerTitleConstants.CLEAR_SUBTITLE:
+		case headerTitleConstants.CLEAR_ALL:
 			return {...state, title: "", subtitle: ""};
 
-		case headerTitleConstants.SHOW_HEADER:
-			return {...state, isVisible: true};
-
-		case headerTitleConstants.HIDE_HEADER:
-			return {...state, isVisible: false};
-			
 		default:
 			return state;
     }

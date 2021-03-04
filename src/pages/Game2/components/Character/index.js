@@ -1,6 +1,5 @@
 import React from 'react'
 import './character.scss'
-import charImage from './pic-char-example.svg'
 
 const Character = ({character, dragPosition, position, onClick}) => {
     const [pos, setPos] = React.useState({x:0, y:0})
