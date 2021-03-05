@@ -416,14 +416,17 @@ const Game2 = (props) => {
 					<Config>
 						<div className="config-option" onClick={()=>setState({...state, config: false, gameConfig: true})}>
 							<span lang="pt-br">Configurações de jogo</span>
+							<div className="divider"></div>
 							<span lang="en">Game settings</span>
 						</div>
 						<div className="config-option" onClick={()=>{}}>
 							<span lang="pt-br">Estatísticas</span>
+							<div className="divider"></div>
 							<span lang="en">Statistics</span>
 						</div>
 						<div className="config-option" onClick={()=>setState({...state, back: true})}>
 							<span lang="pt-br">Sair do jogo</span>
+							<div className="divider"></div>
 							<span lang="en">Leave game</span>
 						</div>
 						<div id="config-fechar" onClick={()=>setState({...state, config: false})}>×</div>
