@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
 //GAME STATE
-  tutorialStep: 0,
   scene: "INIT",
   currentRoom: 0,
   isOnDialog: false,
@@ -12,7 +11,7 @@ export default {
   acusation: false,
   tries: 0,
   validQuestions: [],
-  volume: 100,
+  volume: 15,
   fontSize: 12,
   assistMode: false,
   accessibility: 'NONE',

@@ -1,12 +1,52 @@
-#input-tracker {
-	position: absolute;
-	top: 120px;
-	left: 10px;
+.main-wrapper {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
-.main-wrapper {
-	margin-top: -125px;
-	padding-top: 125px;
+.main-wrapper::after {
+	content: '';
+	position: absolute;
+	pointer-events: none;
+	z-index: -1;
+	background-image: url('../../../../img/formas-bottom-2.svg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: bottom center;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	width: 100%;
+	max-width: 1920px;
+	height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.inner-content {
+	display: flex;
+	flex-direction: column ;
+	align-items: center;
+	justify-content: center;
+}
+
+#input-tracker {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	height: auto;
+	width: auto;
+	opacity: 25%;
+	transition: 100ms linear;
+}
+
+#input-tracker:hover {
+	opacity: 100%;
 }
 
 .type-display {

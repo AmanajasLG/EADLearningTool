@@ -1,6 +1,6 @@
 import { headerTitleConstants } from '../_constants'
 
-export function header (state = {title: "", subtitle: ""}, action) {
+export function header (state = {isVisible: true, title: "", subtitle: ""}, action) {
     switch(action.type) {
         case headerTitleConstants.CHANGE_TITLE:
 			return {...state, title: action.newTitle};
@@ -17,9 +17,9 @@ export function header (state = {title: "", subtitle: ""}, action) {
 		case headerTitleConstants.CLEAR_SUBTITLE:
 			return {...state, subtitle: ""};
 
-		case headerTitleConstants.CLEAR_SUBTITLE:
+		case headerTitleConstants.CLEAR_ALL:
 			return {...state, title: "", subtitle: ""};
-			
+
 		default:
 			return state;
     }

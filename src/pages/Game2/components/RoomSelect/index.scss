@@ -1,9 +1,37 @@
 #RoomSelect {
 	position: absolute;
-	// top: 10px;
-	right: 15px;
+	top: 15px;
+	right: 85px;
 	display: flex;
-	flex: content;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.section-title {
+	margin-right: 5px;
+}
+
+.section-title span {
+	vertical-align: baseline;
+	padding: 5px 25px;
+	color: #59316D;
+}
+
+.section-title span[lang="pt-br"] {
+	font-family: 'Abril Fatface';
+	font-size: 2em;
+}
+
+.section-title span[lang="en"] {
+	font-family: 'Barlow';
+	font-style: italic;
+	font-size: 1.25em;
+	border-left: #F9AFA1 2px solid;
+}
+
+#button-rows {
+	display: flex;
 	flex-direction: row;
 	justify-content: center;
 }
@@ -11,19 +39,26 @@
 .RoomBtn {
 	margin-left: 5px;
 	margin-right: 5px;
-	color: #535C89;
-	border-color: #535C89;;
+	width: 1.65em;
+	height: 1.65em;
+	font-size: 1em;
+	font-family: 'Assistant';
+	font-weight: bold;
+	color: #59316D;
+	border: 1px #AAAAAA solid;
+	border-radius: 1em;
 	background-color: white;
 	transition: 100ms linear;
 }
 
 .RoomBtn:hover {
 	color: white;
-	border-color: white;
-	background-color: #535C89;
+	border-color: #F9AFA1;
+	background-color: #F9AFA1;
 }
 
 #selected {
 	pointer-events: none;
-	opacity: 50%;
+	background-color: #D6E3F4;
+	border-color: #D6E3F4;
 }

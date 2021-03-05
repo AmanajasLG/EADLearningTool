@@ -14,7 +14,6 @@ import {
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { PrivateRoute } from './_components/PrivateRoute'
-// import { alertActions, userActions } from './_actions'
 // import { history } from './_helpers'
 import Login from './pages/Login'
 import UserSpace from './pages/UserSpace'
@@ -28,12 +27,14 @@ import Questionnaires from './pages/Questionnaires'
 import PlaySessions from './pages/PlaySessions'
 
 const App = () => {
-  // const dispatch = useDispatch()
 
   let palette = "palette01"
   document.getElementsByTagName('html')[0].className = palette
+
+  let gameMode = useSelector( state => state.platformConfig.gameMode )
+
   return (
-    <div className="App">
+    <div className={ "App" + (gameMode? " game-mode" : "")}>
       {/* { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }       */}

@@ -2,11 +2,31 @@
 	color: var(--color-accent);
 	background-size: contain;
 	background-repeat: no-repeat;
-	background-position: center;
-	padding: 5px;
+	background-position: center center;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	align-content: center;
 	justify-content: center;
+	height: 100%;
+	width: 100%;
+	padding: 5px;
+}
+
+#sala > div {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	justify-content: center;
+	--aspect-width: 267;
+	--aspect-height: 150;
+	--max-width: 90vw;
+	--max-height: 90vh;
+	--max-dim: max(var(--aspect-width), var(--aspect-height));
+	--norm: min(calc( var(--max-width) / var(--aspect-width) ), calc( var(--max-height) / var(--aspect-height) ));
+	width: calc(var(--aspect-width) * var(--norm));
+	height: calc(var(--aspect-height) * var(--norm));
+	position: relative;
+	bottom: -4vh;
+	padding-top: 100px;
+	// background-color: #59316D88;
 }

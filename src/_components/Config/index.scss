@@ -1,0 +1,92 @@
+#config-dialog {
+	position: absolute;
+	background-color: #F9AFA1;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+#config-fechar {
+	position: absolute;
+	cursor: pointer;
+	right: 15px;
+	top: 15px;
+	width: 60px;
+	height: 60px;
+	font-size: 4em;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding-bottom: 15px;
+	transition: 100ms ease-in-out;
+	overflow: hidden;
+	color: #FFFFFF;
+}
+
+#config-fechar:hover {
+	color: #59316D;
+	transform: scale(1.2);
+}
+
+.config-option {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	width: 100%;
+	max-width: 400px;
+	padding: 20px;
+	margin: 15px;
+}
+
+.config-option,
+.config-option * {
+	transition: 250ms ease-in-out;
+}
+
+.config-option span {
+	display: block;
+}
+
+.config-option span[lang="pt-br"] {
+	font-family: 'Barlow semibold';
+	font-size: 1.5em;
+	color: #59316D;
+}
+
+.config-option span[lang="en"] {
+	font-family: 'Barlow';
+	font-style: italic;
+	font-size: 1em;
+	color: #59316D;
+}
+
+.config-option:hover span {
+	color: white;
+}
+
+.config-option:hover span[lang="pt-br"] {
+	transform: translateY(0.15em);
+}
+
+.config-option:hover span[lang="en"] {
+	transform: translateY(-0.15em);
+}
+
+.config-option .divider {
+	width: 40%;
+	border: 1px solid #FFCCA9;
+	margin: 10px 0;
+}
+
+.config-option:hover .divider {
+	border-color: #59316D;
+}

@@ -2,7 +2,7 @@ import './index.scss'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { apiActions } from '../../_actions'
+import { apiActions, headerTitleActions, platformConfigActions } from '../../_actions'
 
 const UserSpace = () => {
   React.useEffect(()=>{
@@ -13,6 +13,10 @@ const UserSpace = () => {
   const missions = useSelector( state => state.missions)
   const dispatch = useDispatch()
   const { missionsActions } = apiActions
+  
+  // O ideal seria o próprio jogo chamar isso quando
+  // for se encerrar, mas aqui funciona, por enquanto
+  dispatch(platformConfigActions.setGameMode(false))
 
   return(
     <div id="userspace">

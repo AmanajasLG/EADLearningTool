@@ -9,7 +9,9 @@ const Sala = ({children, roomData, setCurrentChar}) => {
   const img = roomData.location.backgroundAssets.length > 0 ? roomData.location.backgroundAssets[0].image[0].url : ""
   return (
       <div id="sala" style={{backgroundImage: `url("${img}")`}} onDragOver={onDragOver}>
+        <div>
           {children}
+        </div>
       </div>
   )
 }

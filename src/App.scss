@@ -2,7 +2,30 @@
 @import './colorPalettes';
 
 .App {
-  //text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.App.game-mode {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+#main-app-wraper {
+  flex-grow: 1;
+}
+
+.App.game-mode #main-app-wraper {
+  flex-grow: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
 .App-logo {
