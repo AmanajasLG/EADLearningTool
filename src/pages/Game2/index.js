@@ -24,6 +24,7 @@ import lamp_acesa from '../../img/lampada_acesa.svg'
 
 import ReactAudioPlayer from 'react-audio-player';
 import config from '../../img/i-settings.svg'
+import { VolumeMute } from '@material-ui/icons'
 
 const Game2 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -435,30 +436,63 @@ const Game2 = (props) => {
 				{
 					state.gameConfig &&
 					<Config>
-						<div>
-							Volume
-							<Button onClick={()=> setState({...state, volume: 0})}>
-								<VolumeDown />
-							</Button>
-								<Slider value={state.volume} onChange={(e, newValue)=> {
-									setState({...state, volume: newValue})}
-								}/>
-							<Button onClick={()=> setState({...state, volume: 100})}>
-								<VolumeUp />
-							</Button>
+						<div id="title">
+							<span lang="pt-br">Configurações de jogo</span>
+							<div className="divider"></div>
+							<span lang="en">Game settings</span>
 						</div>
-						<div>
-							Tamanho da fonte
-							<Slider value={state.fontSize} onChange={(e, newValue) => setState({...state, fontSize: newValue})}/>
-						</div>
-						<div>
-							Modo assistência <Checkbox checked={state.assistMode} onChange={(e)=>setState({...state, assistMode: e.target.checked})}/>
-						</div>
-						<div>
-							Acessibilidade <Button> {'<'} </Button> Tipo <Button> {'>'} </Button>
-						</div>
-						<Button onClick={()=>setState({...state, gameConfig: false})}>X</Button>
-						<Button onClick={()=>setState({...state, gameConfig: false, config: true})}>Voltar</Button>
+						<table id="game-options">
+							<tr>
+								<td>
+									<span lang="pt-br">Volume</span>
+									<span lang="en">Volume</span>
+								</td>
+								<td>
+									<Button onClick={()=> setState({...state, volume: 0})}>
+										<VolumeMute />
+									</Button>
+										<Slider value={state.volume} onChange={(e, newValue)=> {
+											setState({...state, volume: newValue})}
+										}/>
+									<Button onClick={()=> setState({...state, volume: 100})}>
+										<VolumeUp />
+									</Button>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span lang="pt-br">Tamanho da fonte</span>
+									<span lang="en">Font size</span>
+								</td>
+								<td>
+									<Slider value={state.fontSize} onChange={(e, newValue) => setState({...state, fontSize: newValue})}/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span lang="pt-br">Modo assistência</span>
+									<span lang="en">Assist mode</span>
+								</td>
+								<td>
+									<Checkbox checked={state.assistMode} onChange={(e)=>setState({...state, assistMode: e.target.checked})}/>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span lang="pt-br">Acessibilidade</span>
+									<span lang="en">Accessibility</span>
+								</td>
+								<td>
+									<Button> {'<'} </Button> Tipo <Button> {'>'} </Button>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<Button onClick={()=>setState({...state, gameConfig: false, config: true})}>Voltar</Button>
+								</td>
+							</tr>
+						</table>
+						<div id="config-fechar" onClick={()=>setState({...state, gameConfig: false})}>×</div>
 					</Config>
 				}
 				{ state.back && <Redirect to='/userspace' />}
