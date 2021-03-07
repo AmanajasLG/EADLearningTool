@@ -39,6 +39,10 @@ const Game2 = (props) => {
 		return character.tip
 	}).length
 
+	React.useEffect(() => {
+		dispatch(platformConfigActions.setGameMode(true))
+		return () => dispatch(platformConfigActions.setGameMode(false))
+	}, [dispatch])
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
@@ -240,7 +244,6 @@ const Game2 = (props) => {
 		state.spokenCharacters.push(state.currentChar.name)
 	}
 
-	dispatch(platformConfigActions.setGameMode(true))
 	return (
 		<div id="game2-wrapper">
 			<div id="floating-config-btn" onClick={() => setState({...state, config: true}) }>

@@ -16,9 +16,7 @@ const UserSpace = () => {
   React.useEffect(()=>{
     dispatch(missionsActions.getAll())
   }, [dispatch, missionsActions])
-  // O ideal seria o próprio jogo chamar isso quando
-  // for se encerrar, mas aqui funciona, por enquanto
-  dispatch(platformConfigActions.setGameMode(false))
+
 
   return(
     <div id="userspace">
