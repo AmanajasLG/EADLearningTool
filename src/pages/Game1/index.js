@@ -10,7 +10,6 @@ import RoomSelect from '../Game2/components/RoomSelect'
 import Sala from '../Game2/components/Sala'
 import Character from '../Game2/components/Character'
 import Button from '@material-ui/core/Button'
-import AppHeader from '../../_components/AppHeader'
 import '../Game2/index.scss'
 import initialState from './initialState.js'
 import stub from './stub.js'
@@ -48,16 +47,19 @@ const Game1 = (props) => {
 			}
 		document.addEventListener("mousedown", getClickedObject)
 
-		setState({...state, currentPlaySession, getClickedObject})
+		setState( s => { return {...s, currentPlaySession, getClickedObject} })
 		return () => {
 			document.removeEventListener("mousedown", getClickedObject)
 		}
-	}, [currentPlaySession])
+	}, [dispatch, currentPlaySession, player_actionsActions, state.tracking])
 
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-	}, [])
+	}, [dispatch, id, mission, missionsActions, props.match.params.id])
 
+	//React.useEffect(()=>{
+	//	dispatch(headerTitleActions.showHeader(false))
+	//}, [dispatch, headerTitleActions])
 
 	if(error){
 		error = null
@@ -80,12 +82,12 @@ const Game1 = (props) => {
 
 		setState({...state, scene: 'ROOM'})
 	}
-	
+
 	const onMenuButtonClick = (answer) => () =>{
 		//
 		//	Aplicar lógica adicional de click nos botões do menu
 		//
-		
+
 		setState({...state,
 			dialogHistory:
 			[...state.dialogHistory,
@@ -94,7 +96,7 @@ const Game1 = (props) => {
 			]
 		})
 	}
-	
+
 	const onPhoneEnterClick = () => {
 		setState({...state, showContacts: true})
 	}
@@ -109,7 +111,6 @@ const Game1 = (props) => {
 		// colocar em state.contactList e limpar o form
 	}
 
-	dispatch(headerTitleActions.showHeader(false))
 	return (
 		<div>
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
@@ -239,6 +240,8 @@ const Game1 = (props) => {
 										}
 										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }
 									</div>)
+								default:
+									return(<div>Error</div>)
 						}
 					}())}
 

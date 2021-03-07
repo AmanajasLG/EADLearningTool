@@ -1,13 +1,10 @@
 import { React, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { apiActions } from '../../_actions'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import { useAlert } from 'react-alert'
 import { makeStyles } from '@material-ui/core/styles'
 import { FormControlLabel, Radio, RadioGroup } from '@material-ui/core'
 
@@ -32,12 +29,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const EditQuestion = ({question, onDone}) => {
-    const { questionsActions }= apiActions
-    const dispatch = useDispatch()
     const [inputs, setInputs] = useState(question)
-    const [submitted, setSubmitted ] = useState(false)
+    const submitted = false
     const classes = useStyles()
-    const alert = useAlert()
 
     function handleChange(e) {
         const {name, value} = e.target

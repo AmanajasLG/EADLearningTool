@@ -13,14 +13,13 @@ import DeleteIcon from '@material-ui/icons/Delete'
 
 const Questionnaires = ({onAdd}) => {
   const { questionnairesActions } = apiActions
-  const [createQuestionnaire, setCreateQuestionnaire] = React.useState(false)
   const dispatch = useDispatch()
   const questionnaires = useSelector( state => state.questionnaires)
 
   React.useEffect(()=>{
     if(questionnaires.items.length === 0)
       dispatch(questionnairesActions.getAll())
-  }, [])
+  }, [dispatch, questionnairesActions, questionnaires.items.length])
 
   const editQuestionnaire = (questionnaire) => () => {
 

@@ -1,11 +1,8 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-
-import { apiActions , headerTitleActions, platformConfigActions } from '../../_actions'
-
+import { apiActions , platformConfigActions } from '../../_actions'
 import Init from './components/Init'
-import Result from './components/Result'
 import RoomSelect from './components/RoomSelect'
 import Sala from './components/Sala'
 import Character from './components/Character'
@@ -13,14 +10,13 @@ import Button from '@material-ui/core/Button'
 import Config from '../../_components/Config'
 import './index.scss'
 import initialState from './initialState'
-import stub from './stub'
 import Slider from '@material-ui/core/Slider'
-import VolumeDown from '@material-ui/icons/VolumeDown'
 import VolumeUp from '@material-ui/icons/VolumeUp'
 import Checkbox from '@material-ui/core/Checkbox'
-
-import lamp_apagada from '../../img/lampada_apagada.svg'
-import lamp_acesa from '../../img/lampada_acesa.svg'
+import AcusationLamp from './components/AcusationLamp'
+import DialogCharacter from './components/DialogCharacter'
+import DialogHistory from './components/DialogHistory'
+import Menu from './components/Menu'
 
 import ReactAudioPlayer from 'react-audio-player';
 import config from '../../img/i-settings.svg'
@@ -46,7 +42,7 @@ const Game2 = (props) => {
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-	}, [])
+	}, [id, mission, dispatch, missionsActions, props.match.params.id])
 
 	//track player actions
 	React.useEffect(() => {
@@ -67,11 +63,11 @@ const Game2 = (props) => {
 			}
 		document.addEventListener("mousedown", getClickedObject)
 
-		setState({...state, currentPlaySession, getClickedObject})
+		setState(s => {return {...s, currentPlaySession, getClickedObject }})
 		return () => {
 			document.removeEventListener("mousedown", getClickedObject)
 		}
-	}, [currentPlaySession])
+	}, [dispatch, player_actionsActions, state.tracking, currentPlaySession])
 	/*//Testing tool
 	if(error){
 		error = null
@@ -132,12 +128,6 @@ const Game2 = (props) => {
 		setState({...state, locations})
 	}
 
-	const setCurrentChar = (charData) => () =>
-		setState({...state, currentChar: charData})
-
-	const clearCurrentChar = () =>
-		setState({...state, currentChar: null})
-
 	const onStartGame = (e) => {
 		if(state.tracking){
 			dispatch(play_sessionsActions.create({
@@ -148,10 +138,6 @@ const Game2 = (props) => {
 
 		//check if should start or skip tutorial
 		setState({...state, tutorialStep: 0, scene: "ROOM"})
-	}
-
-	const onExitGame = () => {
-		dispatch(headerTitleActions.showHeader(false));
 	}
 
 	const setTutorialCharacter = (character) => () => {
@@ -369,33 +355,18 @@ const Game2 = (props) => {
 				{ state.currentChar &&
 					<div id="conversa" className='DialogPopUp'>
 
-						<div id="acusar" onClick={() => setState({...state, acusation: true})}>
-							<img id="lamp-apagada" src={lamp_apagada} alt=""></img>
-							<img id="lamp-acesa" src={lamp_acesa} alt=""></img>
-							<span>É você!</span>
-						</div>
+						<AcusationLamp onClick={() => setState({...state, acusation: true})} />
 
 						<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
-						<div id='CharacterPortrait'>
-							{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'upperBody'
-							).image[0].url: ""} alt="portrait" />}
-							{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'face' && asset.type === state.faceState
-							).image[0].url : ""} alt="portrait" />}
-						</div>
+						<DialogCharacter character={state.currentChar} face={state.faceState}/>
 
 						<div id="dialogos">
-							<div id='DialogHistory'>
-								<span></span>
-								{state.dialogHistory.map((dialog, index)=>
-									<div className={"mensagem"+(index%2)} key={index}>{dialog}</div>
-									)}
-							</div>
-							<div id='Menu'>
-								{state.answers.map( (answer,index) =>
-									<Button key={index} onClick={onMenuButtonClick(answer)}>{answer.question.question}</Button>
-									)}
-							</div>
+							<DialogHistory dialogHistory={state.dialogHistory}/>
+
+							<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+								onButtonClick={onMenuButtonClick}
+							/>
 						</div>
 					</div>
 				}

@@ -34,7 +34,7 @@ const UserHeader = ({pageInfo}) => {
 		setState({...state, view: 'settings'});
 		alert.show("Vc achou onde faz para abrir suas configurações! \n\n Ending 8/15");
 	}
-	
+
     return (
         <header id="app-header" className={ headerInfo.isVisible ? "" : "hidden" }>
 			<div className="group-btns" id="left-btns">
@@ -47,7 +47,7 @@ const UserHeader = ({pageInfo}) => {
 				<div id="subTitle">{headerInfo.subtitle}</div>
 			</div>
 			<div className="group-btns" id="right-btns">
-				<div id="profilePic" onClick={clickProfile}><img src={avatar} alt="Profile Picture"></img></div>
+				<div id="profilePic" onClick={clickProfile}><img src={avatar} alt="Profile_Picture"/></div>
 				<div className="header-btn" id="logout-btn" onClick={() => {dispatch(logout())}}>Logout</div>
 			</div>
 			{/* style provisório para teste*/}

@@ -20,7 +20,7 @@ const Characters = ({onAdd}) => {
 
   React.useEffect(()=>{
       dispatch(charactersActions.getAll())
-  }, [])
+  }, [dispatch, charactersActions])
 
   React.useEffect(()=>{
     setEdit(-1)

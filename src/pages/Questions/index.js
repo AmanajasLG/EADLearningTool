@@ -20,7 +20,7 @@ const Questions = ({onAdd}) => {
   React.useEffect(()=>{
     if(questions.items.length === 0)
       dispatch(questionsActions.getAll())
-  }, [])
+  }, [dispatch, questionsActions, questions.items.length])
 
   const editQuestion = (question) => () => {
 
