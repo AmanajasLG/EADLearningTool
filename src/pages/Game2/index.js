@@ -1,26 +1,18 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { apiActions , platformConfigActions } from '../../_actions'
+import { apiActions, musicActions } from '../../_actions'
 import Init from './components/Init'
 import RoomSelect from './components/RoomSelect'
 import Sala from './components/Sala'
 import Character from './components/Character'
 import Button from '@material-ui/core/Button'
-import Config from '../../_components/Config'
 import './index.scss'
 import initialState from './initialState'
-import Slider from '@material-ui/core/Slider'
-import VolumeUp from '@material-ui/icons/VolumeUp'
-import Checkbox from '@material-ui/core/Checkbox'
 import AcusationLamp from './components/AcusationLamp'
 import DialogCharacter from './components/DialogCharacter'
 import DialogHistory from './components/DialogHistory'
 import Menu from './components/Menu'
-
-import ReactAudioPlayer from 'react-audio-player';
-import config from '../../img/i-settings.svg'
-import { VolumeMute } from '@material-ui/icons'
 
 const Game2 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -33,16 +25,20 @@ const Game2 = (props) => {
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
+
 	let tipsCount
+
 	if(mission)
 		tipsCount = mission.characters.filter(character => {
 		return character.tip
 	}).length
 
-	React.useEffect(() => {
-		dispatch(platformConfigActions.setGameMode(true))
-		return () => dispatch(platformConfigActions.setGameMode(false))
-	}, [dispatch])
+	React.useEffect(()=>{
+		if(mission)
+			dispatch(musicActions.set(mission.backgroundAudios[0].music[0].url))
+		return () => dispatch(musicActions.set(''))
+	}, [dispatch, mission])
+
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
@@ -170,9 +166,9 @@ const Game2 = (props) => {
 										.slice(0, state.questionsByStep)
 		})
 
-	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0 }
+	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, faceState: 'init' }
 	const closeDialog = () =>
-		setState({...state, currentChar: null, ...dialogInitialState, faceState: 'init' })
+		setState({...state, currentChar: null, ...dialogInitialState })
 	const refreshDialog = () =>
 		setState({...state, ...dialogInitialState,
 			answers: state.locations[state.currentRoom].characters
@@ -249,13 +245,6 @@ const Game2 = (props) => {
 
 	return (
 		<div id="game2-wrapper">
-			<div id="floating-config-btn" onClick={() => setState({...state, config: true}) }>
-				<img src={config} alt='config' />
-			</div>
-			<ReactAudioPlayer
-				src={mission.backgroundAudios[0].music[0].url}
-				autoPlay volume={state.volume/100}
-			/>
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
 			<div id="game2-content">
 				<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e)=>{ setState({...state, tracking: e.target.checked}) }} /></div>
@@ -389,88 +378,6 @@ const Game2 = (props) => {
 						<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
 
 					</div>
-				}
-				{ state.config &&
-					<Config>
-						<div className="config-option" onClick={()=>setState({...state, config: false, gameConfig: true})}>
-							<span lang="pt-br">Configurações de jogo</span>
-							<div className="divider"></div>
-							<span lang="en">Game settings</span>
-						</div>
-						<div className="config-option" onClick={()=>{}}>
-							<span lang="pt-br">Estatísticas</span>
-							<div className="divider"></div>
-							<span lang="en">Statistics</span>
-						</div>
-						<div className="config-option" onClick={()=>setState({...state, back: true})}>
-							<span lang="pt-br">Sair do jogo</span>
-							<div className="divider"></div>
-							<span lang="en">Leave game</span>
-						</div>
-						<div id="config-fechar" onClick={()=>setState({...state, config: false})}>×</div>
-					</Config>
-				}
-				{
-					state.gameConfig &&
-					<Config>
-						<div id="title">
-							<span lang="pt-br">Configurações de jogo</span>
-							<div className="divider"></div>
-							<span lang="en">Game settings</span>
-						</div>
-						<table id="game-options">
-							<tr>
-								<td>
-									<span lang="pt-br">Volume</span>
-									<span lang="en">Volume</span>
-								</td>
-								<td>
-									<Button onClick={()=> setState({...state, volume: 0})}>
-										<VolumeMute />
-									</Button>
-										<Slider value={state.volume} onChange={(e, newValue)=> {
-											setState({...state, volume: newValue})}
-										}/>
-									<Button onClick={()=> setState({...state, volume: 100})}>
-										<VolumeUp />
-									</Button>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<span lang="pt-br">Tamanho da fonte</span>
-									<span lang="en">Font size</span>
-								</td>
-								<td>
-									<Slider value={state.fontSize} onChange={(e, newValue) => setState({...state, fontSize: newValue})}/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<span lang="pt-br">Modo assistência</span>
-									<span lang="en">Assist mode</span>
-								</td>
-								<td>
-									<Checkbox checked={state.assistMode} onChange={(e)=>setState({...state, assistMode: e.target.checked})}/>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<span lang="pt-br">Acessibilidade</span>
-									<span lang="en">Accessibility</span>
-								</td>
-								<td>
-									<Button> {'<'} </Button> Tipo <Button> {'>'} </Button>
-								</td>
-							</tr>
-							<tr>
-								<td colspan="2">
-									<Button onClick={()=>setState({...state, gameConfig: false, config: true})}>Voltar</Button>
-								</td>
-							</tr>
-						</table>
-						<div id="config-fechar" onClick={()=>setState({...state, gameConfig: false})}>×</div>
-					</Config>
 				}
 				{ state.back && <Redirect to='/userspace' />}
 			</div>

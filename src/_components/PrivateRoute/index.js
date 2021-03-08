@@ -1,12 +1,13 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
-function PrivateRoute ({component: Component, roles, ...rest}){
+function PrivateRoute ({component: Component, roles, render, ...rest}){
     return (
-        <Route {...rest} 
+        <Route {...rest}
           render={ props => localStorage.getItem('user') ?
-                <Component {...props} />
-                : <Redirect to={{ pathname: '/login', state: {from:props.location} }} />
+                    Component ? <Component {...props} />
+                  : render && render(props)
+                  : <Redirect to={{ pathname: '/login', state: {from:props.location} }} />
           }
         />
     )

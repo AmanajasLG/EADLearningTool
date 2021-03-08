@@ -6,6 +6,7 @@ import { users } from './users.reducer'
 import { alert } from './alert.reducer'
 import { header } from './headerTitle.reducer'
 import { platformConfig } from './platformConfig.reducer'
+import { music } from './music.reducer'
 
 import apiReducers from './api.reducers'
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     alert,
     header,
     platformConfig,
+    music,
     ...apiReducers,
 })
 
