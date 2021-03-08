@@ -1,4 +1,4 @@
-export default {
+const stub = {
   name: 'Stub mission',
   description: 'Local stub mission for tests',
   locations: [
@@ -32,3 +32,5 @@ export default {
     {name: 'Pablo', characterAssets: [], answers: [{question: {question: "oi?"}}]},
   ]
 }
+
+export default stub

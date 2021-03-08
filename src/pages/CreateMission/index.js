@@ -22,7 +22,7 @@ const CreateMissionGame1 = (props) => {
 
   const characters = useSelector( state => state.characters)
   const locations = useSelector( state => state.locations)
-  const questions = useSelector( state => state.questions)  
+  const questions = useSelector( state => state.questions)
 
   const [state, setState] = React.useState({
     mission: {
@@ -49,7 +49,7 @@ const CreateMissionGame1 = (props) => {
       dispatch(apiActions.locationsActions.getAll())
     if(questions.items.length === 0)
       dispatch(apiActions.questionsActions.getAll())
-  }, [])
+  }, [dispatch, id, originalMission, questions.items.length, locations.items.length, characters.items.length])
 
   const [createCharacter, setCreateCharacter] = React.useState(false)
   const [createLocation, setCreateLocation] = React.useState(false)

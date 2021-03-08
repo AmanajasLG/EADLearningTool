@@ -10,10 +10,7 @@ import EditIcon from '@material-ui/icons/Edit'
 import CancelIcon from '@material-ui/icons/Cancel'
 
 import Mission from '../Mission'
-import CreateMission from '../CreateMission'
 import EditMission from '../EditMission'
-
-
 
 const Missions = () => {
   const { missionsActions } = apiActions
@@ -29,7 +26,7 @@ const Missions = () => {
 
   React.useEffect(() => {
     dispatch(missionsActions.getAll())
-  }, [])
+  }, [dispatch, missionsActions])
 
   return(
     <div>

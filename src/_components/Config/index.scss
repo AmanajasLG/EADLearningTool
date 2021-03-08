@@ -90,3 +90,75 @@
 .config-option:hover .divider {
 	border-color: #59316D;
 }
+
+#title {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 2em;
+	margin-bottom: 45px;
+	top: 10vh;
+	left: auto;
+	right: auto;
+	flex-grow: 1;
+}
+
+#title span[lang="pt-br"] {
+	font-family: 'Abril Fatface';
+	font-size: 1.5em;
+	color: #59316D;
+}
+
+#title span[lang="en"] {
+	font-family: 'Barlow';
+	font-style: italic;
+	font-size: 1em;
+	color: #59316D;
+}
+
+#title .divider {
+	width: 40%;
+	border: 1px solid #FFCCA9;
+	margin: 10px 0;
+}
+
+#game-options {
+	width: 85%;
+	max-width: 500px;
+	min-width: 0;
+	margin-top: 200px;
+}
+
+tr td:first-child {
+	text-align: end;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	vertical-align: middle;
+	width: 1px;
+	white-space: nowrap;
+}
+
+tr td:nth-child(2) {
+	text-align: start;
+	padding-left: 15px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	width: 100%;
+}
+
+table span[lang="pt-br"] {
+	display: block;
+	font-family: 'Barlow Extrabold';
+	color: #59316D;
+	font-size: 1.2em;
+}
+
+table span[lang="en"] {
+	display: block;
+	font-family: 'Barlow';
+	font-style: italic;
+	color: #59316D;
+}

@@ -1,23 +1,13 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import _ from 'lodash'
 
-import DeleteIcon from '@material-ui/icons/Delete'
-import EditIcon from '@material-ui/icons/Edit'
-import Button from '@material-ui/core/Button'
-
-import { apiActions } from '../../_actions'
-import { baseURL } from '../../_services'
-
 const EditCharacter = ({character, onDone}) => {
-  const { charactersActions } = apiActions
   const [state, setState] = React.useState({
     name: character.name,
     job: character.job ? character.job : '',
     id: character.id,
     answers: character.answers ? [...character.answers] : []
   })
-  const dispatch = useDispatch()
 
   const editAnswer = (question, index) => e => {
     console.log('question:', question)

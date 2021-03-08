@@ -9,7 +9,7 @@ const PlaySessions = () => {
 
   React.useEffect(() => {
     dispatch(play_sessionsActions.getAll())
-  }, [])
+  }, [dispatch, play_sessionsActions])
 
   return(
     <div>
