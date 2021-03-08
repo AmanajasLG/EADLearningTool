@@ -167,14 +167,17 @@ const Game2 = (props) => {
 			currentChar: character,
 			answers: state.locations[state.currentRoom].characters
 										.find(c => c.id === character.id).selectedQuestions
-										.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
+										.slice(0, state.questionsByStep)
 		})
 
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0 }
 	const closeDialog = () =>
 		setState({...state, currentChar: null, ...dialogInitialState, faceState: 'init' })
 	const refreshDialog = () =>
-		setState({...state, ...dialogInitialState, answers: state.currentChar.answers.slice(0, state.questionsByStep)})
+		setState({...state, ...dialogInitialState,
+			answers: state.locations[state.currentRoom].characters
+									.find(c => c.id === state.currentChar.id).selectedQuestions
+									.slice(0, state.questionsByStep)})
 
 	const onMenuButtonClick = (answer) => () =>{
 		//
