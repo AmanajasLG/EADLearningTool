@@ -2,7 +2,7 @@ import './index.scss'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { apiActions, platformConfigActions } from '../../_actions'
+import { apiActions } from '../../_actions'
 
 const UserSpace = () => {
 
