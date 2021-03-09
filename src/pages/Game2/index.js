@@ -180,7 +180,7 @@ const Game2 = (props) => {
 
 		let updateState = {
 			showAnswer: null,
-			dialogHistory: [...state.dialogHistory, state.showAnswer.text],
+			dialogHistory: [...state.dialogHistory, {text: state.showAnswer.text, speaker: 'character'}],
 		}
 		console.log('state.showAnswer', state.showAnswer)
 
@@ -229,7 +229,7 @@ const Game2 = (props) => {
 
 			let updateState = {
 				dialogHistory: [...state.dialogHistory,
-					answer.question.question
+					{text: answer.question.question, speaker: 'player'}
 				],
 				dialogStep: state.dialogStep + 1,
 				correct: state.correct + (answer.question.correct? 1 : 0),

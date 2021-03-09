@@ -5,7 +5,7 @@ const DialogHistory = ({dialogHistory}) => {
     <div id='DialogHistory'>
       <span></span>
       {dialogHistory.map((dialog, index)=>
-        <div className={"mensagem"+(index%2)} key={index}>{dialog}</div>
+        <div className={"mensagem" + (dialog.speaker==='player'? 0 : 1) } key={index}>{dialog.text}</div>
       )}
     </div>
   )
