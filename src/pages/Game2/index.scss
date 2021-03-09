@@ -183,15 +183,18 @@
 	align-self: flex-start;
 }
 
-#Menu {
+#DialogBox {
 	background-color: #535c89;
 	border-radius: 0 1em 0 0;
-	flex-grow: 0;
 	padding: 10px 5px 10px 15%;
 	box-shadow: 7px 7px 0px 0px #77777750;
-	display: flex;
-	flex-direction: column;
 	justify-content: center;
+}
+
+#Menu {
+	display: flex;
+	flex-grow: 0;
+	flex-direction: column;
 }
 
 #Menu > * {
