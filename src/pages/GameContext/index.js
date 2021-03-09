@@ -1,5 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { platformConfigActions } from '../../_actions'
 import ConfigWindow from '../../_components/ConfigWindow'
 import GameConfig from '../../_components/GameConfig'
@@ -61,6 +62,7 @@ const GameContext = (props) => {
         />
       }
       {children}
+      { state.back && <Redirect to='/userspace' />}
     </div>
   )
 }
