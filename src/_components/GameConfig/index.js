@@ -43,8 +43,10 @@ const GameConfig = (
               <span lang="pt-br">Tamanho da fonte</span>
               <span lang="en">Font size</span>
             </td>
-            <td>
+            <td id="tamanho-fonte">
+              <span className="label-pequeno">Aa</span>
               <Slider value={fontSize} onChange={onFontSizeChange}/>
+              <span className="label-grande">Aa</span>
             </td>
           </tr>
           <tr>
@@ -61,14 +63,17 @@ const GameConfig = (
               <span lang="pt-br">Acessibilidade</span>
               <span lang="en">Accessibility</span>
             </td>
-            <td>
-              <Button onClick={onAccessibilityLeft}> {'<'} </Button>
-              Tipo
-              <Button onClick={onAccessibilityRight}> {'>'} </Button>
+            <td id="tipo-acessibilidade">
+              <Button onClick={onAccessibilityLeft}> {'❮'} </Button>
+              <div>
+                <span lang="pt-br">Nenhum</span>
+                <span lang="en">None</span>
+              </div>
+              <Button onClick={onAccessibilityRight}> {'❯'} </Button>
             </td>
           </tr>
           <tr>
-            <td colSpan="2">
+            <td id="voltar-cell" colSpan="2">
               <Button onClick={onBack}>Voltar</Button>
             </td>
           </tr>
