@@ -354,14 +354,16 @@ const Game2 = (props) => {
 
 						<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
-						<DialogCharacter character={state.currentChar} face={state.faceState}/>
+						<div id="dialog-interact">
+							<DialogCharacter character={state.currentChar} face={state.faceState}/>
 
-						<div id="dialogos">
-							<DialogHistory dialogHistory={state.dialogHistory}/>
+							<div id="dialogos">
+								<DialogHistory dialogHistory={state.dialogHistory}/>
 
-							<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
-								onButtonClick={onMenuButtonClick}
-							/>
+								<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+									onButtonClick={onMenuButtonClick}
+									/>
+							</div>
 						</div>
 					</div>
 				}

@@ -5,7 +5,7 @@ import ConfigWindow from '../../_components/ConfigWindow'
 import GameConfig from '../../_components/GameConfig'
 import ReactAudioPlayer from 'react-audio-player'
 import config from '../../img/i-settings.svg'
-
+import './index.scss'
 
 const GameContext = (props) => {
   const [state, setState] = React.useState({
@@ -30,7 +30,7 @@ const GameContext = (props) => {
 	}, [dispatch])
 
   return(
-    <div>
+    <div id="game-context">
       <div id="floating-config-btn" onClick={() => setState({...state, config: true}) }>
         <img src={config} alt='config' />
       </div>

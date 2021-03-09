@@ -48,6 +48,7 @@
 #fechar {
 	position: absolute;
 	cursor: pointer;
+	z-index: 1;
 }
 
 #fechar {
@@ -114,12 +115,20 @@
 	background-color: #F9AFA1;
 }
 
+#dialog-interact {
+	height: 100%;
+	width: 100%;
+	max-width: 2000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 #CharacterPortrait {
 	position: absolute;
 	bottom: 0;
-	left: 0;
-	width: 33%;
-	height: calc(100% - 125px);
+	width: 30%;
+	max-width: 600px;
+	height: calc(50% + 25px);
 }
 
 #CharacterPortrait * {
@@ -130,14 +139,12 @@
 }
 
 #dialogos {
-	height: calc(100% - 125px);
-	margin-top: 125px;
 	margin-left: auto;
-	margin-right: 50px;
-	padding-bottom: 75px;
-	max-width: calc(83% - 50px);
+	margin: 0 50px 0px auto;
 	display: flex;
 	flex-direction: column;
+	width: calc(85% - 50px);
+	height: 100%;
 }
 
 #DialogHistory {
@@ -187,11 +194,13 @@
 	background-color: #535c89;
 	border-radius: 0 1em 0 0;
 	flex-grow: 0;
-	padding: 10px 5px 10px 15%;
+	padding: 10px 10px 10px 15%;
+	margin-bottom: 50px;
 	box-shadow: 7px 7px 0px 0px #77777750;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	min-height: 80px;
 }
 
 #Menu > * {
