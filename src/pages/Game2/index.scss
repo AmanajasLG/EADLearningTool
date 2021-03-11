@@ -225,3 +225,144 @@
 #conversationActions {
 	margin-top: 20px;
 }
+
+#dialog-accusation-wrapper {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #FFFFFF80;
+	z-index: 20;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#dialog-accusation {
+	width: 65vw;
+	height: 50vh;
+	max-width: 1200px;
+	max-height: 800px;
+	padding: 30px;
+	background-color: #F9AFA1;
+	flex-shrink: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+	position: relative;
+}
+
+#dialog-accusation::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	// background-image: url('./../../img/bg-forma-laranja.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	transform: scale(2);
+	z-index: -1;
+}
+
+#accusation-infos {
+	flex-grow: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#accusation-infos > * {
+	flex-grow: 1;
+	max-width: 50%;
+}
+
+#accusation-infos > :first-child {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	font-size: 1.5rem;
+}
+
+#accusation-infos span[lang="pt-br"] {
+	font-family: 'Assistant';
+	font-weight: bold;
+}
+
+#accusation-infos span[lang="pt-br"]::after{
+	content: "";
+	display: block;
+	margin: 15px 0px;
+	border-bottom: 2px solid #FFCCC9;
+}
+
+#accusation-infos span[lang="en"] {
+	font-family: 'Barlow light';
+	font-style: italic;
+	font-size: 0.9em;
+}
+
+#accusation-infos > :nth-child(2) {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Assistant';
+	text-align: center;
+	background-color: #FBBBA3;
+	border-radius: 1.5em;
+	// padding: 60px 20px 20px 20px;
+	padding: 20px;
+}
+
+#accusation-infos > :nth-child(2) div {
+	margin-bottom: 0.35em;
+}
+
+#accusation-btns {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#accusation-btns button {
+	margin: 5px 15px;
+	padding: 7px 20px;
+	text-transform: unset;
+	transition: 100ms linear;
+	border-radius: 2em;
+	font-family: 'Barlow';
+	font-weight: bold;
+}
+
+#accusation-btns button:first-child {
+	background-color: #FFCCA9;
+	color: #59316D;
+	border-bottom-right-radius: 0;
+}
+
+#accusation-btns button:first-child::before {
+	content: "❮";
+	margin-right: 15px;
+}
+
+#accusation-btns button:last-child {
+	background-color: #D6e3F4;
+	color: #59316D;
+	border-bottom-left-radius: 0;
+}
+
+#accusation-btns button:last-child::after {
+	content: "❯";
+	margin-left: 15px;
+}
+
+#accusation-btns button:hover {
+	background-color: #59316D;
+	color: #FFFFFF;
+}

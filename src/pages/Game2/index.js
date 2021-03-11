@@ -368,17 +368,30 @@ const Game2 = (props) => {
 					</div>
 				}
 				{ state.acusation &&
-					<div>
-						Tem certeza?
-						<div>
-							Dicas recebidas
-							{state.tips.map((tip, index)=>
-								<div key={index}>{tip}</div>
-							)}
+					<div id="dialog-accusation-wrapper">
+						<div id="dialog-accusation">
+							<div id="accusation-infos">
+								<div>
+									<span lang="pt-br">Tem certeza?</span>
+									<span lang="en">Are you sure it's them?<br />Check your tips.</span>
+								</div>
+								<div>
+									{ /* Dessa linha até a "uma das várias" devem ser removidas quando o carregamento correto vier */ }
+									<div>Dicas recebidas.</div>
+									<div>Dicas recebidas mais longa.</div>
+									<div>Dicas.</div>
+									<div>Uma das várias dicas que foram recebidas mas essa é super mega blaster master longa.</div>
+									<div>Recebidas.</div>
+									{state.tips.map((tip, index)=>
+										<div key={index}>{tip}</div>
+										)}
+								</div>
+							</div>
+							<div id="accusation-btns">
+								<Button onClick={() => setState({...state, acusation: false}) }>Não</Button>
+								<Button onClick={checkEnd}>Sim</Button>
+							</div>
 						</div>
-						<Button onClick={checkEnd}>Yes</Button>
-						<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
-
 					</div>
 				}
 				{ state.back && <Redirect to='/userspace' />}
