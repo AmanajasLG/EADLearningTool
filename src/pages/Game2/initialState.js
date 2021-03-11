@@ -15,6 +15,8 @@ export default {
   fontSize: 12,
   assistMode: false,
   accessibility: 'NONE',
+  tutorialStep: 0,
+  tryAgain: false,
 //DIALOG
   dialogHistory: [],
   dialogStep: 0,

@@ -41,6 +41,7 @@ const Game2 = (props) => {
 		tipsCount = mission.characters.filter(character => {
 		return character.tip
 	}).length
+	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, faceState: 'init' }
 
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
@@ -146,11 +147,21 @@ const Game2 = (props) => {
 		}
 
 		//check if should start or skip tutorial
-		setState({...state, tutorialStep: 0, scene: "ROOM"})
+		setState({...state, scene: state.tryAgain ? "ROOM" : "TUTORIAL"})
 	}
 
 	const onExitGame = () => {
 		dispatch(headerTitleActions.showHeader(false));
+	}
+
+	const endTutorial = () => {
+		setState(
+			{...state, 
+				scene: "ROOM", 
+				tutorialStep: state.tutorialStep + 1,
+				currentChar: null, 
+				...dialogInitialState
+			})
 	}
 
 	const setTutorialCharacter = (character) => () => {
@@ -165,11 +176,12 @@ const Game2 = (props) => {
 						question: {
 							question: 'Estou procurando alguém. Você pode me ajudar?'
 						},
-						close: true
+						close: false
 					}
 				]
 			})
 	}
+
 	//shows only selected questions
 	const setCurrentCharacter = (character) => () => setState(
 		{...state,
@@ -179,9 +191,9 @@ const Game2 = (props) => {
 										.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
 		})
 
-	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0 }
+	
 	const closeDialog = () =>
-		setState({...state, currentChar: null, ...dialogInitialState, faceState: 'init' })
+		setState({...state, currentChar: null, ...dialogInitialState})
 	const refreshDialog = () =>
 		setState({...state, ...dialogInitialState, answers: state.currentChar.answers.slice(0, state.questionsByStep)})
 
@@ -196,8 +208,24 @@ const Game2 = (props) => {
 			if(answer.tip)
 				setState({...state, tips: [...state, answer.tip]})
 			closeDialog()
-		}
-		else{
+		}else if (state.scene === "TUTORIAL"){
+			state.faceState = 'wrongQuestion'
+
+			let updateState = {
+				dialogHistory: [...state.dialogHistory,
+					answer.question.question,
+					answer.answer
+				],
+				tutorialStep: state.tutorialStep + 1,
+				tips: [
+					'A cabelereira sabe'
+				],
+				answers: []
+			}
+
+			setState({...state, ...updateState})
+
+		}else{
 
 			if(answer.question.correct){
 				if(state.validQuestions.hasOwnProperty(answer.question.question)){
@@ -243,11 +271,14 @@ const Game2 = (props) => {
 			setState({...state, acusation: false, faceState: 'wrongAccusation'})
 		} else {
 			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, faceState: state.currentChar.name === state.targetName ?
-			'rightAccusation' : 'wrongAccusation' })
+			'init' : 'init',
+			currentChar: null	
+		})
 		}
 	}
 
 	console.log(mission)
+	console.log(state)
 
 	if(state.dialogHistory.length && state.spokenCharacters.indexOf(state.currentChar.name) === -1){
 		state.spokenCharacters.push(state.currentChar.name)
@@ -331,7 +362,7 @@ const Game2 = (props) => {
 											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</div>
 										</div>
 
-										<Button onClick={() => setState({...initialState}) }>Tentar novamente</Button>
+										<Button onClick={() => setState({...initialState, tryAgain: true}) }>Tentar novamente</Button>
 										<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 									</div> :
 									<div>
@@ -354,7 +385,7 @@ const Game2 = (props) => {
 											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
 										</div>
 
-										<Button onClick={() => setState({...initialState}) }>Tentar novamente</Button>
+										<Button onClick={() => setState({...initialState, tryAgain: true}) }>Tentar novamente</Button>
 										<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 									</div>
 								)
@@ -362,19 +393,41 @@ const Game2 = (props) => {
 				}())}
 				{state.tutorialStep === 0 && state.scene === 'TUTORIAL' &&
 					<div style={{position: 'absolute', top: 100, left: 100, width: 500, height: 300, backgroundColor: '#ddddee'}}>
-						Balão tutorial
+						<div>
+							Selecione alguém para conversar e te ajudar a encontrar o seu guia.
+						</div>
+						<div>-------</div>
+						<div>
+							Select someone to talk and help you find your guide.
+						</div>
 					</div>
 				}
-				{ state.currentChar &&
+				{ state.currentChar && 
 					<div id="conversa" className='DialogPopUp'>
 
+						{ state.scene === "ROOM" && 
 						<div id="acusar" onClick={() => setState({...state, acusation: true})}>
 							<img id="lamp-apagada" src={lamp_apagada} alt=""></img>
 							<img id="lamp-acesa" src={lamp_acesa} alt=""></img>
 							<span>É você!</span>
 						</div>
-
+						}
+						
 						<div id="fechar" onClick={closeDialog}><span>×</span></div>
+
+						{ state.scene === 'TUTORIAL' && state.tutorialStep === 2 &&
+						<div>
+							<div>
+							Selecione alguém para conversar e te ajudar a encontrar o seu guia.
+						</div>
+						<div>-------</div>
+						<div>
+							Select someone to talk and help you find your guide.
+						</div>
+						<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
+						</div>
+
+						}
 
 						<div id='CharacterPortrait'>
 							{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'upperBody'
@@ -399,7 +452,10 @@ const Game2 = (props) => {
 					</div>
 				}
 				{ state.acusation &&
-					<div>
+					<div style={{ 
+						position: 'absolute',
+						top: 0
+					 }}>
 						Tem certeza?
 						<div>
 							Dicas recebidas
