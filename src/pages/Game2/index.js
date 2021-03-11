@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Redirect } from 'react-router-dom'
 import { apiActions, musicActions } from '../../_actions'
 import Init from './components/Init'
 import RoomSelect from './components/RoomSelect'
@@ -354,32 +353,46 @@ const Game2 = (props) => {
 
 						<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
-						<DialogCharacter character={state.currentChar} face={state.faceState}/>
+						<div id="dialog-interact">
+							<DialogCharacter character={state.currentChar} face={state.faceState}/>
 
-						<div id="dialogos">
-							<DialogHistory dialogHistory={state.dialogHistory}/>
+							<div id="dialogos">
+								<DialogHistory dialogHistory={state.dialogHistory}/>
 
-							<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
-								onButtonClick={onMenuButtonClick}
-							/>
+								<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+									onButtonClick={onMenuButtonClick}
+									/>
+							</div>
 						</div>
 					</div>
 				}
 				{ state.acusation &&
-					<div>
-						Tem certeza?
-						<div>
-							Dicas recebidas
-							{state.tips.map((tip, index)=>
-								<div key={index}>{tip}</div>
-							)}
+					<div id="dialog-accusation-wrapper">
+						<div id="dialog-accusation">
+							<div id="accusation-infos">
+								<div>
+									<span lang="pt-br">Tem certeza?</span>
+									<span lang="en">Are you sure it's them?<br />Check your tips.</span>
+								</div>
+								<div>
+									{ /* Dessa linha até a "uma das várias" devem ser removidas quando o carregamento correto vier */ }
+									<div>Dicas recebidas.</div>
+									<div>Dicas recebidas mais longa.</div>
+									<div>Dicas.</div>
+									<div>Uma das várias dicas que foram recebidas mas essa é super mega blaster master longa.</div>
+									<div>Recebidas.</div>
+									{state.tips.map((tip, index)=>
+										<div key={index}>{tip}</div>
+										)}
+								</div>
+							</div>
+							<div id="accusation-btns">
+								<Button onClick={() => setState({...state, acusation: false}) }>Não</Button>
+								<Button onClick={checkEnd}>Sim</Button>
+							</div>
 						</div>
-						<Button onClick={checkEnd}>Yes</Button>
-						<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
-
 					</div>
 				}
-				{ state.back && <Redirect to='/userspace' />}
 			</div>
 			}
 		</div>
