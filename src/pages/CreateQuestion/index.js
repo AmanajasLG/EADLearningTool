@@ -7,7 +7,6 @@ import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
-import { useAlert } from 'react-alert'
 import { makeStyles } from '@material-ui/core/styles'
 import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core'
 
@@ -39,9 +38,8 @@ const CreateQuestion = () => {
         group: 0,
         correct: true
     })
-    const [submitted, setSubmitted ] = useState(false)
+    const submitted = false
     const classes = useStyles()
-    const alert = useAlert()
     const creating = useSelector(state => state.authentication.registering)
 
     function handleSubmit(e) {

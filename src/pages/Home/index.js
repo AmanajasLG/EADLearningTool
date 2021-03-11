@@ -6,7 +6,7 @@ const Home = () => {
   return(
     <div id="message">
       Aqui é a home. Nada muito interessante aqui. Se quiser fazer login:
-      <Link to='/login' class="btn-normal">Login</Link>
+      <Link to='/login' className="btn-normal">Login</Link>
     </div>
   )
 }

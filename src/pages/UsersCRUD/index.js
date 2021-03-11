@@ -11,7 +11,7 @@ const UsersCRUD = () => {
 
   React.useEffect(()=>{
     dispatch(userActions.getAll())
-  }, [])
+  }, [dispatch])
 
   console.log('users:', users)
 

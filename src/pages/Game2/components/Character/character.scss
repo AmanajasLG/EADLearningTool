@@ -19,7 +19,7 @@
 /* Simulando perspectiva e distância. origin é fixo
    mas o scale é pra ser entre 80% e 100% */
 .CharDiv:nth-child(2) {
-	transform-origin: 50% 35%;
+	transform-origin: 50% 40%;
 	transform: scale(0.8);
 }
 

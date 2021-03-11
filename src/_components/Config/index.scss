@@ -9,6 +9,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	z-index: 10;
 }
 
 
@@ -89,4 +90,168 @@
 
 .config-option:hover .divider {
 	border-color: #59316D;
+}
+
+#title {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: 2em;
+	margin-bottom: 45px;
+	top: 10vh;
+	left: auto;
+	right: auto;
+	flex-grow: 1;
+}
+
+#title span[lang="pt-br"] {
+	font-family: 'Abril Fatface';
+	font-size: 1.5em;
+	color: #59316D;
+}
+
+#title span[lang="en"] {
+	font-family: 'Barlow';
+	font-style: italic;
+	font-size: 1em;
+	color: #59316D;
+}
+
+#title .divider {
+	width: 40%;
+	border: 1px solid #FFCCA9;
+	margin: 10px 0;
+}
+
+#game-options {
+	width: 85%;
+	max-width: 500px;
+	min-width: 0;
+	margin-top: 200px;
+}
+
+tr td:first-child {
+	text-align: end;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	width: 1px;
+	white-space: nowrap;
+}
+
+tr td:nth-child(2) {
+	text-align: start;
+	padding-left: 15px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+	color: #59316D;
+}
+
+tr td:nth-child(2) button {
+	min-width: 0;
+}
+
+tr td:nth-child(2) button svg {
+	color: #59316D;
+}
+
+tr td:nth-child(2) .MuiSlider-root {
+	margin: 0 10px;
+}
+
+tr td:nth-child(2) .MuiSlider-rail {
+	color: #FFCCA9;
+}
+
+tr td:nth-child(2) .MuiSlider-track {
+	color: #FFFFFF;
+}
+
+tr td:nth-child(2) .MuiSlider-thumb {
+	color: #59316D;
+}
+
+tr td:nth-child(2) .MuiCheckbox-root {
+	padding: 0;
+	transform-origin: top left;
+	transform: scale(1.5);
+	color: #59316D;
+}
+
+#tamanho-fonte {
+	color: #59316D;
+	font-family: "Assistant";
+	font-weight: bold;
+	font-size: 1.4rem;
+}
+
+#tamanho-fonte .label-pequeno {
+	font-size: 0.8em;
+}
+
+#tamanho-fonte .label-grande {
+	font-size: 1.2em;
+}
+
+#tipo-acessibilidade {
+	background-color: #FFCCA9;
+	border-radius: 2em;
+	padding-right: 15px;
+}
+
+#tipo-acessibilidade div {
+	flex-grow: 1;
+	text-align: center;
+	font-size: 0.8rem;
+}
+
+#tipo-acessibilidade .MuiButton-label {
+	color: #59316D;
+	font-size: 1.5em;
+	transition: 100ms linear;
+}
+
+#tipo-acessibilidade button:hover .MuiButton-label {
+	color:white;
+}
+
+
+table span[lang="pt-br"] {
+	display: block;
+	font-family: 'Barlow Extrabold';
+	color: #59316D;
+	font-size: 1.2em;
+}
+
+table span[lang="en"] {
+	display: block;
+	font-family: 'Barlow';
+	font-style: italic;
+	color: #59316D;
+}
+
+#voltar-cell {
+	padding: 0 0;
+	text-align: center;
+}
+
+#voltar-cell button {
+	margin-top: 50px;
+	padding: 10px 20px;
+	width: 50%;
+	color: #59316D;
+	background-color: #FFCCA9;
+	text-transform: none;
+	font-family: "Assistant";
+	font-weight: bold;
+	font-size: 1.1em;
+	transition: 100ms linear;
+}
+
+#voltar-cell button:hover {
+	color: white;
+	background-color: #59316D;
 }

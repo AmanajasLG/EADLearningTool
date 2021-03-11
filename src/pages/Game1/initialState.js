@@ -1,4 +1,4 @@
-export default {
+const initialValue = {
 //METADATA
   back: false,
 //GAME STATE
@@ -11,3 +11,6 @@ export default {
   currentChar: null,
   showContacts: false,
 }
+
+
+export default initialValue

@@ -1,29 +1,17 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Redirect } from 'react-router-dom'
-
-import { apiActions , headerTitleActions, platformConfigActions } from '../../_actions'
-
+import { apiActions, musicActions } from '../../_actions'
 import Init from './components/Init'
-import Result from './components/Result'
 import RoomSelect from './components/RoomSelect'
 import Sala from './components/Sala'
 import Character from './components/Character'
 import Button from '@material-ui/core/Button'
-import Config from '../../_components/Config'
 import './index.scss'
 import initialState from './initialState'
-import stub from './stub'
-import Slider from '@material-ui/core/Slider'
-import VolumeDown from '@material-ui/icons/VolumeDown'
-import VolumeUp from '@material-ui/icons/VolumeUp'
-import Checkbox from '@material-ui/core/Checkbox'
-
-import lamp_apagada from '../../img/lampada_apagada.svg'
-import lamp_acesa from '../../img/lampada_acesa.svg'
-
-import ReactAudioPlayer from 'react-audio-player';
-import config from '../../img/i-settings.svg'
+import AcusationLamp from './components/AcusationLamp'
+import DialogCharacter from './components/DialogCharacter'
+import DialogHistory from './components/DialogHistory'
+import Menu from './components/Menu'
 
 const Game2 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -36,17 +24,25 @@ const Game2 = (props) => {
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
+
 	let tipsCount
+
 	if(mission)
 		tipsCount = mission.characters.filter(character => {
 		return character.tip
 	}).length
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, faceState: 'init' }
 
+	React.useEffect(()=>{
+		if(mission)
+			dispatch(musicActions.set(mission.backgroundAudios[0].music[0].url))
+		return () => dispatch(musicActions.set(''))
+	}, [dispatch, mission])
+
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-	}, [])
+	}, [id, mission, dispatch, missionsActions, props.match.params.id])
 
 	//track player actions
 	React.useEffect(() => {
@@ -67,11 +63,11 @@ const Game2 = (props) => {
 			}
 		document.addEventListener("mousedown", getClickedObject)
 
-		setState({...state, currentPlaySession, getClickedObject})
+		setState(s => {return {...s, currentPlaySession, getClickedObject }})
 		return () => {
 			document.removeEventListener("mousedown", getClickedObject)
 		}
-	}, [currentPlaySession])
+	}, [dispatch, player_actionsActions, state.tracking, currentPlaySession])
 	/*//Testing tool
 	if(error){
 		error = null
@@ -132,12 +128,6 @@ const Game2 = (props) => {
 		setState({...state, locations})
 	}
 
-	const setCurrentChar = (charData) => () =>
-		setState({...state, currentChar: charData})
-
-	const clearCurrentChar = () =>
-		setState({...state, currentChar: null})
-
 	const onStartGame = (e) => {
 		if(state.tracking){
 			dispatch(play_sessionsActions.create({
@@ -148,10 +138,6 @@ const Game2 = (props) => {
 
 		//check if should start or skip tutorial
 		setState({...state, scene: state.tryAgain ? "ROOM" : "TUTORIAL"})
-	}
-
-	const onExitGame = () => {
-		dispatch(headerTitleActions.showHeader(false));
 	}
 
 	const endTutorial = () => {
@@ -188,14 +174,17 @@ const Game2 = (props) => {
 			currentChar: character,
 			answers: state.locations[state.currentRoom].characters
 										.find(c => c.id === character.id).selectedQuestions
-										.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
+										.slice(0, state.questionsByStep)
 		})
 
 	
 	const closeDialog = () =>
 		setState({...state, currentChar: null, ...dialogInitialState})
 	const refreshDialog = () =>
-		setState({...state, ...dialogInitialState, answers: state.currentChar.answers.slice(0, state.questionsByStep)})
+		setState({...state, ...dialogInitialState,
+			answers: state.locations[state.currentRoom].characters
+									.find(c => c.id === state.currentChar.id).selectedQuestions
+									.slice(0, state.questionsByStep)})
 
 	const onMenuButtonClick = (answer) => () =>{
 		//
@@ -284,16 +273,8 @@ const Game2 = (props) => {
 		state.spokenCharacters.push(state.currentChar.name)
 	}
 
-	dispatch(platformConfigActions.setGameMode(true))
 	return (
 		<div id="game2-wrapper">
-			<div id="floating-config-btn" onClick={() => setState({...state, config: true}) }>
-				<img src={config} alt='config' />
-			</div>
-			<ReactAudioPlayer
-				src={mission.backgroundAudios[0].music[0].url}
-				autoPlay volume={state.volume/100}
-			/>
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
 			<div id="game2-content">
 				<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e)=>{ setState({...state, tracking: e.target.checked}) }} /></div>
@@ -405,14 +386,8 @@ const Game2 = (props) => {
 				{ state.currentChar && 
 					<div id="conversa" className='DialogPopUp'>
 
-						{ state.scene === "ROOM" && 
-						<div id="acusar" onClick={() => setState({...state, acusation: true})}>
-							<img id="lamp-apagada" src={lamp_apagada} alt=""></img>
-							<img id="lamp-acesa" src={lamp_acesa} alt=""></img>
-							<span>É você!</span>
-						</div>
-						}
-						
+						<AcusationLamp onClick={() => setState({...state, acusation: true})} />
+
 						<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
 						{ state.scene === 'TUTORIAL' && state.tutorialStep === 2 &&
@@ -429,95 +404,46 @@ const Game2 = (props) => {
 
 						}
 
-						<div id='CharacterPortrait'>
-							{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'upperBody'
-							).image[0].url: ""} alt="portrait" />}
-							{<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets.find(asset =>  asset.bodyPart === 'face' && asset.type === state.faceState
-							).image[0].url : ""} alt="portrait" />}
-						</div>
+						<div id="dialog-interact">
+							<DialogCharacter character={state.currentChar} face={state.faceState}/>
 
-						<div id="dialogos">
-							<div id='DialogHistory'>
-								<span></span>
-								{state.dialogHistory.map((dialog, index)=>
-									<div className={"mensagem"+(index%2)} key={index}>{dialog}</div>
-									)}
-							</div>
-							<div id='Menu'>
-								{state.answers.map( (answer,index) =>
-									<Button key={index} onClick={onMenuButtonClick(answer)}>{answer.question.question}</Button>
-									)}
+							<div id="dialogos">
+								<DialogHistory dialogHistory={state.dialogHistory}/>
+
+								<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+									onButtonClick={onMenuButtonClick}
+									/>
 							</div>
 						</div>
 					</div>
 				}
 				{ state.acusation &&
-					<div style={{ 
-						position: 'absolute',
-						top: 0
-					 }}>
-						Tem certeza?
-						<div>
-							Dicas recebidas
-							{state.tips.map((tip, index)=>
-								<div key={index}>{tip}</div>
-							)}
+					<div id="dialog-accusation-wrapper">
+						<div id="dialog-accusation">
+							<div id="accusation-infos">
+								<div>
+									<span lang="pt-br">Tem certeza?</span>
+									<span lang="en">Are you sure it's them?<br />Check your tips.</span>
+								</div>
+								<div>
+									{ /* Dessa linha até a "uma das várias" devem ser removidas quando o carregamento correto vier */ }
+									<div>Dicas recebidas.</div>
+									<div>Dicas recebidas mais longa.</div>
+									<div>Dicas.</div>
+									<div>Uma das várias dicas que foram recebidas mas essa é super mega blaster master longa.</div>
+									<div>Recebidas.</div>
+									{state.tips.map((tip, index)=>
+										<div key={index}>{tip}</div>
+										)}
+								</div>
+							</div>
+							<div id="accusation-btns">
+								<Button onClick={() => setState({...state, acusation: false}) }>Não</Button>
+								<Button onClick={checkEnd}>Sim</Button>
+							</div>
 						</div>
-						<Button onClick={checkEnd}>Yes</Button>
-						<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
-
 					</div>
 				}
-				{ state.config &&
-					<Config>
-						<div className="config-option" onClick={()=>setState({...state, config: false, gameConfig: true})}>
-							<span lang="pt-br">Configurações de jogo</span>
-							<div className="divider"></div>
-							<span lang="en">Game settings</span>
-						</div>
-						<div className="config-option" onClick={()=>{}}>
-							<span lang="pt-br">Estatísticas</span>
-							<div className="divider"></div>
-							<span lang="en">Statistics</span>
-						</div>
-						<div className="config-option" onClick={()=>setState({...state, back: true})}>
-							<span lang="pt-br">Sair do jogo</span>
-							<div className="divider"></div>
-							<span lang="en">Leave game</span>
-						</div>
-						<div id="config-fechar" onClick={()=>setState({...state, config: false})}>×</div>
-					</Config>
-				}
-				{
-					state.gameConfig &&
-					<Config>
-						<div>
-							Volume
-							<Button onClick={()=> setState({...state, volume: 0})}>
-								<VolumeDown />
-							</Button>
-								<Slider value={state.volume} onChange={(e, newValue)=> {
-									setState({...state, volume: newValue})}
-								}/>
-							<Button onClick={()=> setState({...state, volume: 100})}>
-								<VolumeUp />
-							</Button>
-						</div>
-						<div>
-							Tamanho da fonte
-							<Slider value={state.fontSize} onChange={(e, newValue) => setState({...state, fontSize: newValue})}/>
-						</div>
-						<div>
-							Modo assistência <Checkbox checked={state.assistMode} onChange={(e)=>setState({...state, assistMode: e.target.checked})}/>
-						</div>
-						<div>
-							Acessibilidade <Button> {'<'} </Button> Tipo <Button> {'>'} </Button>
-						</div>
-						<Button onClick={()=>setState({...state, gameConfig: false})}>X</Button>
-						<Button onClick={()=>setState({...state, gameConfig: false, config: true})}>Voltar</Button>
-					</Config>
-				}
-				{ state.back && <Redirect to='/userspace' />}
 			</div>
 			}
 		</div>

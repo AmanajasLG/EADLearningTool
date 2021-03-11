@@ -1,7 +1,5 @@
 import { apiConstants } from '../_constants'
 import { apiServices } from '../_services'
-import { alertActions } from './'
-import { history } from '../_helpers'
 
 function requester(service, request, success, failure, payload){
   return dispatch => {
@@ -78,7 +76,7 @@ const deleteConstructor = (service, apiDataType) => {
 }
 
 let apiActions = {}
-Object.keys(apiConstants).map( apiDataType =>{
+Object.keys(apiConstants).forEach( (apiDataType) => {
   apiActions[`${apiDataType.toLowerCase()}Actions`] = {
     getAll:  getAllConstructor(apiServices[apiDataType], apiDataType),
     getById: getByIdConstructor(apiServices[apiDataType], apiDataType),

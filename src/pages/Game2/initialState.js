@@ -11,10 +11,6 @@ export default {
   acusation: false,
   tries: 0,
   validQuestions: [],
-  volume: 15,
-  fontSize: 12,
-  assistMode: false,
-  accessibility: 'NONE',
   tutorialStep: 0,
   tryAgain: false,
 //DIALOG

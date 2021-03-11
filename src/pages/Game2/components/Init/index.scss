@@ -1,4 +1,4 @@
-.main-wrapper {
+.main-init-wrapper {
 	height: 100%;
 	width: 100%;
 	margin: 0;
@@ -9,7 +9,7 @@
 	align-items: center;
 }
 
-.main-wrapper::after {
+.main-init-wrapper::after {
 	content: '';
 	position: absolute;
 	pointer-events: none;
@@ -33,6 +33,7 @@
 	flex-direction: column ;
 	align-items: center;
 	justify-content: center;
+	max-width: 700px;
 }
 
 #input-tracker {

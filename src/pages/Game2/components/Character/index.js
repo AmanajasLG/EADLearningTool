@@ -7,7 +7,7 @@ const Character = ({character, dragPosition, position, onClick}) => {
 
     React.useEffect(()=>{
       if(dragging) setPos(dragPosition)
-    }, [dragPosition])
+    }, [dragging, dragPosition])
 
     return (
     <div className="CharDiv" style={pos.x ? {position: 'absolute', left:pos.x, top: pos.y} : null}

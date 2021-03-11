@@ -1,5 +1,4 @@
 import React from 'react'
-import { baseURL } from '../../_services'
 
 const Character = ({character}) => {
   const getAnswer = (qId) => {
