@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Redirect } from 'react-router-dom'
 import { apiActions, musicActions } from '../../_actions'
 import Init from './components/Init'
 import RoomSelect from './components/RoomSelect'
@@ -394,7 +393,6 @@ const Game2 = (props) => {
 						</div>
 					</div>
 				}
-				{ state.back && <Redirect to='/userspace' />}
 			</div>
 			}
 		</div>
