@@ -13,10 +13,11 @@ export default {
   validQuestions: [],
   tutorialStep: 0,
   tryAgain: false,
+  checkPlayed: false,
 //DIALOG
   dialogHistory: [],
   dialogStep: 0,
-  faceState: 'init',
+  characterFeeling: 'init',
   totalDialogSteps: 2,
   questionsByStep: 2,
   currentChar: null,

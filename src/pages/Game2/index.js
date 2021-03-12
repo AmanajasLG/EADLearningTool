@@ -23,7 +23,7 @@ const Game2 = (props) => {
 	const loading = useSelector( state => state.missions.loading)
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
-	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
+	const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultActions } = apiActions
 
 	let tipsCount
 
@@ -31,7 +31,7 @@ const Game2 = (props) => {
 		tipsCount = mission.characters.filter(character => {
 		return character.tip
 	}).length
-	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, faceState: 'init' }
+	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init' }
 
 	React.useEffect(()=>{
 		if(mission)
@@ -43,6 +43,13 @@ const Game2 = (props) => {
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
 	}, [id, mission, dispatch, missionsActions, props.match.params.id])
+
+	// check if user already played the game
+	// React.useEffect(() => {
+	// 	if(!state.checkPlayed){
+	// 		dispatch(user_game_resultActions)
+	// 	} 
+	// }, [id, mission, dispatch, user_game_resultActions, state])
 
 	//track player actions
 	React.useEffect(() => {
@@ -198,7 +205,7 @@ const Game2 = (props) => {
 				setState({...state, tips: [...state, answer.tip]})
 			closeDialog()
 		}else if (state.scene === "TUTORIAL"){
-			state.faceState = 'wrongQuestion'
+			state.characterFeeling = 'wrongQuestion'
 
 			let updateState = {
 				dialogHistory: [...state.dialogHistory,
@@ -225,9 +232,9 @@ const Game2 = (props) => {
 				} else {
 					state.validQuestions[answer.question.question] = 0
 				}
-				state.faceState = 'rightQuestion'
+				state.characterFeeling = 'rightQuestion'
 			} else {
-				state.faceState = 'wrongQuestion'
+				state.characterFeeling = 'wrongQuestion'
 			}
 
 			let updateState = {
@@ -260,15 +267,18 @@ const Game2 = (props) => {
 	const checkEnd = () => {
 		if(state.tries < 3 && state.currentChar.name !== state.targetName){
 			state.tries++
-			setState({...state, acusation: false, faceState: 'wrongAccusation'})
+			setState({...state, acusation: false, characterFeeling: 'wrongAccusation'})
 		} else {
-			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, faceState: state.currentChar.name === state.targetName ?
+			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, characterFeeling: state.currentChar.name === state.targetName ?
 			'init' : 'init',
 			currentChar: null
 			})
 		}
 	}
 
+	console.log(mission)
+	console.log('state', state)
+	console.log('init', initialState)
 
 	return (
 		<div id="game2-wrapper">
@@ -289,8 +299,8 @@ const Game2 = (props) => {
 								<div>
 									Tutorial
 									<Character
-										character={mission.characters.find(character => character.name === 'Fuyuka')}
-										onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuka'))}
+										character={mission.characters.find(character => character.name === 'Fuyuko')}
+										onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuko'))}
 									/>
 								</div>
 							)
@@ -406,7 +416,7 @@ const Game2 = (props) => {
 						}
 
 						<div id="dialog-interact">
-							<DialogCharacter character={state.currentChar} face={state.faceState}/>
+							<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 
 							<div id="dialogos">
 								<DialogHistory dialogHistory={state.dialogHistory}/>
