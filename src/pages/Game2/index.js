@@ -23,7 +23,7 @@ const Game2 = (props) => {
 	const loading = useSelector( state => state.missions.loading)
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
-	const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultActions } = apiActions
+	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
 
 	let tipsCount
 
