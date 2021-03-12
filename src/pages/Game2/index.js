@@ -14,7 +14,7 @@ import DialogHistory from './components/DialogHistory'
 import Menu from './components/Menu'
 
 const Game2 = (props) => {
-	const [state, setState] = React.useState(initialState);
+	const [state, setState] = React.useState({...initialState});
 
 	const id = props.match.params.id
 	const dispatch = useDispatch()
@@ -216,6 +216,9 @@ const Game2 = (props) => {
 
 		}else{
 
+			if (state.spokenCharacters.indexOf(state.currentChar.name))
+				state.spokenCharacters.push(state.currentChar.name)
+
 			if(answer.question.correct){
 				if(state.validQuestions.hasOwnProperty(answer.question.question)){
 					state.validQuestions[answer.question.question]++
@@ -261,17 +264,11 @@ const Game2 = (props) => {
 		} else {
 			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, faceState: state.currentChar.name === state.targetName ?
 			'init' : 'init',
-			currentChar: null	
-		})
+			currentChar: null
+			})
 		}
 	}
 
-	console.log(mission)
-	console.log(state)
-
-	if(state.dialogHistory.length && state.spokenCharacters.indexOf(state.currentChar.name) === -1){
-		state.spokenCharacters.push(state.currentChar.name)
-	}
 
 	return (
 		<div id="game2-wrapper">
@@ -366,7 +363,11 @@ const Game2 = (props) => {
 											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
 										</div>
 
-										<Button onClick={() => setState({...initialState, tryAgain: true}) }>Tentar novamente</Button>
+										<Button onClick={() => setState({...initialState, 
+										tryAgain: true, 
+										tips: [
+											'A cabelereira sabe'
+										]}) }>Tentar novamente</Button>
 										<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 									</div>
 								)
