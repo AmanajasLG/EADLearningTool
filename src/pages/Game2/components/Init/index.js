@@ -4,7 +4,7 @@ import classImage from '../../../../img/pic-people-talk.svg'
 
 const Init = ({name, description, onClose, onStart, onBack}) => {
     return (
-        <div className="main-wrapper">
+        <div className="main-init-wrapper">
           <div className="inner-content">
             <div name="infos">
               <img className="classImage" src={classImage} alt=""/>

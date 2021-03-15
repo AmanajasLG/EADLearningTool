@@ -15,7 +15,7 @@ import Menu from './components/Menu'
 import Writer from './components/Writer'
 
 const Game2 = (props) => {
-	const [state, setState] = React.useState(initialState);
+	const [state, setState] = React.useState({...initialState});
 
 	const id = props.match.params.id
 	const dispatch = useDispatch()
@@ -32,6 +32,7 @@ const Game2 = (props) => {
 		tipsCount = mission.characters.filter(character => {
 		return character.tip
 	}).length
+	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init' }
 
 	React.useEffect(()=>{
 		if(mission)
@@ -43,6 +44,13 @@ const Game2 = (props) => {
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
 	}, [id, mission, dispatch, missionsActions, props.match.params.id])
+
+	// check if user already played the game
+	// React.useEffect(() => {
+	// 	if(!state.checkPlayed){
+	// 		dispatch(user_game_resultActions)
+	// 	} 
+	// }, [id, mission, dispatch, user_game_resultActions, state])
 
 	//track player actions
 	React.useEffect(() => {
@@ -137,7 +145,17 @@ const Game2 = (props) => {
 		}
 
 		//check if should start or skip tutorial
-		setState({...state, tutorialStep: 0, scene: "ROOM"})
+		setState({...state, scene: state.tryAgain ? "ROOM" : "TUTORIAL"})
+	}
+
+	const endTutorial = () => {
+		setState(
+			{...state, 
+				scene: "ROOM", 
+				tutorialStep: state.tutorialStep + 1,
+				currentChar: null, 
+				...dialogInitialState
+			})
 	}
 
 	const setTutorialCharacter = (character) => () => {
@@ -152,11 +170,12 @@ const Game2 = (props) => {
 						question: {
 							question: 'Estou procurando alguém. Você pode me ajudar?'
 						},
-						close: true
+						close: false
 					}
 				]
 			})
 	}
+
 	//shows only selected questions
 	const setCurrentCharacter = (character) => () => setState(
 		{...state,
@@ -166,9 +185,9 @@ const Game2 = (props) => {
 										.slice(0, state.questionsByStep)
 		})
 
-	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, faceState: 'init' }
+	
 	const closeDialog = () =>
-		setState({...state, currentChar: null, ...dialogInitialState })
+		setState({...state, currentChar: null, ...dialogInitialState})
 	const refreshDialog = () =>
 		setState({...state, ...dialogInitialState,
 			answers: state.locations[state.currentRoom].characters
@@ -211,8 +230,27 @@ const Game2 = (props) => {
 			if(answer.tip)
 				setState({...state, tips: [...state, answer.tip]})
 			closeDialog()
-		}
-		else{
+		}else if (state.scene === "TUTORIAL"){
+			state.characterFeeling = 'wrongQuestion'
+
+			let updateState = {
+				dialogHistory: [...state.dialogHistory,
+					answer.question.question,
+					answer.answer
+				],
+				tutorialStep: state.tutorialStep + 1,
+				tips: [
+					'A cabelereira sabe'
+				],
+				answers: []
+			}
+
+			setState({...state, ...updateState})
+
+		}else{
+
+			if (state.spokenCharacters.indexOf(state.currentChar.name))
+				state.spokenCharacters.push(state.currentChar.name)
 
 			//change character face
 			if(answer.question.correct){
@@ -221,9 +259,9 @@ const Game2 = (props) => {
 				} else {
 					state.validQuestions[answer.question.question] = 0
 				}
-				state.faceState = 'rightQuestion'
+				state.characterFeeling = 'rightQuestion'
 			} else {
-				state.faceState = 'wrongQuestion'
+				state.characterFeeling = 'wrongQuestion'
 			}
 
 			let updateState = {
@@ -246,18 +284,18 @@ const Game2 = (props) => {
 	const checkEnd = () => {
 		if(state.tries < 3 && state.currentChar.name !== state.targetName){
 			state.tries++
-			setState({...state, acusation: false, faceState: 'wrongAccusation'})
+			setState({...state, acusation: false, characterFeeling: 'wrongAccusation'})
 		} else {
-			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, faceState: state.currentChar.name === state.targetName ?
-			'rightAccusation' : 'wrongAccusation' })
+			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, characterFeeling: state.currentChar.name === state.targetName ?
+			'init' : 'init',
+			currentChar: null
+			})
 		}
 	}
 
 	console.log(mission)
-
-	if(state.dialogHistory.length && state.spokenCharacters.indexOf(state.currentChar.name) === -1){
-		state.spokenCharacters.push(state.currentChar.name)
-	}
+	console.log('state', state)
+	console.log('init', initialState)
 
 	return (
 		<div id="game2-wrapper">
@@ -278,8 +316,8 @@ const Game2 = (props) => {
 								<div>
 									Tutorial
 									<Character
-										character={mission.characters.find(character => character.name === 'Fuyuka')}
-										onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuka'))}
+										character={mission.characters.find(character => character.name === 'Fuyuko')}
+										onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuko'))}
 									/>
 								</div>
 							)
@@ -329,7 +367,7 @@ const Game2 = (props) => {
 											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</div>
 										</div>
 
-										<Button onClick={() => setState({...initialState}) }>Tentar novamente</Button>
+										<Button onClick={() => setState({...initialState, tryAgain: true}) }>Tentar novamente</Button>
 										<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 									</div> :
 									<div>
@@ -352,7 +390,11 @@ const Game2 = (props) => {
 											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
 										</div>
 
-										<Button onClick={() => setState({...initialState}) }>Tentar novamente</Button>
+										<Button onClick={() => setState({...initialState, 
+										tryAgain: true, 
+										tips: [
+											'A cabelereira sabe'
+										]}) }>Tentar novamente</Button>
 										<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 									</div>
 								)
@@ -360,48 +402,84 @@ const Game2 = (props) => {
 				}())}
 				{state.tutorialStep === 0 && state.scene === 'TUTORIAL' &&
 					<div style={{position: 'absolute', top: 100, left: 100, width: 500, height: 300, backgroundColor: '#ddddee'}}>
-						Balão tutorial
+						<div>
+							Selecione alguém para conversar e te ajudar a encontrar o seu guia.
+						</div>
+						<div>-------</div>
+						<div>
+							Select someone to talk and help you find your guide.
+						</div>
 					</div>
 				}
-				{ state.currentChar &&
+				{ state.currentChar && 
 					<div id="conversa" className='DialogPopUp'>
 
 						<AcusationLamp onClick={() => setState({...state, acusation: true})} />
 
 						<div id="fechar" onClick={closeDialog}><span>×</span></div>
 
-						<DialogCharacter character={state.currentChar} face={state.faceState}/>
+						{ state.scene === 'TUTORIAL' && state.tutorialStep === 2 &&
+						<div>
+							<div>
+							Selecione alguém para conversar e te ajudar a encontrar o seu guia.
+						</div>
+						<div>-------</div>
+						<div>
+							Select someone to talk and help you find your guide.
+						</div>
+						<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
+						</div>
 
-						<div id="dialogos">
-							<DialogHistory dialogHistory={state.dialogHistory}/>
+						}
 
-							<div id='DialogBox'>
-								{state.showAnswer ?
-									<Writer text={state.showAnswer.text}
-										onWritten={afterWriter}
-										afterWrittenTime={4000}
-										characterTime={50}
-									/>
-									:
-									<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
-										onButtonClick={onMenuButtonClick}
-									/>
-								}
+						<div id="dialog-interact">
+							<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
+
+							<div id="dialogos">
+								<DialogHistory dialogHistory={state.dialogHistory}/>
+
+								<div id='DialogBox'>
+									{state.showAnswer ?
+										<Writer text={state.showAnswer.text}
+											onWritten={afterWriter}
+											afterWrittenTime={4000}
+											characterTime={50}
+										/>
+										:
+										<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+											onButtonClick={onMenuButtonClick}
+										/>
+									}
+								</div>
 							</div>
 						</div>
 					</div>
 				}
 				{ state.acusation &&
-					<div>
-						Tem certeza?
-						<div>
-							Dicas recebidas
-							{state.tips.map((tip, index)=>
-								<div key={index}>{tip}</div>
-							)}
+					<div id="dialog-accusation-wrapper">
+						<div id="dialog-accusation">
+							<div id="accusation-infos">
+								<div>
+									<span lang="pt-br">Tem certeza?</span>
+									<span lang="en">Are you sure it's them?<br />Check your tips.</span>
+								</div>
+								<div>
+									{ /* Dessa linha até a "uma das várias" devem ser removidas quando o carregamento correto vier */ }
+									<div>Dicas recebidas.</div>
+									<div>Dicas recebidas mais longa.</div>
+									<div>Dicas.</div>
+									<div>Uma das várias dicas que foram recebidas mas essa é super mega blaster master longa.</div>
+									<div>Recebidas.</div>
+									{state.tips.map((tip, index)=>
+										<div key={index}>{tip}</div>
+										)}
+								</div>
+							</div>
+							<div id="accusation-btns">
+								<Button onClick={() => setState({...state, acusation: false}) }>Não</Button>
+								<Button onClick={checkEnd}>Sim</Button>
+							</div>
 						</div>
-						<Button onClick={checkEnd}>Yes</Button>
-						<Button onClick={() => setState({...state, acusation: false}) }>No</Button>
 					</div>
 				}
 			</div>
