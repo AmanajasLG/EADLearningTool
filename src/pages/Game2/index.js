@@ -12,6 +12,7 @@ import AcusationLamp from './components/AcusationLamp'
 import DialogCharacter from './components/DialogCharacter'
 import DialogHistory from './components/DialogHistory'
 import Menu from './components/Menu'
+import Writer from './components/Writer'
 
 const Game2 = (props) => {
 	const [state, setState] = React.useState({...initialState});
@@ -193,10 +194,35 @@ const Game2 = (props) => {
 									.find(c => c.id === state.currentChar.id).selectedQuestions
 									.slice(0, state.questionsByStep)})
 
+	const afterWriter = () => {
+
+		let updateState = {
+			showAnswer: null,
+			dialogHistory: [...state.dialogHistory, {text: state.showAnswer.text, speaker: 'character'}],
+		}
+		console.log('state.showAnswer', state.showAnswer)
+
+		if(state.dialogStep !== state.totalDialogSteps){
+			updateState.answers = state.locations[state.currentRoom].characters
+										.find(c => c.id === state.currentChar.id).selectedQuestions
+										.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
+		}else{
+			if(state.showAnswer && state.showAnswer.stop)
+				updateState.showAnswer = null
+			else{
+				if(state.correct < state.correctMinimum){
+					updateState.answers = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
+					updateState.showAnswer = {text: 'Não estou entendendo. Quer começar de novo?', index: 0, stop: true}
+				}
+				else{
+					updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
+				}
+			}
+		}
+		setState({...state, ...updateState})
+	}
+
 	const onMenuButtonClick = (answer) => () =>{
-		//
-		//	Aplicar lógica adicional de click nos botões do menu
-		//
 
 		if(answer.refresh)
 			refreshDialog()
@@ -226,6 +252,7 @@ const Game2 = (props) => {
 			if (state.spokenCharacters.indexOf(state.currentChar.name))
 				state.spokenCharacters.push(state.currentChar.name)
 
+			//change character face
 			if(answer.question.correct){
 				if(state.validQuestions.hasOwnProperty(answer.question.question)){
 					state.validQuestions[answer.question.question]++
@@ -239,26 +266,16 @@ const Game2 = (props) => {
 
 			let updateState = {
 				dialogHistory: [...state.dialogHistory,
-					answer.question.question,
-					answer.answer
+					{text: answer.question.question, speaker: 'player'}
 				],
 				dialogStep: state.dialogStep + 1,
-				correct: state.correct + (answer.question.correct? 1 : 0)
+				correct: state.correct + (answer.question.correct? 1 : 0),
+				showAnswer: {
+					text: answer.answer,
+					index: 0
+				}
 			}
 
-			if(updateState.dialogStep !== state.totalDialogSteps){
-				updateState.answers = state.locations[state.currentRoom].characters
-											.find(c => c.id === state.currentChar.id).selectedQuestions
-											.slice(state.questionsByStep * updateState.dialogStep, state.questionsByStep * (updateState.dialogStep + 1))
-			}else{
-				if(updateState.correct < state.correctMinimum){
-					updateState.dialogHistory.push('Não estou entendendo. Quer começar de novo?')
-					updateState.answers = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
-				}
-				else{
-					updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
-				}
-			}
 			// e então atualiza
 			setState({...state, ...updateState})
 		}
@@ -416,15 +433,24 @@ const Game2 = (props) => {
 						}
 
 						<div id="dialog-interact">
-							<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
-
 							<div id="dialogos">
 								<DialogHistory dialogHistory={state.dialogHistory}/>
 
-								<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
-									onButtonClick={onMenuButtonClick}
-									/>
+								<div id='DialogBox'>
+									{state.showAnswer ?
+										<Writer text={state.showAnswer.text}
+											onWritten={afterWriter}
+											afterWrittenTime={4000}
+											characterTime={50}
+										/>
+										:
+										<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+											onButtonClick={onMenuButtonClick}
+										/>
+									}
+								</div>
 							</div>
+							<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 						</div>
 					</div>
 				}
