@@ -433,8 +433,6 @@ const Game2 = (props) => {
 						}
 
 						<div id="dialog-interact">
-							<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
-
 							<div id="dialogos">
 								<DialogHistory dialogHistory={state.dialogHistory}/>
 
@@ -452,6 +450,7 @@ const Game2 = (props) => {
 									}
 								</div>
 							</div>
+							<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 						</div>
 					</div>
 				}
