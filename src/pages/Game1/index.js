@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions , headerTitleActions } from '../../_actions'
+import { apiActions, headerActions } from '../../_actions'
 
 import Init from '../Game2/components/Init'
 import Result from '../Game2/components/Result'
@@ -132,7 +132,7 @@ const Game1 = (props) => {
 											buttonList={mission.locations.map((location) => location.name)}
 											onChange={(buttonIndex) => {
 												setState({...state, currentLocationIndex: buttonIndex})
-												dispatch(headerTitleActions.changeTitle(state.locations[buttonIndex].name))
+												dispatch(headerActions.changeTitle(state.locations[buttonIndex].name))
 											}}
 										/>
 

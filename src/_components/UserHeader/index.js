@@ -36,7 +36,7 @@ const UserHeader = ({pageInfo}) => {
 	}
 
     return (
-        <header id="app-header" className={ headerInfo.isVisible ? "" : "hidden" }>
+        <header id="app-header" className={ headerInfo.state.toLowerCase() }>
 			<div className="group-btns" id="left-btns">
 				<div className="header-btn" id="home-btn" onClick={clickHome}><img src={home} alt="Home"></img></div>
 				<div className="header-btn" id="notif-btn" onClick={clickNotif}><img src={notifications} alt="Notifications"></img></div>

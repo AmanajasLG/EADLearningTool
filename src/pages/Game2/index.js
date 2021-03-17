@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { apiActions, musicActions } from '../../_actions'
+import { apiActions, headerActions, musicActions } from '../../_actions'
 import Init from './components/Init'
 import RoomSelect from './components/RoomSelect'
 import Sala from './components/Sala'
@@ -13,6 +13,7 @@ import DialogCharacter from './components/DialogCharacter'
 import DialogHistory from './components/DialogHistory'
 import Menu from './components/Menu'
 import Writer from './components/Writer'
+import { headerConstants } from '../../_constants'
 
 const Game2 = (props) => {
 	const [state, setState] = React.useState({...initialState});
@@ -290,7 +291,14 @@ const Game2 = (props) => {
 			'init' : 'init',
 			currentChar: null
 			})
+			dispatch(headerActions.setAll(mission.name, mission.nameTranslate))
+			dispatch(headerActions.setState(headerConstants.STATES.OVERLAY))
 		}
+	}
+	
+	const restart = (tips) => {
+		setState({...initialState, tryAgain: true, tips: tips})
+		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
 	console.log(mission)
@@ -342,60 +350,59 @@ const Game2 = (props) => {
 								</div>)
 							case "ENDGAME":
 								return(
-									state.gameEndState ?
-									<div>
-										<div className="Title">
-											<div>{mission.name}</div>
-											<div>{mission.nameTranslate}</div>
-										</div>
-
-										{state.tries === 0 ? <div>
-											<div>Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</div>
-											<div>Well done! You have found the right person on your first try. You're going to rock on your new career!</div>
-										</div> : <div>
-											<div>Você encontrou a pessoa certa! Parabéns!</div>
-											<div>You have found the right person! Congrats!</div>
-										</div>}
-
-										<div className="ClueCounter">
-											<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
-											<div>clues</div>
-										</div>
-
+									<div id="endGame-screen">
+										{state.gameEndState ?
 										<div>
-											<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
-											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</div>
-										</div>
+											<div id="endgame-messages">
+												{state.tries === 0 ?
+												<div className="painel" id="painel-1">
+													<span lang="pt-br">Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</span>
+													<span lang="en">Well done! You have found the right person on your first try. You're going to rock on your new career!</span>
+													<a href="#painel-2">{'>'}</a>
+												</div> :
+												<div className="painel" id="painel-1">
+													<span lang="pt-br">Você encontrou a pessoa certa! Parabéns!</span>
+													<span lang="en">You have found the right person! Congrats!</span>
+													<a href="#painel-2">{'>'}</a>
+												</div>}
 
-										<Button onClick={() => setState({...initialState, tryAgain: true}) }>Tentar novamente</Button>
-										<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
-									</div> :
-									<div>
-										<div className="Title">
-											<div>{mission.name}</div>
-											<div>{mission.nameTranslate}</div>
-										</div>
-										<div className="Mensagem">
-											<div>Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</div>
-											<div>You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</div>
-										</div>
+												<div className="painel" id="painel-2">
+													<div className="ClueCounter">
+														<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
+														<div>clues</div>
+													</div>
 
-										<div className="ClueCounter">
-											<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
-											<div>clues</div>
-										</div>
-
+													<div>
+														<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
+														<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</div>
+													</div>
+													<a href="#painel-1">{'<'}</a>
+												</div>
+											</div>
+											<Button onClick={restart}>Tentar novamente</Button>
+											<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+										</div> :
 										<div>
-											<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
-											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
-										</div>
+											<div id="endgame-messages">
+												<div className="Mensagem">
+													<div>Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</div>
+													<div>You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</div>
+												</div>
 
-										<Button onClick={() => setState({...initialState, 
-										tryAgain: true, 
-										tips: [
-											'A cabelereira sabe'
-										]}) }>Tentar novamente</Button>
-										<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+												<div className="ClueCounter">
+													<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
+													<div>clues</div>
+												</div>
+
+												<div>
+													<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
+													<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
+												</div>
+											</div>
+											<Button onClick={() => restart(['A cabelereira sabe']) }>Tentar novamente</Button>
+											<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+										</div>
+										}
 									</div>
 								)
 					}

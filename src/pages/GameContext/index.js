@@ -1,12 +1,13 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { platformConfigActions } from '../../_actions'
+import { headerActions } from '../../_actions'
 import ConfigWindow from '../../_components/ConfigWindow'
 import GameConfig from '../../_components/GameConfig'
 import ReactAudioPlayer from 'react-audio-player'
 import config from '../../img/i-settings.svg'
 import './index.scss'
+import { headerConstants } from '../../_constants'
 
 const GameContext = (props) => {
   const [state, setState] = React.useState({
@@ -21,20 +22,26 @@ const GameContext = (props) => {
 
   const dispatch = useDispatch()
   const music = useSelector(state => state.music)
+  let headerInfo = useSelector(state => state.header)
 
   let { children } = props
   children = {...children, props: {...props} }
 
 	React.useEffect(() => {
-		dispatch(platformConfigActions.setGameMode(true))
-		return () => dispatch(platformConfigActions.setGameMode(false))
+		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
+		return () => {
+      dispatch(headerActions.clearAll())
+      dispatch(headerActions.setState(headerConstants.STATES.NORMAL))
+    }
 	}, [dispatch])
 
   return(
     <div id="game-context">
-      <div id="floating-config-btn" onClick={() => setState({...state, config: true}) }>
-        <img src={config} alt='config' />
-      </div>
+      { (headerInfo.state === headerConstants.STATES.HIDDEN) &&
+        <div id="floating-config-btn" onClick={() => setState({...state, config: true}) }>
+          <img src={config} alt='config' />
+        </div>
+      }
       <ReactAudioPlayer
 				src={music.url}
 				autoPlay volume={state.volume/100}
