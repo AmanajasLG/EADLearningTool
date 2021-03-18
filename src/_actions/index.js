@@ -1,6 +1,5 @@
 export * from './alert.actions'
 export * from './user.actions'
-export * from './headerTitle.actions'
+export * from './header.actions'
 export * from './api.actions'
-export * from './platformConfig.actions'
 export * from './music.actions'

@@ -389,3 +389,200 @@
 	background-color: #59316D;
 	color: #FFFFFF;
 }
+
+#endGame-screen {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #D6E3F4;
+	// z-index: -10;
+}
+
+#endGame-screen > div {
+	position: absolute;
+	width: 54.5vw;
+	right: 130px;
+	height: 56.5vh;
+	bottom: 160px;
+	margin-top: auto;
+	margin-bottom: auto;
+	background-color: #F9AFA1;
+	border-radius: 2.75em;
+	box-shadow: #44444440 25px 25px;
+	padding: 20px;
+	z-index: 0;
+}
+
+#endgame-messages {
+	position: relative;
+	min-width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	overflow-x: scroll;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	scroll-behavior: smooth;
+	// scroll-behavior: auto;
+}
+
+#endgame-messages::-webkit-scrollbar {
+	display: none;
+}
+
+.painel {
+	position: relative;
+	flex: 0 0 auto;
+	width: 100%;
+	height: 100%;
+	padding: 75px;
+	scroll-snap-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	line-height: 2.7rem;
+}
+
+#painel-1 span {
+	display: block;
+	font-size: 2.3rem;
+	font-family: 'Barlow';
+	color: #583F3A;
+	text-align: center;
+}
+
+#painel-1 span[lang="pt-br"] {
+	font-weight: 600;
+}
+
+#painel-1 span[lang="en"]::before {
+	content: "";
+	display: block;
+	border: #59316D solid;
+	border-width: 2px 0 0 0;
+	width: 200px;
+	margin: 40px auto;
+}
+
+#painel-1 span[lang="en"] {
+	font-style: italic;
+}
+
+.painel .next-btn {
+	position: absolute;
+	right: calc( 75px / 2);
+}
+
+.painel .prev-btn {
+	position: absolute;
+	left: calc( 75px / 2);
+}
+
+.painel .next-btn,
+.painel .prev-btn {
+	color: white;
+	font-size: 2rem;
+	text-decoration: none;
+}
+
+#painel-2 {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.painel-2-wrapper {
+	width: 50%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.painel-2-content {
+	position: relative;
+	text-align: center;
+}
+
+.painel-2-wrapper:first-child .painel-2-content {
+	background-image: url('../../img/bg-forma-verde.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-clip: border-box;
+	padding: 75px 125px;
+	font-size: 3rem;
+	color: #59316D;
+	line-height: 1.2em;
+	font-family: 'Assistant';
+}
+
+.painel-2-wrapper:first-child .painel-2-content span {
+	font-family: 'Abril Fatface';
+}
+
+.painel-2-wrapper:first-child .painel-2-content span:first-child {
+	font-size: 2em;
+}
+
+.painel-2-wrapper:nth-child(2) .painel-2-content {
+	font-size: 1.8rem;
+	font-family: 'Barlow';
+	font-weight: 600;
+	line-height: 2rem;
+	// padding: 0 20px;
+}
+
+#endGame-action-btns-right {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#endGame-action-btns-right button {
+	text-transform: none;
+	font-family: 'Barlow ExtraBold';
+	font-size: 1.5rem;
+	margin: -15px 15px 0 15px;
+	border-radius: 3rem;
+	color: #59316D;
+	transition: 100ms linear;
+	min-width: 300px;
+	text-align: center;
+}
+
+#endGame-action-btns-right button:hover {
+	//Usei !important aqui pra não ter que escrever uma regra pra cada button abaixo com o hover pra mudar só isso
+	background-color: #59316D !important;
+	color: white;
+}
+
+#endGame-action-btns-right button:first-child::before {
+	content: "❮";
+	position: absolute;
+	left: 30px;
+}
+
+#endGame-action-btns-right button:first-child {
+	background-color: #FFDEA9;
+	border-bottom-right-radius: 0;
+	padding: 12px 30px 12px 50px;
+}
+
+#endGame-action-btns-right button:nth-child(2) {
+	background-color: #FFCCA9;
+	border-bottom-left-radius: 0;
+	padding: 12px 50px 12px 30px;
+}
+
+#endGame-action-btns-right button:nth-child(2)::after {
+	content: "❯";
+	position: absolute;
+	right: 30px;
+}
