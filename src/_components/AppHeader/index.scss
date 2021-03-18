@@ -49,7 +49,7 @@
 }
 
 #app-header.overlay {
-	padding: 45px 45px 10px 45px;
+	padding: 40px 60px 10px 60px;
 	background-color: transparent;
 }
 
@@ -78,9 +78,15 @@
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;
-	font-size: 2.2rem;
+	font-size: 2rem;
 	padding-left: 30px;
 	/* cursor: default; */
+	line-height: 2.2rem;
+	transition: 500ms linear;
+}
+
+#app-header.overlay #pageTitle {
+	font-size: 2.5rem;
 }
 
 #mainTitle {
@@ -101,9 +107,21 @@
 
 #profilePic {
 	transform: scale(0.5);
+	transition: 500ms ease-in-out;
 }
 
 #logout-btn {
 	font-family: 'barlow semibold';
 	vertical-align: middle;
+	transition: 500ms ease-in-out;
+}
+
+#app-header.overlay #profilePic {
+	transform: scale(0.8) translateX(100%);
+	// margin-left: 33%;
+}
+
+#app-header.overlay #logout-btn {
+	opacity: 0%;
+	pointer-events: none;
 }

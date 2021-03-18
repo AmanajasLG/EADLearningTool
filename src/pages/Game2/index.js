@@ -367,41 +367,44 @@ const Game2 = (props) => {
 												</div>}
 
 												<div className="painel" id="painel-2">
-													<div className="ClueCounter">
-														<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
-														<div>clues</div>
+													<div className="painel-2-wrapper">
+														<div className="painel-2-content">
+															<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
+															<div>clues</div>
+														</div>
 													</div>
-
-													<div>
-														<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
-														<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</div>
+													<div className="painel-2-wrapper">
+														<div className="painel-2-content">
+															<div>
+																<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
+																<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</p>
+															</div>
+														</div>
 													</div>
 													<a href="#painel-1" className="prev-btn">{'❮'}</a>
 												</div>
 											</div>
-											<div id="endGame-action-btns">
+											<div id="endGame-action-btns-right">
 												<Button onClick={restart}>Tentar novamente</Button>
 												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 											</div>
 										</div> :
 										<div>
-											<div id="endgame-messages">
-												<div className="Mensagem">
+											<div>
+												<div>
 													<div>Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</div>
 													<div>You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</div>
 												</div>
-
-												<div className="ClueCounter">
+												<div>
 													<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
 													<div>clues</div>
 												</div>
-
 												<div>
 													<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
 													<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
 												</div>
 											</div>
-											<div id="endGame-action-btns">
+											<div id="endGame-action-btns-wrong">
 												<Button onClick={() => restart(['A cabelereira sabe']) }>Tentar novamente</Button>
 												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 											</div>

@@ -400,15 +400,15 @@
 
 #endGame-screen > div {
 	position: absolute;
-	width: 55vw;
-	right: 100px;
-	height: 60vh;
-	bottom: 120px;
+	width: 54.5vw;
+	right: 130px;
+	height: 56.5vh;
+	bottom: 160px;
 	margin-top: auto;
 	margin-bottom: auto;
 	background-color: #F9AFA1;
-	border-radius: 3em;
-	box-shadow: #44444444 30px 30px;
+	border-radius: 2.75em;
+	box-shadow: #44444440 25px 25px;
 	padding: 20px;
 	z-index: 0;
 }
@@ -443,6 +443,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	line-height: 2.7rem;
 }
 
 #painel-1 span {
@@ -487,14 +488,64 @@
 	text-decoration: none;
 }
 
-#endGame-action-btns {
+#painel-2 {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.painel-2-wrapper {
+	width: 50%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.painel-2-content {
+	position: relative;
+	text-align: center;
+}
+
+.painel-2-wrapper:first-child .painel-2-content {
+	background-image: url('../../img/bg-forma-verde.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-clip: border-box;
+	padding: 75px 125px;
+	font-size: 3rem;
+	color: #59316D;
+	line-height: 1.2em;
+	font-family: 'Assistant';
+}
+
+.painel-2-wrapper:first-child .painel-2-content span {
+	font-family: 'Abril Fatface';
+}
+
+.painel-2-wrapper:first-child .painel-2-content span:first-child {
+	font-size: 2em;
+}
+
+.painel-2-wrapper:nth-child(2) .painel-2-content {
+	font-size: 1.8rem;
+	font-family: 'Barlow';
+	font-weight: 600;
+	line-height: 2rem;
+	// padding: 0 20px;
+}
+
+#endGame-action-btns-right {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
 }
 
-#endGame-action-btns button {
+#endGame-action-btns-right button {
 	text-transform: none;
 	font-family: 'Barlow ExtraBold';
 	font-size: 1.5rem;
@@ -506,31 +557,31 @@
 	text-align: center;
 }
 
-#endGame-action-btns button:hover {
+#endGame-action-btns-right button:hover {
 	//Usei !important aqui pra não ter que escrever uma regra pra cada button abaixo com o hover pra mudar só isso
 	background-color: #59316D !important;
 	color: white;
 }
 
-#endGame-action-btns button:first-child::before {
+#endGame-action-btns-right button:first-child::before {
 	content: "❮";
 	position: absolute;
 	left: 30px;
 }
 
-#endGame-action-btns button:first-child {
+#endGame-action-btns-right button:first-child {
 	background-color: #FFDEA9;
 	border-bottom-right-radius: 0;
 	padding: 12px 30px 12px 50px;
 }
 
-#endGame-action-btns button:nth-child(2) {
+#endGame-action-btns-right button:nth-child(2) {
 	background-color: #FFCCA9;
 	border-bottom-left-radius: 0;
 	padding: 12px 50px 12px 30px;
 }
 
-#endGame-action-btns button:nth-child(2)::after {
+#endGame-action-btns-right button:nth-child(2)::after {
 	content: "❯";
 	position: absolute;
 	right: 30px;
