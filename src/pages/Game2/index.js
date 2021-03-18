@@ -358,12 +358,12 @@ const Game2 = (props) => {
 												<div className="painel" id="painel-1">
 													<span lang="pt-br">Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</span>
 													<span lang="en">Well done! You have found the right person on your first try. You're going to rock on your new career!</span>
-													<a href="#painel-2">{'>'}</a>
+													<a href="#painel-2" className="next-btn">{'❯'}</a>
 												</div> :
 												<div className="painel" id="painel-1">
 													<span lang="pt-br">Você encontrou a pessoa certa! Parabéns!</span>
 													<span lang="en">You have found the right person! Congrats!</span>
-													<a href="#painel-2">{'>'}</a>
+													<a href="#painel-2" className="next-btn">{'❯'}</a>
 												</div>}
 
 												<div className="painel" id="painel-2">
@@ -376,11 +376,13 @@ const Game2 = (props) => {
 														<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
 														<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</div>
 													</div>
-													<a href="#painel-1">{'<'}</a>
+													<a href="#painel-1" className="prev-btn">{'❮'}</a>
 												</div>
 											</div>
-											<Button onClick={restart}>Tentar novamente</Button>
-											<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+											<div id="endGame-action-btns">
+												<Button onClick={restart}>Tentar novamente</Button>
+												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+											</div>
 										</div> :
 										<div>
 											<div id="endgame-messages">
@@ -399,8 +401,10 @@ const Game2 = (props) => {
 													<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
 												</div>
 											</div>
-											<Button onClick={() => restart(['A cabelereira sabe']) }>Tentar novamente</Button>
-											<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+											<div id="endGame-action-btns">
+												<Button onClick={() => restart(['A cabelereira sabe']) }>Tentar novamente</Button>
+												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
+											</div>
 										</div>
 										}
 									</div>

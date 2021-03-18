@@ -433,8 +433,105 @@
 }
 
 .painel {
+	position: relative;
 	flex: 0 0 auto;
 	width: 100%;
 	height: 100%;
+	padding: 75px;
 	scroll-snap-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#painel-1 span {
+	display: block;
+	font-size: 2.3rem;
+	font-family: 'Barlow';
+	color: #583F3A;
+	text-align: center;
+}
+
+#painel-1 span[lang="pt-br"] {
+	font-weight: 600;
+}
+
+#painel-1 span[lang="en"]::before {
+	content: "";
+	display: block;
+	border: #59316D solid;
+	border-width: 2px 0 0 0;
+	width: 200px;
+	margin: 40px auto;
+}
+
+#painel-1 span[lang="en"] {
+	font-style: italic;
+}
+
+.painel .next-btn {
+	position: absolute;
+	right: calc( 75px / 2);
+}
+
+.painel .prev-btn {
+	position: absolute;
+	left: calc( 75px / 2);
+}
+
+.painel .next-btn,
+.painel .prev-btn {
+	color: white;
+	font-size: 2rem;
+	text-decoration: none;
+}
+
+#endGame-action-btns {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#endGame-action-btns button {
+	text-transform: none;
+	font-family: 'Barlow ExtraBold';
+	font-size: 1.5rem;
+	margin: -15px 15px 0 15px;
+	border-radius: 3rem;
+	color: #59316D;
+	transition: 100ms linear;
+	min-width: 300px;
+	text-align: center;
+}
+
+#endGame-action-btns button:hover {
+	//Usei !important aqui pra não ter que escrever uma regra pra cada button abaixo com o hover pra mudar só isso
+	background-color: #59316D !important;
+	color: white;
+}
+
+#endGame-action-btns button:first-child::before {
+	content: "❮";
+	position: absolute;
+	left: 30px;
+}
+
+#endGame-action-btns button:first-child {
+	background-color: #FFDEA9;
+	border-bottom-right-radius: 0;
+	padding: 12px 30px 12px 50px;
+}
+
+#endGame-action-btns button:nth-child(2) {
+	background-color: #FFCCA9;
+	border-bottom-left-radius: 0;
+	padding: 12px 50px 12px 30px;
+}
+
+#endGame-action-btns button:nth-child(2)::after {
+	content: "❯";
+	position: absolute;
+	right: 30px;
 }
