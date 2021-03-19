@@ -45,6 +45,16 @@ const getByIdConstructor = (service, apiDataType) => {
   }
 }
 
+const findConstructor = (service, apiDataType) => {
+  return function(findData){
+    return requester(service.find, request, success, failure, findData)
+
+    function request() { return {type: apiConstants[apiDataType].FIND_REQUEST} }
+    function success(data) { return {type: apiConstants[apiDataType].FIND_SUCCESS, data} }
+    function failure(error) { return {type: apiConstants[apiDataType].FIND_FAILURE, error} }
+  }
+}
+
 const createConstructor = (service, apiDataType) => {
   return function(createData){
     return requester(service.create, request, success, failure, createData)
@@ -80,6 +90,8 @@ Object.keys(apiConstants).forEach( (apiDataType) => {
   apiActions[`${apiDataType.toLowerCase()}Actions`] = {
     getAll:  getAllConstructor(apiServices[apiDataType], apiDataType),
     getById: getByIdConstructor(apiServices[apiDataType], apiDataType),
+    find: findConstructor(apiServices[apiDataType],
+    apiDataType),
     create:  createConstructor(apiServices[apiDataType], apiDataType),
     update:  updateConstructor(apiServices[apiDataType], apiDataType),
     delete:  deleteConstructor(apiServices[apiDataType], apiDataType)

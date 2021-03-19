@@ -16,6 +16,10 @@ export const apiConstantBuilder = apiDataType => {
     GETBYID_SUCCESS: `${apiDataType}_GETBYID_SUCCESS`,
     GETBYID_FAILURE: `${apiDataType}_GETBYID_FAILURE`,
 
+    FIND_REQUEST: 'USER_FIND_REQUEST',
+    FIND_SUCCESS: 'USER_FIND_SUCCESS',
+    FIND_FAILURE: 'USER_FIND_FAILURE',
+
     DELETE_REQUEST: `${apiDataType}_DELETE_REQUEST`,
     DELETE_SUCCESS: `${apiDataType}_DELETE_SUCCESS`,
     DELETE_FAILURE: `${apiDataType}_DELETE_FAILURE`,

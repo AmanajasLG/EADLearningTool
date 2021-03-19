@@ -10,7 +10,7 @@ const getAllBuilder = (routeName) => function getAll() {
     return api(
       {
         method: 'get',
-        url: `/${routeName.toLowerCase().replace('_', '-')}`,
+        url: `/${routeName.toLowerCase().replace(/_/g, '-')}`,
         headers: authHeader()
       })
       .then(handleResponse)
@@ -20,17 +20,28 @@ const getByIdBuilder = (routeName) => function getById(id){
     return api(
         {
           method: 'get',
-          url: `/${routeName.toLowerCase().replace('_', '-')}/${id}`,
+          url: `/${routeName.toLowerCase().replace(/_/g, '-')}/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
+}
+
+const findBuilder = (routeName) => function find(data) {
+  return api(
+    {
+      method: 'get',
+      url: `/${routeName.toLowerCase().replace(/_/g, '-')}`,
+      headers: authHeader(),
+      query: data
+    })
+    .then(handleResponse)
 }
 
 const createBuilder = (routeName) => function create(data) {
     return api(
       {
         method: 'post',
-        url: `/${routeName.toLowerCase().replace('_', '-')}`,
+        url: `/${routeName.toLowerCase().replace(/_/g, '-')}`,
         headers: authHeader(),
         data: data
       })
@@ -41,7 +52,7 @@ const updateBuilder = (routeName) => function update(data){
     return api(
         {
           method: 'put',
-          url: `/${routeName.toLowerCase().replace('_', '-')}/${data.id}`,
+          url: `/${routeName.toLowerCase().replace(/_/g, '-')}/${data.id}`,
           headers:  {
             ...authHeader(),
           'Content-Type': 'application/json'
@@ -55,7 +66,7 @@ const deleteBuilder = (routeName) => function _delete(id){
     return api(
         {
           method: 'delete',
-          url: `/${routeName.toLowerCase().replace('_', '-')}/${id}`,
+          url: `/${routeName.toLowerCase().replace(/_/g, '-')}/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
@@ -69,6 +80,8 @@ function handleResponse(response) {
       return Promise.reject(response.statusText)
   }
 
+  console.log('satanas pelado', response.data)
+
   return response.data
 }
 
@@ -78,6 +91,7 @@ apiValues.map( apiDataType =>
   apiServices[`${apiDataType}`] = {
     getAll:  getAllBuilder(apiDataType),
     getById: getByIdBuilder(apiDataType),
+    find:  findBuilder(apiDataType),
     create:  createBuilder(apiDataType),
     update:  updateBuilder(apiDataType),
     delete:  deleteBuilder(apiDataType)

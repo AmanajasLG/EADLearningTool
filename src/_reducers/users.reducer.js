@@ -32,6 +32,18 @@ export function users(state = {}, action) {
             return {...state,
                 error: action.error
             };
+        case userConstants.FIND_REQUEST:
+            return {...state,
+                loading: true
+            };
+        case userConstants.FIND_SUCCESS:
+            return {...state,
+                items: action.user
+            };
+        case userConstants.FIND_FAILURE:
+            return {...state,
+                error: action.error
+            };
         case userConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted
             return {

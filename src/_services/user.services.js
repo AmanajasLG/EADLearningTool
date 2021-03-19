@@ -7,6 +7,7 @@ export const userService = {
     register,
     getAll,
     getById,
+    find,
     update,
     delete: _delete
 }
@@ -56,6 +57,17 @@ function getById(id){
           headers: authHeader()
         })
         .then(handleResponse)
+}
+
+function find(data) {
+  return api(
+    {
+      method: 'get',
+      url: '/users',
+      headers: authHeader(),
+      query: data
+    })
+    .then(handleResponse)
 }
 
 function register(user) {

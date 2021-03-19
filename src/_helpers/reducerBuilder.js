@@ -68,6 +68,22 @@ export const reducerBuilder = constants => (state = initialState, action) =>
               error: action.error
           };
 
+        case constants.FIND_REQUEST:
+            return {...state,
+                error: null,
+                loading: true
+            };
+        case constants.FIND_SUCCESS:
+            return {...state,
+                items: action.data,
+                loading: false
+            };
+        case constants.FIND_FAILURE:
+            return {...state,
+                loading: false,
+                error: action.error
+            };
+
       case constants.DELETE_REQUEST:
           // add 'deleting:true' property to character being deleted
           return {
