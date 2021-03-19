@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-anonymous-default-export
-export default {
+const initialState = (tryAgain = false) => ({
 //GAME STATE
   scene: "INIT",
   currentRoom: 0,
@@ -12,8 +12,9 @@ export default {
   tries: 0,
   validQuestions: [],
   tutorialStep: 0,
-  tryAgain: false,
-  checkPlayed: false,
+  tryAgain: tryAgain,
+  hasPlayed: false,
+  checkedPlayed: false,
 //DIALOG
   dialogHistory: [],
   dialogStep: 0,
@@ -32,4 +33,6 @@ export default {
   elapsedTime: null,
   back: false,
   spokenCharacters: [],
-}
+})
+
+export default initialState

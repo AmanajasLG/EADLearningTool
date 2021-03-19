@@ -14,7 +14,8 @@ import DialogHistory from './components/DialogHistory'
 import Menu from './components/Menu'
 
 const Game2 = (props) => {
-	const [state, setState] = React.useState({...initialState});
+	
+	const [state, setState] = React.useState(initialState());
 
 	const id = props.match.params.id
 	const dispatch = useDispatch()
@@ -23,7 +24,8 @@ const Game2 = (props) => {
 	const loading = useSelector( state => state.missions.loading)
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
-	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
+	const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
+	const hasPlayed = useSelector( state => state.user_game_results.items.length > 0)
 
 	let tipsCount
 
@@ -39,17 +41,30 @@ const Game2 = (props) => {
 		return () => dispatch(musicActions.set(''))
 	}, [dispatch, mission])
 
+	React.useEffect(()=>{
+		if(mission)
+			dispatch(musicActions.set(mission.backgroundAudios[0].music[0].url))
+		return () => dispatch(musicActions.set(''))
+	}, [dispatch, mission])
+
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
 		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
 	}, [id, mission, dispatch, missionsActions, props.match.params.id])
 
 	// check if user already played the game
-	// React.useEffect(() => {
-	// 	if(!state.checkPlayed){
-	// 		dispatch(user_game_resultActions)
-	// 	} 
-	// }, [id, mission, dispatch, user_game_resultActions, state])
+	React.useEffect(() => {
+		if(mission && !state.checkedPlayed){
+			dispatch(user_game_resultsActions.find({
+				'user.id': userId,
+				'mission.id': mission.id
+			}))
+			
+			state.checkedPlayed = true
+		} 
+
+		state.hasPlayed = hasPlayed
+	}, [userId, mission, dispatch, user_game_resultsActions, state, hasPlayed])
 
 	//track player actions
 	React.useEffect(() => {
@@ -144,7 +159,7 @@ const Game2 = (props) => {
 		}
 
 		//check if should start or skip tutorial
-		setState({...state, scene: state.tryAgain ? "ROOM" : "TUTORIAL"})
+		setState({...state, scene: (state.tryAgain || state.hasPlayed) ? "ROOM" : "TUTORIAL"})
 	}
 
 	const endTutorial = () => {
@@ -270,15 +285,25 @@ const Game2 = (props) => {
 			setState({...state, acusation: false, characterFeeling: 'wrongAccusation'})
 		} else {
 			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, characterFeeling: state.currentChar.name === state.targetName ?
-			'init' : 'init',
+			'rightAccusation' : 'wrongAccusation',
 			currentChar: null
 			})
+
+			//aqui
+			dispatch(user_game_resultsActions.create({
+				user: userId,
+				mission: mission.id,
+				score: state.score,
+				tipsCount: state.tips.length,
+				spokenCharactersCount: state.spokenCharacters.length,
+				tries: state.tries,
+				won: state.gameEndState,
+				validQuestionsCount: Object.keys(state.validQuestions).length
+			}))
 		}
 	}
-
-	console.log(mission)
-	console.log('state', state)
-	console.log('init', initialState)
+	console.log('state', useSelector( state => state))
+	console.log('CURRENT STATE', state)
 
 	return (
 		<div id="game2-wrapper">
@@ -350,7 +375,7 @@ const Game2 = (props) => {
 											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</div>
 										</div>
 
-										<Button onClick={() => setState({...initialState, tryAgain: true}) }>Tentar novamente</Button>
+										<Button onClick={() => setState({...initialState(), tryAgain: true}) }>Tentar novamente</Button>
 										<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 									</div> :
 									<div>
@@ -373,7 +398,7 @@ const Game2 = (props) => {
 											<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
 										</div>
 
-										<Button onClick={() => setState({...initialState, 
+										<Button onClick={() => setState({...initialState(), 
 										tryAgain: true, 
 										tips: [
 											'A cabelereira sabe'
@@ -404,11 +429,11 @@ const Game2 = (props) => {
 						{ state.scene === 'TUTORIAL' && state.tutorialStep === 2 &&
 						<div>
 							<div>
-							Selecione alguém para conversar e te ajudar a encontrar o seu guia.
+							Lembre-se: As pessoas então ocupadas em seua ambientes de trabalho, então tenha certeza de não gastar o tempo delas com perguntas fora de contexto!
 						</div>
 						<div>-------</div>
 						<div>
-							Select someone to talk and help you find your guide.
+							Remember: People are busy in their workplaces, so be sure not to waste their time with questions that are out of context!
 						</div>
 						<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
 						</div>
