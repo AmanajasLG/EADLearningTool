@@ -41,7 +41,7 @@
 	left: 0px;
 	height: 100vh;
 	width: 100vw;
-	background-color: #FFFFFFA0;
+	background-color: #FFFFFFBB;
 }
 
 #acusar,
@@ -54,9 +54,9 @@
 #fechar {
 	right: 30px;
 	top: 30px;
-	width: 60px;
-	height: 60px;
-	font-size: 4em;
+	width: 100px;
+	height: 100px;
+	font-size: 6em;
 	text-align: center;
 	display: flex;
 	flex-direction: column;
@@ -75,8 +75,8 @@
 #acusar {
 	position: absolute;
 	top: 5vh;
-	left: 5vh;
-	height: 100px;
+	left: 8vh;
+	height: 150px;
 }
 
 #lamp-acesa,
@@ -103,11 +103,15 @@
 }
 
 #acusar span {
+	position: relative;
+	left: -30px;
+	top: 5px;
 	background-color: #F9AFA100;
 	border-radius: 0 2em 2em 0;
-	padding: 15px 20px 15px 30px;
+	padding: 20px 40px 20px 70px;
 	margin-left: -20px;
 	z-index: 0;
+	font-size: 1.5em;
 	color: #59316D;
 }
 
@@ -129,6 +133,9 @@
 	width: 30%;
 	max-width: 600px;
 	height: calc(50% + 25px);
+	pointer-events: none;
+	transform-origin: 40% 40%;
+	transform: scale(2.5);
 }
 
 #CharacterPortrait * {
@@ -140,10 +147,10 @@
 
 #dialogos {
 	margin-left: auto;
-	margin: 0 50px 0px auto;
+	margin: 0 200px 0px auto;
 	display: flex;
 	flex-direction: column;
-	width: calc(85% - 50px);
+	width: calc(70% - 80px);
 	height: 100%;
 }
 
@@ -152,12 +159,14 @@
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
-	padding-bottom: 20px;
-	max-width: 500px;
+	max-width: 850px;
 	width: 100%;
+	padding-bottom: 20px;
 	padding-left: 40px;
+	height: max-content;
+	// margin-top: 80px;
 	align-self: flex-end;
-	mask-image: linear-gradient(0deg, #FFFF 50%, #FFF0 90%);
+	mask-image: linear-gradient(0deg, #FFFF 50%, #FFF1 80%);
 	// background-image: linear-gradient(0deg, #FFFF 50%, #000F 90%);
 	// mask-image: linear-gradient(0deg, #FFFF 20%, #FFF0 50%);
 	// background-image: linear-gradient(0deg, #FFFF 20%, #000F 50%);
@@ -173,8 +182,10 @@
 
 .mensagem0, .mensagem1 {
 	margin-bottom: 15px;
-	padding: 10px 20px;
-	min-width: 300px;
+	padding: 20px 40px;
+	min-width: 450px;
+	max-width: 720px;
+	font-size: 2em;
 }
 
 .mensagem0 {
@@ -190,26 +201,38 @@
 	align-self: flex-start;
 }
 
-#Menu {
+#DialogBox {
 	background-color: #535c89;
-	border-radius: 0 1em 0 0;
+	border-radius: 0 1.5em 0 0;
 	flex-grow: 0;
-	padding: 10px 10px 10px 15%;
-	margin-bottom: 50px;
+	padding: 15px;
+	margin-bottom: 75px;
 	box-shadow: 7px 7px 0px 0px #77777750;
+	justify-content: center;
+}
+
+#Menu {
 	display: flex;
+	flex-grow: 0;
 	flex-direction: column;
 	justify-content: center;
-	min-height: 80px;
+	height: 260px;
 }
 
 #Menu > * {
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background-color: rgba(255, 255, 255, 0.15);
 	color: #FFFFFF;
-	margin: 5px;
+	margin: 7.5px;
+	font-size: 1.8em;
 	border-radius: 0.75em 0.75em 0 0.75em;
+	flex-grow: 1;
 	transition: 100ms linear;
+}
+
+#Menu .MuiButton-label {
+	justify-content: start;
+	margin-left: 20%;
 }
 
 #Menu > *:hover {
@@ -365,4 +388,201 @@
 #accusation-btns button:hover {
 	background-color: #59316D;
 	color: #FFFFFF;
+}
+
+#endGame-screen {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: #D6E3F4;
+	// z-index: -10;
+}
+
+#endGame-screen > div {
+	position: absolute;
+	width: 54.5vw;
+	right: 130px;
+	height: 56.5vh;
+	bottom: 160px;
+	margin-top: auto;
+	margin-bottom: auto;
+	background-color: #F9AFA1;
+	border-radius: 2.75em;
+	box-shadow: #44444440 25px 25px;
+	padding: 20px;
+	z-index: 0;
+}
+
+#endgame-messages {
+	position: relative;
+	min-width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	overflow-x: scroll;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	scroll-behavior: smooth;
+	// scroll-behavior: auto;
+}
+
+#endgame-messages::-webkit-scrollbar {
+	display: none;
+}
+
+.painel {
+	position: relative;
+	flex: 0 0 auto;
+	width: 100%;
+	height: 100%;
+	padding: 75px;
+	scroll-snap-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	line-height: 2.7rem;
+}
+
+#painel-1 span {
+	display: block;
+	font-size: 2.3rem;
+	font-family: 'Barlow';
+	color: #583F3A;
+	text-align: center;
+}
+
+#painel-1 span[lang="pt-br"] {
+	font-weight: 600;
+}
+
+#painel-1 span[lang="en"]::before {
+	content: "";
+	display: block;
+	border: #59316D solid;
+	border-width: 2px 0 0 0;
+	width: 200px;
+	margin: 40px auto;
+}
+
+#painel-1 span[lang="en"] {
+	font-style: italic;
+}
+
+.painel .next-btn {
+	position: absolute;
+	right: calc( 75px / 2);
+}
+
+.painel .prev-btn {
+	position: absolute;
+	left: calc( 75px / 2);
+}
+
+.painel .next-btn,
+.painel .prev-btn {
+	color: white;
+	font-size: 2rem;
+	text-decoration: none;
+}
+
+#painel-2 {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.painel-2-wrapper {
+	width: 50%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.painel-2-content {
+	position: relative;
+	text-align: center;
+}
+
+.painel-2-wrapper:first-child .painel-2-content {
+	background-image: url('../../img/bg-forma-verde.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-clip: border-box;
+	padding: 75px 125px;
+	font-size: 3rem;
+	color: #59316D;
+	line-height: 1.2em;
+	font-family: 'Assistant';
+}
+
+.painel-2-wrapper:first-child .painel-2-content span {
+	font-family: 'Abril Fatface';
+}
+
+.painel-2-wrapper:first-child .painel-2-content span:first-child {
+	font-size: 2em;
+}
+
+.painel-2-wrapper:nth-child(2) .painel-2-content {
+	font-size: 1.8rem;
+	font-family: 'Barlow';
+	font-weight: 600;
+	line-height: 2rem;
+	// padding: 0 20px;
+}
+
+#endGame-action-btns-right {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+#endGame-action-btns-right button {
+	text-transform: none;
+	font-family: 'Barlow ExtraBold';
+	font-size: 1.5rem;
+	margin: -15px 15px 0 15px;
+	border-radius: 3rem;
+	color: #59316D;
+	transition: 100ms linear;
+	min-width: 300px;
+	text-align: center;
+}
+
+#endGame-action-btns-right button:hover {
+	//Usei !important aqui pra não ter que escrever uma regra pra cada button abaixo com o hover pra mudar só isso
+	background-color: #59316D !important;
+	color: white;
+}
+
+#endGame-action-btns-right button:first-child::before {
+	content: "❮";
+	position: absolute;
+	left: 30px;
+}
+
+#endGame-action-btns-right button:first-child {
+	background-color: #FFDEA9;
+	border-bottom-right-radius: 0;
+	padding: 12px 30px 12px 50px;
+}
+
+#endGame-action-btns-right button:nth-child(2) {
+	background-color: #FFCCA9;
+	border-bottom-left-radius: 0;
+	padding: 12px 50px 12px 30px;
+}
+
+#endGame-action-btns-right button:nth-child(2)::after {
+	content: "❯";
+	position: absolute;
+	right: 30px;
 }

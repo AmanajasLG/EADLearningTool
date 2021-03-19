@@ -26,13 +26,14 @@ import Register from './pages/Register'
 import Questionnaires from './pages/Questionnaires'
 import PlaySessions from './pages/PlaySessions'
 import GameContext from './pages/GameContext'
+import { headerConstants } from './_constants'
 
 const App = () => {
 
   let palette = "palette01"
   document.getElementsByTagName('html')[0].className = palette
 
-  let gameMode = useSelector( state => state.platformConfig.gameMode )
+  let gameMode = useSelector( state => state.header.state ) !== headerConstants.STATES.NORMAL;
 
   return (
     <div className={ "App" + (gameMode? " game-mode" : "")}>

@@ -2,34 +2,55 @@
 	position: relative;
 	display: flex;
 	flex-direction: row;
-	background-color: #F9AFA1;
 	color: var(--color-text);
 	padding: 10px 30px 10px 30px;
 	margin-bottom: 20px;
 	justify-content: space-between;
-	height: 74px;
+	min-height: 74px;
 	align-items: center;
 	left: 0;
 	right: 0;
 	top: 0;
 	transition: 500ms ease-in-out;
+	z-index: 99;
 }
 
 #app-header::after {
 	content: "";
 	position: absolute;
-	background-image: url('../../img/capa-top.svg');
 	background-repeat: no-repeat;
 	left: 0;
 	right: 0;
-	top: calc(100% - 1px); //Reduz um pixel para eliminar artefato na página
+	// top: calc(100% - 1px); //Reduz um pixel para eliminar artefato na página
+	top: 100%; //Reduz um pixel para eliminar artefato na página
 	height: 20px;
+	transition: 500ms ease-in-out;
 }
 
-.App.game-mode #app-header {
+#app-header.normal {
+	background-color: #F9AFA1;
+}
+
+#app-header.normal::after {
+	background-image: url('../../img/capa-top.svg');
+}
+
+#app-header.hidden {
 	transform: translateY( calc(-100% - 20px) );
 	margin-bottom: -74px;
 	opacity: 0%;
+	background-color: transparent;
+}
+
+#app-header.hidden::after,
+#app-header.overlay::after {
+	opacity: 0%;
+	// background-image: none;
+}
+
+#app-header.overlay {
+	padding: 40px 60px 10px 60px;
+	background-color: transparent;
 }
 
 .header-btn {
@@ -55,14 +76,26 @@
 
 #pageTitle {
 	display: flex;
+	flex-grow: 1;
 	flex-direction: column;
-	font-size: 80%;
+	font-size: 2rem;
+	padding-left: 30px;
 	/* cursor: default; */
+	line-height: 2.2rem;
+	transition: 500ms linear;
+}
+
+#app-header.overlay #pageTitle {
+	font-size: 2.5rem;
+}
+
+#mainTitle {
+	font-family: 'Abril Fatface';
 }
 
 #subTitle {
-	font-weight: bold;
-	font-size: 80%;
+	font-family: 'Barlow Thin';
+	font-size: 0.5em;
 }
 
 #right-btns {
@@ -74,9 +107,21 @@
 
 #profilePic {
 	transform: scale(0.5);
+	transition: 500ms ease-in-out;
 }
 
 #logout-btn {
 	font-family: 'barlow semibold';
 	vertical-align: middle;
+	transition: 500ms ease-in-out;
+}
+
+#app-header.overlay #profilePic {
+	transform: scale(0.8) translateX(100%);
+	// margin-left: 33%;
+}
+
+#app-header.overlay #logout-btn {
+	opacity: 0%;
+	pointer-events: none;
 }
