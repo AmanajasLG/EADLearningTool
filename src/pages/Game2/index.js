@@ -205,22 +205,27 @@ const Game2 = (props) => {
 			showAnswer: null,
 			dialogHistory: [...state.dialogHistory, {text: state.showAnswer.text, speaker: 'character'}],
 		}
-		console.log('state.showAnswer', state.showAnswer)
-
-		if(state.dialogStep !== state.totalDialogSteps){
-			updateState.answers = state.locations[state.currentRoom].characters
-										.find(c => c.id === state.currentChar.id).selectedQuestions
-										.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
-		}else{
-			if(state.showAnswer && state.showAnswer.stop)
+		if( state.scene === "TUTORIAL" ) {
+			updateState = {
+				...updateState,
+				tutorialStep: state.tutorialStep + 1
+			}
+		} else {
+			if(state.dialogStep !== state.totalDialogSteps){
+				updateState.answers = state.locations[state.currentRoom].characters
+				.find(c => c.id === state.currentChar.id).selectedQuestions
+				.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
+			}else{
+				if(state.showAnswer && state.showAnswer.stop)
 				updateState.showAnswer = null
-			else{
-				if(state.correct < state.correctMinimum){
-					updateState.answers = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
-					updateState.showAnswer = {text: 'Não estou entendendo. Quer começar de novo?', index: 0, stop: true}
-				}
 				else{
-					updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
+					if(state.correct < state.correctMinimum){
+						updateState.answers = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
+						updateState.showAnswer = {text: 'Não estou entendendo. Quer começar de novo?', index: 0, stop: true}
+					}
+					else{
+						updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
+					}
 				}
 			}
 		}
@@ -240,9 +245,12 @@ const Game2 = (props) => {
 
 			let updateState = {
 				dialogHistory: [...state.dialogHistory,
-					answer.question.question,
-					answer.answer
+					{text: answer.question.question, speaker: 'player'}
 				],
+				showAnswer: {
+					text: answer.answer,
+					index: 0
+				},
 				tips: [
 					'A cabelereira sabe.'
 				],
@@ -305,15 +313,12 @@ const Game2 = (props) => {
 		switch(id) {
 			case 2:
 				tela = (
-					<div>
-						<div>
-							Selecione alguém para conversar e te ajudar a encontrar o seu guia.
+					<div id="tutorial-popup-2-wrapper">
+						<div id="tutorial-popup-2-content">
+							<span lang="pt-br"><strong>Lembre-se:</strong> As pessoas estão ocupadas em seus ambientes de trabalho, então tenha certeza de não gastar o tempo delas com perguntas fora de contexto!</span>
+							<span lang="en"><strong>Remember:</strong> People are busy in their workplaces, so be sure not to waste their times with question that are out of yout context!</span>
+							<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
 						</div>
-						<div>-------</div>
-						<div>
-							Select someone to talk and help you find your guide.
-						</div>
-						<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
 					</div>
 				)
 				// fallthrough
@@ -362,11 +367,7 @@ const Game2 = (props) => {
 					break
 
 			default:
-				// temporario
-				tela = (<div style={ {position: "absolute", width: "100%", height: "100%", display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"} }>
-							<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
-						</div>
-				)
+				tela = null
 				break
 		}
 
@@ -377,9 +378,6 @@ const Game2 = (props) => {
 		setState({...initialState, tryAgain: true, tips: tips})
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
-
-	console.log(mission)
-	console.log('state', state)
 
 	return (
 		<div id="game2-wrapper">
