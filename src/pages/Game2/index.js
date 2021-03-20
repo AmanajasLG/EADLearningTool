@@ -7,8 +7,12 @@ import Sala from './components/Sala'
 import Character from './components/Character'
 import Button from '@material-ui/core/Button'
 import './index.scss'
-import initialState from './initialState'
+import './tela-acusacao.scss'
+import './tela-fim-jogo.scss'
+import './tela-conversa.scss'
+import './tela-tutorial.scss'
 import AcusationLamp from './components/AcusationLamp'
+import initialState from './initialState'
 import DialogCharacter from './components/DialogCharacter'
 import DialogHistory from './components/DialogHistory'
 import Menu from './components/Menu'
@@ -216,22 +220,27 @@ const Game2 = (props) => {
 			showAnswer: null,
 			dialogHistory: [...state.dialogHistory, {text: state.showAnswer.text, speaker: 'character'}],
 		}
-		console.log('state.showAnswer', state.showAnswer)
-
-		if(state.dialogStep !== state.totalDialogSteps){
-			updateState.answers = state.locations[state.currentRoom].characters
-										.find(c => c.id === state.currentChar.id).selectedQuestions
-										.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
-		}else{
-			if(state.showAnswer && state.showAnswer.stop)
+		if( state.scene === "TUTORIAL" ) {
+			setTimeout(() => { setState({	...state,
+											...updateState,
+											tutorialStep: state.tutorialStep + 1
+										}) }, 3000)
+		} else {
+			if(state.dialogStep !== state.totalDialogSteps){
+				updateState.answers = state.locations[state.currentRoom].characters
+				.find(c => c.id === state.currentChar.id).selectedQuestions
+				.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
+			}else{
+				if(state.showAnswer && state.showAnswer.stop)
 				updateState.showAnswer = null
-			else{
-				if(state.correct < state.correctMinimum){
-					updateState.answers = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
-					updateState.showAnswer = {text: 'Não estou entendendo. Quer começar de novo?', index: 0, stop: true}
-				}
 				else{
-					updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
+					if(state.correct < state.correctMinimum){
+						updateState.answers = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
+						updateState.showAnswer = {text: 'Não estou entendendo. Quer começar de novo?', index: 0, stop: true}
+					}
+					else{
+						updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
+					}
 				}
 			}
 		}
@@ -251,12 +260,14 @@ const Game2 = (props) => {
 
 			let updateState = {
 				dialogHistory: [...state.dialogHistory,
-					answer.question.question,
-					answer.answer
+					{text: answer.question.question, speaker: 'player'}
 				],
-				tutorialStep: state.tutorialStep + 1,
+				showAnswer: {
+					text: answer.answer,
+					index: 0
+				},
 				tips: [
-					'A cabelereira sabe'
+					'A cabelereira sabe.'
 				],
 				answers: []
 			}
@@ -323,6 +334,73 @@ const Game2 = (props) => {
 			dispatch(headerActions.setState(headerConstants.STATES.OVERLAY))
 		}
 	}
+
+	const tutorialScreen = (id) => {
+		let tela = null
+		
+		switch(id) {
+			case 2:
+				tela = (
+					<div id="tutorial-popup-2-wrapper">
+						<div id="tutorial-popup-2-content">
+							<span lang="pt-br"><strong>Lembre-se:</strong> As pessoas estão ocupadas em seus ambientes de trabalho, então tenha certeza de não gastar o tempo delas com perguntas fora de contexto!</span>
+							<span lang="en"><strong>Remember:</strong> People are busy in their workplaces, so be sure not to waste their times with question that are out of yout context!</span>
+							<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
+						</div>
+					</div>
+				)
+				// fallthrough
+
+				case 1:
+					tela = (
+						<div id="conversa" className='DialogPopUp'>
+							<div id="dialog-interact">
+								<div id="dialogos">
+									<DialogHistory dialogHistory={state.dialogHistory}/>
+									<div id='DialogBox'>
+										{state.showAnswer ?
+											<Writer text={state.showAnswer.text}
+												onWritten={afterWriter}
+												afterWrittenTime={3000}
+												characterTime={50}
+											/>
+											:
+											<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+												onButtonClick={onMenuButtonClick}
+											/>
+										}
+									</div>
+								</div>
+								<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
+							</div>
+							{tela}
+						</div>
+					)
+				// fallthrough
+
+				case 0:
+					tela = (
+						<div id="tutorial-screen">
+							<Character
+								character={mission.characters.find(character => character.name === 'Fuyuko')}
+								onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuko'))}
+							/>
+							<div id="tutorial-popup-1">
+								<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
+								<span lang="en">Select someone to talk and help you find your guide.</span>
+							</div>
+							{tela}
+						</div>
+					)
+					break
+
+			default:
+				tela = null
+				break
+		}
+
+		return tela
+	}
 	
 	const restart = (tips) => {
 		setState({...initialState(), tryAgain: true, tips: tips})
@@ -344,15 +422,7 @@ const Game2 = (props) => {
 												onBack={ () => setState({...state, back: true}) }
 											/>
 						case "TUTORIAL":
-							return (
-								<div>
-									Tutorial
-									<Character
-										character={mission.characters.find(character => character.name === 'Fuyuko')}
-										onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuko'))}
-									/>
-								</div>
-							)
+							return ( tutorialScreen(state.tutorialStep) )
 						case "ROOM":
 							return (
 								<div id="room-itself">
@@ -371,6 +441,31 @@ const Game2 = (props) => {
 											/>
 										)}
 									</Sala>
+									{state.currentChar &&
+									<div id="conversa" className='DialogPopUp'>
+										<AcusationLamp onClick={() => setState({...state, acusation: true})} />
+										<div id="fechar" onClick={closeDialog}><span>×</span></div>
+										<div id="dialog-interact">
+											<div id="dialogos">
+												<DialogHistory dialogHistory={state.dialogHistory}/>
+												<div id='DialogBox'>
+													{state.showAnswer ?
+														<Writer text={state.showAnswer.text}
+															onWritten={afterWriter}
+															afterWrittenTime={4000}
+															characterTime={50}
+														/>
+														:
+														<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+															onButtonClick={onMenuButtonClick}
+														/>
+													}
+												</div>
+											</div>
+											<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
+										</div>
+									</div>
+									}
 								</div>)
 							case "ENDGAME":
 								return(
@@ -438,60 +533,6 @@ const Game2 = (props) => {
 								)
 					}
 				}())}
-				{state.tutorialStep === 0 && state.scene === 'TUTORIAL' &&
-					<div style={{position: 'absolute', top: 100, left: 100, width: 500, height: 300, backgroundColor: '#ddddee'}}>
-						<div>
-							Selecione alguém para conversar e te ajudar a encontrar o seu guia.
-						</div>
-						<div>-------</div>
-						<div>
-							Select someone to talk and help you find your guide.
-						</div>
-					</div>
-				}
-				{ state.currentChar && 
-					<div id="conversa" className='DialogPopUp'>
-
-						<AcusationLamp onClick={() => setState({...state, acusation: true})} />
-
-						<div id="fechar" onClick={closeDialog}><span>×</span></div>
-
-						{ state.scene === 'TUTORIAL' && state.tutorialStep === 2 &&
-						<div>
-							<div>
-							Lembre-se: As pessoas então ocupadas em seua ambientes de trabalho, então tenha certeza de não gastar o tempo delas com perguntas fora de contexto!
-						</div>
-						<div>-------</div>
-						<div>
-							Remember: People are busy in their workplaces, so be sure not to waste their time with questions that are out of context!
-						</div>
-						<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
-						</div>
-
-						}
-
-						<div id="dialog-interact">
-							<div id="dialogos">
-								<DialogHistory dialogHistory={state.dialogHistory}/>
-
-								<div id='DialogBox'>
-									{state.showAnswer ?
-										<Writer text={state.showAnswer.text}
-											onWritten={afterWriter}
-											afterWrittenTime={4000}
-											characterTime={50}
-										/>
-										:
-										<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
-											onButtonClick={onMenuButtonClick}
-										/>
-									}
-								</div>
-							</div>
-							<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
-						</div>
-					</div>
-				}
 				{ state.acusation &&
 					<div id="dialog-accusation-wrapper">
 						<div id="dialog-accusation">
