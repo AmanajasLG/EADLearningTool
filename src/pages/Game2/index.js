@@ -206,10 +206,10 @@ const Game2 = (props) => {
 			dialogHistory: [...state.dialogHistory, {text: state.showAnswer.text, speaker: 'character'}],
 		}
 		if( state.scene === "TUTORIAL" ) {
-			updateState = {
-				...updateState,
-				tutorialStep: state.tutorialStep + 1
-			}
+			setTimeout(() => { setState({	...state,
+											...updateState,
+											tutorialStep: state.tutorialStep + 1
+										}) }, 3000)
 		} else {
 			if(state.dialogStep !== state.totalDialogSteps){
 				updateState.answers = state.locations[state.currentRoom].characters
@@ -333,7 +333,7 @@ const Game2 = (props) => {
 										{state.showAnswer ?
 											<Writer text={state.showAnswer.text}
 												onWritten={afterWriter}
-												afterWrittenTime={4000}
+												afterWrittenTime={3000}
 												characterTime={50}
 											/>
 											:
