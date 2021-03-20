@@ -14,6 +14,7 @@ import '../Game2/index.scss'
 import initialState from './initialState.js'
 import stub from './stub.js'
 import './index.scss'
+import Phone from './components/Phone'
 
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -171,71 +172,13 @@ const Game1 = (props) => {
 										{ state.showContacts &&
 											<div id="contacts">
 												<div id="btn-fechar" onClick={onPhoneExitClick}><span>×</span></div>
-												<div id="fullPhone">
-													<p>Lista de contatos</p>
-													<div id="lista-contatos">
-														{// TODO
-														// Assim que contactList estiver implementado, isso aqui deve funcionar
-														/* { state.contactList.map((contact, index)=>
-															<div className="contato" key={index}>
-																<div className="contact-profile-pic">
-																	<img>{contact.pic}</img> // Provavelmente vai ser a mesma para todos, então de onde puxar?
-																	<span>{index}</span>
-																</div>
-																<div className="contact-info">
-																	<div className="name">
-																		<p>Nome</p>
-																		<p>{contact.name}</p>
-																	</div>
-																	<div className="profession">
-																		<p>Profissão</p>
-																		<p>{contact.profession}</p>
-																	</div>
-																	<div className="nationality">
-																		<p>Nacionalidade</p>
-																		<p>{contact.nationality}</p>
-																	</div>
-																</div>
-															</div>
-														) } */}
-														<div id="add-contato" className="contato">
-															<div className="contact-profile-pic">
-																{/* <img></img> Se for para usar a mesma imagem que seria usada lá em cima, tira o div e usa isso */}
-																<div></div>
-																<span>+</span>
-															</div>
-															<div className="contact-info">
-																<div className="name">
-																	<p>Nome</p>
-																	<input type="text" name="nome" placeholder="Nome do contato"></input>
-																</div>
-																<div className="profession">
-																	<p>Profissão</p>
-																	<select name="profissao">
-																		{ /* Melhor ainda se tiver ccomo trazer as opções automaticamente, mesmo que não seja do backend*/ }
-																		<option value="">-- Profissão --</option>
-																		<option value="Cebelereiro">Cabelereiro</option>
-																		<option value="Pintor">Pintor</option>
-																		<option value="Professor">Professor</option>
-																	</select>
-																</div>
-																<div className="nationality">
-																	<p>Nacionalidade</p>
-																	<select name="Nacionalidade">
-																		{ /* Melhor ainda se tiver ccomo trazer as opções automaticamente, mesmo que não seja do backend*/ }
-																		<option value="">-- Nacionalidade --</option>
-																		<option value="Brasileira">Brasileira</option>
-																		<option value="Americana">Americana</option>
-																		<option value="Japonesa">Japonesa</option>
-																		<option value="Finlandesa">Finlandesa</option>
-																	</select>
-																</div>
-															</div>
-															<div id="btn-add-contato" onClick={addContact}>Adicionar contato</div>
-														</div>
-													</div>
-												</div>
-												<div id="btn-terminei">Terminei!</div>
+
+												<Phone addContact={addContact}
+													jobs={["-- Profissão --", "Cabelereiro", "Pintor", "Professor"]}
+													nationalities={["-- Nacionalidade --", "Brasileira", "Americana", "Japonesa", "Finlandesa"]}
+												/>
+
+											<div id="btn-terminei">Terminei!</div>
 											</div>
 										}
 										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }
