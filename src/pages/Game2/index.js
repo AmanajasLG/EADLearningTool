@@ -11,6 +11,7 @@ import './tela-acusacao.scss'
 import './tela-fim-jogo.scss'
 import './tela-conversa.scss'
 import './tela-tutorial.scss'
+import AcusationLamp from './components/AcusationLamp'
 import initialState from './initialState'
 import DialogCharacter from './components/DialogCharacter'
 import DialogHistory from './components/DialogHistory'
@@ -243,7 +244,7 @@ const Game2 = (props) => {
 					answer.answer
 				],
 				tips: [
-					'A cabelereira sabe'
+					'A cabelereira sabe.'
 				],
 				answers: []
 			}
@@ -323,18 +324,18 @@ const Game2 = (props) => {
 							<div id="dialog-interact">
 								<div id="dialogos">
 									<DialogHistory dialogHistory={state.dialogHistory}/>
-									<div id='DialogBox' onClick={ () => { setState({...state, tutorialStep: state.tutorialStep + 1}) }}>
+									<div id='DialogBox'>
 										{state.showAnswer ?
 											<Writer text={state.showAnswer.text}
 												onWritten={afterWriter}
 												afterWrittenTime={4000}
 												characterTime={50}
-												/>
-												:
-												<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+											/>
+											:
+											<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
 												onButtonClick={onMenuButtonClick}
-												/>
-											}
+											/>
+										}
 									</div>
 								</div>
 								<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
@@ -351,14 +352,9 @@ const Game2 = (props) => {
 								character={mission.characters.find(character => character.name === 'Fuyuko')}
 								onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuko'))}
 							/>
-							<div style={{position: 'absolute', top: 100, left: 100, width: 500, height: 300, backgroundColor: '#ddddee'}}>
-								<div>
-									Selecione alguém para conversar e te ajudar a encontrar o seu guia.
-								</div>
-								<div>-------</div>
-								<div>
-									Select someone to talk and help you find your guide.
-								</div>
+							<div id="tutorial-popup-1">
+								<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
+								<span lang="en">Select someone to talk and help you find your guide.</span>
 							</div>
 							{tela}
 						</div>
@@ -384,7 +380,6 @@ const Game2 = (props) => {
 
 	console.log(mission)
 	console.log('state', state)
-	console.log('init', initialState)
 
 	return (
 		<div id="game2-wrapper">
@@ -420,6 +415,31 @@ const Game2 = (props) => {
 											/>
 										)}
 									</Sala>
+									{state.currentChar &&
+									<div id="conversa" className='DialogPopUp'>
+										<AcusationLamp onClick={() => setState({...state, acusation: true})} />
+										<div id="fechar" onClick={closeDialog}><span>×</span></div>
+										<div id="dialog-interact">
+											<div id="dialogos">
+												<DialogHistory dialogHistory={state.dialogHistory}/>
+												<div id='DialogBox'>
+													{state.showAnswer ?
+														<Writer text={state.showAnswer.text}
+															onWritten={afterWriter}
+															afterWrittenTime={4000}
+															characterTime={50}
+														/>
+														:
+														<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+															onButtonClick={onMenuButtonClick}
+														/>
+													}
+												</div>
+											</div>
+											<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
+										</div>
+									</div>
+									}
 								</div>)
 							case "ENDGAME":
 								return(

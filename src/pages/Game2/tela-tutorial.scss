@@ -6,13 +6,59 @@
 	left: 0;
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	padding: 150px 100px 50px 100px;
+	justify-content: flex-start;
+	align-items: flex-end;
+	padding: 30vh 300px 5vh 300px;
 	z-index: 0;
 }
 
 #tutorial-screen .CharDiv {
-	height: fit-content;
-	width: fit-content;
+	flex: 0 1 auto;
+	height: 100%;
+}
+
+#tutorial-screen .CharDiv img {
+	flex: 1 1 auto;
+	object-fit: contain;
+	height: 100%;
+	width: auto;
+}
+
+#tutorial-popup-1 {
+	position: absolute;
+	top: 160px;
+	right: 200px;
+	width: 625px;
+	height: 300px;
+	background-color: #F9AFA1;
+	box-shadow: #44444444 15px 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Barlow';
+	font-size: 2.25rem;
+	line-height: 2.75rem;
+	text-align: center;
+	border-radius: 40px; //TEMPORARIO
+}
+
+#tutorial-popup-1 [lang="pt-br"] {
+	font-weight: 600;
+	padding: 0 30px;
+	margin-bottom: 10px;
+}
+
+#tutorial-popup-1 [lang="en"]::before {
+	content: "";
+	display: block;
+	border-top: 2px solid white;
+	margin: 20px auto;
+	width: 40%;
+}
+
+#tutorial-popup-1 [lang="en"] {
+	font-style: italic;
+	font-size: 0.8em;
+	padding: 0px 110px;
 }
