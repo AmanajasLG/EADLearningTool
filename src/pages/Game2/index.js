@@ -201,6 +201,8 @@ const Game2 = (props) => {
 
 	const afterWriter = () => {
 
+		console.log("chamou afterWriter")
+
 		let updateState = {
 			showAnswer: null,
 			dialogHistory: [...state.dialogHistory, {text: state.showAnswer.text, speaker: 'character'}],
@@ -209,7 +211,7 @@ const Game2 = (props) => {
 			setTimeout(() => { setState({	...state,
 											...updateState,
 											tutorialStep: state.tutorialStep + 1
-										}) }, 3000)
+										}) }, 1500)
 		} else {
 			if(state.dialogStep !== state.totalDialogSteps){
 				updateState.answers = state.locations[state.currentRoom].characters
@@ -329,12 +331,12 @@ const Game2 = (props) => {
 							<div id="dialog-interact">
 								<div id="dialogos">
 									<DialogHistory dialogHistory={state.dialogHistory}/>
-									<div id='DialogBox'>
+									<div id='DialogBox' className={state.showAnswer ? "alternative" : ""}>
 										{state.showAnswer ?
 											<Writer text={state.showAnswer.text}
 												onWritten={afterWriter}
-												afterWrittenTime={3000}
-												characterTime={50}
+												afterWrittenTime={1500}
+												characterTime={48}
 											/>
 											:
 											<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
@@ -420,12 +422,13 @@ const Game2 = (props) => {
 										<div id="dialog-interact">
 											<div id="dialogos">
 												<DialogHistory dialogHistory={state.dialogHistory}/>
-												<div id='DialogBox'>
+												<div id='DialogBox' className={state.showAnswer ? "alternative" : ""}>
 													{state.showAnswer ?
 														<Writer text={state.showAnswer.text}
-															onWritten={afterWriter}
-															afterWrittenTime={4000}
-															characterTime={50}
+															// onWritten={afterWriter}
+															onWritten={() => {console.log("chamando onWritten");afterWriter()}}
+															afterWrittenTime={2000}
+															characterTime={48}
 														/>
 														:
 														<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
