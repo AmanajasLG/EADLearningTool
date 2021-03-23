@@ -6,6 +6,10 @@ const initialValue = {
   endGame: false,
   currentLocationIndex: 0,
   locations:[],
+  jobs:[],
+  countries:[],
+  contactsTemplate:[],
+  contactsAtSession:[],
 //DIALOG
   dialogHistory: [],
   currentChar: null,

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions, headerActions } from '../../_actions'
+import { apiActions } from '../../_actions'
 
 import Init from '../Game2/components/Init'
 import Result from '../Game2/components/Result'
@@ -19,13 +19,13 @@ import Phone from './components/Phone'
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState);
 
-	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
+	const { game_1_missionsActions, play_sessionsActions, player_actionsActions } = apiActions
 	const id = props.match.params.id
 	const dispatch = useDispatch()
 
-	const loading = useSelector( state => state.missions.loading)
-	let error = useSelector( state => state.missions.error)
-	let mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
+	const loading = useSelector( state => state.game_1_missions.loading)
+	let error = useSelector( state => state.game_1_missions.error)
+	let mission = useSelector( state => state.game_1_missions.items.find(mission => mission.id === props.match.params.id))
 	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 
@@ -55,29 +55,54 @@ const Game1 = (props) => {
 	}, [dispatch, currentPlaySession, player_actionsActions, state.tracking])
 
 	React.useEffect(() => {
-		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-	}, [dispatch, id, mission, missionsActions, props.match.params.id])
-
-	//React.useEffect(()=>{
-	//	dispatch(headerTitleActions.showHeader(false))
-	//}, [dispatch, headerTitleActions])
+		if(id && !mission) dispatch(game_1_missionsActions.getById(props.match.params.id))
+		if(mission){
+			let data = {}
+			if(state.locations.length === 0){
+				let perRoom = mission.characters.length
+				data.locations = mission.locations.map((location, index) => {
+					return {
+						...location,
+						characters: mission.characters.slice(perRoom * index, perRoom*index + perRoom),
+					}
+				})
+			}
+			if(state.jobs.length === 0){
+				data.jobs = mission.characters.reduce( (acc, character) => {
+					if(!acc.includes(character.job))
+						acc.push(character.job)
+					return acc
+				}, [])
+			}
+			if(state.countries.length === 0){
+				data.countries = mission.characters.reduce( (acc, character) => {
+					if(!acc.includes(character.country))
+						acc.push(character.country)
+					return acc
+				}, [])
+			}
+			if(state.contactsTemplate.length === 0){
+				data.contactsTemplate = mission.characters.reduce( (acc, character) => {
+					acc.push({id: character.id, name: character.name, country: character.country, job: character.job})
+					return acc
+				}, [])
+				data.contactsAtSession = data.contactsTemplate.map( contact => { return {...contact, job: '', country: ''} })
+			}
+			if(Object.keys(data).length > 0)
+				setState(state => { return {...state, ...data}})
+		}
+	}, [dispatch, id, mission, game_1_missionsActions, props.match.params.id])
 
 	if(error){
 		error = null
 		mission = stub
 	}
 
-	//aplicar lógica de espalhamento de personagens
-	if(mission && state.locations.length === 0){
-		let locations = mission.locations.map( location => { return {location: location, characters: [...mission.characters]} })
-		setState({...state, locations: locations})
-	}
-
 	const onStartGame = (e) => {
 		if(state.tracking){
 			dispatch(play_sessionsActions.create({
-				usersPermissionsUser: userId,
-				mission: mission.id
+				//usersPergame_1_missionsUser: userId,
+				//mission: mission.id
 			}))
 		}
 
@@ -106,10 +131,14 @@ const Game1 = (props) => {
 		setState({...state, showContacts: false})
 	}
 
-	const addContact = () => {
-		// TODO
-		// Pegar nome, profissão e nacionalidade do form,
-		// colocar em state.contactList e limpar o form
+	const modifyContact = (contact) => {
+		let index = state.contactsAtSession.indexOf(state.contactsAtSession.find( c => c.id === contact.id))
+		console.log('changing:', contact)
+		setState({...state,
+			contactsAtSession: [
+				...state.contactsAtSession.slice(0, index), contact, ...state.contactsAtSession.slice(index + 1)
+			]
+		})
 	}
 
 	return (
@@ -130,14 +159,13 @@ const Game1 = (props) => {
 								return (
 									<div>
 										<RoomSelect
-											buttonList={mission.locations.map((location) => location.name)}
+											buttonList={mission.locations.map( location => location.name)}
 											onChange={(buttonIndex) => {
 												setState({...state, currentLocationIndex: buttonIndex})
-												dispatch(headerActions.changeTitle(state.locations[buttonIndex].name))
 											}}
 										/>
 
-										<Sala roomData={state.locations[state.currentLocationIndex]}>
+									<Sala roomData={state.locations[state.currentLocationIndex]}>
 											{state.locations[state.currentLocationIndex].characters.map((character, index) =>
 						            <Character key={index}
 						              character={character}
@@ -173,9 +201,11 @@ const Game1 = (props) => {
 											<div id="contacts">
 												<div id="btn-fechar" onClick={onPhoneExitClick}><span>×</span></div>
 
-												<Phone addContact={addContact}
-													jobs={["-- Profissão --", "Cabelereiro", "Pintor", "Professor"]}
-													nationalities={["-- Nacionalidade --", "Brasileira", "Americana", "Japonesa", "Finlandesa"]}
+												<Phone
+													modifyContact={modifyContact}
+													contacts={state.contactsAtSession}
+													jobs={["-- Profissão --", ...state.jobs]}
+													countries={["-- País --", ...state.countries]}
 												/>
 
 											<div id="btn-terminei">Terminei!</div>

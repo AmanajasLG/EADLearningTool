@@ -9,14 +9,18 @@ const UserSpace = () => {
 
   const user = useSelector(state => state.authentication.user.user)
   const missions = useSelector( state => state.missions)
+  const game1missions = useSelector( state => state.game_1_missions)
   const dispatch = useDispatch()
-  const { missionsActions } = apiActions
+  const { missionsActions, game_1_missionsActions } = apiActions
 
 
   React.useEffect(()=>{
     dispatch(missionsActions.getAll())
   }, [dispatch, missionsActions])
 
+  React.useEffect(()=>{
+    dispatch(game_1_missionsActions.getAll())
+  }, [dispatch, game_1_missionsActions])
 
   return(
     <div id="userspace">
@@ -48,8 +52,8 @@ const UserSpace = () => {
         <p>Missões:</p>
         <Link to={'/game1/0'}>Stub</Link>
         <div id="missoes">
-          {missions.loading ? <div id="loading">Loading...</div> :
-            missions && missions.items.map( (mission, index) =>
+          {game1missions.loading ? <div id="loading">Loading...</div> :
+            game1missions && game1missions.items.map( (mission, index) =>
             <div key={index} className="missao">
               <Link to={`/game1/${mission.id}`}>
                 <div id="imagem"></div>
