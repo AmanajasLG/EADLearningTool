@@ -4,12 +4,13 @@
 	display: flex;
 	justify-content: flex-end;
 	flex-flow: column;
-	align-items: center;
+	align-items: stretch;
 	// margin: 0px 20px;
 	flex: 1 1 auto;
 	min-width: 0;
 	min-height: 0;
 	max-height: 100%;
+	text-align: center;
 }
 
 .CharDiv * {
@@ -32,7 +33,7 @@
 	max-width: 100%;
 }
 
-.CharDiv img:hover {
+.CharDiv:hover img {
 	filter: drop-shadow(8px 4px 0px var(--color-fourth));
 }
 
