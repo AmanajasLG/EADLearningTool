@@ -21,6 +21,7 @@ export default {
   totalDialogSteps: 2,
   questionsByStep: 2,
   currentChar: null,
+  showConvo: false,
   questions: [],
   targetName: 'Leila',
   correct: 0,

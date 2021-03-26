@@ -5,6 +5,14 @@
 	height: 100vh;
 	width: 100vw;
 	background-color: #FFFFFFBB;
+	display: block !important;
+	transition: 100ms ease-in-out;
+}
+
+#conversa[hidden] {
+	opacity: 0;
+	pointer-events: none;
+	transition: 100ms 50ms ease-in-out;
 }
 
 #acusar,
@@ -82,7 +90,13 @@
 	background-color: #F9AFA1;
 }
 
+#conversa[hidden] #dialog-interact {
+	transform: translateY(5%);
+}
+
 #dialog-interact {
+	transform: translateY(0%);
+	transition: 150ms ease-in-out;
 	height: 100%;
 	width: 100%;
 	max-width: 2000px;
