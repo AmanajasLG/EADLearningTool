@@ -2,17 +2,17 @@ import React from 'react'
 import './index.scss'
 import classImage from '../../../../img/pic-people-talk.svg'
 
-const Init = ({name, description, onClose, onStart, onBack}) => {
+const Init = ({name, description, nameTranlate, descriptionTranlate, onClose, onStart, onBack}) => {
     return (
         <div className="main-init-wrapper">
           <div className="inner-content">
             <div name="infos">
               <img className="classImage" src={classImage} alt=""/>
               <h1 className="margin-half-top type-l type-display type-center">{name}</h1>
-              <h1 className="type-m type-display type-center subtitle">Em inglês</h1>
+              <h1 className="type-m type-display type-center subtitle">{nameTranlate.name}</h1>
 
               <h2 className="margin-half-top type-s type-center">{description}</h2>
-              <h2 className="type-s type-center subdescription">Em inglês</h2>
+              <h2 className="type-s type-center subdescription">{descriptionTranlate.description}</h2>
             </div>
             <div id="btns">
               { onBack && <button className="btn btn-center" id="btn-back" onClick={onBack}>Voltar</button> }
