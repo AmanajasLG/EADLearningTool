@@ -10,18 +10,14 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime}) => {
     } else {
       timeoutID = setTimeout( onWritten, afterWrittenTime )
     }
-
     return () => {clearTimeout(timeoutID)}
   })
-
-
 
   return(
   <div id="Writer">
     { state.text.substring(0, state.index) }
   </div>
   )
-
 }
 
 export default Writer
