@@ -27,6 +27,7 @@ import Questionnaires from './pages/Questionnaires'
 import PlaySessions from './pages/PlaySessions'
 import GameContext from './pages/GameContext'
 import { headerConstants } from './_constants'
+import TestPage from './TestPage'
 
 const App = () => {
 
@@ -35,6 +36,9 @@ const App = () => {
 
   let gameMode = useSelector( state => state.header.state ) !== headerConstants.STATES.NORMAL;
 
+  return (
+    <TestPage />
+  );
   return (
     <div className={ "App" + (gameMode? " game-mode" : "")}>
       {/* { alert.message &&

@@ -5,7 +5,7 @@ const Menu = ({buttonList, onButtonClick}) => {
   return(
     <div id='Menu'>
       {buttonList.map( (button,index) =>
-        <Button key={index} onClick={onButtonClick(button)}>{button.text}</Button>
+        <Button key={index} onClick={() => {onButtonClick(button)}}>{button.question}</Button>
         )}
     </div>
   )

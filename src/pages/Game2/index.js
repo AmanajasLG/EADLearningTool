@@ -383,11 +383,11 @@ const Game2 = (props) => {
 					switch(state.scene){
 						case "INIT":
 							return <Init
-												name={mission.name} description={mission.description}
-												onStart={ onStartGame }
-												onBack={ () => setState({...state, back: true}) }
-											/>
-						case "TUTORIAL":
+							name={mission.name} description={mission.description}
+							onStart={ onStartGame }
+							onBack={ () => setState({...state, back: true}) }
+							/>
+							case "TUTORIAL":
 							return ( tutorialScreen(state.tutorialStep) )
 						case "ROOM":
 							return (
