@@ -232,6 +232,7 @@ const Game1 = (props) => {
 
 												<Phone
 													modifyContact={modifyContact}
+													contactsTemplate={state.contactsTemplate}
 													contacts={state.contactsAtSession}
 													jobs={["-- Profissão --", ...state.jobs]}
 													countries={["-- País --", ...state.countries]}

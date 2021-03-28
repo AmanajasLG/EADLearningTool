@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Dropdown = ({onChange, label, optionList, value}) => {
+const Dropdown = ({style, onChange, label, optionList, value}) => {
 
   return(
     <div>
       <p>{label}</p>
-      <select value={value} onChange={onChange}>
+      <select style={style} value={value} onChange={onChange}>
         {optionList.map((option, index) =>
           <option value={option} key={index}>{option}</option>
         )}

@@ -1,7 +1,7 @@
 import React from 'react'
 import Dropdown from '../Dropdown'
 
-const Phone = ({modifyContact, contacts, jobs, countries}) => {
+const Phone = ({modifyContact, contactsTemplate, contacts, jobs, countries}) => {
   return(
     <div id="fullPhone">
       <p>Lista de contatos</p>
@@ -19,12 +19,14 @@ const Phone = ({modifyContact, contacts, jobs, countries}) => {
                 <input type="text" name="nome" placeholder="Nome do contato" value={contact.name} readOnly="readonly" onChange={()=>{}}/>
               </div>
               <Dropdown
+                style={ contact.job === contactsTemplate.find( template => template.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
                 onChange={e => modifyContact({...contact, job: e.target.value}) }
                 label={"Profissão"}
                 value={contact.job}
                 optionList={jobs}
               />
               <Dropdown
+                style={ contact.country === contactsTemplate.find( template => template.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
                 onChange={e => modifyContact({...contact, country: e.target.value})}
                 label={"País"}
                 value={contact.country}
