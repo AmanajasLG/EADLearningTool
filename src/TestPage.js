@@ -7,13 +7,14 @@ const TestPage = () => {
 	if( show )
 	return(
 		<Conversa
+			callAfterEveryMsg = {false}
 			prevDialogHistory = {[
 				{text: "Olá!", speaker: "player"},
 				{text: "Oi! Tudo bem com você?"}
 			]}
 			convOptions = {[
-				{question: "Tudo sim. Qual é seu nome?", answer: "Meu nome é fulana."},
-				{question: "Tudo sim. E com você?", answer: "Tudo ótimo."}
+				{question: "Tudo sim. Qual é seu nome?", answers: ["Ah, que bom que você está bem! Meu nome é fulana augusta da silva borges. E o seu nome, qual que é?"]},
+				{question: "Tudo sim. E com você?", answers: ["Tudo ótimo.", "É sério? Vai falar só isso mesmo?", "Ok então...", "Tchau"]}
 			]}
 			afterWriter = { () => {console.log("afterWriter")} }
 			onExited = { (dialogHistory) => {console.log("onExited");console.log(dialogHistory);setShow(false)} }
