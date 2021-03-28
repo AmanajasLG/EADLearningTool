@@ -1,0 +1,49 @@
+@keyframes openOverlay {
+	0% {opacity: 0%}
+	100% {opacity: 100%}
+}
+
+@keyframes closeOverlay {
+	0% {opacity: 100%}
+	100% {opacity: 0%}
+}
+
+#fullscreen-overlay {
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: #FFFFFFBB;
+	overflow: hidden;
+	opacity: 100%;
+	animation: openOverlay 250ms linear forwards;
+}
+
+#fullscreen-overlay.ExitAnim {
+	animation: closeOverlay 250ms linear forwards;
+}
+
+#fullscreen-overlay-close-btn {
+	position: absolute;
+	cursor: pointer;
+	right: 30px;
+	top: 30px;
+	width: 100px;
+	height: 100px;
+	font-size: 6em;
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding-bottom: 15px;
+	transition: 100ms ease-in-out;
+	overflow: hidden;
+	color: #59316D;
+}
+
+#fullscreen-overlay-close-btn:hover {
+	color: #f9afa1;
+	transform: scale(1.2);
+}

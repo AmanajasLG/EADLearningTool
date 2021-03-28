@@ -50,7 +50,7 @@ const CreateMissionGame1 = (props) => {
       dispatch(apiActions.locationsActions.getAll())
     if(questions.items.length === 0)
       dispatch(apiActions.questionsActions.getAll())
-  }, [dispatch, id, originalMission, questions.items.length, locations.items.length, characters.items.length])
+  }, [dispatch, id, originalMission, questions.items.length, locations.items.length, characters.items.length, game])
 
   const [createCharacter, setCreateCharacter] = React.useState(false)
   const [createLocation, setCreateLocation] = React.useState(false)

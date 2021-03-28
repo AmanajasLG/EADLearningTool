@@ -59,7 +59,8 @@ const Game1 = (props) => {
 	}, [dispatch, currentPlaySession, player_actionsActions, state.tracking])
 
 	React.useEffect(() => {
-		if(id && !mission) dispatch(game_1_missionsActions.getById(props.match.params.id))
+		if(id && !mission)
+			dispatch(game_1_missionsActions.getById(props.match.params.id))
 		if(mission){
 			let data = {}
 			if(state.locations.length === 0){
@@ -71,6 +72,7 @@ const Game1 = (props) => {
 					}
 				})
 			}
+			//list of all available jobs
 			if(state.jobs.length === 0){
 				data.jobs = mission.characters.reduce( (acc, character) => {
 					if(!acc.includes(character.job))
@@ -78,6 +80,7 @@ const Game1 = (props) => {
 					return acc
 				}, [])
 			}
+			//list of all available countries
 			if(state.countries.length === 0){
 				data.countries = mission.characters.reduce( (acc, character) => {
 					if(!acc.includes(character.country))
@@ -85,12 +88,26 @@ const Game1 = (props) => {
 					return acc
 				}, [])
 			}
+			//resume characters as contacts
 			if(state.contactsTemplate.length === 0){
+				//create full contact template
 				data.contactsTemplate = mission.characters.reduce( (acc, character) => {
-					acc.push({id: character.id, name: character.name, country: character.country, job: character.job})
+					acc.push({id: character.id, name: character.name, country: character.country, job: character.job,
+						//looks for mission configuration
+						showJob: character.game_1_mission_characters.length > 0 &&
+										 character.game_1_mission_characters.find(config => config.game_1_mission === mission.id).showJob,
+						showCountry: character.game_1_mission_characters.length > 0 &&
+												 character.game_1_mission_characters.find(config => config.game_1_mission === mission.id).showCountry})
 					return acc
 				}, [])
-				data.contactsAtSession = data.contactsTemplate.map( contact => { return {...contact, job: '', country: ''} })
+
+				//create contact state shown to/ manipulated by to player
+				data.contactsAtSession = data.contactsTemplate.map( contact => {
+					return {...contact,
+						job: contact.showJob? contact.job : '',
+						country: contact.showCountry? contact.showCountry : ''
+					}
+				})
 			}
 			if(Object.keys(data).length > 0)
 				setState(state => { return {...state, ...data}})

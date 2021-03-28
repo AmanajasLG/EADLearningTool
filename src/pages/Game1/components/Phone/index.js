@@ -21,11 +21,13 @@ const Phone = ({modifyContact, contacts, jobs, countries}) => {
               <Dropdown
                 onChange={e => modifyContact({...contact, job: e.target.value}) }
                 label={"Profissão"}
+                value={contact.job}
                 optionList={jobs}
               />
               <Dropdown
                 onChange={e => modifyContact({...contact, country: e.target.value})}
                 label={"País"}
+                value={contact.country}
                 optionList={countries}
               />
             </div>
