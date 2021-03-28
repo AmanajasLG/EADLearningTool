@@ -12,7 +12,9 @@ const initialValue = {
   contactsAtSession:[],
 //DIALOG
   dialogHistory: [],
+  answers: [],
   currentChar: null,
+  characterFeeling: 'init',
   showContacts: false,
 }
 

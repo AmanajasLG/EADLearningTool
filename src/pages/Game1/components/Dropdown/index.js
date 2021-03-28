@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Dropdown = ({onChange, label, optionList, value}) => {
-  const [state, setState] = React.useState(value)
 
   return(
     <div>

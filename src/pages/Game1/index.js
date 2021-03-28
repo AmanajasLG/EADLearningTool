@@ -15,6 +15,10 @@ import initialState from './initialState.js'
 import stub from './stub.js'
 import './index.scss'
 import Phone from './components/Phone'
+import DialogHistory from '../Game2/components/DialogHistory'
+import DialogCharacter from '../Game2/components/DialogCharacter'
+import Menu from '../Game2/components/Menu'
+import Writer from '../Game2/components/Writer'
 
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -26,7 +30,7 @@ const Game1 = (props) => {
 	const loading = useSelector( state => state.game_1_missions.loading)
 	let error = useSelector( state => state.game_1_missions.error)
 	let mission = useSelector( state => state.game_1_missions.items.find(mission => mission.id === props.match.params.id))
-	const userId = useSelector( state => state.authentication.user.user.id )
+	//const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 
 	//Track playerActions
@@ -59,7 +63,7 @@ const Game1 = (props) => {
 		if(mission){
 			let data = {}
 			if(state.locations.length === 0){
-				let perRoom = mission.characters.length
+				let perRoom = Math.floor(mission.characters.length / mission.locations.length)
 				data.locations = mission.locations.map((location, index) => {
 					return {
 						...location,
@@ -91,7 +95,7 @@ const Game1 = (props) => {
 			if(Object.keys(data).length > 0)
 				setState(state => { return {...state, ...data}})
 		}
-	}, [dispatch, id, mission, game_1_missionsActions, props.match.params.id])
+	}, [dispatch, id, mission, game_1_missionsActions, props.match.params.id, state.locations.length, state.contactsTemplate.length, state.countries.length, state.jobs.length])
 
 	if(error){
 		error = null
@@ -108,6 +112,16 @@ const Game1 = (props) => {
 
 		setState({...state, scene: 'ROOM'})
 	}
+
+	const setCurrentChar = (character) => () => {
+
+		setState({...state, currentChar: character,
+			answers: character.answers
+			.filter( answer => mission.questions.find(question => question.id ===  answer.question.id))})
+	}
+
+
+	const afterWriter = () => {}
 
 	const onMenuButtonClick = (answer) => () =>{
 		//
@@ -165,11 +179,11 @@ const Game1 = (props) => {
 											}}
 										/>
 
-									<Sala roomData={state.locations[state.currentLocationIndex]}>
+										<Sala roomData={state.locations[state.currentLocationIndex]}>
 											{state.locations[state.currentLocationIndex].characters.map((character, index) =>
 						            <Character key={index}
 						              character={character}
-						              setCurrentChar={(charData) => () => setState({...state, currentChar: charData})}
+						              onClick={setCurrentChar(character)}
 						            />
 											)}
 										</Sala>
@@ -177,24 +191,22 @@ const Game1 = (props) => {
 										{ state.currentChar &&
 											<div id="conversa" className='DialogPopUp'>
 
-												<Button onClick={() => setState({...state, currentChar: null, dialogHistory: []})}>X</Button>
-
-												<div className='CharacterPortrait' style={{width: 100}}>
-									        {<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[1].image[0].url: ""} alt="portrait" />}
-									        {<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[2].image[0].url : ""} alt="portrait" />}
-									      </div>
-
-												<div className='DialogHistory'>
-													{state.dialogHistory.map((dialog, index)=>
-														<div key={index}>{dialog}</div>
-													)}
+												<Button id='fechar' onClick={() => setState({...state, currentChar: null, dialogHistory: []})}>X</Button>
+												<DialogHistory dialogHistory={state.dialogHistory}/>
+												<div id='DialogBox'>
+													{state.showAnswer ?
+														<Writer text={state.showAnswer.text}
+															onWritten={afterWriter}
+															afterWrittenTime={3000}
+															characterTime={50}
+														/>
+														:
+														<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+															onButtonClick={onMenuButtonClick}
+														/>
+													}
 												</div>
-
-												<div className='Menu'>
-													{state.currentChar.answers.map( (answer,index) =>
-														<Button key={index} onClick={onMenuButtonClick(answer)}>{answer.question.question}</Button>
-													)}
-												</div>
+												<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 											</div>
 										}
 										{ state.showContacts &&

@@ -17,8 +17,9 @@ const CreateMissionGame1 = (props) => {
   const dispatch = useDispatch()
 
   //for edit
+  const game = props && props.match? props.match.params.game : null
   const id = props && props.match ? props.match.params.id : null
-  const originalMission = useSelector( state => id && state.missions.items.length > 0 ? state.missions.items.filter(m => m.id === id)[0] : null )
+  const originalMission = useSelector( state => id && state[game].items.length > 0 ? state[game].items.filter(m => m.id === id)[0] : null )
 
   const characters = useSelector( state => state.characters)
   const locations = useSelector( state => state.locations)
@@ -42,7 +43,7 @@ const CreateMissionGame1 = (props) => {
   //refrashed route
   React.useEffect(() => {
     if(id && !originalMission)
-      dispatch(apiActions.missionsActions.getById(id))
+      dispatch(apiActions[game+"Actions"].getById(id))
     if(characters.items.length === 0)
       dispatch(apiActions.charactersActions.getAll())
     if(locations.items.length === 0)
@@ -57,12 +58,12 @@ const CreateMissionGame1 = (props) => {
 
   const createMission = () => {
     let data = {...state.mission}
-    dispatch(apiActions.missionsActions.create(data))
+    dispatch(apiActions[game+"Actions"].create(data))
   }
 
   const editMission = () => {
     let data = {...state.mission}
-    dispatch(apiActions.missionsActions.update(data))
+    dispatch(apiActions[game+"Actions"].update(data))
   }
 
   const addToMission = (type, data) => () => {
