@@ -11,10 +11,12 @@ const Conversa = ({
 		children,
 		shouldExit = false,
 		showDialogHistory = true,
-		callAfterEveryMsg = false,
+		onClearDialogHistory = null,
+		callAfterWritterForEveryMsg = false,
 		msPerCharacter = 50,
 		waitAfterWritten = 2000,
 		prevDialogHistory = [],
+		charPreSpeech = null,
 		convOptions = [],
 		currentChar = null,
 		charFeeling = null,
@@ -28,6 +30,24 @@ const Conversa = ({
 		answers: null,
 		dialogHistory: prevDialogHistory
 	});
+
+	// Isso PODE causar bug caso mudemos alguém mude charPreSpeech desse componente enquanto o writer faz algo
+	React.useEffect( () => {
+		if( charPreSpeech !== null && charPreSpeech.length > 0 ) {
+			state.currentAnswer = 0
+			state.answers = typeof(charPreSpeech) === "string" ? [charPreSpeech] : charPreSpeech
+		}
+		// eslint-disable-next-line
+	}, [charPreSpeech])
+	
+	// Isso PODE causar bug caso alguém mande limpar enquanto o writer faz algo
+	React.useEffect(() => {
+		if( onClearDialogHistory ) {
+			onClearDialogHistory(state.dialogHistory)
+			state.dialogHistory = []
+		}
+		// eslint-disable-next-line
+	}, [onClearDialogHistory])
 
 	const _querFechar = () => {
 		setState({
@@ -62,11 +82,12 @@ const Conversa = ({
 			...updateState
 		})
 
-		if( callAfterEveryMsg || state.currentAnswer >= state.answers.length-1 )
+		if( callAfterWritterForEveryMsg || state.currentAnswer >= state.answers.length-1 )
 			afterWriter()
 	}
 
 	const _convoChoiceClick = (convoChoosen) => {
+		if( typeof(convoChoosen.answers) === "string" ) convoChoosen.answers = [convoChoosen.answers]
 		setState( {
 			...state,
 			dialogHistory: [
