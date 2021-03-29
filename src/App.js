@@ -35,16 +35,14 @@ const App = () => {
   document.getElementsByTagName('html')[0].className = palette
 
   let gameMode = useSelector( state => state.header.state ) !== headerConstants.STATES.NORMAL;
-/*
+  {/*
   return (
-    <TestPage />
-  );
-  */
-  return (
-    <div className={ "App" + (gameMode? " game-mode" : "")}>
+    <div>
       {/* { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
       }       */}
+  return (
+    <div className={ "App" + (gameMode? " game-mode" : "")}>
       <Router>
         <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn)}} />
         <Switch>
@@ -53,6 +51,7 @@ const App = () => {
           <Route path="/register" component={Register} />
           <Route path="/EADLearningTool" component={Home}/>
           <PrivateRoute exact path="/game1/:id" render={(props) => <GameContext {...props}><Game1 /></GameContext>} />
+          <PrivateRoute exact path="/test" component={TestPage} />
           <PrivateRoute exact path="/game2/:id" render={(props) => <GameContext {...props}><Game2 /></GameContext>} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />
           <PrivateRoute exact path="/missions" component={Missions} />
