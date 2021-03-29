@@ -11,6 +11,7 @@ const Conversa = ({
 		children,
 		shouldExit = false,
 		showDialogHistory = true,
+		callAfterEveryMsg = false,
 		msPerCharacter = 50,
 		waitAfterWritten = 2000,
 		prevDialogHistory = [],
@@ -19,12 +20,12 @@ const Conversa = ({
 		charFeeling = null,
 		afterWriter = () => {},
 		onExited = (dialogHistory) => {},
-		onConvoChoiceMade = (answer) => {},
+		onConvoChoiceMade = (convoChoosen) => {},
 	}) => {
 
 	const [state, setState] = React.useState({
 		querFechar: shouldExit,
-		showAnswer: null,
+		answers: null,
 		dialogHistory: prevDialogHistory
 	});
 
@@ -40,27 +41,42 @@ const Conversa = ({
 	}
 
 	const _afterWriter = () => {
+		let updateState = {}
+		if( state.currentAnswer < state.answers.length-1 ) {
+			updateState = {
+				currentAnswer: state.currentAnswer + 1
+			}
+		} else {
+			updateState = {
+				currentAnswer: null,
+				answers: null
+			}
+		}
+
 		setState({
 			...state,
 			dialogHistory: [
 				...state.dialogHistory,
-				{text: state.showAnswer}
+				{text: state.answers[state.currentAnswer]}
 			],
-			showAnswer: null,
+			...updateState
 		})
-		afterWriter()
+
+		if( callAfterEveryMsg || state.currentAnswer >= state.answers.length-1 )
+			afterWriter()
 	}
 
-	const _convoChoiceClick = (answer) => {
+	const _convoChoiceClick = (convoChoosen) => {
 		setState( {
 			...state,
 			dialogHistory: [
 				...state.dialogHistory,
-				{text: answer.question, speaker: 'player'}
+				{text: convoChoosen.question, speaker: 'player'}
 			],
-			showAnswer: answer.answer
+			answers: convoChoosen.answers,
+			currentAnswer: 0
 		} )
-		onConvoChoiceMade(answer)
+		onConvoChoiceMade(convoChoosen)
 	}
 
 	return (
@@ -68,9 +84,9 @@ const Conversa = ({
 			<div id="dialog-interact" className={state.querFechar ? "ExitAnim" : null}>
 				<div id="dialogos">
 					{showDialogHistory ? <DialogHistory dialogHistory={state.dialogHistory}/> : <div style={{flexGrow: '1'}} />}
-					<div id='dialog-box' className={state.showAnswer ? "alternative" : ""}>
-						{state.showAnswer ?
-							<Writer text={state.showAnswer}
+					<div id='dialog-box' className={state.answers ? "alternative" : ""}>
+						{state.answers ?
+							<Writer text={state.answers[state.currentAnswer]}
 								onWritten={_afterWriter}
 								afterWrittenTime={waitAfterWritten}
 								characterTime={msPerCharacter}
