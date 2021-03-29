@@ -1,7 +1,17 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
+import { headerActions } from './_actions'
+import { headerConstants } from './_constants'
+
 import Conversa from './pages/Game2/components/Conversa'
 
 const TestPage = () => {
+	const dispatch = useDispatch()
+	React.useEffect( () => {
+		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
+		return () => {dispatch(headerActions.setState(headerConstants.STATES.NORMAL))}
+	}, [dispatch] )
+
 	const [show, setShow] = React.useState( true )
 
 	if( show )
@@ -13,7 +23,7 @@ const TestPage = () => {
 				{text: "Oi! Tudo bem com você?"}
 			]}
 			convOptions = {[
-				{question: "Tudo sim. Qual é seu nome?", answers: ["Ah, que bom que você está bem! Meu nome é fulana augusta da silva borges. E o seu nome, qual que é?"]},
+				{question: "Tudo sim. Qual é seu nome?", answers: "Ah, que bom que você está bem! Meu nome é fulana augusta da silva borges. E o seu nome, qual que é?"},
 				{question: "Tudo sim. E com você?", answers: ["Tudo ótimo.", "É sério? Vai falar só isso mesmo?", "Ok então...", "Tchau"]}
 			]}
 			afterWriter = { () => {console.log("afterWriter")} }

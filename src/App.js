@@ -37,9 +37,6 @@ const App = () => {
   let gameMode = useSelector( state => state.header.state ) !== headerConstants.STATES.NORMAL;
 
   return (
-    <TestPage />
-  );
-  return (
     <div className={ "App" + (gameMode? " game-mode" : "")}>
       {/* { alert.message &&
         <div className={`alert ${alert.type}`}>{alert.message}</div>
@@ -52,6 +49,7 @@ const App = () => {
           <Route path="/register" component={Register} />
           <Route path="/EADLearningTool" component={Home}/>
           <PrivateRoute exact path="/game1/:id" render={(props) => <GameContext {...props}><Game1 /></GameContext>} />
+          <PrivateRoute exact path="/test" component={TestPage} />
           <PrivateRoute exact path="/game2/:id" render={(props) => <GameContext {...props}><Game2 /></GameContext>} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />
           <PrivateRoute exact path="/missions" component={Missions} />
