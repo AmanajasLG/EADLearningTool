@@ -140,7 +140,7 @@ const Game1 = (props) => {
 
 	const afterWriter = () => {}
 
-	const onMenuButtonClick = (answer) => () =>{
+	const onMenuButtonClick = (answer) => () => {
 		//
 		//	Aplicar lógica adicional de click nos botões do menu
 		//
@@ -154,13 +154,12 @@ const Game1 = (props) => {
 		})
 	}
 
-	const onPhoneEnterClick = () => {
+	const onPhoneEnterClick = () =>
 		setState({...state, showContacts: true})
-	}
 
-	const onPhoneExitClick = () => {
+
+	const onPhoneExitClick = () =>
 		setState({...state, showContacts: false})
-	}
 
 	const modifyContact = (contact) => {
 		let index = state.contactsAtSession.indexOf(state.contactsAtSession.find( c => c.id === contact.id))
@@ -190,6 +189,7 @@ const Game1 = (props) => {
 								return (
 									<div>
 										<RoomSelect
+											value={state.currentLocationIndex}
 											buttonList={mission.locations.map( location => location.name)}
 											onChange={(buttonIndex) => {
 												setState({...state, currentLocationIndex: buttonIndex})
@@ -233,16 +233,43 @@ const Game1 = (props) => {
 												<Phone
 													modifyContact={modifyContact}
 													contactsTemplate={state.contactsTemplate}
-													contacts={state.contactsAtSession}
+													contacts={state.contactsAtSession.filter(contact =>
+														state.locations[state.currentLocationIndex].characters.find( character => character.id === contact.id)
+													)}
 													jobs={["-- Profissão --", ...state.jobs]}
 													countries={["-- País --", ...state.countries]}
 												/>
 
-											<div id="btn-terminei">Terminei!</div>
+											<div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}>
+												Terminei!
+											</div>
 											</div>
 										}
 										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }
+										{ state.changeRoomPopUp &&
+											<div style={{position: 'absolute', zIndex: 1000}}>
+												<p>Texto Are you sure?</p>
+												<button onClick={() => setState({...state, changeRoomPopUp: false})}>
+													Voltar
+												</button>
+												<button onClick={() => {
+														if(state.currentLocationIndex + 1 < state.locations.length)
+															setState({...state, changeRoomPopUp: false, currentLocationIndex: state.currentLocationIndex + 1, showContacts: false})
+														else {
+															setState({...state, scene: 'ENDGAME'})
+														}
+												}}>
+													Avançar
+												</button>
+											</div>
+										}
 									</div>)
+								case 'ENDGAME':
+									return(
+										<div>
+											Fim de jogo! tela de feedback
+										</div>
+									)
 								default:
 									return(<div>Error</div>)
 						}
