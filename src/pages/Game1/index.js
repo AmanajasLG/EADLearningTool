@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions, headerActions } from '../../_actions'
+import { apiActions } from '../../_actions'
 
 import Init from '../Game2/components/Init'
 import Result from '../Game2/components/Result'
@@ -14,18 +14,23 @@ import '../Game2/index.scss'
 import initialState from './initialState.js'
 import stub from './stub.js'
 import './index.scss'
+import Phone from './components/Phone'
+import DialogHistory from '../Game2/components/DialogHistory'
+import DialogCharacter from '../Game2/components/DialogCharacter'
+import Menu from '../Game2/components/Menu'
+import Writer from '../Game2/components/Writer'
 
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState);
 
-	const { missionsActions, play_sessionsActions, player_actionsActions } = apiActions
+	const { game_1_missionsActions, play_sessionsActions, player_actionsActions } = apiActions
 	const id = props.match.params.id
 	const dispatch = useDispatch()
 
-	const loading = useSelector( state => state.missions.loading)
-	let error = useSelector( state => state.missions.error)
-	let mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
-	const userId = useSelector( state => state.authentication.user.user.id )
+	const loading = useSelector( state => state.game_1_missions.loading)
+	let error = useSelector( state => state.game_1_missions.error)
+	let mission = useSelector( state => state.game_1_missions.items.find(mission => mission.id === props.match.params.id))
+	//const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 
 	//Track playerActions
@@ -54,36 +59,88 @@ const Game1 = (props) => {
 	}, [dispatch, currentPlaySession, player_actionsActions, state.tracking])
 
 	React.useEffect(() => {
-		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-	}, [dispatch, id, mission, missionsActions, props.match.params.id])
+		if(id && !mission)
+			dispatch(game_1_missionsActions.getById(props.match.params.id))
+		if(mission){
+			let data = {}
+			if(state.locations.length === 0){
+				let perRoom = Math.floor(mission.characters.length / mission.locations.length)
+				data.locations = mission.locations.map((location, index) => {
+					return {
+						...location,
+						characters: mission.characters.slice(perRoom * index, perRoom*index + perRoom),
+					}
+				})
+			}
+			//list of all available jobs
+			if(state.jobs.length === 0){
+				data.jobs = mission.characters.reduce( (acc, character) => {
+					if(!acc.includes(character.job))
+						acc.push(character.job)
+					return acc
+				}, [])
+			}
+			//list of all available countries
+			if(state.countries.length === 0){
+				data.countries = mission.characters.reduce( (acc, character) => {
+					if(!acc.includes(character.country))
+						acc.push(character.country)
+					return acc
+				}, [])
+			}
+			//resume characters as contacts
+			if(state.contactsTemplate.length === 0){
+				//create full contact template
+				data.contactsTemplate = mission.characters.reduce( (acc, character) => {
+					acc.push({id: character.id, name: character.name, country: character.country, job: character.job,
+						//looks for mission configuration
+						showJob: character.game_1_mission_characters.length > 0 &&
+										 character.game_1_mission_characters.find(config => config.game_1_mission === mission.id).showJob,
+						showCountry: character.game_1_mission_characters.length > 0 &&
+												 character.game_1_mission_characters.find(config => config.game_1_mission === mission.id).showCountry})
+					return acc
+				}, [])
 
-	//React.useEffect(()=>{
-	//	dispatch(headerTitleActions.showHeader(false))
-	//}, [dispatch, headerTitleActions])
+				//create contact state shown to/ manipulated by to player
+				data.contactsAtSession = data.contactsTemplate.map( contact => {
+					return {...contact,
+						job: contact.showJob? contact.job : '',
+						country: contact.showCountry? contact.showCountry : ''
+					}
+				})
+			}
+			if(Object.keys(data).length > 0)
+				setState(state => { return {...state, ...data}})
+		}
+	}, [dispatch, id, mission, game_1_missionsActions, props.match.params.id, state.locations.length, state.contactsTemplate.length, state.countries.length, state.jobs.length])
 
 	if(error){
 		error = null
 		mission = stub
 	}
 
-	//aplicar lógica de espalhamento de personagens
-	if(mission && state.locations.length === 0){
-		let locations = mission.locations.map( location => { return {location: location, characters: [...mission.characters]} })
-		setState({...state, locations: locations})
-	}
-
 	const onStartGame = (e) => {
 		if(state.tracking){
 			dispatch(play_sessionsActions.create({
-				usersPermissionsUser: userId,
-				mission: mission.id
+				//usersPergame_1_missionsUser: userId,
+				//mission: mission.id
 			}))
 		}
 
 		setState({...state, scene: 'ROOM'})
 	}
 
-	const onMenuButtonClick = (answer) => () =>{
+	const setCurrentChar = (character) => () => {
+
+		setState({...state, currentChar: character,
+			answers: character.answers
+			.filter( answer => mission.questions.find(question => question.id ===  answer.question.id))})
+	}
+
+
+	const afterWriter = () => {}
+
+	const onMenuButtonClick = (answer) => () => {
 		//
 		//	Aplicar lógica adicional de click nos botões do menu
 		//
@@ -97,18 +154,21 @@ const Game1 = (props) => {
 		})
 	}
 
-	const onPhoneEnterClick = () => {
+	const onPhoneEnterClick = () =>
 		setState({...state, showContacts: true})
-	}
 
-	const onPhoneExitClick = () => {
+
+	const onPhoneExitClick = () =>
 		setState({...state, showContacts: false})
-	}
 
-	const addContact = () => {
-		// TODO
-		// Pegar nome, profissão e nacionalidade do form,
-		// colocar em state.contactList e limpar o form
+	const modifyContact = (contact) => {
+		let index = state.contactsAtSession.indexOf(state.contactsAtSession.find( c => c.id === contact.id))
+		console.log('changing:', contact)
+		setState({...state,
+			contactsAtSession: [
+				...state.contactsAtSession.slice(0, index), contact, ...state.contactsAtSession.slice(index + 1)
+			]
+		})
 	}
 
 	return (
@@ -129,10 +189,10 @@ const Game1 = (props) => {
 								return (
 									<div>
 										<RoomSelect
-											buttonList={mission.locations.map((location) => location.name)}
+											value={state.currentLocationIndex}
+											buttonList={mission.locations.map( location => location.name)}
 											onChange={(buttonIndex) => {
 												setState({...state, currentLocationIndex: buttonIndex})
-												dispatch(headerActions.changeTitle(state.locations[buttonIndex].name))
 											}}
 										/>
 
@@ -140,7 +200,7 @@ const Game1 = (props) => {
 											{state.locations[state.currentLocationIndex].characters.map((character, index) =>
 						            <Character key={index}
 						              character={character}
-						              setCurrentChar={(charData) => () => setState({...state, currentChar: charData})}
+						              onClick={setCurrentChar(character)}
 						            />
 											)}
 										</Sala>
@@ -148,98 +208,68 @@ const Game1 = (props) => {
 										{ state.currentChar &&
 											<div id="conversa" className='DialogPopUp'>
 
-												<Button onClick={() => setState({...state, currentChar: null, dialogHistory: []})}>X</Button>
-
-												<div className='CharacterPortrait' style={{width: 100}}>
-									        {<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[1].image[0].url: ""} alt="portrait" />}
-									        {<img src={state.currentChar.characterAssets.length > 0 ? state.currentChar.characterAssets[2].image[0].url : ""} alt="portrait" />}
-									      </div>
-
-												<div className='DialogHistory'>
-													{state.dialogHistory.map((dialog, index)=>
-														<div key={index}>{dialog}</div>
-													)}
+												<Button id='fechar' onClick={() => setState({...state, currentChar: null, dialogHistory: []})}>X</Button>
+												<DialogHistory dialogHistory={state.dialogHistory}/>
+												<div id='DialogBox'>
+													{state.showAnswer ?
+														<Writer text={state.showAnswer.text}
+															onWritten={afterWriter}
+															afterWrittenTime={3000}
+															characterTime={50}
+														/>
+														:
+														<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+															onButtonClick={onMenuButtonClick}
+														/>
+													}
 												</div>
-
-												<div className='Menu'>
-													{state.currentChar.answers.map( (answer,index) =>
-														<Button key={index} onClick={onMenuButtonClick(answer)}>{answer.question.question}</Button>
-													)}
-												</div>
+												<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 											</div>
 										}
 										{ state.showContacts &&
 											<div id="contacts">
 												<div id="btn-fechar" onClick={onPhoneExitClick}><span>×</span></div>
-												<div id="fullPhone">
-													<p>Lista de contatos</p>
-													<div id="lista-contatos">
-														{// TODO
-														// Assim que contactList estiver implementado, isso aqui deve funcionar
-														/* { state.contactList.map((contact, index)=>
-															<div className="contato" key={index}>
-																<div className="contact-profile-pic">
-																	<img>{contact.pic}</img> // Provavelmente vai ser a mesma para todos, então de onde puxar?
-																	<span>{index}</span>
-																</div>
-																<div className="contact-info">
-																	<div className="name">
-																		<p>Nome</p>
-																		<p>{contact.name}</p>
-																	</div>
-																	<div className="profession">
-																		<p>Profissão</p>
-																		<p>{contact.profession}</p>
-																	</div>
-																	<div className="nationality">
-																		<p>Nacionalidade</p>
-																		<p>{contact.nationality}</p>
-																	</div>
-																</div>
-															</div>
-														) } */}
-														<div id="add-contato" className="contato">
-															<div className="contact-profile-pic">
-																{/* <img></img> Se for para usar a mesma imagem que seria usada lá em cima, tira o div e usa isso */}
-																<div></div>
-																<span>+</span>
-															</div>
-															<div className="contact-info">
-																<div className="name">
-																	<p>Nome</p>
-																	<input type="text" name="nome" placeholder="Nome do contato"></input>
-																</div>
-																<div className="profession">
-																	<p>Profissão</p>
-																	<select name="profissao">
-																		{ /* Melhor ainda se tiver ccomo trazer as opções automaticamente, mesmo que não seja do backend*/ }
-																		<option value="">-- Profissão --</option>
-																		<option value="Cebelereiro">Cabelereiro</option>
-																		<option value="Pintor">Pintor</option>
-																		<option value="Professor">Professor</option>
-																	</select>
-																</div>
-																<div className="nationality">
-																	<p>Nacionalidade</p>
-																	<select name="Nacionalidade">
-																		{ /* Melhor ainda se tiver ccomo trazer as opções automaticamente, mesmo que não seja do backend*/ }
-																		<option value="">-- Nacionalidade --</option>
-																		<option value="Brasileira">Brasileira</option>
-																		<option value="Americana">Americana</option>
-																		<option value="Japonesa">Japonesa</option>
-																		<option value="Finlandesa">Finlandesa</option>
-																	</select>
-																</div>
-															</div>
-															<div id="btn-add-contato" onClick={addContact}>Adicionar contato</div>
-														</div>
-													</div>
-												</div>
-												<div id="btn-terminei">Terminei!</div>
+
+												<Phone
+													modifyContact={modifyContact}
+													contactsTemplate={state.contactsTemplate}
+													contacts={state.contactsAtSession.filter(contact =>
+														state.locations[state.currentLocationIndex].characters.find( character => character.id === contact.id)
+													)}
+													jobs={["-- Profissão --", ...state.jobs]}
+													countries={["-- País --", ...state.countries]}
+												/>
+
+											<div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}>
+												Terminei!
+											</div>
 											</div>
 										}
 										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }
+										{ state.changeRoomPopUp &&
+											<div style={{position: 'absolute', zIndex: 1000}}>
+												<p>Texto Are you sure?</p>
+												<button onClick={() => setState({...state, changeRoomPopUp: false})}>
+													Voltar
+												</button>
+												<button onClick={() => {
+														if(state.currentLocationIndex + 1 < state.locations.length)
+															setState({...state, changeRoomPopUp: false, currentLocationIndex: state.currentLocationIndex + 1, showContacts: false})
+														else {
+															setState({...state, scene: 'ENDGAME'})
+														}
+												}}>
+													Avançar
+												</button>
+											</div>
+										}
 									</div>)
+								case 'ENDGAME':
+									return(
+										<div>
+											Fim de jogo! tela de feedback
+										</div>
+									)
 								default:
 									return(<div>Error</div>)
 						}

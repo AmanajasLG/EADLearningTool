@@ -6,14 +6,27 @@
 	left: 0;
 	background-color: #FFFFFF80;
 	z-index: 20;
-	display: flex;
+	// Tive que colocar !important pq o bootstrap está sacaneando com o código
+	display: flex !important;
 	justify-content: center;
 	align-items: center;
+	transition: 100ms cubic-bezier(.5, 0, .5, 1);
+}
+
+#dialog-accusation-wrapper[hidden] {
+	opacity: 0;
+	pointer-events: none;
+	transition: 100ms 50ms cubic-bezier(.5, 0, .5, 1);
+}
+
+#dialog-accusation-wrapper[hidden] #dialog-accusation {
+	transform: scale(0.95);
 }
 
 #dialog-accusation {
-	width: 65vw;
-	height: 50vh;
+	transition: 150ms cubic-bezier(.5, 0, .5, 1);
+	width: 70vw;
+	min-height: 50vh;
 	max-width: 1200px;
 	max-height: 800px;
 	padding: 30px;
@@ -24,6 +37,8 @@
 	justify-content: center;
 	align-items: stretch;
 	position: relative;
+	font-size: 1.5rem;
+	border-radius: 2em;
 }
 
 #dialog-accusation::before {
@@ -58,11 +73,11 @@
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	font-size: 1.5rem;
+	font-size: 1.5em;
 }
 
 #accusation-infos span[lang="pt-br"] {
-	font-family: 'Assistant';
+	font-family: 'Barlow';
 	font-weight: bold;
 }
 
@@ -70,7 +85,7 @@
 	content: "";
 	display: block;
 	margin: 15px 0px;
-	border-bottom: 2px solid #FFCCC9;
+	border-bottom: 2px solid #fdc7b3;
 }
 
 #accusation-infos span[lang="en"] {
@@ -104,12 +119,12 @@
 
 #accusation-btns button {
 	margin: 5px 15px;
-	padding: 7px 20px;
+	padding: 12px 30px;
 	text-transform: unset;
 	transition: 100ms linear;
 	border-radius: 2em;
-	font-family: 'Barlow';
-	font-weight: bold;
+	font-family: 'Barlow ExtraBold';
+	font-size: 1em;
 }
 
 #accusation-btns button:first-child {
@@ -120,7 +135,7 @@
 
 #accusation-btns button:first-child::before {
 	content: "❮";
-	margin-right: 15px;
+	margin-right: 25px;
 }
 
 #accusation-btns button:last-child {
@@ -131,7 +146,7 @@
 
 #accusation-btns button:last-child::after {
 	content: "❯";
-	margin-left: 15px;
+	margin-left: 25px;
 }
 
 #accusation-btns button:hover {
