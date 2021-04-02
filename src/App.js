@@ -4,6 +4,7 @@ import AppHeader from './_components/AppHeader'
 import Home from './pages/Home'
 import Game1 from './pages/Game1'
 import Game2 from './pages/Game2'
+import Game3 from './pages/Game3'
 
 import {
   BrowserRouter as Router,
@@ -35,12 +36,6 @@ const App = () => {
   document.getElementsByTagName('html')[0].className = palette
 
   let gameMode = useSelector( state => state.header.state ) !== headerConstants.STATES.NORMAL;
-  {/*
-  return (
-    <div>
-      {/* { alert.message &&
-        <div className={`alert ${alert.type}`}>{alert.message}</div>
-      }       */}
   return (
     <div className={ "App" + (gameMode? " game-mode" : "")}>
       <Router>
@@ -51,8 +46,9 @@ const App = () => {
           <Route path="/register" component={Register} />
           <Route path="/EADLearningTool" component={Home}/>
           <PrivateRoute exact path="/game1/:id" render={(props) => <GameContext {...props}><Game1 /></GameContext>} />
-          <PrivateRoute exact path="/test" component={TestPage} />
           <PrivateRoute exact path="/game2/:id" render={(props) => <GameContext {...props}><Game2 /></GameContext>} />
+          <PrivateRoute exact path="/game3/:id" render={(props) => <GameContext {...props}><Game3 /></GameContext>} />
+          <PrivateRoute exact path="/test" component={TestPage} />
           <PrivateRoute exact path="/userspace" component={UserSpace} />
           <PrivateRoute exact path="/missions" component={Missions} />
           <PrivateRoute exact path="/questions" component={Questions} />
@@ -68,7 +64,12 @@ const App = () => {
     </div>
   );
 }
-/*
-          <Redirect from="*" to="/login" />
-*/
 export default App;
+
+/*
+return (
+  <div>
+    {/* { alert.message &&
+      <div className={`alert ${alert.type}`}>{alert.message}</div>
+    })
+*/
