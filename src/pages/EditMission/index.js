@@ -15,7 +15,7 @@ const EditMission = ({mission, onDone}) => {
 
   console.log(mission)
 
-  const [charList, setCharList] = React.useState(mission.characters)
+  const [charList, setCharList] = React.useState(mission.missionCharacters)
   const [locationList, setLocationList] = React.useState(mission.locations)
   const [questionList, setQuestionList] = React.useState(mission.questions)
   const characters = useSelector(state => state.characters)

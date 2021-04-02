@@ -80,8 +80,6 @@ function handleResponse(response) {
       return Promise.reject(response.statusText)
   }
 
-  console.log('satanas pelado', response.data)
-
   return response.data
 }
 

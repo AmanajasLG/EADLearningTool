@@ -30,6 +30,7 @@ const Game2 = (props) => {
 	let mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
 	const loading = useSelector( state => state.missions.loading)
 	const userId = useSelector( state => state.authentication.user.user.id )
+	const lang = useSelector( state => state.authentication.user.user.language )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
 	const hasPlayed = useSelector( state => state.user_game_results.items.length > 0)
@@ -37,8 +38,8 @@ const Game2 = (props) => {
 	let tipsCount
 
 	if(mission)
-		tipsCount = mission.characters.filter(character => {
-		return character.tip
+		tipsCount = mission.missionCharacters.filter(missionCharacter => {
+		return missionCharacter.tip
 	}).length
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init', preSpeech: null }
 
@@ -112,8 +113,8 @@ const Game2 = (props) => {
 
 	if(mission && state.locations.length === 0){
 		// safe copies
-		let availableCharacters = mission.characters.slice(0)
-		let locations = mission.locations.map( location => { return {location: location, characters: []} })
+		let availableCharacters = mission.missionCharacters.slice(0)
+		let locations = mission.locations.map( location => { return {location: location, missionsCharacters: []} })
 
 		//distribute on locations
 		while(availableCharacters.length > 0){
@@ -145,9 +146,7 @@ const Game2 = (props) => {
 		    selectedQuestions[3] = temp
 		  }
 
-			console.log('selectedQuestions:', selectedQuestions)
-
-			locations[locationIndex].characters = [...locations[locationIndex].characters,
+			locations[locationIndex].missionsCharacters = [...locations[locationIndex].missionsCharacters,
 				{...availableCharacters[characterIndex],
 					selectedQuestions
 				}
@@ -203,6 +202,9 @@ const Game2 = (props) => {
 		{...state,
 			showConvo: true,
 			currentChar: character,
+			answers: state.locations[state.currentRoom].missionsCharacters
+										.find(mc => mc.character.id === character.id).selectedQuestions
+										.slice(0, state.questionsByStep),
 			convOptions: state.locations[state.currentRoom].characters
 										.find(c => c.id === character.id).selectedQuestions
 										.slice(0, state.questionsByStep)
@@ -226,8 +228,9 @@ const Game2 = (props) => {
 		} else {
 			let updateState = {}
 			if(state.dialogStep !== state.totalDialogSteps){
-				updateState.convOptions = state.locations[state.currentRoom].characters
-				.find(c => c.id === state.currentChar.id).selectedQuestions
+				updateState.answers = state.locations[state.currentRoom].missionsCharacters
+				.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
+
 				.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
 			}else{
 				if(state.correct < state.correctMinimum){
@@ -344,8 +347,8 @@ const Game2 = (props) => {
 		return (
 			<div id="tutorial-screen">
 				<Character
-					character={mission.characters.find(character => character.name === 'Fuyuko')}
-					onClick={setTutorialCharacter(mission.characters.find(character => character.name === 'Fuyuko'))}
+					character={mission.missionCharacters.find(character => character.name === 'Fuyuko').character}
+					onClick={setTutorialCharacter(mission.missionCharacters.find(character => character.name === 'Fuyuko').character)}
 				/>
 				<div id="tutorial-popup-1">
 					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
@@ -389,6 +392,8 @@ const Game2 = (props) => {
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
+	console.log(mission)
+
 	return (
 		<div id="game2-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
@@ -399,11 +404,14 @@ const Game2 = (props) => {
 					switch(state.scene){
 						case "INIT":
 							return <Init
-							name={mission.name} description={mission.description}
-							onStart={ onStartGame }
-							onBack={ () => setState({...state, back: true}) }
-							/>
-							case "TUTORIAL":
+												name={mission.name} description={mission.description}
+												nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
+												descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
+												onStart={ onStartGame }
+												onBack={ () => setState({...state, back: true}) }
+											/>
+						case "TUTORIAL":
+
 							return ( tutorialScreen(state.tutorialStep) )
 						case "ROOM":
 							return (
@@ -416,10 +424,10 @@ const Game2 = (props) => {
 									/>
 
 									<Sala roomData={state.locations[state.currentRoom]}>
-										{state.locations[state.currentRoom].characters.map((character, index) =>
+										{state.locations[state.currentRoom].missionsCharacters.map((missionsCharacter, index) =>
 											<Character key={index}
-												character={character}
-												onClick={setCurrentCharacter(character)}
+												character={missionsCharacter.character}
+												onClick={setCurrentCharacter(missionsCharacter.character)}
 											/>
 										)}
 									</Sala>
