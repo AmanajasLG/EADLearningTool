@@ -5,16 +5,21 @@ import AddIcon from '@material-ui/icons/Add'
 import RemoveIcon from '@material-ui/icons/Remove'
 import Button from '@material-ui/core/Button'
 
-import Character from '../Character'
 import CreateCharacter from '../CreateCharacter'
 import CreateLocation from '../CreateLocation'
 import Question from '../Question'
 import CreateQuestion from '../CreateQuestion'
+import EditMissionCharacter from './components/EditMissionCharacter'
+import EditNewMissionCharacter from './components/EditNewMissionCharacter'
+import missionCharacterInitialState from './missionCharacterInitialState'
+
+// import { useAlert } from 'react-alert'
 
 import { apiActions } from '../../_actions'
 
 const CreateMissionGame1 = (props) => {
   const dispatch = useDispatch()
+  // const alert = useAlert()
 
   //for edit
   const id = props && props.match ? props.match.params.id : null
@@ -28,11 +33,14 @@ const CreateMissionGame1 = (props) => {
     mission: {
       name: '',
       description: '',
-      characters: [],
+      missionCharacters: [],
       locations: [],
       questions:[]
     },
-    characterDetails: null
+    charactersList: [],
+    charactersConfigList: [],
+    characterConfig: null,
+    newCharacterConfig: null,
   })
 
   //for edit
@@ -56,13 +64,35 @@ const CreateMissionGame1 = (props) => {
   const [createQuestion, setCreateQuestion] = React.useState(false)
 
   const createMission = () => {
-    let data = {...state.mission}
+    let data = {...state.mission, 
+      missionCharacters: state.mission.missionCharacters.map(missionCharacter => {
+        return missionCharacter.id
+      }),
+      missionCharactersCreate: [...state.charactersConfigList, ...state.charactersList]
+    }
+
+    state.charactersConfigList = []
+    state.charactersList = []
+
     dispatch(apiActions.missionsActions.create(data))
   }
 
   const editMission = () => {
-    let data = {...state.mission}
+    // state.mission.missionCharacters = [...state.mission.missionCharacters]
+    // state.charactersConfigList = []
+    // state.charactersList = []
+    let data = {...state.mission, 
+      missionCharacters: state.mission.missionCharacters.map(missionCharacter => {
+        return missionCharacter.id
+      }),
+      missionCharactersCreate: [...state.charactersConfigList, ...state.charactersList]
+    }
+
+    state.charactersConfigList = [] 
+    state.charactersList = []
+
     dispatch(apiActions.missionsActions.update(data))
+    
   }
 
   const addToMission = (type, data) => () => {
@@ -70,12 +100,43 @@ const CreateMissionGame1 = (props) => {
   }
 
   const removeFromMission = (type, data) => () => {
-    setState({...state, mission: {...state.mission, [type]: state.mission[type].filter(d => d.id !== data.id)}})
+      setState({...state, mission: {...state.mission, [type]: state.mission[type].filter(d => d.id !== data.id)}})
   }
 
-  const viewDetails = (character) => () => {
-    setState({...state, characterDetails: character})
+  const editCharacterConfig = (character) => () => {
+    setState({...state, characterConfig: character})
   }
+
+  const createCharacterConfig = (character) => () => {
+    setState({...state, newCharacterConfig: character})
+  }
+
+  const cancelCharacterConfig = () => () => {
+    setState({...state, characterConfig: null, newCharacterConfig: null})
+  }
+
+  const addCharacterToList = (character) => () => {
+    setState({...state, charactersList: [...state.charactersList, missionCharacterInitialState(character)]})
+  }
+
+  const removeCharacterFromList = (character) => () => {
+    setState({...state, charactersList: state.charactersList.filter(d => d.character.id !== character.character.id)})
+  }
+
+  const removeCharacterFromConfigList = (character) => () => {
+    setState({...state, charactersConfigList: state.charactersList.filter(d => d.character.id !== character.character.id)})
+  }
+
+  const updateCharacterConfig = (character) => () => {
+    dispatch(apiActions.mission_charactersActions.update(character))
+    setState({...state, characterConfig: null})
+  }
+
+  const addCharacterConfig = (missionCharacter) => () => {
+    setState({...state, charactersConfigList: [...state.charactersConfigList, missionCharacter], charactersList: state.charactersList.filter(d => d.character.id !== missionCharacter.character.id), newCharacterConfig: null})
+  }
+
+  console.log(state)
 
   return(
     <div>
@@ -103,12 +164,31 @@ const CreateMissionGame1 = (props) => {
 
           <div>
             <div>Personagens na missão:</div>
-            {state.mission.characters.map( ( character, index) =>
+            {state.mission.missionCharacters.map( ( missionCharacter, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                <Button onClick={removeFromMission('characters', character)}><RemoveIcon /></Button>
-                <Button onClick={viewDetails(character)}>
-                  {character.name}
+                <Button onClick={removeFromMission('missionCharacters', missionCharacter)}><RemoveIcon /></Button>
+                <Button onClick={editCharacterConfig(missionCharacter)}>
+                  {missionCharacter.character.name}
                 </Button>
+              </div>
+            )}
+            {state.charactersConfigList.map( ( missionCharacter, index) =>
+              <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
+                <Button onClick={removeCharacterFromConfigList('missionCharacters', missionCharacter)}><RemoveIcon /></Button>
+                <Button onClick={editCharacterConfig(missionCharacter)}>
+                  {missionCharacter.character.name}
+                </Button>
+              </div>
+            )}
+            {state.charactersList.map( ( character, index) =>
+              <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
+                <Button onClick={removeCharacterFromList(character)}><RemoveIcon /></Button>
+                <Button onClick={createCharacterConfig(character)}>
+                  {character.character.name}
+                </Button>
+                {state.charactersList.indexOf(character) !== -1 ? <div >!
+                  <span>This character has no config!</span>
+                </div> : null}
               </div>
             )}
           </div>
@@ -138,13 +218,13 @@ const CreateMissionGame1 = (props) => {
           <div>
             <div>Personagens disponíveis</div>
             {characters.items && characters.items.length > 0 && characters.items
-              .filter( character => !state.mission.characters.find( c => c.id === character.id) )
+              .filter( character => !state.mission.missionCharacters.find( c => c.character.id === character.id) && !state.charactersList.find( c => c.character.id === character.id) && !state.charactersConfigList.find( c => c.character.id === character.id))
               .map( (character, index) =>
               <div key={index} style={{display: 'flex', flexDirection: 'row'}}>
-                <Button onClick={addToMission('characters', character)}>
+                <Button onClick={addCharacterToList(character)}>
                   <AddIcon />
                 </Button>
-                <Button onClick={viewDetails(character)}>
+                <Button onClick={editCharacterConfig(character)}>
                   {character.name}
                 </Button>
               </div>
@@ -194,7 +274,8 @@ const CreateMissionGame1 = (props) => {
 
         <div>
           <h5>Detalhes do personagem:</h5>
-          {state.characterDetails && <Character character={state.characterDetails}/>}
+          {state.characterConfig && <EditMissionCharacter missionCharacter={state.characterConfig} onDone={updateCharacterConfig} questions={state.mission.questions} cancel={cancelCharacterConfig}/>}
+          {state.newCharacterConfig && <EditNewMissionCharacter character={state.newCharacterConfig} onDone={addCharacterConfig} questions={state.mission.questions} cancel={cancelCharacterConfig}/>}
         </div>
 
       </div>
