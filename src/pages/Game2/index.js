@@ -381,8 +381,8 @@ const Game2 = (props) => {
 					tela = (
 						<div id="tutorial-screen">
 							<Character
-								character={mission.missionCharacters.find(missionCharacter => missionCharacter.character.name === 'Fuyuko')}
-								onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacter => missionCharacter.character.name === 'Fuyuko'))}
+								character={mission.missionCharacters.find(missionCharacter => missionCharacter.character.name === 'Fuyuko').character}
+								onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacter => missionCharacter.character.name === 'Fuyuko').character)}
 							/>
 							<div id="tutorial-popup-1">
 								<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
@@ -405,6 +405,8 @@ const Game2 = (props) => {
 		setState({...initialState(), tryAgain: true, tips: tips})
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
+
+	console.log(mission)
 
 	return (
 		<div id="game2-wrapper">
