@@ -18,6 +18,7 @@ import DialogHistory from './components/DialogHistory'
 import Menu from './components/Menu'
 import Writer from './components/Writer'
 import { headerConstants } from '../../_constants'
+import Conversa from './components/Conversa'
 
 const Game2 = (props) => {
 
@@ -39,7 +40,7 @@ const Game2 = (props) => {
 		tipsCount = mission.characters.filter(character => {
 		return character.tip
 	}).length
-	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init' }
+	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init', preSpeech: null }
 
 	React.useEffect(()=>{
 		if(mission)
@@ -184,7 +185,7 @@ const Game2 = (props) => {
 				tutorialStep: state.tutorialStep + 1,
 				showConvo: true,
 				currentChar: character,
-				answers:
+				convOptions:
 				[
 					{
 						answer: 'Olha, não sei quem você está procurando, cheguei aqui semana passada. A cabelereira deve saber!',
@@ -202,123 +203,114 @@ const Game2 = (props) => {
 		{...state,
 			showConvo: true,
 			currentChar: character,
-			answers: state.locations[state.currentRoom].characters
+			convOptions: state.locations[state.currentRoom].characters
 										.find(c => c.id === character.id).selectedQuestions
 										.slice(0, state.questionsByStep)
 		})
 
-
-	const closeDialog = () => {
-		let updateState = {
+	const closeDialog = (dialogHistory) => {
+		setState({
+			...state,
 			showConvo: false,
+			currentChar: null,
 			...dialogInitialState
-		}
-		setState({...state, ...updateState})
-		setTimeout( () => {setState({...state, ...updateState, currentChar: null})}, 151 )
+		})
 	}
 
-	const refreshDialog = () =>
-		setState({...state, ...dialogInitialState,
-			answers: state.locations[state.currentRoom].characters
-									.find(c => c.id === state.currentChar.id).selectedQuestions
-									.slice(0, state.questionsByStep)})
-
 	const afterWriter = () => {
-
-		console.log("chamou afterWriter")
-
-		if(state.showConvo) {
-			let updateState = {
-				showAnswer: null,
-				dialogHistory: [...state.dialogHistory, {text: state.showAnswer.text, speaker: 'character'}],
-			}
-			if( state.scene === "TUTORIAL" ) {
-				setTimeout(() => { setState({	...state,
-												...updateState,
-												tutorialStep: state.tutorialStep + 1
-											}) }, 1500)
-			} else {
-				if(state.dialogStep !== state.totalDialogSteps){
-					updateState.answers = state.locations[state.currentRoom].characters
-					.find(c => c.id === state.currentChar.id).selectedQuestions
-					.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
-				}else{
-					if(state.showAnswer && state.showAnswer.stop)
-					updateState.showAnswer = null
-					else{
-						if(state.correct < state.correctMinimum){
-							updateState.answers = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
-							updateState.showAnswer = {text: 'Não estou entendendo. Quer começar de novo?', index: 0, stop: true}
-						}
-						else{
-							updateState.answers = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
-						}
-					}
+		if( state.scene === "TUTORIAL" ) {
+			setTimeout(() => { setState({
+				...state,
+				tutorialStep: state.tutorialStep + 1
+			}) }, 1500)
+		} else {
+			let updateState = {}
+			if(state.dialogStep !== state.totalDialogSteps){
+				updateState.convOptions = state.locations[state.currentRoom].characters
+				.find(c => c.id === state.currentChar.id).selectedQuestions
+				.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
+			}else{
+				if(state.correct < state.correctMinimum){
+					updateState.preSpeech = ["Não estou entendendo. Quer começar de novo?"]
+					updateState.convOptions = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
+				} else {
+					updateState.convOptions = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
 				}
 			}
 			setState({...state, ...updateState})
 		}
+	}
+
+	const onRefreshDialog = () => {
+		setState({
+			...state,
+			refreshDialog: null
+		})
 	}
 
 	const onMenuButtonClick = (answer) => () =>{
+		let updateState = {}
+
+		if(answer.tip)
+			updateState = {...updateState, tips: [...state.tips, answer.tip]}
 
 		if(answer.refresh)
-			refreshDialog()
-		else if(answer.close){
-			if(answer.tip)
-				setState({...state, tips: [...state, answer.tip]})
-			closeDialog()
-		}else if (state.scene === "TUTORIAL"){
-			state.characterFeeling = 'wrongQuestion'
-
-			let updateState = {
-				dialogHistory: [...state.dialogHistory,
-					{text: answer.question.question, speaker: 'player'}
-				],
-				showAnswer: {
-					text: answer.answer,
-					index: 0
-				},
-				tips: [
-					'A cabelereira sabe.'
-				],
-				answers: []
+			updateState = {
+				...updateState,
+				...dialogInitialState,
+				refreshDialog: onRefreshDialog,
+				convOptions: state.locations[state.currentRoom].characters
+										.find(c => c.id === state.currentChar.id).selectedQuestions
+										.slice(0, state.questionsByStep)
 			}
-
-			setState({...state, ...updateState})
-
-		}else{
-
-			if (state.spokenCharacters.indexOf(state.currentChar.name))
-				state.spokenCharacters.push(state.currentChar.name)
-
-			//change character face
-			if(answer.question.correct){
-				if(state.validQuestions.hasOwnProperty(answer.question.question)){
-					state.validQuestions[answer.question.question]++
-				} else {
-					state.validQuestions[answer.question.question] = 0
+		else if(answer.close)
+			updateState = {...updateState, shouldCloseConvo: true}
+		else {
+			if (state.scene === "TUTORIAL"){
+				updateState = {
+					...updateState,
+					characterFeeling: 'wrongQuestion',
+					// ? Pq isso está sendo adicionado aqui? Isso é tip pro jogo real?
+					// ? Se sim, ele deveria ir em setTutorialCharacter pq faz mais sentido
+					tips: [
+						'A cabelereira sabe.'
+					],
+					convOptions: []
 				}
-				state.characterFeeling = 'rightQuestion'
 			} else {
-				state.characterFeeling = 'wrongQuestion'
-			}
+				updateState = {
+					...updateState,
+					spokenCharacters: state.spokenCharacters,
+					validQuestions: state.validQuestions,
+					characterFeeling: null
+				}
+				// ? Não era para ser negado isso não? "!updateState.[...]"?
+				// ? Pelo que entendi do que isso deveria fazer é colocar na lista o personagem
+				// ? somente se o jogador ainda não falou com ele
+				if (updateState.spokenCharacters.indexOf(updateState.currentChar.name))
+					updateState.spokenCharacters.push(updateState.currentChar.name)
 
-			let updateState = {
-				dialogHistory: [...state.dialogHistory,
-					{text: answer.question.question, speaker: 'player'}
-				],
-				dialogStep: state.dialogStep + 1,
-				correct: state.correct + (answer.question.correct? 1 : 0),
-				showAnswer: {
-					text: answer.answer,
-					index: 0
+				//change character face
+				if(answer.question.correct){
+					if(updateState.validQuestions.hasOwnProperty(answer.question.question)){
+						updateState.validQuestions[answer.question.question]++
+					} else {
+						updateState.validQuestions[answer.question.question] = 0
+					}
+					updateState.characterFeeling = 'rightQuestion'
+				} else {
+					updateState.characterFeeling = 'wrongQuestion'
 				}
 			}
 
-			// e então atualiza
-			setState({...state, ...updateState})
+			updateState = {
+				...updateState,
+				dialogStep: state.dialogStep + 1,
+				correct: state.correct + (answer.question.correct? 1 : 0)
+			}
 		}
+
+		setState({...state, ...updateState})
 	}
 
 	const checkEnd = () => {
@@ -371,8 +363,8 @@ const Game2 = (props) => {
 										characterTime={48}
 									/>
 								}
-								{!(state.showAnswer) && !(state.answers == null) &&
-									<Menu buttonList={ state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, []) }
+								{!(state.showAnswer) && !(state.convOptions == null) &&
+									<Menu buttonList={ state.convOptions.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, []) }
 									onButtonClick={onMenuButtonClick}
 									/>
 								}
@@ -431,7 +423,23 @@ const Game2 = (props) => {
 											/>
 										)}
 									</Sala>
-									<div id="conversa" className='DialogPopUp' hidden={!state.showConvo} aria-hidden={!state.showConvo}>
+									{state.showConvo &&
+										<Conversa
+											shouldExit={state.shouldCloseConvo}
+											prevDialogHistory={[]}
+											clearDialogHistory={state.refreshDialog}
+											charPreSpeech={null}
+											convOptions={state.convOptions.reduce((acc, convOption) => { return [...acc, {...convOption, answers:convOption.answer, question: convOption.question.question} ] }, [])}
+											currentChar={state.currentChar}
+											charFeeling={state.characterFeeling}
+											afterWriter={afterWriter}
+											onExited={closeDialog}
+											onConvoChoiceMade={onMenuButtonClick}
+										>
+											<AcusationLamp onClick={() => setState({...state, acusation: true})} />
+										</Conversa>
+									}
+									{/* <div id="conversa" className='DialogPopUp' hidden={!state.showConvo} aria-hidden={!state.showConvo}>
 										<AcusationLamp onClick={() => setState({...state, acusation: true})} />
 										<div id="fechar" onClick={closeDialog}><span>×</span></div>
 										<div id="dialog-interact">
@@ -445,7 +453,7 @@ const Game2 = (props) => {
 															characterTime={48}
 														/>
 														:
-														<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
+														<Menu buttonList={state.convOptions.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
 															onButtonClick={onMenuButtonClick}
 														/>
 													}
@@ -453,7 +461,7 @@ const Game2 = (props) => {
 											</div>
 											<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 										</div>
-									</div>
+									</div> */}
 								</div>)
 							case "ENDGAME":
 								return(
