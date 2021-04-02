@@ -10,9 +10,13 @@ import CreateCharacter from '../CreateCharacter'
 import CreateLocation from '../CreateLocation'
 import Question from '../Question'
 import CreateQuestion from '../CreateQuestion'
+import CreateGame1Data from './Game1Data'
+import Game2Data from './Game2Data'
+
 
 import { apiActions } from '../../_actions'
 
+//used for game 1 and 2 coincident data
 const CreateMissionGame1 = (props) => {
   const dispatch = useDispatch()
 
@@ -133,6 +137,13 @@ const CreateMissionGame1 = (props) => {
               </div>
             )}
           </div>
+            {game === 'game_1_missions' &&
+              <CreateGame1Data data={state.mission.game_1_mission_characters} characters={state.mission.characters}
+                onChangeCharacter={()=>{}} onJobCheckChange={()=>{}} onCountryCheckChange={()=>{}}/>
+            }
+            {game === 'game2' &&
+              <Game2Data />
+            }
         </div>
 
         <div>
@@ -199,7 +210,6 @@ const CreateMissionGame1 = (props) => {
         </div>
 
       </div>
-
     </div>
   )
 }
