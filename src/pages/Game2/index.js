@@ -192,7 +192,6 @@ const Game2 = (props) => {
 										.find(c => c.id === character.id).selectedQuestions
 										.slice(0, state.questionsByStep)
 		})
-
 	
 	const closeDialog = (dialogHistory) => {
 		setState({
@@ -205,7 +204,8 @@ const Game2 = (props) => {
 
 	const afterWriter = () => {
 		if( state.scene === "TUTORIAL" ) {
-			setTimeout(() => { setState({	...state,
+			setTimeout(() => { setState({
+				...state,
 				tutorialStep: state.tutorialStep + 1
 			}) }, 1500)
 		} else {
@@ -255,6 +255,8 @@ const Game2 = (props) => {
 				updateState = {
 					...updateState,
 					characterFeeling: 'wrongQuestion',
+					// ? Pq isso está sendo adicionado aqui? Isso é tip pro jogo real?
+					// ? Se sim, ele deveria ir em setTutorialCharacter pq faz mais sentido
 					tips: [
 						'A cabelereira sabe.'
 					],
@@ -267,6 +269,9 @@ const Game2 = (props) => {
 					validQuestions: state.validQuestions,
 					characterFeeling: null
 				}
+				// ? Não era para ser negado isso não? "!updateState.[...]"?
+				// ? Pelo que entendi do que isso deveria fazer é colocar na lista o personagem
+				// ? somente se o jogador ainda não falou com ele
 				if (updateState.spokenCharacters.indexOf(updateState.currentChar.name))
 					updateState.spokenCharacters.push(updateState.currentChar.name)
 	

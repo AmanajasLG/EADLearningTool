@@ -16,6 +16,7 @@
 	bottom: 0;
 	left: 0;
 	background-color: #FFFFFFBB;
+	background-color: rgba(#FFFFFF, var(--bgOpacity));
 	overflow: hidden;
 	opacity: 100%;
 	animation: openOverlay 250ms linear forwards;
