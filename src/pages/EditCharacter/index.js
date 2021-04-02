@@ -34,11 +34,35 @@ const EditCharacter = ({character, onDone}) => {
   return(
     <div>
       <div>
-        <input type='text' value={state.name} onChange={ e => setState({...state, name: e.target.value}) }/>
-        <input type='text' value={state.job} onChange={ e => setState({...state, job: e.target.value}) } />
+        <div>
+          Name:<input type='text' value={state.name} onChange={ e => setState({...state, name: e.target.value}) }/>
+        </div>
+        <div>
+          Job:<input type='text' value={state.job} onChange={ e => setState({...state, job: e.target.value}) } />
+        </div>
+        <div>
+          Country:<input type='text' value={state.country} onChange={ e => setState({...state, country: e.target.value}) } />
+        </div>
         <div>{character.civilState}</div>
         <div>
-          <div>Missões que participa:</div>
+          <div>JOGO 1 - Missões que participa:</div>
+          {character.game_1_missions.map((mission, mIndex) =>
+            <div key={mIndex}>
+              <div>{mIndex+1}: {mission.name}</div>
+              <div>
+                {mission.questions.map( (question, qIndex) =>
+                  <div key={qIndex}>
+                    <div>{question.question}</div>
+                    <input type='text' value={getAnswer(question.id)}
+                      onChange={editAnswer(question, qIndex)} placeholder='Resposta'/>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+        <div>
+          <div>JOGO 2 - Missões que participa:</div>
           {character.missions.map((mission, mIndex) =>
             <div key={mIndex}>
               <div>{mIndex+1}: {mission.name}</div>
