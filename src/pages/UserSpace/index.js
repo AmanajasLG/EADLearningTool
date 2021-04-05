@@ -10,8 +10,9 @@ const UserSpace = () => {
   const user = useSelector(state => state.authentication.user.user)
   const missions = useSelector( state => state.missions)
   const game1missions = useSelector( state => state.game_1_missions)
+  const game3missions = useSelector( state => state.game_3_missions)
   const dispatch = useDispatch()
-  const { missionsActions, game_1_missionsActions } = apiActions
+  const { missionsActions, game_1_missionsActions, game_3_missionsActions } = apiActions
 
 
   React.useEffect(()=>{
@@ -21,6 +22,10 @@ const UserSpace = () => {
   React.useEffect(()=>{
     dispatch(game_1_missionsActions.getAll())
   }, [dispatch, game_1_missionsActions])
+
+    React.useEffect(()=>{
+      dispatch(game_3_missionsActions.getAll())
+    }, [dispatch, game_3_missionsActions])
 
   return(
     <div id="userspace">
@@ -93,12 +98,11 @@ const UserSpace = () => {
         <p>Jogar jogo 3</p>
         <p>Missões:</p>
         <Link to={'/game3/0'}>Stub</Link>
-        {/*
         <div id="missoes">
-          {missions.loading ? <div>Loading...</div> :
-            missions && missions.items.map( (mission, index) =>
+          {game3missions.loading ? <div id="loading">Loading...</div> :
+            game3missions && game3missions.items.map( (mission, index) =>
             <div key={index} className="missao">
-              <Link to={`/game2/${mission.id}`}>
+              <Link to={`/game3/${mission.id}`}>
                 <div id="imagem"></div>
                 <div id="card-text-wrapper">
                   <div id="nome-missao">{mission.name}</div>
@@ -106,10 +110,9 @@ const UserSpace = () => {
                   <div id="recompensas">Recompensas</div>
                 </div>
               </Link>
-            </div>
-          )}
+            </div>)
+          }
         </div>
-        */}
       </div>
 
     </div>

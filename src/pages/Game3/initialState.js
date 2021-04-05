@@ -1,7 +1,7 @@
 const initialState = {
   scene: 'INIT',
   cart: [],
-  currentCorridor: 0,
+  currentAisle: 0,
   checkout: false,
   onPayment: false,
   payment: [],
