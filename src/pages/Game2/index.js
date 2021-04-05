@@ -62,17 +62,19 @@ const Game2 = (props) => {
 
 	// check if user already played the game
 	React.useEffect(() => {
+		let updateState = {}
 		if(mission && !state.checkedPlayed){
 			dispatch(user_game_resultsActions.find({
 				'user.id': userId,
 				'mission.id': mission.id
 			}))
 
-			state.checkedPlayed = true
+			updateState.checkedPlayed = true
 		}
-
-		state.hasPlayed = hasPlayed
-	}, [userId, mission, dispatch, user_game_resultsActions, state, hasPlayed])
+		updateState.hasPlayed = hasPlayed
+		setState({...state, ...updateState})
+		// eslint-disable-next-line
+	}, [userId, mission, dispatch, user_game_resultsActions, hasPlayed])
 
 	//track player actions
 	React.useEffect(() => {
@@ -165,7 +167,7 @@ const Game2 = (props) => {
 		}
 
 		//check if should start or skip tutorial
-		setState({...state, scene: (state.tryAgain || state.hasPlayed) ? "ROOM" : "TUTORIAL"})
+		setState({...state, scene: (!state.seeTutorial && state.hasPlayed) ? "ROOM" : "TUTORIAL"})
 	}
 
 	const endTutorial = () => {
@@ -198,17 +200,19 @@ const Game2 = (props) => {
 	}
 
 	//shows only selected questions
-	const setCurrentCharacter = (character) => () => setState(
-		{...state,
+	const setCurrentCharacter = (character) => () => {
+		setState({
+			...state,
 			showConvo: true,
 			currentChar: character,
 			answers: state.locations[state.currentRoom].missionsCharacters
 										.find(mc => mc.character.id === character.id).selectedQuestions
 										.slice(0, state.questionsByStep),
-			convOptions: state.locations[state.currentRoom].characters
-										.find(c => c.id === character.id).selectedQuestions
+			convOptions: state.locations[state.currentRoom].missionsCharacters
+										.find(c => c.character.id === character.id).selectedQuestions
 										.slice(0, state.questionsByStep)
 		})
+	}
 
 	const closeDialog = (dialogHistory) => {
 		setState({
@@ -230,7 +234,6 @@ const Game2 = (props) => {
 			if(state.dialogStep !== state.totalDialogSteps){
 				updateState.answers = state.locations[state.currentRoom].missionsCharacters
 				.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
-
 				.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
 			}else{
 				if(state.correct < state.correctMinimum){
@@ -347,8 +350,8 @@ const Game2 = (props) => {
 		return (
 			<div id="tutorial-screen">
 				<Character
-					character={mission.missionCharacters.find(character => character.name === 'Fuyuko').character}
-					onClick={setTutorialCharacter(mission.missionCharacters.find(character => character.name === 'Fuyuko').character)}
+					character={mission.missionCharacters.find(character => character.character.name === 'Fuyuko').character}
+					onClick={setTutorialCharacter(mission.missionCharacters.find(character => character.character.name === 'Fuyuko').character)}
 				/>
 				<div id="tutorial-popup-1">
 					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
@@ -388,7 +391,7 @@ const Game2 = (props) => {
 	}
 
 	const restart = (tips) => {
-		setState({...initialState(), tryAgain: true, tips: tips})
+		setState({...initialState(), tips: tips, hasPlayed: true})
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
@@ -411,7 +414,6 @@ const Game2 = (props) => {
 												onBack={ () => setState({...state, back: true}) }
 											/>
 						case "TUTORIAL":
-
 							return ( tutorialScreen(state.tutorialStep) )
 						case "ROOM":
 							return (
@@ -423,7 +425,7 @@ const Game2 = (props) => {
 										}}
 									/>
 
-									<Sala roomData={state.locations[state.currentRoom]}>
+									<Sala roomData={state.locations[state.currentRoom].location}>
 										{state.locations[state.currentRoom].missionsCharacters.map((missionsCharacter, index) =>
 											<Character key={index}
 												character={missionsCharacter.character}
@@ -436,7 +438,7 @@ const Game2 = (props) => {
 											shouldExit={state.shouldCloseConvo}
 											prevDialogHistory={[]}
 											clearDialogHistory={state.refreshDialog}
-											charPreSpeech={null}
+											charPreSpeech={state.preSpeech}
 											convOptions={state.convOptions.reduce((acc, convOption) => { return [...acc, {...convOption, answers:convOption.answer, question: convOption.question.question} ] }, [])}
 											currentChar={state.currentChar}
 											charFeeling={state.characterFeeling}

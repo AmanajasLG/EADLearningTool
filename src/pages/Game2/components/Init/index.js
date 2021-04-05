@@ -2,7 +2,7 @@ import React from 'react'
 import './index.scss'
 import classImage from '../../../../img/pic-people-talk.svg'
 
-const Init = ({name, description, nameTranlate, descriptionTranlate, onClose, onStart, onBack}) => {
+const Init = ({name, description, nameTranlate, descriptionTranlate, onStart, onBack, onSeeTutorial}) => {
     return (
         <div className="main-init-wrapper">
           <div className="inner-content">
@@ -17,7 +17,7 @@ const Init = ({name, description, nameTranlate, descriptionTranlate, onClose, on
             <div id="btns">
               { onBack && <button className="btn btn-center" id="btn-back" onClick={onBack}>Voltar</button> }
               { onStart && <button className="btn btn-center" id="btn-start" onClick={onStart}>Iniciar</button> }
-              { onClose && <button className="btn btn-center" id="btn-close" onClick={onClose}>Fechar</button> }
+              { onSeeTutorial && <button className="btn btn-center" id="btn-tutorial" onClick={onSeeTutorial}>Ver tutorial</button> }
             </div>
           </div>
         </div>
