@@ -35,12 +35,6 @@ const App = () => {
   document.getElementsByTagName('html')[0].className = palette
 
   let gameMode = useSelector( state => state.header.state ) !== headerConstants.STATES.NORMAL;
-  {/*
-  return (
-    <div>
-      {/* { alert.message &&
-        <div className={`alert ${alert.type}`}>{alert.message}</div>
-      }       */}
   return (
     <div className={ "App" + (gameMode? " game-mode" : "")}>
       <Router>

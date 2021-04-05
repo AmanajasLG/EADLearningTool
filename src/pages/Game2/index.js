@@ -13,10 +13,6 @@ import './tela-conversa.scss'
 import './tela-tutorial.scss'
 import AcusationLamp from './components/AcusationLamp'
 import initialState from './initialState'
-import DialogCharacter from './components/DialogCharacter'
-import DialogHistory from './components/DialogHistory'
-import Menu from './components/Menu'
-import Writer from './components/Writer'
 import { headerConstants } from '../../_constants'
 import Conversa from './components/Conversa'
 
@@ -357,7 +353,17 @@ const Game2 = (props) => {
 					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
 					<span lang="en">Select someone to talk and help you find your guide.</span>
 				</div>
-				<div id="conversa" className='DialogPopUp' hidden={!state.showConvo} aria-hidden={!state.showConvo}>
+				{state.showConvo &&
+					<Conversa
+						convOptions = {state.convOptions.reduce((acc, convOption) => { return [...acc, {...convOption, answers:convOption.answer, question: convOption.question.question} ] }, [])}
+						currentChar = {state.currentChar}
+						charFeeling = {state.characterFeeling}
+						afterWriter = {afterWriter}
+						onConvoChoiceMade = {onMenuButtonClick}
+						waitAfterWritten = {1500}
+					/>
+				}
+				{/* <div id="conversa" className='DialogPopUp' hidden={!state.showConvo} aria-hidden={!state.showConvo}>
 					<div id="dialog-interact">
 						<div id="dialogos">
 							<DialogHistory dialogHistory={state.dialogHistory}/>
@@ -378,14 +384,16 @@ const Game2 = (props) => {
 						</div>
 						<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 					</div>
-				</div>
-				<div id="tutorial-popup-2-wrapper" hidden={id!==2} aria-hidden={id!==2}>
-					<div id="tutorial-popup-2-content">
-						<span lang="pt-br"><strong>Lembre-se:</strong> As pessoas estão ocupadas em seus ambientes de trabalho, então tenha certeza de não gastar o tempo delas com perguntas fora de contexto!</span>
-						<span lang="en"><strong>Remember:</strong> People are busy in their workplaces, so be sure not to waste their times with question that are out of yout context!</span>
-						<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
+				</div> */}
+				{id === 2 &&
+					<div id="tutorial-popup-2-wrapper">
+						<div id="tutorial-popup-2-content">
+							<span lang="pt-br"><strong>Lembre-se:</strong> As pessoas estão ocupadas em seus ambientes de trabalho, então tenha certeza de não gastar o tempo delas com perguntas fora de contexto!</span>
+							<span lang="en"><strong>Remember:</strong> People are busy in their workplaces, so be sure not to waste their times with question that are out of yout context!</span>
+							<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
+						</div>
 					</div>
-				</div>
+				}
 			</div>
 		)
 	}
@@ -407,12 +415,15 @@ const Game2 = (props) => {
 					switch(state.scene){
 						case "INIT":
 							return <Init
-												name={mission.name} description={mission.description}
-												nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
-												descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
-												onStart={ onStartGame }
-												onBack={ () => setState({...state, back: true}) }
-											/>
+										name={mission.name} description={mission.description}
+										// nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang}).name}
+										// descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang}).description}
+										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
+										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
+										onStart={ onStartGame }
+										onBack={ () => setState({...state, back: true}) }
+										onSeeTutorial={ state.hasPlayed ? () => {state.seeTutorial = true;onStartGame()} : null }
+									/>
 						case "TUTORIAL":
 							return ( tutorialScreen(state.tutorialStep) )
 						case "ROOM":
