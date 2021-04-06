@@ -57,8 +57,18 @@ const Game3 = (props) => {
     setState({...state, payment: [...state.payment.slice(0, index), ...state.payment.slice(index+1)]})
   }
 
+  const moveToPayment = () => {
+    setState({...state, onPayment: true, price: state.cart.reduce( (acc, product) => product.price + acc, 0)})
+  }
+
   const doPayment = () => {
-    setState({...state, scene: 'END_GAME', win: true})
+    let updateData = {}
+    updateData.paymentAmount = state.payment.reduce( (acc, money) => money.value + acc, 0)
+    if(updateData.paymentAmount >= state.price){
+      updateData.scene = 'END_GAME'
+      updateData.win = true
+    }
+    setState({...state, ...updateData})
   }
 
   //const { mission } = state
@@ -135,7 +145,7 @@ const Game3 = (props) => {
                     <div>
                       Caixa
                       {haveAll() ?
-                        <button onClick={()=> setState({...state, onPayment: true})}>
+                        <button onClick={moveToPayment}>
                           Pagar
                         </button>
                         :
@@ -146,11 +156,13 @@ const Game3 = (props) => {
                       }
                       {state.onPayment &&
                         <div>
-                          Hora de pagar
-
+                          Hora de pagar! Sua compra deu {state.price}
                           <button onClick={doPayment}>
                             Finalizar Compra
                           </button>
+                          {state.paymentAmount && state.paymentAmount < state.price &&
+                            <div>Opa, pagament insuficiente.</div>
+                          }
                           <div>
                             {mission.moneyTypes.map( (money, index) =>
                               <Button key={index} onClick={addToPayment(money)}><img style={{width: 50}} src={money.image.url} alt='money'/></Button>
