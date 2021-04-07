@@ -5,7 +5,9 @@ const initialState = {
   checkout: false,
   onPayment: false,
   payment: [],
-  win: false
+  win: false,
+  change: null,
+  paymentAmount: null
 }
 
 export default initialState
