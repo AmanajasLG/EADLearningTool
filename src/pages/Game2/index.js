@@ -114,12 +114,14 @@ const Game2 = (props) => {
 		//distribute on locations
 		while(availableCharacters.length > 0){
 			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
+			// se personagem for o de tutorial, separa ele e continua
 			if( availableCharacters[characterIndex].character.name === "Tutorial" ) {
 				tutorialCharacter = availableCharacters[characterIndex]
 				availableCharacters.splice(characterIndex, 1)
 				continue;
 			}
 
+			// sorteia sala aleatoriamente com pesos que diminuem dependendo de quantos personagens já se tem
 			let totalWeight = 0
 			const weights = locations.map( (location) => {
 				let weight = maxWeight - location.missionsCharacters.length
@@ -137,7 +139,8 @@ const Game2 = (props) => {
 			let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
 
 			let selectedQuestions = []
-			while(selectedQuestions.length < 4){ // E verificar o tamanho de correct e ncorrect pq pode acabar
+			// ? E se correct/ncorrect não tiveram a quantidade necessária de perguntas?
+			while(selectedQuestions.length < 4){
 				let source = selectedQuestions.length % 2 === 0? correct : ncorrect
 				let index = Math.floor(Math.random(0, source.length))
 				selectedQuestions.push( source[index] )
@@ -180,12 +183,12 @@ const Game2 = (props) => {
 
 	const endTutorial = () => {
 		let updateState = {
-			tutorialStep: state.tutorialStep + 1,
 			showConvo: false,
+			currentChar: null,
+			scene: "ROOM",
 			...dialogInitialState
 		}
 		setState({...state, ...updateState})
-		setTimeout( () => {setState({...state, ...updateState, currentChar: null, scene: "ROOM"})}, 400 )
 	}
 
 	const setTutorialCharacter = (character) => () => {
@@ -429,7 +432,7 @@ const Game2 = (props) => {
 										}}
 									/>
 
-									<Sala roomData={state.locations[state.currentRoom].location}>
+									<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
 										{state.locations[state.currentRoom].missionsCharacters.map((missionsCharacter, index) =>
 											<Character key={index}
 												character={missionsCharacter.character}
