@@ -1,7 +1,7 @@
 import React from 'react'
 import './character.scss'
 
-const Character = ({character, dragPosition, position, onClick}) => {
+const Character = ({zDepth, character, dragPosition, position, onClick}) => {
     // const [pos, setPos] = React.useState({x:0, y:0})
     // const [dragging, setDragging] = React.useState(false)
 
@@ -19,7 +19,7 @@ const Character = ({character, dragPosition, position, onClick}) => {
     // )
 
     return (
-    <div className="CharDiv" onClick={onClick}>
+    <div className="CharDiv" onClick={onClick} style={{"--z": zDepth}}>
         <img src={character.characterAssets.length > 0 ? character.characterAssets.find(asset => asset.bodyPart === 'fullbody'
 													).image[0].url : ""} alt={`${character.name}`}/>
         <div>{character.name}</div>

@@ -161,7 +161,8 @@ const Game2 = (props) => {
 
 			locations[locationIndex].missionsCharacters = [...locations[locationIndex].missionsCharacters,
 				{...availableCharacters[characterIndex],
-					selectedQuestions
+					selectedQuestions,
+					zDepth: Math.random()
 				}
 			]
 			availableCharacters.splice(characterIndex, 1)
@@ -435,6 +436,7 @@ const Game2 = (props) => {
 									<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
 										{state.locations[state.currentRoom].missionsCharacters.map((missionsCharacter, index) =>
 											<Character key={index}
+												zDepth={missionsCharacter.zDepth}
 												character={missionsCharacter.character}
 												onClick={setCurrentCharacter(missionsCharacter.character)}
 											/>
