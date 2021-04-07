@@ -34,16 +34,8 @@ const Game2 = (props) => {
 	let tipsCount
 
 	if(mission)
-		tipsCount = mission.missionCharacters.filter(missionCharacter => {
-		return missionCharacter.tip
-	}).length
+		tipsCount = mission.missionCharacters.filter(missionCharacter => { return missionCharacter.tip }).length
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init', preSpeech: null, convOptions: [] }
-
-	React.useEffect(()=>{
-		if(mission)
-			dispatch(musicActions.set(mission.backgroundAudios[0].music[0].url))
-		return () => dispatch(musicActions.set(''))
-	}, [dispatch, mission])
 
 	React.useEffect(()=>{
 		if(mission)
@@ -112,37 +104,50 @@ const Game2 = (props) => {
 	if(mission && state.locations.length === 0){
 		// safe copies
 		let availableCharacters = mission.missionCharacters.slice(0)
-		let locations = mission.locations.map( location => { return {location: location, missionsCharacters: []} })
-
+		let locations = mission.locations.map( location => {
+			delete location.characters
+			return {location: location, missionsCharacters: []}
+		})
+		
+		const maxWeight = Math.max(mission.missionCharacters.length - mission.locations.length, 1)
 		//distribute on locations
 		while(availableCharacters.length > 0){
-
-			const locationIndex = Math.floor((Math.random() * 100)) % locations.length
+			let totalWeight = 0
+			const weights = locations.map( (location) => {
+				let weight = maxWeight - location.missionsCharacters.length
+				totalWeight += weight
+				return weight
+			})
+			let rand = Math.floor(Math.random()*totalWeight)
+			let i = 0;
+			while( rand >= 0 ) rand -= weights[i++]
+			const locationIndex = i-1
 			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
 
 			//each character has some good and bad questions that can be asked
 			let availableAnswers = [...availableCharacters[characterIndex].answers]
-		  let correct = availableAnswers.filter(answer => answer.question.correct)
-		  let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
+			let correct = availableAnswers.filter(answer => answer.question.correct)
+			let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
 
-		  let selectedQuestions = []
-		  while(selectedQuestions.length < 4){
-		    let source = selectedQuestions.length % 2 === 0? correct : ncorrect
-		    let index = Math.floor(Math.random(0, source.length))
-		    selectedQuestions.push( source[index] )
-		    source.splice(index, 1)
-		  }
+			let selectedQuestions = []
+			while(selectedQuestions.length < 4){ // E verificar o tamanho de correct e ncorrect pq pode acabar
+				let source = selectedQuestions.length % 2 === 0? correct : ncorrect
+				let index = Math.floor(Math.random(0, source.length))
+				selectedQuestions.push( source[index] )
+				source.splice(index, 1)
+			}
 
-		  if(Math.floor(Math.random(0,1) < .5)){
-		    let temp = selectedQuestions[0]
-		    selectedQuestions[0] = selectedQuestions[1]
-		    selectedQuestions[1] = temp
-		  }
-		  if(Math.floor(Math.random(0, 1) > .5)){
-		    let temp = selectedQuestions[2]
-		    selectedQuestions[2] = selectedQuestions[3]
-		    selectedQuestions[3] = temp
-		  }
+			// Aleatorizando para que nem sempre venham as perguntas na ordem certo->errado
+			if(Math.floor(Math.random(0,1) < .5)){
+				let temp = selectedQuestions[0]
+				selectedQuestions[0] = selectedQuestions[1]
+				selectedQuestions[1] = temp
+			}
+			if(Math.floor(Math.random(0, 1) > .5)){
+				let temp = selectedQuestions[2]
+				selectedQuestions[2] = selectedQuestions[3]
+				selectedQuestions[3] = temp
+			}
 
 			locations[locationIndex].missionsCharacters = [...locations[locationIndex].missionsCharacters,
 				{...availableCharacters[characterIndex],
@@ -467,7 +472,7 @@ const Game2 = (props) => {
 													<span lang="en">You have found the right person! Congrats!</span>
 													<a href="#painel-2" className="next-btn">{'❯'}</a>
 												</div>}
-
+												{/* missionCharacters.character.characterAssets[] tem type rightAccusation! */}
 												<div className="painel" id="painel-2">
 													<div className="painel-2-wrapper">
 														<div className="painel-2-content">
