@@ -109,9 +109,17 @@ const Game2 = (props) => {
 			return {location: location, missionsCharacters: []}
 		})
 		
+		let tutorialCharacter = null;
 		const maxWeight = Math.max(mission.missionCharacters.length - mission.locations.length, 1)
 		//distribute on locations
 		while(availableCharacters.length > 0){
+			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
+			if( availableCharacters[characterIndex].character.name === "Tutorial" ) {
+				tutorialCharacter = availableCharacters[characterIndex]
+				availableCharacters.splice(characterIndex, 1)
+				continue;
+			}
+
 			let totalWeight = 0
 			const weights = locations.map( (location) => {
 				let weight = maxWeight - location.missionsCharacters.length
@@ -122,7 +130,6 @@ const Game2 = (props) => {
 			let i = 0;
 			while( rand >= 0 ) rand -= weights[i++]
 			const locationIndex = i-1
-			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
 
 			//each character has some good and bad questions that can be asked
 			let availableAnswers = [...availableCharacters[characterIndex].answers]
@@ -156,7 +163,7 @@ const Game2 = (props) => {
 			]
 			availableCharacters.splice(characterIndex, 1)
 		}
-		setState({...state, locations})
+		setState({...state, locations, tutorialCharacter})
 	}
 
 	const onStartGame = (e) => {
@@ -227,7 +234,8 @@ const Game2 = (props) => {
 		if( state.scene === "TUTORIAL" ) {
 			setTimeout(() => { setState({
 				...state,
-				tutorialStep: state.tutorialStep + 1
+				tutorialStep: state.tutorialStep + 1,
+				tips: [ 'A cabelereira sabe.' ]
 			}) }, 1500)
 		} else {
 			let updateState = {}
@@ -278,11 +286,6 @@ const Game2 = (props) => {
 				updateState = {
 					...updateState,
 					characterFeeling: 'wrongQuestion',
-					// ? Pq isso está sendo adicionado aqui? Isso é tip pro jogo real?
-					// ? Se sim, ele deveria ir em setTutorialCharacter pq faz mais sentido
-					tips: [
-						'A cabelereira sabe.'
-					],
 					convOptions: []
 				}
 			} else {
@@ -354,8 +357,8 @@ const Game2 = (props) => {
 		return (
 			<div id="tutorial-screen">
 				<Character
-					character={mission.missionCharacters.find(character => character.character.name === 'Fuyuko').character}
-					onClick={setTutorialCharacter(mission.missionCharacters.find(character => character.character.name === 'Fuyuko').character)}
+					character={state.tutorialCharacter.character}
+					onClick={setTutorialCharacter(state.tutorialCharacter.character)}
 				/>
 				<div id="tutorial-popup-1">
 					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
