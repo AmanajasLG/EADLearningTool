@@ -64,11 +64,16 @@ const Game3 = (props) => {
   const doPayment = () => {
     let updateData = {}
     updateData.paymentAmount = state.payment.reduce( (acc, money) => money.value + acc, 0)
-    if(updateData.paymentAmount >= state.price){
-      updateData.scene = 'END_GAME'
-      updateData.win = true
-    }
+    updateData.change = updateData.paymentAmount - state.price
     setState({...state, ...updateData})
+  }
+
+  const receiveChange = () => {
+    let updateData = {}
+    updateData.scene = 'END_GAME'
+    updateData.win = true
+    setState({...state, ...updateData})
+
   }
 
   //const { mission } = state
@@ -156,12 +161,20 @@ const Game3 = (props) => {
                       }
                       {state.onPayment &&
                         <div>
-                          Hora de pagar! Sua compra deu {state.price}
+                          Hora de pagar! Sua compra deu {Number.parseFloat(state.price).toFixed(2)}
                           <button onClick={doPayment}>
                             Finalizar Compra
                           </button>
                           {state.paymentAmount && state.paymentAmount < state.price &&
                             <div>Opa, pagament insuficiente.</div>
+                          }
+                          {state.change &&
+                            <div className='PopUp'>
+                              <div>Seu troco! {state.change}</div>
+                              <div>O troco está correto?</div>
+                              <button onClick={receiveChange}>Yes</button>
+                              <button onClick={receiveChange}>No</button>
+                            </div>
                           }
                           <div>
                             {mission.moneyTypes.map( (money, index) =>
@@ -181,7 +194,11 @@ const Game3 = (props) => {
 
                   <div className='carrinho'>
                     {state.cart.map((product, index) =>
-                      <div key={index}>{product.name} <button onClick={removeProduct(index)}>Remover</button></div>
+                      <div key={index}>{product.name}
+                        { !state.checkout &&
+                          <button onClick={removeProduct(index)}>Remover</button>
+                        }
+                      </div>
                     )}
                   </div>
 
