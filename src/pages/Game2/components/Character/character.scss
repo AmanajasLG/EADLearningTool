@@ -5,7 +5,6 @@
 	justify-content: flex-end;
 	flex-flow: column;
 	align-items: stretch;
-	// margin: 0px 20px;
 	flex: 1 1 0px;
 	min-width: 0;
 	min-height: 0;
@@ -33,6 +32,10 @@
 	filter: drop-shadow(8px 4px 0px var(--color-fourth));
 }
 
-.CharDiv:hover > div > div {
-	font-weight: bolder;
+.CharDiv > div {
+	opacity: 0%;
+}
+
+.CharDiv:hover > div {
+	opacity: 100%;
 }

@@ -2,6 +2,8 @@ import React from 'react'
 import lamp_apagada from '../../../../img/lampada_apagada.svg'
 import lamp_acesa from '../../../../img/lampada_acesa.svg'
 
+import './index.scss'
+
 const AcusationLamp = ({onClick}) => {
   return(
     <div id="acusar" onClick={onClick}>

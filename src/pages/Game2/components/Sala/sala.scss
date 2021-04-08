@@ -28,7 +28,7 @@
 	width: var(--width);
 	height: var(--height);
 	padding-top: calc(var(--height) * 0.25);
-	position: relative;
-	bottom: -4vh;
+	position: absolute;
+	bottom: 3vh;
 	// background-color: #59316D88;
 }
