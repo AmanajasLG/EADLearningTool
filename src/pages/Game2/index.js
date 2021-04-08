@@ -468,6 +468,7 @@ const Game2 = (props) => {
 										{state.gameEndState ?
 										<div>
 											<div id="endgame-messages">
+												{/* missionCharacters.character.characterAssets[] tem type rightAccusation! */}
 												{state.tries === 0 ?
 												<div className="painel" id="painel-1">
 													<span lang="pt-br">Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</span>
@@ -479,7 +480,6 @@ const Game2 = (props) => {
 													<span lang="en">You have found the right person! Congrats!</span>
 													<a href="#painel-2" className="next-btn">{'❯'}</a>
 												</div>}
-												{/* missionCharacters.character.characterAssets[] tem type rightAccusation! */}
 												<div className="painel" id="painel-2">
 													<div className="painel-2-wrapper">
 														<div className="painel-2-content">
