@@ -14,6 +14,10 @@ import AcusationLamp from './components/AcusationLamp'
 import initialState from './initialState'
 import { headerConstants } from '../../_constants'
 import Conversa from './components/Conversa'
+import DialogCharacter from './components/DialogCharacter'
+
+import iconVitoriaPers from '../../img/Game2/parabens_vitoria-persistente.svg'
+import iconVitoriaPrim from '../../img/Game2/parabens_vitoria-primeira.svg'
 
 const Game2 = (props) => {
 
@@ -112,11 +116,10 @@ const Game2 = (props) => {
 		const maxWeight = Math.max(mission.missionCharacters.length - mission.locations.length, 1)
 		//distribute on locations
 		while(availableCharacters.length > 0){
-			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
 			// se personagem for o de tutorial, separa ele e continua
-			if( availableCharacters[characterIndex].character.name === "Tutorial" ) {
-				tutorialCharacter = availableCharacters[characterIndex]
-				availableCharacters.splice(characterIndex, 1)
+			if( availableCharacters[0].character.name === "Tutorial" ) {
+				tutorialCharacter = availableCharacters[0]
+				availableCharacters.splice(0, 1)
 				continue;
 			}
 
@@ -133,7 +136,7 @@ const Game2 = (props) => {
 			const locationIndex = i-1
 
 			//each character has some good and bad questions that can be asked
-			let availableAnswers = [...availableCharacters[characterIndex].answers]
+			let availableAnswers = [...availableCharacters[0].answers]
 			let correct = availableAnswers.filter(answer => answer.question.correct)
 			let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
 
@@ -159,12 +162,26 @@ const Game2 = (props) => {
 			}
 
 			locations[locationIndex].missionsCharacters = [...locations[locationIndex].missionsCharacters,
-				{...availableCharacters[characterIndex],
+				{...availableCharacters[0],
 					selectedQuestions,
 					zDepth: Math.random()
 				}
 			]
-			availableCharacters.splice(characterIndex, 1)
+			availableCharacters.splice(0, 1)
+		}
+
+		// Aleatorizando ordem dos personagens em cada sala
+		for( let i = 0; i < locations.length; i++ ) {
+			let amountChars = locations[i].missionsCharacters.length
+			if( amountChars <= 1) continue
+			for( let j = 0; j < amountChars-1; j++ ) {
+				let exchangeWith = Math.floor(Math.random() * (amountChars - j)) + j
+				if (j === exchangeWith) continue // Não precisa trocar se for consigo mesmo
+				//swap
+				let aux = locations[i].missionsCharacters[j]
+				locations[i].missionsCharacters[j] = locations[i].missionsCharacters[exchangeWith]
+				locations[i].missionsCharacters[exchangeWith] = aux
+			}
 		}
 		setState({...state, locations, tutorialCharacter})
 	}
@@ -238,21 +255,26 @@ const Game2 = (props) => {
 			setTimeout(() => { setState({
 				...state,
 				tutorialStep: state.tutorialStep + 1,
-				tips: [ 'A cabelereira sabe.' ]
+				tips: [ 'A cabeleireira sabe.' ]
 			}) }, 1500)
 		} else {
 			let updateState = {}
-			if(state.dialogStep !== state.totalDialogSteps){
+			if(state.dialogStep < state.totalDialogSteps){
 				updateState.convOptions = state.locations[state.currentRoom].missionsCharacters
 					.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
 					.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
-			}else{
+			} else if(state.dialogStep === state.totalDialogSteps) {
 				if(state.correct < state.correctMinimum){
 					updateState.preSpeech = state.currentChar.wrongAnswer
 					updateState.convOptions = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}, answer:state.currentChar.endDialog}]
 				} else {
 					updateState.convOptions = [{tip: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?'}, answer:state.currentChar.rightAnswer }]
 				}
+			} else {
+				const tchaus = ['Ah tá, tchau!', 'Ok. Valeu!', 'Tchau!', 'Até mais!',
+								'Entendi... Muito obrigado!', 'Até logo!', 'Até a próxima!']
+				const rIdx = Math.floor(Math.random()*tchaus.length)
+				updateState.convOptions = [{close: true, question:{question: tchaus[rIdx]}, answer:state.currentChar.endDialog}]
 			}
 			if( state.closeAfterWritter ) {
 				delete state.closeAfterWritter
@@ -417,7 +439,7 @@ const Game2 = (props) => {
 										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
 										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
 										onStart={ onStartGame }
-										onBack={ () => setState({...state, back: true}) }
+										onBack={() => setState({...state, back: true})}
 										onSeeTutorial={ state.hasPlayed ? () => {state.seeTutorial = true;onStartGame()} : null }
 									/>
 						case "TUTORIAL":
@@ -431,7 +453,8 @@ const Game2 = (props) => {
 											setState({...state, currentRoom: num})
 										}}
 									/>
-
+									{/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
+										//? pq passar tudo ao invés de só passar a string? Que aí poderia ser local ou na rede... */}
 									<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
 										{state.locations[state.currentRoom].missionsCharacters.map((missionsCharacter, index) =>
 											<Character key={index}
@@ -466,9 +489,11 @@ const Game2 = (props) => {
 								return(
 									<div id="endGame-screen">
 										{state.gameEndState ?
-										<div>
+										<div id="end-panels">
+											<div id="painel-2-icon">
+												<img src={state.tries === 0 ? iconVitoriaPrim : iconVitoriaPers} alt=""/>
+											</div>
 											<div id="endgame-messages">
-												{/* missionCharacters.character.characterAssets[] tem type rightAccusation! */}
 												{state.tries === 0 ?
 												<div className="painel" id="painel-1">
 													<span lang="pt-br">Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</span>
@@ -483,7 +508,7 @@ const Game2 = (props) => {
 												<div className="painel" id="painel-2">
 													<div className="painel-2-wrapper">
 														<div className="painel-2-content">
-															<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
+															<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
 															<div>clues</div>
 														</div>
 													</div>
@@ -524,6 +549,13 @@ const Game2 = (props) => {
 											</div>
 										</div>
 										}
+										<DialogCharacter
+											character={
+												mission.missionCharacters.find((mc) => {
+													return mc.character.name===state.targetName
+												}).character}
+											feeling={"rightAccusation"}
+										/>
 									</div>
 								)
 					}

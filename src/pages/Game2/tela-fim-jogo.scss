@@ -6,7 +6,7 @@
 	// z-index: -10;
 }
 
-#endGame-screen > div {
+#end-panels {
 	position: absolute;
 	width: 54.5vw;
 	right: 7%;
@@ -21,6 +21,12 @@
 	z-index: 0;
 }
 
+#endGame-screen #CharacterPortrait {
+	width: 38.5vw;
+	height: 85vh;
+	max-width: none;
+}
+
 #endgame-messages {
 	position: relative;
 	min-width: 100%;
@@ -28,6 +34,7 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
+	pointer-events: none;
 	overflow-x: scroll;
 	scroll-snap-type: x mandatory;
 	scrollbar-width: none;
@@ -53,6 +60,10 @@
 	align-items: center;
 	line-height: 2.7rem;
 	overflow: hidden;
+}
+
+.painel a {
+	pointer-events: fill;
 }
 
 #painel-1 span {
@@ -205,4 +216,18 @@
 	content: "❯";
 	position: absolute;
 	right: 30px;
+}
+
+#painel-2-icon {
+	position: absolute;
+	width: 100%;
+	height: 25vh;
+	overflow: visible;
+	display: flex;
+	justify-content: center;
+}
+
+#painel-2-icon > img {
+	position: relative;
+	top: -77.5%;
 }
