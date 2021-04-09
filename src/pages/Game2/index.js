@@ -18,6 +18,7 @@ import DialogCharacter from './components/DialogCharacter'
 
 import iconVitoriaPers from '../../img/Game2/parabens_vitoria-persistente.svg'
 import iconVitoriaPrim from '../../img/Game2/parabens_vitoria-primeira.svg'
+import iconDicas from '../../img/ícone_jogo1.svg'
 
 const Game2 = (props) => {
 
@@ -567,7 +568,10 @@ const Game2 = (props) => {
 								<span lang="pt-br">Tem certeza?</span>
 								<span lang="en">Are you sure it's them?<br />Check your tips.</span>
 							</div>
-							<div>
+							<div id="tips-received">
+								<div id="accusation-icon">
+									<img src={iconDicas} alt="" />
+								</div>
 								{state.tips.length > 0 ?
 									state.tips.map((tip, index) => <div key={index}>{tip}</div>)
 									:
