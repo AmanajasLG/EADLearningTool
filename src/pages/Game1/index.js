@@ -254,10 +254,9 @@ const Game1 = (props) => {
 													jobs={["-- Profissão --", ...state.jobs]}
 													countries={["-- País --", ...state.countries]}
 												/>
-
-											<div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}>
-												Terminei!
-											</div>
+												<div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}>
+													Terminei!
+												</div>
 											</div>
 										}
 										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }
