@@ -2,6 +2,8 @@ import React from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
+import { apiActions } from '../../_actions'
+
 import Button from '@material-ui/core/Button'
 
 import Init from '../Game2/components/Init'
@@ -18,6 +20,12 @@ const Game3 = (props) => {
   const onStartGame = () => {
     setState({...state, scene: 'TUTORIAL'})
   }
+
+  React.useEffect(() =>{
+    if(!mission && props.match.params.id){
+      dispatch(apiActions.game_3_missionsActions.getById(props.match.params.id))
+    }
+  }, [props.match.params.id])
 
   const addProduct = (product) => () => setState({...state, cart: [...state.cart, product]})
 
@@ -77,7 +85,10 @@ const Game3 = (props) => {
   }
 
   //const { mission } = state
+  console.log('mission:', mission)
   return(
+    <div>
+    { mission ?
     //verificar se é possível generalizar esses gameX-wrapper
     <div id="game2-wrapper">
       {(function renderScene(){
@@ -87,8 +98,8 @@ const Game3 = (props) => {
                 <Init name={mission.name} description={mission.description}
   							onStart={ onStartGame }
   							onBack={ () => setState({...state, back: true}) }
-                nameTranlate={{ name: 'Tradução'}}
-                descriptionTranlate={{description: 'Tradução'}}
+                nameTranlate={'Tradução'}
+                descriptionTranlate={'Tradução'}
                 />
               )
             case 'TUTORIAL':
@@ -247,6 +258,10 @@ const Game3 = (props) => {
               )
       }})()}
     {state.back && <Redirect to={'/userspace'} />}
+    </div>
+    :
+    <div>Loading..</div>
+    }
     </div>
   )
 }
