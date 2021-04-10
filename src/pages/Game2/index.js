@@ -9,16 +9,16 @@ import Button from '@material-ui/core/Button'
 import './index.scss'
 import './tela-acusacao.scss'
 import './tela-fim-jogo.scss'
-import './tela-conversa.scss'
 import './tela-tutorial.scss'
 import AcusationLamp from './components/AcusationLamp'
 import initialState from './initialState'
-import DialogCharacter from './components/DialogCharacter'
-import DialogHistory from './components/DialogHistory'
-import Menu from './components/Menu'
-import Writer from './components/Writer'
 import { headerConstants } from '../../_constants'
 import Conversa from './components/Conversa'
+import DialogCharacter from './components/DialogCharacter'
+
+import iconVitoriaPers from '../../img/Game2/parabens_vitoria-persistente.svg'
+import iconVitoriaPrim from '../../img/Game2/parabens_vitoria-primeira.svg'
+import iconDicas from '../../img/ícone_jogo1.svg'
 
 const Game2 = (props) => {
 
@@ -38,16 +38,8 @@ const Game2 = (props) => {
 	let tipsCount
 
 	if(mission)
-		tipsCount = mission.missionCharacters.filter(missionCharacter => {
-		return missionCharacter.tip
-	}).length
-	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init', preSpeech: null }
-
-	React.useEffect(()=>{
-		if(mission)
-			dispatch(musicActions.set(mission.backgroundAudios[0].music[0].url))
-		return () => dispatch(musicActions.set(''))
-	}, [dispatch, mission])
+		tipsCount = mission.missionCharacters.filter(missionCharacter => { return missionCharacter.tip }).length
+	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init', preSpeech: null, convOptions: [] }
 
 	React.useEffect(()=>{
 		if(mission)
@@ -62,17 +54,19 @@ const Game2 = (props) => {
 
 	// check if user already played the game
 	React.useEffect(() => {
+		let updateState = {}
 		if(mission && !state.checkedPlayed){
 			dispatch(user_game_resultsActions.find({
 				'user.id': userId,
 				'mission.id': mission.id
 			}))
 
-			state.checkedPlayed = true
+			updateState.checkedPlayed = true
 		}
-
-		state.hasPlayed = hasPlayed
-	}, [userId, mission, dispatch, user_game_resultsActions, state, hasPlayed])
+		updateState.hasPlayed = hasPlayed
+		setState({...state, ...updateState})
+		// eslint-disable-next-line
+	}, [userId, mission, dispatch, user_game_resultsActions, hasPlayed])
 
 	//track player actions
 	React.useEffect(() => {
@@ -114,46 +108,83 @@ const Game2 = (props) => {
 	if(mission && state.locations.length === 0){
 		// safe copies
 		let availableCharacters = mission.missionCharacters.slice(0)
-		let locations = mission.locations.map( location => { return {location: location, missionsCharacters: []} })
-
+		let locations = mission.locations.map( location => {
+			delete location.characters
+			return {location: location, missionsCharacters: []}
+		})
+		
+		let tutorialCharacter = null;
+		const maxWeight = Math.max(mission.missionCharacters.length - mission.locations.length, 1)
 		//distribute on locations
 		while(availableCharacters.length > 0){
+			// se personagem for o de tutorial, separa ele e continua
+			if( availableCharacters[0].character.name === "Tutorial" ) {
+				tutorialCharacter = availableCharacters[0]
+				availableCharacters.splice(0, 1)
+				continue;
+			}
 
-			const locationIndex = Math.floor((Math.random() * 100)) % locations.length
-			const characterIndex = Math.floor(Math.random(0, availableCharacters.length))
+			// sorteia sala aleatoriamente com pesos que diminuem dependendo de quantos personagens já se tem
+			let totalWeight = 0
+			const weights = locations.map( (location) => {
+				let weight = maxWeight - location.missionsCharacters.length
+				totalWeight += weight
+				return weight
+			})
+			let rand = Math.floor(Math.random()*totalWeight)
+			let i = 0;
+			while( rand >= 0 ) rand -= weights[i++]
+			const locationIndex = i-1
 
 			//each character has some good and bad questions that can be asked
-			let availableAnswers = [...availableCharacters[characterIndex].answers]
-		  let correct = availableAnswers.filter(answer => answer.question.correct)
-		  let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
+			let availableAnswers = [...availableCharacters[0].answers]
+			let correct = availableAnswers.filter(answer => answer.question.correct)
+			let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
 
-		  let selectedQuestions = []
-		  while(selectedQuestions.length < 4){
-		    let source = selectedQuestions.length % 2 === 0? correct : ncorrect
-		    let index = Math.floor(Math.random(0, source.length))
-		    selectedQuestions.push( source[index] )
-		    source.splice(index, 1)
-		  }
+			let selectedQuestions = []
+			// ? E se correct/ncorrect não tiveram a quantidade necessária de perguntas?
+			while(selectedQuestions.length < 4){
+				let source = selectedQuestions.length % 2 === 0? correct : ncorrect
+				let index = Math.floor(Math.random(0, source.length))
+				selectedQuestions.push( source[index] )
+				source.splice(index, 1)
+			}
 
-		  if(Math.floor(Math.random(0,1) < .5)){
-		    let temp = selectedQuestions[0]
-		    selectedQuestions[0] = selectedQuestions[1]
-		    selectedQuestions[1] = temp
-		  }
-		  if(Math.floor(Math.random(0, 1) > .5)){
-		    let temp = selectedQuestions[2]
-		    selectedQuestions[2] = selectedQuestions[3]
-		    selectedQuestions[3] = temp
-		  }
+			// Aleatorizando para que nem sempre venham as perguntas na ordem certo->errado
+			if(Math.floor(Math.random(0,1) < .5)){
+				let temp = selectedQuestions[0]
+				selectedQuestions[0] = selectedQuestions[1]
+				selectedQuestions[1] = temp
+			}
+			if(Math.floor(Math.random(0, 1) > .5)){
+				let temp = selectedQuestions[2]
+				selectedQuestions[2] = selectedQuestions[3]
+				selectedQuestions[3] = temp
+			}
 
 			locations[locationIndex].missionsCharacters = [...locations[locationIndex].missionsCharacters,
-				{...availableCharacters[characterIndex],
-					selectedQuestions
+				{...availableCharacters[0],
+					selectedQuestions,
+					zDepth: Math.random()
 				}
 			]
-			availableCharacters.splice(characterIndex, 1)
+			availableCharacters.splice(0, 1)
 		}
-		setState({...state, locations})
+
+		// Aleatorizando ordem dos personagens em cada sala
+		for( let i = 0; i < locations.length; i++ ) {
+			let amountChars = locations[i].missionsCharacters.length
+			if( amountChars <= 1) continue
+			for( let j = 0; j < amountChars-1; j++ ) {
+				let exchangeWith = Math.floor(Math.random() * (amountChars - j)) + j
+				if (j === exchangeWith) continue // Não precisa trocar se for consigo mesmo
+				//swap
+				let aux = locations[i].missionsCharacters[j]
+				locations[i].missionsCharacters[j] = locations[i].missionsCharacters[exchangeWith]
+				locations[i].missionsCharacters[exchangeWith] = aux
+			}
+		}
+		setState({...state, locations, tutorialCharacter})
 	}
 
 	const onStartGame = (e) => {
@@ -165,17 +196,17 @@ const Game2 = (props) => {
 		}
 
 		//check if should start or skip tutorial
-		setState({...state, scene: (state.tryAgain || state.hasPlayed) ? "ROOM" : "TUTORIAL"})
+		setState({...state, scene: (!state.seeTutorial && state.hasPlayed) ? "ROOM" : "TUTORIAL"})
 	}
 
 	const endTutorial = () => {
 		let updateState = {
-			tutorialStep: state.tutorialStep + 1,
 			showConvo: false,
+			currentChar: null,
+			scene: "ROOM",
 			...dialogInitialState
 		}
 		setState({...state, ...updateState})
-		setTimeout( () => {setState({...state, ...updateState, currentChar: null, scene: "ROOM"})}, 400 )
 	}
 
 	const setTutorialCharacter = (character) => () => {
@@ -187,7 +218,7 @@ const Game2 = (props) => {
 				convOptions:
 				[
 					{
-						answer: 'Olha, não sei quem você está procurando, cheguei aqui semana passada. A cabelereira deve saber!',
+						answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...','A cabelereira deve saber!'],
 						question: {
 							question: 'Estou procurando alguém. Você pode me ajudar?'
 						},
@@ -198,24 +229,25 @@ const Game2 = (props) => {
 	}
 
 	//shows only selected questions
-	const setCurrentCharacter = (character) => () => setState(
-		{...state,
+	const setCurrentCharacter = (character) => () => {
+		setState({
+			...state,
 			showConvo: true,
 			currentChar: character,
-			answers: state.locations[state.currentRoom].missionsCharacters
-										.find(mc => mc.character.id === character.id).selectedQuestions
-										.slice(0, state.questionsByStep),
-			convOptions: state.locations[state.currentRoom].characters
-										.find(c => c.id === character.id).selectedQuestions
+			dialogStep: 0,
+			convOptions: state.locations[state.currentRoom].missionsCharacters
+										.find(c => c.character.id === character.id).selectedQuestions
 										.slice(0, state.questionsByStep)
 		})
+	}
 
 	const closeDialog = (dialogHistory) => {
 		setState({
 			...state,
+			...dialogInitialState,
 			showConvo: false,
-			currentChar: null,
-			...dialogInitialState
+			shouldCloseConvo: false,
+			currentChar: null
 		})
 	}
 
@@ -223,22 +255,32 @@ const Game2 = (props) => {
 		if( state.scene === "TUTORIAL" ) {
 			setTimeout(() => { setState({
 				...state,
-				tutorialStep: state.tutorialStep + 1
+				tutorialStep: state.tutorialStep + 1,
+				tips: [ 'A cabeleireira sabe.' ]
 			}) }, 1500)
 		} else {
 			let updateState = {}
-			if(state.dialogStep !== state.totalDialogSteps){
-				updateState.answers = state.locations[state.currentRoom].missionsCharacters
-				.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
-
-				.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
-			}else{
+			if(state.dialogStep < state.totalDialogSteps){
+				updateState.convOptions = state.locations[state.currentRoom].missionsCharacters
+					.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
+					.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
+			} else if(state.dialogStep === state.totalDialogSteps) {
 				if(state.correct < state.correctMinimum){
-					updateState.preSpeech = ["Não estou entendendo. Quer começar de novo?"]
-					updateState.convOptions = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}}]
+					updateState.preSpeech = state.currentChar.wrongAnswer
+					updateState.convOptions = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}, answer:state.currentChar.endDialog}]
 				} else {
-					updateState.convOptions = [{answer: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?', tip:state.currentChar.rightAnswer }}]
+					updateState.convOptions = [{tip: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?'}, answer:state.currentChar.rightAnswer }]
 				}
+			} else {
+				const tchaus = ['Ah tá, tchau!', 'Ok. Valeu!', 'Tchau!', 'Até mais!',
+								'Entendi... Muito obrigado!', 'Até logo!', 'Até a próxima!']
+				const rIdx = Math.floor(Math.random()*tchaus.length)
+				updateState.convOptions = [{close: true, question:{question: tchaus[rIdx]}, answer:state.currentChar.endDialog}]
+			}
+			if( state.closeAfterWritter ) {
+				delete state.closeAfterWritter
+				updateState.convOptions = []
+				updateState.shouldCloseConvo = true
 			}
 			setState({...state, ...updateState})
 		}
@@ -247,37 +289,29 @@ const Game2 = (props) => {
 	const onRefreshDialog = () => {
 		setState({
 			...state,
-			refreshDialog: null
+			...dialogInitialState,
+			refreshDialog: null,
+			convOptions: state.locations[state.currentRoom].missionsCharacters
+									.find(c => c.character.id === state.currentChar.id).selectedQuestions
+									.slice(0, state.questionsByStep)
 		})
 	}
 
-	const onMenuButtonClick = (answer) => () =>{
+	const onMenuButtonClick = (answer) => {
 		let updateState = {}
 
 		if(answer.tip)
 			updateState = {...updateState, tips: [...state.tips, answer.tip]}
 
 		if(answer.refresh)
-			updateState = {
-				...updateState,
-				...dialogInitialState,
-				refreshDialog: onRefreshDialog,
-				convOptions: state.locations[state.currentRoom].characters
-										.find(c => c.id === state.currentChar.id).selectedQuestions
-										.slice(0, state.questionsByStep)
-			}
+			updateState = {...updateState, refreshDialog: onRefreshDialog}
 		else if(answer.close)
-			updateState = {...updateState, shouldCloseConvo: true}
+			updateState = {...updateState, closeAfterWritter: true}
 		else {
 			if (state.scene === "TUTORIAL"){
 				updateState = {
 					...updateState,
 					characterFeeling: 'wrongQuestion',
-					// ? Pq isso está sendo adicionado aqui? Isso é tip pro jogo real?
-					// ? Se sim, ele deveria ir em setTutorialCharacter pq faz mais sentido
-					tips: [
-						'A cabelereira sabe.'
-					],
 					convOptions: []
 				}
 			} else {
@@ -287,18 +321,15 @@ const Game2 = (props) => {
 					validQuestions: state.validQuestions,
 					characterFeeling: null
 				}
-				// ? Não era para ser negado isso não? "!updateState.[...]"?
-				// ? Pelo que entendi do que isso deveria fazer é colocar na lista o personagem
-				// ? somente se o jogador ainda não falou com ele
-				if (updateState.spokenCharacters.indexOf(updateState.currentChar.name))
-					updateState.spokenCharacters.push(updateState.currentChar.name)
+				if (updateState.spokenCharacters.indexOf(state.currentChar.name) === -1)
+					updateState.spokenCharacters.push(state.currentChar.name)
 
 				//change character face
-				if(answer.question.correct){
-					if(updateState.validQuestions.hasOwnProperty(answer.question.question)){
-						updateState.validQuestions[answer.question.question]++
+				if(answer.correct){
+					if(updateState.validQuestions.hasOwnProperty(answer.question)){
+						updateState.validQuestions[answer.question]++
 					} else {
-						updateState.validQuestions[answer.question.question] = 0
+						updateState.validQuestions[answer.question] = 0
 					}
 					updateState.characterFeeling = 'rightQuestion'
 				} else {
@@ -309,7 +340,7 @@ const Game2 = (props) => {
 			updateState = {
 				...updateState,
 				dialogStep: state.dialogStep + 1,
-				correct: state.correct + (answer.question.correct? 1 : 0)
+				correct: state.correct + (answer.correct? 1 : 0)
 			}
 		}
 
@@ -319,7 +350,12 @@ const Game2 = (props) => {
 	const checkEnd = () => {
 		if(state.tries < 3 && state.currentChar.name !== state.targetName){
 			state.tries++
-			setState({...state, acusation: false, characterFeeling: 'wrongAccusation'})
+			setState({
+				...state,
+				acusation: false,
+				characterFeeling: 'wrongAccusation',
+				preSpeech: state.currentChar.acusationAnswer
+			})
 		} else {
 			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, characterFeeling: state.currentChar.name === state.targetName ?
 			'rightAccusation' : 'wrongAccusation',
@@ -347,48 +383,42 @@ const Game2 = (props) => {
 		return (
 			<div id="tutorial-screen">
 				<Character
-					character={mission.missionCharacters.find(character => character.name === 'Fuyuko').character}
-					onClick={setTutorialCharacter(mission.missionCharacters.find(character => character.name === 'Fuyuko').character)}
+					character={state.tutorialCharacter.character}
+					onClick={setTutorialCharacter(state.tutorialCharacter.character)}
 				/>
 				<div id="tutorial-popup-1">
 					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
 					<span lang="en">Select someone to talk and help you find your guide.</span>
 				</div>
-				<div id="conversa" className='DialogPopUp' hidden={!state.showConvo} aria-hidden={!state.showConvo}>
-					<div id="dialog-interact">
-						<div id="dialogos">
-							<DialogHistory dialogHistory={state.dialogHistory}/>
-							<div id='DialogBox' className={state.showAnswer ? "alternative" : ""}>
-								{state.showAnswer &&
-									<Writer text={state.showAnswer.text}
-										onWritten={afterWriter}
-										afterWrittenTime={1500}
-										characterTime={48}
-									/>
-								}
-								{!(state.showAnswer) && !(state.convOptions == null) &&
-									<Menu buttonList={ state.convOptions.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, []) }
-									onButtonClick={onMenuButtonClick}
-									/>
-								}
-							</div>
+				{state.showConvo &&
+					<Conversa
+						onExited = {() => {setState({...state, showConvo: false, tutorialStep: state.tutorialStep-1})}}
+						convOptions = {state.convOptions.reduce((acc, convOption) => {
+							let option = {...convOption, answers: convOption.answer, question: convOption.question.question}
+							delete option.answer
+							return [...acc, option ]
+						}, [])}
+						currentChar = {state.currentChar}
+						charFeeling = {state.characterFeeling}
+						afterWriter = {afterWriter}
+						onConvoChoiceMade = {onMenuButtonClick}
+					/>
+				}
+				{id === 2 &&
+					<div id="tutorial-popup-2-wrapper">
+						<div id="tutorial-popup-2-content">
+							<span lang="pt-br"><strong>Lembre-se:</strong> As pessoas estão ocupadas em seus ambientes de trabalho, então tenha certeza de não gastar o tempo delas com perguntas fora de contexto!</span>
+							<span lang="en"><strong>Remember:</strong> People are busy in their workplaces, so be sure not to waste their times with question that are out of yout context!</span>
+							<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
 						</div>
-						<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 					</div>
-				</div>
-				<div id="tutorial-popup-2-wrapper" hidden={id!==2} aria-hidden={id!==2}>
-					<div id="tutorial-popup-2-content">
-						<span lang="pt-br"><strong>Lembre-se:</strong> As pessoas estão ocupadas em seus ambientes de trabalho, então tenha certeza de não gastar o tempo delas com perguntas fora de contexto!</span>
-						<span lang="en"><strong>Remember:</strong> People are busy in their workplaces, so be sure not to waste their times with question that are out of yout context!</span>
-						<button className="btn btn-center" id="btn-end-tutorial" onClick={endTutorial}>Continuar</button>
-					</div>
-				</div>
+				}
 			</div>
 		)
 	}
 
 	const restart = (tips) => {
-		setState({...initialState(), tryAgain: true, tips: tips})
+		setState({...initialState(), tips: tips, hasPlayed: true})
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
@@ -404,14 +434,16 @@ const Game2 = (props) => {
 					switch(state.scene){
 						case "INIT":
 							return <Init
-												name={mission.name} description={mission.description}
-												nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
-												descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
-												onStart={ onStartGame }
-												onBack={ () => setState({...state, back: true}) }
-											/>
+										name={mission.name} description={mission.description}
+										// nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang}).name}
+										// descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang}).description}
+										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
+										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
+										onStart={ onStartGame }
+										onBack={() => setState({...state, back: true})}
+										onSeeTutorial={ state.hasPlayed ? () => {state.seeTutorial = true;onStartGame()} : null }
+									/>
 						case "TUTORIAL":
-
 							return ( tutorialScreen(state.tutorialStep) )
 						case "ROOM":
 							return (
@@ -422,10 +454,12 @@ const Game2 = (props) => {
 											setState({...state, currentRoom: num})
 										}}
 									/>
-
-									<Sala roomData={state.locations[state.currentRoom]}>
+									{/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
+										//? pq passar tudo ao invés de só passar a string? Que aí poderia ser local ou na rede... */}
+									<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
 										{state.locations[state.currentRoom].missionsCharacters.map((missionsCharacter, index) =>
 											<Character key={index}
+												zDepth={missionsCharacter.zDepth}
 												character={missionsCharacter.character}
 												onClick={setCurrentCharacter(missionsCharacter.character)}
 											/>
@@ -435,9 +469,13 @@ const Game2 = (props) => {
 										<Conversa
 											shouldExit={state.shouldCloseConvo}
 											prevDialogHistory={[]}
-											clearDialogHistory={state.refreshDialog}
-											charPreSpeech={null}
-											convOptions={state.convOptions.reduce((acc, convOption) => { return [...acc, {...convOption, answers:convOption.answer, question: convOption.question.question} ] }, [])}
+											onClearDialogHistory={state.refreshDialog}
+											charPreSpeech={state.preSpeech}
+											convOptions={state.convOptions.reduce((acc, convOption) => {
+												let option = {...convOption, ...convOption.question, answers: convOption.answer}
+												delete option.answer
+												return [...acc, option ]
+											}, [])}
 											currentChar={state.currentChar}
 											charFeeling={state.characterFeeling}
 											afterWriter={afterWriter}
@@ -447,35 +485,15 @@ const Game2 = (props) => {
 											<AcusationLamp onClick={() => setState({...state, acusation: true})} />
 										</Conversa>
 									}
-									{/* <div id="conversa" className='DialogPopUp' hidden={!state.showConvo} aria-hidden={!state.showConvo}>
-										<AcusationLamp onClick={() => setState({...state, acusation: true})} />
-										<div id="fechar" onClick={closeDialog}><span>×</span></div>
-										<div id="dialog-interact">
-											<div id="dialogos">
-												<DialogHistory dialogHistory={state.dialogHistory}/>
-												<div id='DialogBox' className={state.showAnswer ? "alternative" : ""}>
-													{state.showAnswer ?
-														<Writer text={state.showAnswer.text}
-															onWritten={afterWriter}
-															afterWrittenTime={2000}
-															characterTime={48}
-														/>
-														:
-														<Menu buttonList={state.convOptions.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
-															onButtonClick={onMenuButtonClick}
-														/>
-													}
-												</div>
-											</div>
-											<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
-										</div>
-									</div> */}
 								</div>)
 							case "ENDGAME":
 								return(
 									<div id="endGame-screen">
 										{state.gameEndState ?
-										<div>
+										<div id="end-panels">
+											<div id="painel-2-icon">
+												<img src={state.tries === 0 ? iconVitoriaPrim : iconVitoriaPers} alt=""/>
+											</div>
 											<div id="endgame-messages">
 												{state.tries === 0 ?
 												<div className="painel" id="painel-1">
@@ -488,11 +506,10 @@ const Game2 = (props) => {
 													<span lang="en">You have found the right person! Congrats!</span>
 													<a href="#painel-2" className="next-btn">{'❯'}</a>
 												</div>}
-
 												<div className="painel" id="painel-2">
 													<div className="painel-2-wrapper">
 														<div className="painel-2-content">
-															<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
+															<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
 															<div>clues</div>
 														</div>
 													</div>
@@ -533,6 +550,13 @@ const Game2 = (props) => {
 											</div>
 										</div>
 										}
+										<DialogCharacter
+											character={
+												mission.missionCharacters.find((mc) => {
+													return mc.character.name===state.targetName
+												}).character}
+											feeling={"rightAccusation"}
+										/>
 									</div>
 								)
 					}
@@ -544,16 +568,15 @@ const Game2 = (props) => {
 								<span lang="pt-br">Tem certeza?</span>
 								<span lang="en">Are you sure it's them?<br />Check your tips.</span>
 							</div>
-							<div>
-								{ /* Dessa linha até a "uma das várias" devem ser removidas quando o carregamento correto vier */ }
-								<div>Dicas recebidas.</div>
-								<div>Dicas recebidas mais longa.</div>
-								<div>Dicas.</div>
-								<div>Uma das várias dicas que foram recebidas mas essa é super mega blaster master longa.</div>
-								<div>Recebidas.</div>
-								{state.tips.map((tip, index)=>
-									<div key={index}>{tip}</div>
-									)}
+							<div id="tips-received">
+								<div id="accusation-icon">
+									<img src={iconDicas} alt="" />
+								</div>
+								{state.tips.length > 0 ?
+									state.tips.map((tip, index) => <div key={index}>{tip}</div>)
+									:
+									<div>Nenhuma dica recebida.</div>
+								}
 							</div>
 						</div>
 						<div id="accusation-btns">
@@ -569,40 +592,3 @@ const Game2 = (props) => {
 }
 
 export default Game2
-
-/*
-
-	const [missionOpen, setMissionOpen] = React.useState(true)
-	const _minTimeBonus = 2*60*1000; // Se terminar antes desse tempo (em ms), ganha o bônus máximo
-	const _maxTimeBonus = 5*60*1000; // Se terminar em até esse tempo (em ms), ganha um bônus no score proporcional. Terminar depois garante 0 de bônus
-	const _maxBonusPts = 100; // Máximo de 100 pontos se terminar antes do mínimo
-
-	const handleSubmit = (value) => () => {
-		// Computa bônus por tempo
-		let diff = Date.now() - state.startedTimestamp;
-		// Faz o bônus ser decrescente com o passar do tempo, escalados para que bonusAmnt
-		// seja 1 em t = _minTimeBonus e 0 em t = _maxTimeBonus
-		let bonusAmnt = (_maxTimeBonus - diff)/(_maxTimeBonus - _minTimeBonus);
-		bonusAmnt = Math.max(Math.min(bonusAmnt, 1.0), 0.0); // Clampa para que bonusAmnt = [0,1]
-
-		// Sim, eu sei. Essa linha está 3x maior que o ideal por culpa da string. Mas ela é para ser temporária.
-		// Se estivermos em produção e essa linha ainda estiver existente, algo deu muito errado.
-		let msgFinal = `Você encontrou ${state.targetName}!\nVocê levou ${Math.trunc(diff / 60000)}:` + `${Math.trunc(diff/1000)%60}`.padStart(2, '0') + ` para encontrar. Isso te garante ${Math.round(_maxBonusPts*bonusAmnt)} pontos de bonus.`
-		if( value == state.quizAnswer ) {
-			let newScore = state.score + Math.round(_maxBonusPts*bonusAmnt) + 15;
-			setState({...state, gameEndState: msgFinal + `\nE se apresentou corretamente! +15 pontos\nSeu score final é de ${newScore}`, score: newScore, elapsedTime: diff})
-		} else {
-			let newScore = state.score + Math.round(_maxBonusPts*bonusAmnt);
-			setState({...state, gameEndState: msgFinal + `\nSeu score final é de ${newScore}`, score: newScore})
-		}
-	}
-
-	// Criei essa função mas agora não sei se ela será útil ou se deve ser aqui.
-	// Precisamos determinar quando e onde haverá incremento ou decremento de pontuação.
-	// Caso seja somente tempo levado para terminar o jogo, essa função é inútil.
-	// Caso seja tudo somente ao término, essa função é inútil e as outras computações
-	// podem ser feitas em handleSubmit, junto com a computação do bônus por tempo
-	const changeScore = (value) => () => {
-		setState({...state, score: state.score + value})
-	}
-*/

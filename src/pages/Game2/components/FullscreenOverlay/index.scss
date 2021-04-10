@@ -16,7 +16,11 @@
 	bottom: 0;
 	left: 0;
 	background-color: #FFFFFFBB;
-	background-color: rgba(#FFFFFF, var(--bgOpacity));
+	background-color: rgba(
+		var(--bgR),
+		var(--bgG),
+		var(--bgB),
+		var(--bgA));
 	overflow: hidden;
 	opacity: 100%;
 	animation: openOverlay 250ms linear forwards;
@@ -42,9 +46,19 @@
 	transition: 100ms ease-in-out;
 	overflow: hidden;
 	color: #59316D;
+	color: rgba(
+		var(--closeR),
+		var(--closeG),
+		var(--closeB),
+		1);
 }
 
 #fullscreen-overlay-close-btn:hover {
-	color: #f9afa1;
+		color: #f9afa1;
+		color: rgba(
+			var(--closeHoverR),
+			var(--closeHoverG),
+			var(--closeHoverB),
+			1);
 	transform: scale(1.2);
 }

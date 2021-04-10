@@ -101,17 +101,16 @@ const CreateMissionGame1 = (props) => {
       missionCharactersCreate: [...state.charactersConfigList, ...state.charactersList]
     }
 
-/*
+
 //  algo errado aqui
-// 
+//
     state.charactersConfigList = []
     state.charactersList = []
 
     dispatch(apiActions.missionsActions.update(data))
 
-    let data = {...state.mission}
+    data = {...state.mission}
     dispatch(apiActions[game+"Actions"].update(data))
-*/
   }
 
   const addToMission = (type, data) => () => {

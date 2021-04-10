@@ -89,31 +89,40 @@ h2.type-s {
 	content: "< ";
 }
 
-#btn-back {
+#btn-start::after {
+	content: " >";
+}
+
+#btn-back,
+#btn-start,
+#btn-tutorial {
 	padding: 10px 30px;
-	margin-right: 1em;
-	background-color: #D6E3F4;
-	color: #59316D;
 	font-family: 'barlow semibold';
-	border-radius: 50px 50px 0px 50px;
 	transition: 100ms linear;
+	color: #59316D;
+}
+
+#btn-back {
+	background-color: #D6E3F4;
+	margin-right: 1em;
+	border-radius: 50px 50px 0px 50px;
 }
 
 #btn-start {
-	padding: 10px 30px;
-	margin-left: 1em;
 	background-color: #F9AFA1;
-	color: #59316D;
-	font-family: 'barlow semibold';
+	margin-left: 1em;
 	border-radius: 50px 50px 50px 0px;
-	transition: 100ms linear;
 }
 
-#btn-start:hover, #btn-back:hover {
+#btn-tutorial {
+	display: block;
+	margin-top: 1.5em;
+	border-radius: 50px;
+}
+
+#btn-start:hover,
+#btn-back:hover,
+#btn-tutorial:hover {
 	color: white;
 	background-color: #59316D;
-}
-
-#btn-start::after {
-	content: " >";
 }

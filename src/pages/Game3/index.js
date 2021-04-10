@@ -178,13 +178,18 @@ const Game3 = (props) => {
                           }
                           <div>
                             {mission.moneyTypes.map( (money, index) =>
-                              <Button key={index} onClick={addToPayment(money)}><img style={{width: 50}} src={money.image.url} alt='money'/></Button>
+                              <Button key={index} onClick={addToPayment(money)}>
+                                <img style={{width: 50}} src={money.image.url} alt='money'/>
+                              </Button>
                             )}
                           </div>
 
                           <div>
                           {state.payment.map((money, index) =>
-                            <div key={index}><img style={{width: 50}} src={money.image.url} alt='money'/><button onClick={removeFromPayment(index)}>Remover</button></div>
+                            <div key={index}>
+                              <img style={{width: 50}} src={money.image.url} alt='money'/>
+                              <button onClick={removeFromPayment(index)}>Remover</button>
+                            </div>
                           )}
                           </div>
                         </div>

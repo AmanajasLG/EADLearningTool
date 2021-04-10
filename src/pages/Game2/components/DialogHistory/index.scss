@@ -4,21 +4,25 @@
 	mask-image: linear-gradient(0deg, #FFFF 50%, #FFF0 100%);
 	// background-image: linear-gradient(0deg, #FFF 50%, #000 100%);
 	width: 100%;
-	max-width: 810px;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end; /* Bug do flex-box: impossível ter scroll com flex-end */
 	margin: 20px 0;
 	// overflow: scroll;
 	overflow: hidden;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
 }
 
 #dialog-history-content {
+	margin-left: 200px;
+	flex: 1 1 0px;
+	max-width: 810px;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-end;
 	justify-content: flex-end;
-	width: 100%;
 	// margin-top: auto; /* Workaround do bug do flex-box, mas âncora do elemento não fica na base */
 }
 

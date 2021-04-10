@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-anonymous-default-export
-const initialState = (tryAgain = false) => ({
+const initialState = () => ({
 //GAME STATE
   scene: "INIT",
   currentRoom: 0,
@@ -12,7 +12,7 @@ const initialState = (tryAgain = false) => ({
   tries: 0,
   validQuestions: [],
   tutorialStep: 0,
-  tryAgain: tryAgain,
+  seeTutorial: false,
   hasPlayed: false,
   checkedPlayed: false,
 //DIALOG
