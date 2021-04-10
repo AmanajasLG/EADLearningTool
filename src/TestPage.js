@@ -15,16 +15,16 @@ const TestPage = () => {
 	// MODIFICAR SOMENTE DAQUI PARA BAIXO
 	// -------------------------------------------
 
-
+	const [contacts, setContacts] = React.useState([
+		{name: "Fulano", job: "Carpinteiro", country: "Brasil"},
+		{name: "Ciclano", job: "Marceneiro", country: "Espanha"},
+		{name: "Beltrano", job: "Pescador", country: "Portugal"}
+	])
 
 	return (
 		<div style={{position:"absolute", top: 0, left: 0, width:"100%", height:"100%"}}>
 			<Phone
-				contacts={[
-					{name: "Fulano", job: "Carpinteiro", country: "Brasil"},
-					{name: "Ciclano", job: "Marceneiro", country: "Espanha"},
-					{name: "Beltrano", job: "Pescador", country: "Portugal"}
-				]}
+				contacts={contacts}
 				jobs={[
 					"Carpinteiro",
 					"Marceneiro",
@@ -35,6 +35,7 @@ const TestPage = () => {
 					"Espanha",
 					"Portugual"
 				]}
+				onAddContact={(newC)=>setContacts([...contacts, newC])}
 			>
 			</Phone>
 		</div>
