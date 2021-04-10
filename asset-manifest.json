@@ -1,17 +1,21 @@
 {
   "files": {
-    "main.css": "/EADLearningTool/static/css/main.91d55f43.chunk.css",
-    "main.js": "/EADLearningTool/static/js/main.8c941b9a.chunk.js",
-    "main.js.map": "/EADLearningTool/static/js/main.8c941b9a.chunk.js.map",
-    "runtime-main.js": "/EADLearningTool/static/js/runtime-main.a89cfa7c.js",
-    "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.a89cfa7c.js.map",
-    "static/js/2.1df1cb09.chunk.js": "/EADLearningTool/static/js/2.1df1cb09.chunk.js",
-    "static/js/2.1df1cb09.chunk.js.map": "/EADLearningTool/static/js/2.1df1cb09.chunk.js.map",
-    "static/js/3.9c1fe8a4.chunk.js": "/EADLearningTool/static/js/3.9c1fe8a4.chunk.js",
-    "static/js/3.9c1fe8a4.chunk.js.map": "/EADLearningTool/static/js/3.9c1fe8a4.chunk.js.map",
+    "main.css": "/EADLearningTool/static/css/main.ebb0a8f7.chunk.css",
+    "main.js": "/EADLearningTool/static/js/main.9f2c272f.chunk.js",
+    "main.js.map": "/EADLearningTool/static/js/main.9f2c272f.chunk.js.map",
+    "runtime-main.js": "/EADLearningTool/static/js/runtime-main.e7505000.js",
+    "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.e7505000.js.map",
+    "static/js/2.b1d8bcd7.chunk.js": "/EADLearningTool/static/js/2.b1d8bcd7.chunk.js",
+    "static/js/2.b1d8bcd7.chunk.js.map": "/EADLearningTool/static/js/2.b1d8bcd7.chunk.js.map",
+    "static/js/3.a3d76062.chunk.js": "/EADLearningTool/static/js/3.a3d76062.chunk.js",
+    "static/js/3.a3d76062.chunk.js.map": "/EADLearningTool/static/js/3.a3d76062.chunk.js.map",
     "index.html": "/EADLearningTool/index.html",
-    "static/css/main.91d55f43.chunk.css.map": "/EADLearningTool/static/css/main.91d55f43.chunk.css.map",
-    "static/js/2.1df1cb09.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.1df1cb09.chunk.js.LICENSE.txt",
+    "static/css/main.ebb0a8f7.chunk.css.map": "/EADLearningTool/static/css/main.ebb0a8f7.chunk.css.map",
+    "static/js/2.b1d8bcd7.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.b1d8bcd7.chunk.js.LICENSE.txt",
+    "static/media/Celular Base.794704d0.svg": "/EADLearningTool/static/media/Celular Base.794704d0.svg",
+    "static/media/Celular Sala.f026f530.svg": "/EADLearningTool/static/media/Celular Sala.f026f530.svg",
+    "static/media/Mão dedão.60615287.svg": "/EADLearningTool/static/media/Mão dedão.60615287.svg",
+    "static/media/Mão palma.ff873eea.svg": "/EADLearningTool/static/media/Mão palma.ff873eea.svg",
     "static/media/avatar1.48f082ac.svg": "/EADLearningTool/static/media/avatar1.48f082ac.svg",
     "static/media/tela-fim-jogo.scss": "/EADLearningTool/static/media/bg-forma-verde.60dfa7ed.svg",
     "static/media/index.scss": "/EADLearningTool/static/media/formas-bottom-2.15b83aae.svg",
@@ -22,12 +26,13 @@
     "static/media/lampada_apagada.3f2311d7.svg": "/EADLearningTool/static/media/lampada_apagada.3f2311d7.svg",
     "static/media/parabens_vitoria-persistente.62184df1.svg": "/EADLearningTool/static/media/parabens_vitoria-persistente.62184df1.svg",
     "static/media/parabens_vitoria-primeira.a06b772e.svg": "/EADLearningTool/static/media/parabens_vitoria-primeira.a06b772e.svg",
-    "static/media/pic-people-talk.3d385cc4.svg": "/EADLearningTool/static/media/pic-people-talk.3d385cc4.svg"
+    "static/media/pic-people-talk.3d385cc4.svg": "/EADLearningTool/static/media/pic-people-talk.3d385cc4.svg",
+    "static/media/ícone_jogo1.244e8c29.svg": "/EADLearningTool/static/media/ícone_jogo1.244e8c29.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.a89cfa7c.js",
-    "static/js/2.1df1cb09.chunk.js",
-    "static/css/main.91d55f43.chunk.css",
-    "static/js/main.8c941b9a.chunk.js"
+    "static/js/runtime-main.e7505000.js",
+    "static/js/2.b1d8bcd7.chunk.js",
+    "static/css/main.ebb0a8f7.chunk.css",
+    "static/js/main.9f2c272f.chunk.js"
   ]
 }
