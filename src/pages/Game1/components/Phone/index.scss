@@ -153,6 +153,7 @@
 
 #big-phone-screen-content {
 	overflow-y: scroll;
+	scroll-behavior: smooth;
 	overflow-x: hidden;
 	margin-right: -5px;
 	margin-bottom: 20px;
@@ -167,7 +168,7 @@
 }
 
 #lista-contatos {
-	overflow-y: scroll;
+	overflow: hidden;
 	margin-left: 20px;
 	margin-right: 10px;
 	// margin-bottom: 10px;
@@ -181,6 +182,7 @@
 	align-items: stretch;
 	justify-content: flex-start;
 	margin-bottom: 40px;
+	animation: showContact 350ms cubic-bezier(0,0, 0,1) forwards;
 }
 
 .contato * {
@@ -242,6 +244,12 @@
 	font-weight: 600;
 }
 
+#add-contato {
+	background-color: #D6E3F455;
+	border-radius: 30px;
+	padding: 10px;
+}
+
 #btn-add-contato {
 	margin-top: 20px;
 	margin-left: 10px;
@@ -251,13 +259,23 @@
 	text-align: center;
 	font-family: 'Barlow';
 	font-weight: 500;
-	color: #59316D;
-	background-color: #D6E3F4;
-	cursor: pointer;
 	transition: 100ms linear;
 }
 
-#btn-add-contato:hover {
+#btn-add-contato.enabled {
+	background-color: #D6E3F4;
+	color: #59316D;
+	cursor: pointer;
+}
+
+#btn-add-contato.disabled {
+	background-color: #AAAAAA;
+	color: #EEEEEE;
+	cursor: default;
+	pointer-events: none;
+}
+
+#btn-add-contato:hover.enabled {
 	background-color: #59316D;
 	color: #FFFFFF;
 }
@@ -288,4 +306,15 @@
 #btn-terminei:hover {
 	background-color: #59316D;
 	color: #FFFFFF;
+}
+
+@keyframes showContact {
+	0% {
+		transform: scale(0.75);
+		opacity: 0%;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 100%;
+	}
 }
