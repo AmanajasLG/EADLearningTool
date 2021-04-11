@@ -38,13 +38,13 @@
 #app-header.hidden {
 	transform: translateY( calc(-100% - 20px) );
 	margin-bottom: -74px;
-	opacity: 0%;
+	opacity: 0;
 	background-color: transparent;
 }
 
 #app-header.hidden::after,
 #app-header.overlay::after {
-	opacity: 0%;
+	opacity: 0;
 	// background-image: none;
 }
 
@@ -121,6 +121,6 @@
 }
 
 #app-header.overlay #logout-btn {
-	opacity: 0%;
+	opacity: 0;
 	pointer-events: none;
 }

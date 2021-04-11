@@ -42,13 +42,13 @@
 	left: 10px;
 	height: auto;
 	width: auto;
-	opacity: 25%;
+	opacity: 0.25;
 	transition: 100ms linear;
 	z-index: 10;
 }
 
 #input-tracker:hover {
-	opacity: 100%;
+	opacity: 1;
 }
 
 .type-display {

@@ -54,11 +54,11 @@
 	text-align: center;
 	padding: 0 10px 10px 10px;
 	transition: 200ms ease-in-out;
-	opacity: 0%;
+	opacity: 0;
 }
 
 #small-phone-content:hover #small-phone-floating-text {
-	opacity: 100%;
+	opacity: 1;
 }
 
 #small-phone-floating-text span[lang="pt-br"] {
@@ -310,10 +310,10 @@
 @keyframes showContact {
 	0% {
 		transform: scale(0.75);
-		opacity: 0%;
+		opacity: 0;
 	}
 	100% {
 		transform: scale(1);
-		opacity: 100%;
+		opacity: 1;
 	}
 }

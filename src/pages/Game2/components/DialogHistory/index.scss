@@ -37,22 +37,22 @@
 @keyframes slideFromLeft {
 	0% {
 		transform: translate(-20%, 50%);
-		opacity: 0%;
+		opacity: 0;
 	}
 	100% {
 		transform: translate(0%, 0%);
-		opacity: 100%;
+		opacity: 1;
 	}
 }
 
 @keyframes slideFromRight {
 	0% {
 		transform: translate(20%, 50%);
-		opacity: 0%;
+		opacity: 0;
 	}
 	100% {
 		transform: translate(0%, 0%);
-		opacity: 100%;
+		opacity: 1;
 	}
 }
 
