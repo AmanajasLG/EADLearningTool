@@ -1,4 +1,3 @@
-
 import './App.scss'
 import AppHeader from './_components/AppHeader'
 import Home from './pages/Home'

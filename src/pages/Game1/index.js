@@ -60,7 +60,7 @@ const Game1 = (props) => {
 		if(mission){
 			let data = {}
 			if(state.locations.length === 0){
-				let perRoom = Math.floor(mission.characters.length / mission.locations.length)
+				let perRoom = mission.game_1_mission_characters.length / mission.locations.length
 				data.locations = mission.locations.map((location, index) => {
 					return {
 						...location,

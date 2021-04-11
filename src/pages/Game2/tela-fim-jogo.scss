@@ -36,7 +36,9 @@
 	flex-wrap: nowrap;
 	pointer-events: none;
 	overflow-x: scroll;
-	scroll-snap-type: x mandatory;
+	-webkit-scroll-snap-type: mandatory;
+		-ms-scroll-snap-type: mandatory;
+			scroll-snap-type: x mandatory;
 	scrollbar-width: none;
 	-ms-overflow-style: none;
 	scroll-behavior: smooth;
@@ -145,7 +147,8 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
-	background-clip: border-box;
+	-webkit-background-clip: border-box;
+			background-clip: border-box;
 	padding: 75px 125px;
 	font-size: 3rem;
 	color: #59316D;
