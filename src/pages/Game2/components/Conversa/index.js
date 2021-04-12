@@ -66,11 +66,18 @@ const Conversa = ({
 		dialogHistory: prevDialogHistory
 	});
 
+	// if( charPreSpeech !== null && charPreSpeech.length > 0 ) {
+	// 	state.currentAnswer = 0
+	// 	state.answers = typeof(charPreSpeech) === "string" ? [charPreSpeech] : charPreSpeech
+	// 	charPreSpeech = null
+	// }
+
 	// * UNDEFINED BEHAVIOR caso alguém mude o charPreSpeech desse componente enquanto o writer faz algo
 	React.useEffect( () => {
 		if( charPreSpeech !== null && charPreSpeech.length > 0 ) {
 			state.currentAnswer = 0
 			state.answers = typeof(charPreSpeech) === "string" ? [charPreSpeech] : charPreSpeech
+			console.log('effect', state.answers)
 		}
 		// eslint-disable-next-line
 	}, [charPreSpeech])
@@ -97,7 +104,7 @@ const Conversa = ({
 
 	const _afterWriter = () => {
 		let updateState = {}
-		if( state.currentAnswer < state.answers.length-1 ) {
+		if( state.currentAnswer < state.answers.length - 1 ) {
 			updateState = {
 				currentAnswer: state.currentAnswer + 1
 			}
@@ -110,18 +117,19 @@ const Conversa = ({
 
 		setState({
 			...state,
+			...updateState,
 			dialogHistory: [
 				...state.dialogHistory,
 				{text: state.answers[state.currentAnswer]}
 			],
-			...updateState
 		})
 
-		if( callAfterWritterForEveryMsg || state.currentAnswer >= state.answers.length-1 )
+		if( callAfterWritterForEveryMsg || state.currentAnswer >= state.answers.length - 1 )
 			afterWriter()
 	}
 
 	const _convoChoiceClick = (convoChoosen) => {
+
 		if( typeof(convoChoosen.answers) === "string" ) convoChoosen.answers = [convoChoosen.answers]
 		setState( {
 			...state,
@@ -131,8 +139,9 @@ const Conversa = ({
 			],
 			answers: convoChoosen.answers,
 			currentAnswer: 0
-		} )
-		onConvoChoiceMade(convoChoosen)
+		})
+
+		onConvoChoiceMade(convoChoosen)()
 	}
 
 	return (

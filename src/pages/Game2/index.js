@@ -188,9 +188,7 @@ const Game2 = (props) => {
 				[
 					{
 						answer: 'Olha, não sei quem você está procurando, cheguei aqui semana passada. A cabelereira deve saber!',
-						question: {
-							question: 'Estou procurando alguém. Você pode me ajudar?'
-						},
+						question: 'Estou procurando alguém. Você pode me ajudar?',
 						close: false
 					}
 				]
@@ -202,11 +200,8 @@ const Game2 = (props) => {
 		{...state,
 			showConvo: true,
 			currentChar: character,
-			answers: state.locations[state.currentRoom].missionsCharacters
+			convOptions: state.locations[state.currentRoom].missionsCharacters
 										.find(mc => mc.character.id === character.id).selectedQuestions
-										.slice(0, state.questionsByStep),
-			convOptions: state.locations[state.currentRoom].characters
-										.find(c => c.id === character.id).selectedQuestions
 										.slice(0, state.questionsByStep)
 		})
 
@@ -227,10 +222,9 @@ const Game2 = (props) => {
 			}) }, 1500)
 		} else {
 			let updateState = {}
-			if(state.dialogStep !== state.totalDialogSteps){
-				updateState.answers = state.locations[state.currentRoom].missionsCharacters
+			if(state.dialogStep !== state.totalDialogSteps){				
+				updateState.convOptions = state.locations[state.currentRoom].missionsCharacters
 				.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
-
 				.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
 			}else{
 				if(state.correct < state.correctMinimum){
@@ -285,16 +279,14 @@ const Game2 = (props) => {
 					...updateState,
 					spokenCharacters: state.spokenCharacters,
 					validQuestions: state.validQuestions,
-					characterFeeling: null
+					characterFeeling: null,
 				}
-				// ? Não era para ser negado isso não? "!updateState.[...]"?
-				// ? Pelo que entendi do que isso deveria fazer é colocar na lista o personagem
-				// ? somente se o jogador ainda não falou com ele
-				if (updateState.spokenCharacters.indexOf(updateState.currentChar.name))
-					updateState.spokenCharacters.push(updateState.currentChar.name)
+
+				if (updateState.spokenCharacters.indexOf(state.currentChar.name) === -1)
+					updateState.spokenCharacters.push(state.currentChar.name)
 
 				//change character face
-				if(answer.question.correct){
+				if(answer.correct){
 					if(updateState.validQuestions.hasOwnProperty(answer.question.question)){
 						updateState.validQuestions[answer.question.question]++
 					} else {
@@ -309,7 +301,7 @@ const Game2 = (props) => {
 			updateState = {
 				...updateState,
 				dialogStep: state.dialogStep + 1,
-				correct: state.correct + (answer.question.correct? 1 : 0)
+				correct: state.correct + (answer.correct? 1 : 0)
 			}
 		}
 
@@ -347,8 +339,8 @@ const Game2 = (props) => {
 		return (
 			<div id="tutorial-screen">
 				<Character
-					character={mission.missionCharacters.find(character => character.name === 'Fuyuko').character}
-					onClick={setTutorialCharacter(mission.missionCharacters.find(character => character.name === 'Fuyuko').character)}
+					character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
+					onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
 				/>
 				<div id="tutorial-popup-1">
 					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
@@ -392,8 +384,6 @@ const Game2 = (props) => {
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
-	console.log(mission)
-
 	return (
 		<div id="game2-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
@@ -424,7 +414,7 @@ const Game2 = (props) => {
 									/>
 
 									<Sala roomData={state.locations[state.currentRoom]}>
-										{state.locations[state.currentRoom].missionsCharacters.map((missionsCharacter, index) =>
+										{state.locations[state.currentRoom].missionsCharacters.filter(missionCharacter => missionCharacter.character.name !== 'Tutorial').map((missionsCharacter, index) =>
 											<Character key={index}
 												character={missionsCharacter.character}
 												onClick={setCurrentCharacter(missionsCharacter.character)}
@@ -436,8 +426,8 @@ const Game2 = (props) => {
 											shouldExit={state.shouldCloseConvo}
 											prevDialogHistory={[]}
 											clearDialogHistory={state.refreshDialog}
-											charPreSpeech={null}
-											convOptions={state.convOptions.reduce((acc, convOption) => { return [...acc, {...convOption, answers:convOption.answer, question: convOption.question.question} ] }, [])}
+											charPreSpeech={state.preSpeech}
+											convOptions={state.convOptions.reduce((acc, convOption) => { return [...acc, {...convOption, answers:convOption.answer, question: convOption.question.question, correct: convOption.question.correct} ] }, [])}
 											currentChar={state.currentChar}
 											charFeeling={state.characterFeeling}
 											afterWriter={afterWriter}

@@ -81,7 +81,7 @@ const CreateMissionGame1 = (props) => {
 
     dispatch(apiActions.missionsActions.create(data))
     
-    let data = {...state.mission}
+    data = {...state.mission}
     dispatch(apiActions[game+"Actions"].create(data))
   
   }
@@ -102,7 +102,7 @@ const CreateMissionGame1 = (props) => {
 
     dispatch(apiActions.missionsActions.update(data))
     
-    let data = {...state.mission}
+    data = {...state.mission}
     dispatch(apiActions[game+"Actions"].update(data))     
   }
 
