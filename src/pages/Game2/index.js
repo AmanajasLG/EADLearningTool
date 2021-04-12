@@ -234,7 +234,7 @@ const Game2 = (props) => {
 						// question: 'Estou procurando alguém. Você pode me ajudar?',
 						answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...','A cabelereira deve saber!'],
 						question: {
-							question: 'Estou procurando alguém. Você pode me ajudar?'
+							question: 'Estou procurando alguém. Você pode me ajudar?',
 						},
 						close: false
 					}
@@ -289,13 +289,13 @@ const Game2 = (props) => {
 					updateState.preSpeech = state.currentChar.wrongAnswer
 					updateState.convOptions = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}, answer:state.currentChar.endDialog}]
 				} else {
-					updateState.convOptions = [{tip: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?'}, answer:state.currentChar.rightAnswer }]
+					updateState.convOptions = [{tip: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?'}, answer:state.currentChar.rightAnswer, correct: true }]
 				}
 			} else {
 				const tchaus = ['Ah tá, tchau!', 'Ok. Valeu!', 'Tchau!', 'Até mais!',
 								'Entendi... Muito obrigado!', 'Até logo!', 'Até a próxima!']
 				const rIdx = Math.floor(Math.random()*tchaus.length)
-				updateState.convOptions = [{close: true, question:{question: tchaus[rIdx]}, answer:state.currentChar.endDialog}]
+				updateState.convOptions = [{close: true, question:{question: tchaus[rIdx], correct: true}, answer:state.currentChar.endDialog}]
 			}
 			if( state.closeAfterWritter ) {
 				delete state.closeAfterWritter
@@ -320,7 +320,7 @@ const Game2 = (props) => {
 	const onMenuButtonClick = (answer) => {
 		let updateState = {}
 
-		if(answer.tip)
+		if(state.tips.indexOf(answer.tip) === -1)
 			updateState = {...updateState, tips: [...state.tips, answer.tip]}
 
 		if(answer.refresh)
