@@ -29,7 +29,7 @@ import './index.scss'
  *			Histórico inicial da conversa
  * @param  {string | string[]} [props.charPreSpeech]
  *			Lista de falas a serem apresentadas antes de se dar a opção de escolha ao jogador
- * @param  {Object[]} props.convOptions
+ * @param  {{question:string, answers:string[]}[]} props.convOptions
  *			Lista de opções para o jogador escolher (com suas respostas)
  * @param  {Object} [props.currentChar]
  *			Info do personagem a ser renderizado

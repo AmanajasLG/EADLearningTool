@@ -9,7 +9,8 @@ import palma from '../../../../img/Game1/Mão palma.svg'
 import './index.scss'
 import FullscreenOverlay from '../../../Game2/components/FullscreenOverlay'
 
-const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
+// const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
+const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize}) => {
 	const [state,setState] = React.useState({maximized: false, shouldMinimize: false})
 	const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
 	
@@ -19,9 +20,14 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 	}, [contacts])
 	
 	React.useEffect( () => {
-		if(typeof(onMinimize) === "function") _shouldMinimize()
+		if(shouldMinimize) _shouldMinimize()
 		//eslint-disable-next-line
-	}, [onMinimize])
+	}, [shouldMinimize])
+
+	// React.useEffect( () => {
+	// 	if(onMinimize) _shouldMinimize()
+	// 	//eslint-disable-next-line
+	// }, [onMinimize])
 
 	const _maximize = () => {
 		setState({...state, maximized: true})
@@ -32,7 +38,9 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 	}
 
 	const _minimized = () => {
-		setState({...state, shouldMinimize: false, maximized: false})
+		// setState({...state, shouldMinimize: false, maximized: false})
+		state.shouldMinimize = false
+		state.maximized = false
 		if(typeof(onMinimize) === "function") onMinimize()
 	}
 
@@ -59,14 +67,14 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 					<input type="text" name="nome" placeholder="Nome do contato" value={contact.name} readOnly="readonly" onChange={()=>{}}/>
 				</div>
 				<Dropdown
-					style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
+					// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
 					onChange={e => modifyContact({...contact, job: e.target.value}) }
 					label={"Profissão"}
 					value={contact.job}
 					optionList={jobs}
 				/>
 				<Dropdown
-					style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
+					// style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
 					onChange={e => modifyContact({...contact, country: e.target.value})}
 					label={"Nacionalidade"}
 					value={contact.country}
