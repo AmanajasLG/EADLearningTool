@@ -214,7 +214,9 @@ const Game1 = (props) => {
 											jobs={state.jobs}
 											countries={state.countries}
 											onFinish={() => setState({...state, changeRoomPopUp: true})}
-											onMinimize={state.onMinimize}
+											// onMinimize={state.onMinimize}
+											onMinimize={() => setState({...state, shouldMinimize: false})}
+											shouldMinimize={state.shouldMinimize}
 											/>
 										{state.currentChar &&
 										<Conversa
@@ -262,7 +264,8 @@ const Game1 = (props) => {
 																	...state,
 																	shouldCloseDialog: true,
 																	currentLocationIndex: state.currentLocationIndex + 1,
-																	onMinimize: () => state.onMinimize = null
+																	// onMinimize: () => state.onMinimize = null
+																	shouldMinimize: true
 																})
 															else
 																setState({...state, scene: 'ENDGAME'})
