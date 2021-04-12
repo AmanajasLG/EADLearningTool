@@ -294,7 +294,7 @@ const Game1 = (props) => {
 									</div>)
 								case 'ENDGAME':
 									return(
-										<div>
+										<div style={{position: 'absolute', top:0, right:0, bottom:0, left:0, textAlign:"center", paddingTop:"45vh"}}>
 											Fim de jogo! tela de feedback
 										</div>
 									)
