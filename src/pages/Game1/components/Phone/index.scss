@@ -1,3 +1,12 @@
+#phone {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+}
+
 // ---------------------------------------------------------------------
 //
 //                             MINIMIZED
@@ -36,7 +45,13 @@
 	cursor: pointer;
 }
 
+#small-phone-content img,
+#small-phone-content svg {
+	pointer-events: all;
+}
+
 #small-phone-content:hover {
+	pointer-events: all;
 	transform: translateY(33%);
 }
 
@@ -54,11 +69,11 @@
 	text-align: center;
 	padding: 0 10px 10px 10px;
 	transition: 200ms ease-in-out;
-	opacity: 0%;
+	opacity: 0;
 }
 
 #small-phone-content:hover #small-phone-floating-text {
-	opacity: 100%;
+	opacity: 1;
 }
 
 #small-phone-floating-text span[lang="pt-br"] {
@@ -153,7 +168,6 @@
 
 #big-phone-screen-content {
 	overflow-y: scroll;
-	scroll-behavior: smooth;
 	overflow-x: hidden;
 	margin-right: -5px;
 	margin-bottom: 20px;
@@ -311,10 +325,10 @@
 @keyframes showContact {
 	0% {
 		transform: scale(0.75);
-		opacity: 0%;
+		opacity: 0;
 	}
 	100% {
 		transform: scale(1);
-		opacity: 100%;
+		opacity: 1;
 	}
 }

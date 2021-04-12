@@ -16,6 +16,9 @@ const initialValue = {
   currentChar: null,
   characterFeeling: 'init',
   showContacts: false,
+  onMinimize: null,
+  shouldCloseDialog: false,
+  wrongContacts: 0,
 }
 
 

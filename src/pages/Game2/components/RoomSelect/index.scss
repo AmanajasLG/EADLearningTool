@@ -13,7 +13,7 @@
 }
 
 .section-title span {
-	vertical-align: baseline;
+	vertical-align: middle;
 	padding: 5px 25px;
 	color: #59316D;
 }
@@ -49,6 +49,13 @@
 	border-radius: 1em;
 	background-color: white;
 	transition: 100ms linear;
+	cursor: pointer;
+}
+
+.RoomBtn.disabled {
+	pointer-events: none;
+	border-color: #AAAAAA55;
+	opacity: 0.9;
 }
 
 .RoomBtn:hover {

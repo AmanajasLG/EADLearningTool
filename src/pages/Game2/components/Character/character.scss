@@ -7,6 +7,7 @@
 	align-items: stretch;
 	flex: 1 1 0px;
 	min-width: 0;
+	max-width: 33%;
 	min-height: 0;
 	height: 100%;
 	text-align: center;
@@ -33,9 +34,9 @@
 }
 
 .CharDiv > div {
-	opacity: 0%;
+	opacity: 0;
 }
 
 .CharDiv:hover > div {
-	opacity: 100%;
+	opacity: 1;
 }

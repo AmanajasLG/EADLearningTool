@@ -1,4 +1,3 @@
-import './index.scss'
 import React from 'react'
 import avatar from '../../img/avatar1.svg'
 import home from '../../img/i-home.svg'
@@ -35,8 +34,8 @@ const UserHeader = ({pageInfo}) => {
 		alert.show("Vc achou onde faz para abrir suas configurações! \n\n Ending 8/15");
 	}
 
-    return (
-        <header id="app-header" className={ headerInfo.state.toLowerCase() }>
+	return (
+		<header id="app-header" className={ headerInfo.state.toLowerCase() }>
 			<div className="group-btns" id="left-btns">
 				<div className="header-btn" id="home-btn" onClick={clickHome}><img src={home} alt="Home"></img></div>
 				<div className="header-btn" id="notif-btn" onClick={clickNotif}><img src={notifications} alt="Notifications"></img></div>
@@ -61,7 +60,7 @@ const UserHeader = ({pageInfo}) => {
 				</div>
 			}
 		</header>
-  )
+	)
 	/**/
 }
 

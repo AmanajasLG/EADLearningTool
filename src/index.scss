@@ -8,6 +8,12 @@ html {
 
 *, *::before, *::after {
   box-sizing: inherit;
+  margin: 0px;
+  padding: 0px;
+}
+
+img, svg {
+  vertical-align: middle;
 }
 
 /* VARIABLES */
@@ -19,15 +25,30 @@ html {
 /* TYPE */
 body {
   margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji","Segoe UI Symbol", "Noto Color Emoji";
   font-family: var(--font-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 16px;
-  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  // color: var(--color-text);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+a {
+  text-decoration-line: none;
+}
+
+a:hover {
+  text-decoration-line: underline;
+}
+
+a:visited {
+  color: #007bff;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -54,14 +75,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .btn {
   padding: 10px 20px;
-  background-color: var(--color-accent);
   border-radius: 50px 50px 50px 0;
-  color: white;
   text-decoration: none;
   font-weight: 800;
   text-transform: none;
-  font-size: 1.25rem;
+  font-size: 1.10rem;
   transition: linear 0.2s;
+	border: none;
+  cursor: pointer;
 }
 
 .btn.btn-center {
