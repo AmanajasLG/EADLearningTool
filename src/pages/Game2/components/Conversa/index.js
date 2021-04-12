@@ -151,7 +151,7 @@ const Conversa = ({
 			currentAnswer: 0
 		})
 
-		onConvoChoiceMade(convoChoosen)()
+		onConvoChoiceMade(convoChoosen)
 	}
 
 	return (

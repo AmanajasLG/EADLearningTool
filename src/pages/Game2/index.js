@@ -259,8 +259,7 @@ const Game2 = (props) => {
 		if( state.scene === "TUTORIAL" ) {
 			setTimeout(() => { setState({
 				...state,
-				tutorialStep: state.tutorialStep + 1,
-				tips: [ 'A cabeleireira sabe.' ]
+				tutorialStep: state.tutorialStep + 1
 			}) }, 1500)
 		} else {
 			let updateState = {}
@@ -430,8 +429,8 @@ const Game2 = (props) => {
 		)
 	}
 
-	const restart = (tips) => {
-		setState({...initialState(), tips: tips, hasPlayed: true})
+	const restart = () => {
+		setState({...initialState(), hasPlayed: true})
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
@@ -465,9 +464,6 @@ const Game2 = (props) => {
 											setState({...state, currentRoom: num})
 										}}
 									/>
-
-									{/* // <Sala roomData={state.locations[state.currentRoom]}>
-									// 	{state.locations[state.currentRoom].missionsCharacters.filter(missionCharacter => missionCharacter.character.name !== 'Tutorial').map((missionsCharacter, index) => */}
 									{/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
 										//? pq passar tudo ao invés de só passar a string? Que aí poderia ser local ou na rede... */}
 									<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
@@ -562,7 +558,7 @@ const Game2 = (props) => {
 												</div>
 											</div>
 											<div id="endGame-action-btns-wrong">
-												<Button onClick={() => restart(['A cabelereira sabe']) }>Tentar novamente</Button>
+												<Button onClick={restart}>Tentar novamente</Button>
 												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 											</div>
 										</div>
