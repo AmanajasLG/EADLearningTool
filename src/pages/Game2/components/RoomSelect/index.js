@@ -5,8 +5,10 @@ const RoomSelect = ({value, buttonList, onChange}) => {
 	const [state, setState] = React.useState(0)
 
 	const buttonClick = (num) => () => {
-		if(onChange) onChange(num)
-		setState(num)
+		if(onChange) {
+			onChange(num)
+			setState(num)
+		}
 	}
 
 	React.useEffect(() => {
@@ -21,7 +23,7 @@ const RoomSelect = ({value, buttonList, onChange}) => {
 		</div>
 		<div id="button-rows">
 			{buttonList.map( (name, index) =>
-				<button className="RoomBtn" key={index}
+				<button className={"RoomBtn" + (onChange ? "" : " disabled")} key={index}
 				id={ state === index ? "selected" : "" }
 				onClick={buttonClick(index)}
 				>

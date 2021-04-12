@@ -4,3 +4,101 @@
 	width: 100%;
 	height: 100%;
 }
+
+.popup-wrapper {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.popup-content {
+	width: 700px;
+	height: 550px;
+	background-color: #F9AFA1;
+	border-radius: 3rem;
+	padding: 50px;
+	// position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.popup-content > span {
+	font-family: 'Abril Fatface';
+	font-size: 3rem;
+	color: #59316D;
+	display: block;
+	text-align: center;
+}
+
+.popup-content > p {
+	margin-top: 3rem;
+	font-style: italic;
+	font-size: 2rem;
+	text-align: center;
+	flex-grow: 1;
+}
+
+#popup-btns {
+	// position: absolute;
+	// bottom: 0;
+	// left: 0;
+	// right: 0;
+	// margin-bottom: 50px;
+	flex-grow: 1;
+	justify-self: flex-end;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+button {
+	font-family: 'Barlow Extrabold';
+	font-size: 1.3rem;
+	color: #59316D;
+	margin: 20px;
+	padding: 15px;
+	border: none;
+	border-radius: 2rem;
+	position: relative;
+	cursor: pointer;
+	transition: 150ms linear;
+}
+
+button#no-go:hover,
+button#go:hover {
+	background-color: #59316D;
+	color: #FFFFFF;
+}
+
+button#no-go::before {
+	content: "❮";
+	display: inline-block;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+button#no-go {
+	padding-right: 40px;
+	border-bottom-right-radius: 0;
+	background-color: #FFCCA9;
+}
+
+button#go {
+	padding-left: 40px;
+	border-bottom-left-radius: 0;
+	background-color: #D6E3F4;
+}
+
+button#go::after {
+	content: "❯";
+	display: inline-block;
+	margin-left: 15px;
+	margin-right: 15px;
+}

@@ -15,6 +15,7 @@ import Phone from './components/Phone'
 import Conversa from '../Game2/components/Conversa'
 
 import './index.scss'
+import FullscreenOverlay from '../Game2/components/FullscreenOverlay'
 
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -59,6 +60,8 @@ const Game1 = (props) => {
 			dispatch(game_1_missionsActions.getById(props.match.params.id))
 		if(mission){
 			let data = {}
+
+			//distribute characters in locations
 			if(state.locations.length === 0){
 				// data.locations = [...mission.locations]
 				data.locations = mission.locations.filter( (location) => {return location.characters}) // Só pq o backend está trazendo info errada
@@ -69,6 +72,7 @@ const Game1 = (props) => {
 					data.locations[place=(place+1)%data.locations.length].characters.push( characters.splice(randIdx, 1)[0] )
 				}
 			}
+
 			//list of all available jobs
 			if(state.jobs.length === 0){
 				data.jobs = mission.characters.reduce( (acc, character) => {
@@ -77,6 +81,7 @@ const Game1 = (props) => {
 					return acc
 				}, [])
 			}
+
 			//list of all available countries
 			if(state.countries.length === 0){
 				data.countries = mission.characters.reduce( (acc, character) => {
@@ -85,6 +90,7 @@ const Game1 = (props) => {
 					return acc
 				}, [])
 			}
+
 			//resume characters as contacts
 			if(state.contactsTemplate.length === 0){
 				//create full contact template
@@ -123,7 +129,6 @@ const Game1 = (props) => {
 				//mission: mission.id
 			}))
 		}
-
 		setState({...state, scene: 'ROOM'})
 	}
 
@@ -139,7 +144,6 @@ const Game1 = (props) => {
 		//
 		//	Aplicar lógica adicional de click nos botões do menu
 		//
-
 		setState({...state,
 			dialogHistory:
 			[...state.dialogHistory,
@@ -182,9 +186,6 @@ const Game1 = (props) => {
 										<RoomSelect
 											value={state.currentLocationIndex}
 											buttonList={state.locations.map( location => location.name)}
-											onChange={(buttonIndex) => {
-												setState({...state, currentLocationIndex: buttonIndex})
-											}}
 										/>
 										<Sala roomData={state.locations[state.currentLocationIndex]}>
 											{state.locations[state.currentLocationIndex].characters.map((character, index) =>
@@ -195,24 +196,24 @@ const Game1 = (props) => {
 											)}
 										</Sala>
 										{state.currentChar &&
-											<Conversa
-												shouldExit={state.shouldCloseConvo}
-												prevDialogHistory={[]}
-												onClearDialogHistory={state.refreshDialog}
-												charPreSpeech={state.preSpeech}
-												convOptions={state.convOptions.reduce((acc, convOption) => {
-													let option = {...convOption, ...convOption.question, answers: convOption.answer}
-													delete option.answer
-													return [...acc, option ]
-												}, [])}
-												currentChar={state.currentChar}
-												charFeeling={state.characterFeeling}
-												afterWriter={afterWriter}
-												onExited={closeDialog}
-												onConvoChoiceMade={onMenuButtonClick}
-											>
-												{/* Coisinha no canto superior esquerdo vai aqui */}
-											</Conversa>
+										<Conversa
+											shouldExit={state.shouldCloseConvo}
+											prevDialogHistory={[]}
+											onClearDialogHistory={state.refreshDialog}
+											charPreSpeech={state.preSpeech}
+											convOptions={state.convOptions.reduce((acc, convOption) => {
+												let option = {...convOption, ...convOption.question, answers: convOption.answer}
+												delete option.answer
+												return [...acc, option ]
+											}, [])}
+											currentChar={state.currentChar}
+											charFeeling={state.characterFeeling}
+											afterWriter={afterWriter}
+											onExited={closeDialog}
+											onConvoChoiceMade={onMenuButtonClick}
+										>
+											{/* Coisinha no canto superior esquerdo vai aqui */}
+										</Conversa>
 										}
 										<Phone
 											contacts={
@@ -227,6 +228,37 @@ const Game1 = (props) => {
 											onMinimize={() => setState({...state, shouldMinimize: false})}
 										/>
 										{ state.changeRoomPopUp &&
+										<FullscreenOverlay
+											showCloseBtn={false}
+										>
+											<div className="popup-wrapper">
+												{true ?
+												<div className="popup-content">
+													<span>Are you sure?</span>
+													<p>
+														[X] people have the wrong data. Are you sure you want to continue? You may not be able to overcome this midlife crisis!
+													</p>
+													<div id="popup-btns">
+														<button id="no-go">Keep trying</button>
+														<button id="go">Continue anyway</button>
+													</div>
+												</div>
+												:
+												<div className="popup-content">
+													<span>Are you sure?</span>
+													<p>
+														Everything seems ok around here. Do you want to continue?
+													</p>
+													<div id="popup-btns">
+														<button id="no-go">Not yet</button>
+														<button id="go">Let's go</button>
+													</div>
+												</div>
+												}
+											</div>
+										</FullscreenOverlay>
+										}
+										{/* { state.changeRoomPopUp &&
 											<div style={{position: 'absolute', zIndex: 1000, top:0, right:0, bottom:0, left:0}}>
 												<p>Texto Are you sure?</p>
 												<button onClick={() => setState({...state, changeRoomPopUp: false})}>
@@ -242,7 +274,7 @@ const Game1 = (props) => {
 													Avançar
 												</button>
 											</div>
-										}
+										} */}
 									</div>)
 								case 'ENDGAME':
 									return(
