@@ -5,23 +5,18 @@
 	justify-content: flex-end;
 	flex-flow: column;
 	align-items: stretch;
-	// margin: 0px 20px;
-	flex: 1 1 auto;
+	flex: 1 1 0px;
 	min-width: 0;
 	min-height: 0;
-	max-height: 100%;
+	height: 100%;
 	text-align: center;
+	transform-origin: 50% 30%;
+	--z: 0;
+	transform: scale(calc(1 - 0.2 * var(--z)));
 }
 
 .CharDiv * {
 	transition: 100ms linear;
-}
-
-/* Simulando perspectiva e distância. origin é fixo
-   mas o scale é pra ser entre 80% e 100% */
-.CharDiv:nth-child(2) {
-	transform-origin: 50% 40%;
-	transform: scale(0.8);
 }
 
 .CharDiv img {
@@ -37,6 +32,10 @@
 	filter: drop-shadow(8px 4px 0px var(--color-fourth));
 }
 
-.CharDiv:hover > div > div {
-	font-weight: bolder;
+.CharDiv > div {
+	opacity: 0%;
+}
+
+.CharDiv:hover > div {
+	opacity: 100%;
 }

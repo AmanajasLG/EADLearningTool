@@ -10,7 +10,7 @@ const RoomSelect = ({value, buttonList, onChange}) => {
 	}
 
 	React.useEffect(() => {
-		setState(value)
+		if(value) setState(value)
 	}, [value])
 
   return (

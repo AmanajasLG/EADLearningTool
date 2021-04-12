@@ -33,24 +33,24 @@
 #CharacterPortrait {
 	position: absolute;
 	bottom: 0;
-	width: 30%;
+	width: calc(25% + 80px);
 	max-width: 600px;
-	height: calc(50% + 25px);
+	height: 80%;
 	pointer-events: none;
-	transform-origin: 40% 40%;
-	transform: scale(2.5);
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 }
 
 #CharacterPortrait * {
-	position: absolute;
-	bottom: 0;
-	left: 0;
+	position: relative;
 	max-height: 100%;
+	left: 25%;
 }
 
 #dialogos {
 	margin-left: auto;
-	margin: 0 200px 0px auto;
+	margin: 0 10% 0px auto;
 	display: flex;
 	flex-direction: column;
 	width: calc(75% - 80px);
@@ -67,8 +67,10 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: stretch;
-	height: 260px;
+	height: 24%;
+	max-height: 300px;
 	transition: 50ms ease-in-out;
+	overflow: hidden;
 }
 
 #dialog-box.alternative {
@@ -91,7 +93,8 @@
 }
 
 #Menu > button {
-	flex: 1 1 auto;
+	flex: 1 1 0px;
+	min-height: 0px;
 	max-height: 45%;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background-color: rgba(255, 255, 255, 0.15);
@@ -101,12 +104,23 @@
 	font-size: 1.8em;
 	border-radius: 0.75em 0.75em 0 0.75em;
 	transition: 100ms linear;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
-#Menu .MuiButton-label {
+#Menu > button * {
+	min-height: 0px;
+	flex: 1 1 0px;
+}
+
+#Menu > button > span {
 	justify-content: start;
 	text-transform: none;
+	text-align: start;
 	margin-left: 20%;
+	font-family: 'Barlow';
+	font-weight: 500;
 }
 
 #Menu > *:hover {

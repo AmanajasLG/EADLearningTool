@@ -153,3 +153,27 @@
 	background-color: #59316D;
 	color: #FFFFFF;
 }
+
+#tips-received {
+	position: relative;
+}
+
+#accusation-icon {
+	position: absolute;
+	width: 100%;
+	height: 5vh;
+	left: 0;
+	top: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: visible;
+}
+
+#accusation-icon > img {
+	position: relative;
+	top: -66%;
+	height: 100%;
+	object-fit: contain;
+	flex: 1 1 0px;
+}

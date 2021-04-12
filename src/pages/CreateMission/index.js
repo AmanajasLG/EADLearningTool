@@ -69,41 +69,53 @@ const CreateMissionGame1 = (props) => {
   const [createQuestion, setCreateQuestion] = React.useState(false)
 
   const createMission = () => {
-    let data = {...state.mission, 
+    let data = {...state.mission,
       missionCharacters: state.mission.missionCharacters.map(missionCharacter => {
         return missionCharacter.id
       }),
       missionCharactersCreate: [...state.charactersConfigList, ...state.charactersList]
     }
 
+
+/*
+//  algo muito errado aqui
+//
     state.charactersConfigList = []
     state.charactersList = []
 
     dispatch(apiActions.missionsActions.create(data))
     
     data = {...state.mission}
+
+    let data = {...state.mission}
     dispatch(apiActions[game+"Actions"].create(data))
-  
+  */
   }
 
   const editMission = () => {
     // state.mission.missionCharacters = [...state.mission.missionCharacters]
     // state.charactersConfigList = []
     // state.charactersList = []
-    let data = {...state.mission, 
+    let data = {...state.mission,
       missionCharacters: state.mission.missionCharacters.map(missionCharacter => {
         return missionCharacter.id
       }),
       missionCharactersCreate: [...state.charactersConfigList, ...state.charactersList]
     }
 
-    state.charactersConfigList = [] 
+
+//  algo errado aqui
+//
+    state.charactersConfigList = []
     state.charactersList = []
 
     dispatch(apiActions.missionsActions.update(data))
     
+    // data = {...state.mission}
+    // dispatch(apiActions[game+"Actions"].update(data))     
+
     data = {...state.mission}
-    dispatch(apiActions[game+"Actions"].update(data))     
+    dispatch(apiActions[game+"Actions"].update(data))
   }
 
   const addToMission = (type, data) => () => {

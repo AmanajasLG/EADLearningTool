@@ -1,18 +1,11 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { apiActions } from '../../../_actions'
 import Checkbox from '@material-ui/core/Checkbox'
 
 const CreateGame1Data = ({data, characters}) => {
 
   const dispatch = useDispatch()
-
-  const onChangeCharacter = data => e => {
-    if(e.target.value != 'NoCharacter'){
-      let payload = {id: data.id, character: characters.find( character => character.name === e.target.value).id}
-      dispatch(apiActions.game_1_mission_charactersActions.update(payload))
-    }
-  }
 
   const onCheckChange = (id, type) => e => {
 

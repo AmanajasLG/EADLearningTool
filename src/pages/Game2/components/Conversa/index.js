@@ -75,9 +75,14 @@ const Conversa = ({
 	// * UNDEFINED BEHAVIOR caso alguém mude o charPreSpeech desse componente enquanto o writer faz algo
 	React.useEffect( () => {
 		if( charPreSpeech !== null && charPreSpeech.length > 0 ) {
-			state.currentAnswer = 0
-			state.answers = typeof(charPreSpeech) === "string" ? [charPreSpeech] : charPreSpeech
-			console.log('effect', state.answers)
+			// state.currentAnswer = 0
+			// state.answers = typeof(charPreSpeech) === "string" ? [charPreSpeech] : charPreSpeech
+			// console.log('effect', state.answers)
+			setState({
+				...state,
+				currentAnswer: 0,
+				answers: typeof(charPreSpeech) === "string" ? [charPreSpeech] : charPreSpeech
+			})
 		}
 		// eslint-disable-next-line
 	}, [charPreSpeech])
@@ -90,6 +95,11 @@ const Conversa = ({
 		}
 		// eslint-disable-next-line
 	}, [onClearDialogHistory])
+	
+	React.useEffect( () => {
+		setState({...state, querFechar: shouldExit})
+		// eslint-disable-next-line
+	}, [shouldExit])
 
 	const _querFechar = () => {
 		setState({

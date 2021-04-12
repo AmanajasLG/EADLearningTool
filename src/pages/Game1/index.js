@@ -9,16 +9,12 @@ import Result from '../Game2/components/Result'
 import RoomSelect from '../Game2/components/RoomSelect'
 import Sala from '../Game2/components/Sala'
 import Character from '../Game2/components/Character'
-import Button from '@material-ui/core/Button'
-import '../Game2/index.scss'
 import initialState from './initialState.js'
 import stub from './stub.js'
-import './index.scss'
 import Phone from './components/Phone'
-import DialogHistory from '../Game2/components/DialogHistory'
-import DialogCharacter from '../Game2/components/DialogCharacter'
-import Menu from '../Game2/components/Menu'
-import Writer from '../Game2/components/Writer'
+import Conversa from '../Game2/components/Conversa'
+
+import './index.scss'
 
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState);
@@ -171,23 +167,26 @@ const Game1 = (props) => {
 		})
 	}
 
+	const closeDialog = () => {
+		setState({...state, currentChar: null})
+	}
+
 	return (
-		<div>
+		<div id="game1-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
-			<div>
-				<div style={{width: '100%', height: '100%'}}>
+				<div id="game1-content">
 					<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e)=>{ setState({...state, tracking: e.target.checked}) }} /></div>
 					{(function renderScene(){
 						switch(state.scene){
 							case "INIT":
 								return <Init
-													name={mission.name} description={mission.description}
-													onStart={ onStartGame }
-													onBack={ ()=> setState({...state, back: true}) }
-												/>
+											name={mission.name} description={mission.description}
+											onStart={ onStartGame }
+											onBack={ ()=> setState({...state, back: true}) }
+										/>
 							case "ROOM":
 								return (
-									<div>
+									<div id="room-itself">
 										<RoomSelect
 											value={state.currentLocationIndex}
 											buttonList={mission.locations.map( location => location.name)}
@@ -195,19 +194,36 @@ const Game1 = (props) => {
 												setState({...state, currentLocationIndex: buttonIndex})
 											}}
 										/>
-
 										<Sala roomData={state.locations[state.currentLocationIndex]}>
 											{state.locations[state.currentLocationIndex].characters.map((character, index) =>
-						            <Character key={index}
-						              character={character}
-						              onClick={setCurrentChar(character)}
-						            />
+												<Character key={index}
+												character={character}
+												onClick={setCurrentChar(character)}
+												/>
 											)}
 										</Sala>
-
-										{ state.currentChar &&
+										{state.currentChar &&
+											<Conversa
+												shouldExit={state.shouldCloseConvo}
+												prevDialogHistory={[]}
+												onClearDialogHistory={state.refreshDialog}
+												charPreSpeech={state.preSpeech}
+												convOptions={state.convOptions.reduce((acc, convOption) => {
+													let option = {...convOption, ...convOption.question, answers: convOption.answer}
+													delete option.answer
+													return [...acc, option ]
+												}, [])}
+												currentChar={state.currentChar}
+												charFeeling={state.characterFeeling}
+												afterWriter={afterWriter}
+												onExited={closeDialog}
+												onConvoChoiceMade={onMenuButtonClick}
+											>
+												{/* Coisinha no canto superior esquerdo vai aqui */}
+											</Conversa>
+										}
+										{/* { state.currentChar &&
 											<div id="conversa" className='DialogPopUp'>
-
 												<Button id='fechar' onClick={() => setState({...state, currentChar: null, dialogHistory: []})}>X</Button>
 												<DialogHistory dialogHistory={state.dialogHistory}/>
 												<div id='DialogBox'>
@@ -225,11 +241,10 @@ const Game1 = (props) => {
 												</div>
 												<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
 											</div>
-										}
+										} */}
 										{ state.showContacts &&
 											<div id="contacts">
 												<div id="btn-fechar" onClick={onPhoneExitClick}><span>×</span></div>
-
 												<Phone
 													modifyContact={modifyContact}
 													contactsTemplate={state.contactsTemplate}
@@ -239,10 +254,9 @@ const Game1 = (props) => {
 													jobs={["-- Profissão --", ...state.jobs]}
 													countries={["-- País --", ...state.countries]}
 												/>
-
-											<div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}>
-												Terminei!
-											</div>
+												<div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}>
+													Terminei!
+												</div>
 											</div>
 										}
 										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }
@@ -274,7 +288,6 @@ const Game1 = (props) => {
 									return(<div>Error</div>)
 						}
 					}())}
-
 					{ !state.gameEndState && // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
 						<div></div>
 					}
@@ -282,7 +295,6 @@ const Game1 = (props) => {
 					{ state.tries > 0 ? <div>{state.tries} tentativa{state.tries > 1? 's' : ''}!</div> : null}
 					{ state.back && <Redirect to='/userspace' />}
 				</div>
-			</div>
 			}
 		</div>
   )
