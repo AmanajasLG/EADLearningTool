@@ -9,7 +9,7 @@ import palma from '../../../../img/Game1/Mão palma.svg'
 import './index.scss'
 import FullscreenOverlay from '../../../Game2/components/FullscreenOverlay'
 
-const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize}) => {
+const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 	const [state,setState] = React.useState({maximized: false, shouldMinimize: false})
 	const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
 	
@@ -17,21 +17,22 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 		setState({...state, contacts: contacts})
 		//eslint-disable-next-line
 	}, [contacts])
-
 	
 	React.useEffect( () => {
-		if(shouldMinimize === true) _shouldMinimize()
+		if(typeof(onMinimize) === "function") _shouldMinimize()
 		//eslint-disable-next-line
-	}, [shouldMinimize])
+	}, [onMinimize])
 
 	const _maximize = () => {
 		setState({...state, maximized: true})
 	}
+	
 	const _shouldMinimize = () => {
 		setState({...state, shouldMinimize: true})
 	}
+
 	const _minimized = () => {
-		setState({...state, shouldMinimize: false, maximized: false, close: false})
+		setState({...state, shouldMinimize: false, maximized: false})
 		if(typeof(onMinimize) === "function") onMinimize()
 	}
 

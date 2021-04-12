@@ -18,7 +18,7 @@ import './index.scss'
 import FullscreenOverlay from '../Game2/components/FullscreenOverlay'
 
 const Game1 = (props) => {
-	const [state, setState] = React.useState(initialState);
+	const [state, setState] = React.useState(initialState)
 
 	const { game_1_missionsActions, play_sessionsActions, player_actionsActions } = apiActions
 	const id = props.match.params.id
@@ -167,6 +167,16 @@ const Game1 = (props) => {
 		setState({...state, currentChar: null})
 	}
 
+	if(state.changeRoomPopUp) {
+		state.wrongContacts = 0
+		state.locations[state.currentLocationIndex].characters.forEach( (contact, index) => {
+			let answer = state.contactsAtSession.find( (contactAtSession) => {return contactAtSession.id === contact.id} )
+			let gabarito = state.contactsTemplate.find( (contactTemplate) => {return contactTemplate.id === contact.id} )
+			if( answer.job !== gabarito.job && answer.country !== gabarito.country )
+				state.wrongContacts++
+		})
+	}
+
 	return (
 		<div id="game1-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
@@ -224,37 +234,45 @@ const Game1 = (props) => {
 											jobs={state.jobs}
 											countries={state.countries}
 											onFinish={() => setState({...state, changeRoomPopUp: true})}
-											shouldMinimize={state.shouldMinimize}
-											onMinimize={() => setState({...state, shouldMinimize: false})}
+											onMinimize={state.onMinimize}
 										/>
 										{ state.changeRoomPopUp &&
 										<FullscreenOverlay
 											showCloseBtn={false}
+											shouldExit={state.shouldCloseDialog}
+											onReadyToExit={() => {setState({...state, shouldCloseDialog: false, changeRoomPopUp: false})}}
 										>
 											<div className="popup-wrapper">
-												{true ?
 												<div className="popup-content">
 													<span>Are you sure?</span>
 													<p>
-														[X] people have the wrong data. Are you sure you want to continue? You may not be able to overcome this midlife crisis!
+														{state.wrongContacts > 0 ?
+														state.wrongContacts + " people have the wrong data. Are you sure you want to continue? You may not be able to overcome this midlife crisis!"
+														:
+														"Everything seems ok around here. Do you want to continue?"
+														}
 													</p>
 													<div id="popup-btns">
-														<button id="no-go">Keep trying</button>
-														<button id="go">Continue anyway</button>
+														<button id="no-go" onClick={() => setState({...state, shouldCloseDialog: true, onMinimize: () => {
+															state.onMinimize = null
+														}})}>
+															{state.wrongContacts > 0 ? "Keep trying" : "Not yet"}
+														</button>
+														<button id="go" onClick={ () => {
+															if(state.currentLocationIndex + 1 < state.locations.length)
+																setState({
+																	...state,
+																	shouldCloseDialog: true,
+																	currentLocationIndex: state.currentLocationIndex + 1,
+																	onMinimize: () => {state.onMinimize = null}
+																})
+															else
+																setState({...state, scene: 'ENDGAME'})
+														}}>
+															{state.wrongContacts > 0 ? "Continue anyway" : "Let's go"}
+														</button>
 													</div>
 												</div>
-												:
-												<div className="popup-content">
-													<span>Are you sure?</span>
-													<p>
-														Everything seems ok around here. Do you want to continue?
-													</p>
-													<div id="popup-btns">
-														<button id="no-go">Not yet</button>
-														<button id="go">Let's go</button>
-													</div>
-												</div>
-												}
 											</div>
 										</FullscreenOverlay>
 										}
