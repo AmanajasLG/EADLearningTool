@@ -172,7 +172,7 @@ const Game1 = (props) => {
 		state.locations[state.currentLocationIndex].characters.forEach( (contact, index) => {
 			let answer = state.contactsAtSession.find( (contactAtSession) => {return contactAtSession.id === contact.id} )
 			let gabarito = state.contactsTemplate.find( (contactTemplate) => {return contactTemplate.id === contact.id} )
-			if( answer.job !== gabarito.job && answer.country !== gabarito.country )
+			if( answer.job !== gabarito.job || answer.country !== gabarito.country )
 				state.wrongContacts++
 		})
 	}
