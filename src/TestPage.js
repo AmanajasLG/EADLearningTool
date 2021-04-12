@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import Phone from './pages/Game1/components/Phone'
+import Conversa from './pages/Game2/components/Conversa'
 import { headerActions } from './_actions'
 import { headerConstants } from './_constants'
 
@@ -17,30 +17,17 @@ const TestPage = () => {
 	// MODIFICAR SOMENTE DAQUI PARA BAIXO
 	// -------------------------------------------
 
-	const [contacts, setContacts] = React.useState([
-		{name: "Fulano", job: "Carpinteiro", country: "Brasil"},
-		{name: "Ciclano", job: "Marceneiro", country: "Espanha"},
-		{name: "Beltrano", job: "Pescador", country: "Portugal"}
-	])
+
 
 	return (
-		<div style={divStyle}>
-			<Phone
-				contacts={contacts}
-				jobs={[
-					"Carpinteiro",
-					"Marceneiro",
-					"Pescador"
-				]}
-				countries={[
-					"Brasil",
-					"Espanha",
-					"Portugual"
-				]}
-				onAddContact={(newC)=>setContacts([...contacts, newC])}
-			>
-			</Phone>
-		</div>
+		<div style={divStyle}> {/* NÃO MODIFICAR ESSA LINHA */}
+			<Conversa convOptions={[
+				{question: "Pergunta 1", answers: ["Resposta 1.1", "Resposta 1.2"]},
+				{question: "Pergunta 2", answers: ["Resposta 2.1"]},
+				{question: "Pergunta 3", answers: ["Resposta 3.1"]},
+				{question: "Pergunta 4", answers: ["Resposta 4.1"]},
+			]}/>
+		</div> /* NÃO MODIFICAR ESSA LINHA */
 	)
 
 	// -------------------------------------------

@@ -79,22 +79,35 @@
 
 #Menu,
 #Writer {
-	display: flex;
 	flex-grow: 1;
-	flex-direction: column;
-	justify-content: center;
 	padding-left: 20%;
+	width: 100%;
+	height: 100%;
+}
+
+#Menu {
+	overflow: auto;
 }
 
 #Writer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	font-size: 2em;
 	color: #FFFFFF;
 	padding-right: 20px;
 }
 
-#Menu > button {
+#menu-options {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: stretch;
+}
+
+#menu-options > button {
 	flex: 1 1 0px;
-	min-height: 0px;
+	min-height: 55px;
 	max-height: 45%;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background-color: rgba(255, 255, 255, 0.15);
@@ -110,12 +123,12 @@
 	cursor: pointer;
 }
 
-#Menu > button * {
+#menu-options > button * {
 	min-height: 0px;
 	flex: 1 1 0px;
 }
 
-#Menu > button > span {
+#menu-options > button > span {
 	justify-content: start;
 	text-transform: none;
 	text-align: start;
@@ -124,7 +137,7 @@
 	font-weight: 500;
 }
 
-#Menu > *:hover {
+#menu-options > *:hover {
 	border: 1px solid #FFFFFF;
 	background-color: #FFFFFF;
 	color: #59316D;
