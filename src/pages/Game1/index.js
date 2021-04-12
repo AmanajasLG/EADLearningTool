@@ -133,9 +133,9 @@ const Game1 = (props) => {
 	}
 
 	const setCurrentChar = (character) => () => {
-		setState({...state, currentChar: character,
-			answers: character.answers
-			.filter( answer => mission.questions.find(question => question.id ===  answer.question.id))})
+		let convOptions = character.answers.filter( answer => mission?.questions?.find(question => question?.id === answer?.question?.id)) ?? []
+		if(convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
+		setState({...state, currentChar: character, convOptions: convOptions})
 	}
 
 	const afterWriter = () => {}
@@ -205,6 +205,17 @@ const Game1 = (props) => {
 												/>
 											)}
 										</Sala>
+										<Phone
+											contacts={
+												state.contactsAtSession.filter(contact => state.locations[state.currentLocationIndex].characters.find( character => character.id === contact.id))
+											}
+											modifyContact={modifyContact}
+											contactsTemplate={state.contactsTemplate}
+											jobs={state.jobs}
+											countries={state.countries}
+											onFinish={() => setState({...state, changeRoomPopUp: true})}
+											onMinimize={state.onMinimize}
+											/>
 										{state.currentChar &&
 										<Conversa
 											shouldExit={state.shouldCloseConvo}
@@ -225,17 +236,6 @@ const Game1 = (props) => {
 											{/* Coisinha no canto superior esquerdo vai aqui */}
 										</Conversa>
 										}
-										<Phone
-											contacts={
-												state.contactsAtSession.filter(contact => state.locations[state.currentLocationIndex].characters.find( character => character.id === contact.id))
-											}
-											modifyContact={modifyContact}
-											contactsTemplate={state.contactsTemplate}
-											jobs={state.jobs}
-											countries={state.countries}
-											onFinish={() => setState({...state, changeRoomPopUp: true})}
-											onMinimize={state.onMinimize}
-										/>
 										{ state.changeRoomPopUp &&
 										<FullscreenOverlay
 											showCloseBtn={false}
@@ -253,9 +253,7 @@ const Game1 = (props) => {
 														}
 													</p>
 													<div id="popup-btns">
-														<button id="no-go" onClick={() => setState({...state, shouldCloseDialog: true, onMinimize: () => {
-															state.onMinimize = null
-														}})}>
+														<button id="no-go" onClick={() => setState({...state, shouldCloseDialog: true})}>
 															{state.wrongContacts > 0 ? "Keep trying" : "Not yet"}
 														</button>
 														<button id="go" onClick={ () => {
@@ -264,7 +262,7 @@ const Game1 = (props) => {
 																	...state,
 																	shouldCloseDialog: true,
 																	currentLocationIndex: state.currentLocationIndex + 1,
-																	onMinimize: () => {state.onMinimize = null}
+																	onMinimize: () => state.onMinimize = null
 																})
 															else
 																setState({...state, scene: 'ENDGAME'})

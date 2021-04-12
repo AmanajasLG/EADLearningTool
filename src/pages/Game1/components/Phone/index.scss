@@ -40,7 +40,7 @@
 	flex-direction: column;
 	justify-content: flex-start;
 	align-content: stretch;
-	transition: 300ms ease-in-out;
+	transition: 200ms ease-in-out;
 	transform: translateY(40%);
 	cursor: pointer;
 }
@@ -68,7 +68,7 @@
 	line-height: 1.7rem;
 	text-align: center;
 	padding: 0 10px 10px 10px;
-	transition: 200ms ease-in-out;
+	transition: 100ms ease-in-out;
 	opacity: 0;
 }
 

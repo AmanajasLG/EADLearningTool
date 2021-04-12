@@ -59,14 +59,14 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 					<input type="text" name="nome" placeholder="Nome do contato" value={contact.name} readOnly="readonly" onChange={()=>{}}/>
 				</div>
 				<Dropdown
-					style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
+					// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
 					onChange={e => modifyContact({...contact, job: e.target.value}) }
 					label={"Profissão"}
 					value={contact.job}
 					optionList={jobs}
 				/>
 				<Dropdown
-					style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
+					// style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
 					onChange={e => modifyContact({...contact, country: e.target.value})}
 					label={"Nacionalidade"}
 					value={contact.country}
