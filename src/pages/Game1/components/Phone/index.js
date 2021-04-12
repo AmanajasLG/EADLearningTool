@@ -9,7 +9,7 @@ import palma from '../../../../img/Game1/Mão palma.svg'
 import './index.scss'
 import FullscreenOverlay from '../../../Game2/components/FullscreenOverlay'
 
-const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact}) => {
+const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize}) => {
 	const [state,setState] = React.useState({maximized: false, shouldMinimize: false})
 	const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
 	
@@ -18,27 +18,35 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 		//eslint-disable-next-line
 	}, [contacts])
 
-	const maximize = (event) => {
+	
+	React.useEffect( () => {
+		if(shouldMinimize === true) _shouldMinimize()
+		//eslint-disable-next-line
+	}, [shouldMinimize])
+
+	const _maximize = () => {
 		setState({...state, maximized: true})
 	}
-	const shouldMinimize = (event) => {
+	const _shouldMinimize = () => {
 		setState({...state, shouldMinimize: true})
 	}
-	const minimize = (event) => {
-		setState({...state, shouldMinimize: false, maximized: false})
+	const _minimized = () => {
+		setState({...state, shouldMinimize: false, maximized: false, close: false})
+		if(typeof(onMinimize) === "function") onMinimize()
 	}
 
-	const addContato = () => {
+	const _addContato = () => {
 		if(onAddContact) onAddContact(newContact)
 		else throw new Error("Using phone without callback: onAddContact")
 		setNewContact({name: '', job: '', country: ''})
 	}
 
-	const terminou = () => {
-
+	const _terminou = () => {
+		if(typeof(onFinish) === "function") onFinish()
+		else console.log("onFinish not set or is not a function")
 	}
 
-	const contatoTemplate = (contact, key) => {
+	const _contatoTemplate = (contact, key) => {
 		return (
 			<div className="contato" key={key}>
 				<div className="contact-profile-pic">
@@ -50,14 +58,14 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 					<input type="text" name="nome" placeholder="Nome do contato" value={contact.name} readOnly="readonly" onChange={()=>{}}/>
 				</div>
 				<Dropdown
-					// style={ contact.job === contactsTemplate.find( template => template.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
+					style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
 					onChange={e => modifyContact({...contact, job: e.target.value}) }
 					label={"Profissão"}
 					value={contact.job}
 					optionList={jobs}
 				/>
 				<Dropdown
-					// style={ contact.country === contactsTemplate.find( template => template.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
+					style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
 					onChange={e => modifyContact({...contact, country: e.target.value})}
 					label={"Nacionalidade"}
 					value={contact.country}
@@ -71,7 +79,7 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 		<div id="phone">
 			<div id="small-phone-wrapper" className={state.maximized ? "maximized" : null}>
 				<div id="small-phone-inner-wrapper">
-					<div id="small-phone-content" onClick={maximize}>
+					<div id="small-phone-content" onClick={_maximize}>
 						<div id="small-phone-floating-text">
 							<span lang="pt-br">Adicione um novo contato</span>
 							<span lang="default">Add a new contact</span>
@@ -84,9 +92,9 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 				<FullscreenOverlay
 						bgRGBA={{r:249, g:175, b:161, a:0.69}}
 						closeHoverRGB={{r: 255, g: 255, b: 255}}
-						onClickClose={shouldMinimize}
+						onClickClose={_shouldMinimize}
 						shouldExit={state.shouldMinimize}
-						onReadyToExit={minimize}
+						onReadyToExit={_minimized}
 				>
 					<div id="big-phone-wrapper" className={state.shouldMinimize ? "minimizing" : null}>
 						<div id="big-phone-imgs">
@@ -99,9 +107,9 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 								<p>Lista de contatos</p>
 								<div id="lista-contatos">
 									{contacts?.map((contact, index) => {
-										return contatoTemplate(contact, index)
+										return _contatoTemplate(contact, index)
 									})}
-									<div id="add-contato" className="contato">
+									{/* <div id="add-contato" className="contato">
 										<div className="contact-profile-pic">
 											<div></div>
 											<span><strong>+</strong></span>
@@ -134,13 +142,13 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 										>
 											Adicionar contato
 										</div>
-									</div>
+									</div> */}
 								</div>
 							</div>
 						</div>
 						{/* <div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}> */}
 						<div id="btn-terminei-wrapper">
-							<div id="btn-terminei" onClick={terminou}>
+							<div id="btn-terminei" onClick={_terminou}>
 								Terminei!
 							</div>
 						</div>

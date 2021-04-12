@@ -1,3 +1,12 @@
+#phone {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+}
+
 // ---------------------------------------------------------------------
 //
 //                             MINIMIZED
@@ -36,7 +45,13 @@
 	cursor: pointer;
 }
 
+#small-phone-content img,
+#small-phone-content svg {
+	pointer-events: all;
+}
+
 #small-phone-content:hover {
+	pointer-events: all;
 	transform: translateY(33%);
 }
 

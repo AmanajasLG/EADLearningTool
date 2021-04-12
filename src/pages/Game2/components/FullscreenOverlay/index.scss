@@ -1,11 +1,11 @@
 @keyframes openOverlay {
-	0% {opacity: 0%}
-	100% {opacity: 100%}
+	0% {opacity: 0;}
+	100% {opacity: 1;}
 }
 
 @keyframes closeOverlay {
-	0% {opacity: 100%}
-	100% {opacity: 0%}
+	0% {opacity: 1;}
+	100% {opacity: 0;}
 }
 
 #fullscreen-overlay {
@@ -23,6 +23,7 @@
 		var(--bgA));
 	overflow: hidden;
 	opacity: 1;
+	pointer-events: all;
 	animation: openOverlay 250ms linear forwards;
 }
 

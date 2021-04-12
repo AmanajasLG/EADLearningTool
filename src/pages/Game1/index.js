@@ -60,13 +60,14 @@ const Game1 = (props) => {
 		if(mission){
 			let data = {}
 			if(state.locations.length === 0){
-				let perRoom = mission.game_1_mission_characters.length / mission.locations.length
-				data.locations = mission.locations.map((location, index) => {
-					return {
-						...location,
-						characters: mission.characters.slice(perRoom * index, perRoom*index + perRoom),
-					}
-				})
+				// data.locations = [...mission.locations]
+				data.locations = mission.locations.filter( (location) => {return location.characters}) // Só pq o backend está trazendo info errada
+				let place = data.locations.length-1
+				let characters = mission.characters.slice()
+				while( characters.length > 0 ) {
+					let randIdx = Math.floor(Math.random()*characters.length)
+					data.locations[place=(place+1)%data.locations.length].characters.push( characters.splice(randIdx, 1)[0] )
+				}
 			}
 			//list of all available jobs
 			if(state.jobs.length === 0){
@@ -127,12 +128,10 @@ const Game1 = (props) => {
 	}
 
 	const setCurrentChar = (character) => () => {
-
 		setState({...state, currentChar: character,
 			answers: character.answers
 			.filter( answer => mission.questions.find(question => question.id ===  answer.question.id))})
 	}
-
 
 	const afterWriter = () => {}
 
@@ -149,13 +148,6 @@ const Game1 = (props) => {
 			]
 		})
 	}
-
-	const onPhoneEnterClick = () =>
-		setState({...state, showContacts: true})
-
-
-	const onPhoneExitClick = () =>
-		setState({...state, showContacts: false})
 
 	const modifyContact = (contact) => {
 		let index = state.contactsAtSession.indexOf(state.contactsAtSession.find( c => c.id === contact.id))
@@ -189,7 +181,7 @@ const Game1 = (props) => {
 									<div id="room-itself">
 										<RoomSelect
 											value={state.currentLocationIndex}
-											buttonList={mission.locations.map( location => location.name)}
+											buttonList={state.locations.map( location => location.name)}
 											onChange={(buttonIndex) => {
 												setState({...state, currentLocationIndex: buttonIndex})
 											}}
@@ -222,53 +214,27 @@ const Game1 = (props) => {
 												{/* Coisinha no canto superior esquerdo vai aqui */}
 											</Conversa>
 										}
-										{/* { state.currentChar &&
-											<div id="conversa" className='DialogPopUp'>
-												<Button id='fechar' onClick={() => setState({...state, currentChar: null, dialogHistory: []})}>X</Button>
-												<DialogHistory dialogHistory={state.dialogHistory}/>
-												<div id='DialogBox'>
-													{state.showAnswer ?
-														<Writer text={state.showAnswer.text}
-															onWritten={afterWriter}
-															afterWrittenTime={3000}
-															characterTime={50}
-														/>
-														:
-														<Menu buttonList={state.answers.reduce((acc, answer) => { return [...acc, {...answer, text: answer.question.question} ] }, [])}
-															onButtonClick={onMenuButtonClick}
-														/>
-													}
-												</div>
-												<DialogCharacter character={state.currentChar} feeling={state.characterFeeling}/>
-											</div>
-										} */}
-										{ state.showContacts &&
-											<div id="contacts">
-												<div id="btn-fechar" onClick={onPhoneExitClick}><span>×</span></div>
-												<Phone
-													modifyContact={modifyContact}
-													contactsTemplate={state.contactsTemplate}
-													contacts={state.contactsAtSession.filter(contact =>
-														state.locations[state.currentLocationIndex].characters.find( character => character.id === contact.id)
-													)}
-													jobs={["-- Profissão --", ...state.jobs]}
-													countries={["-- País --", ...state.countries]}
-												/>
-												<div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}>
-													Terminei!
-												</div>
-											</div>
-										}
-										{ !state.showContacts && <div id="phone" onClick={onPhoneEnterClick}><p>Agenda de contatos</p></div> }
+										<Phone
+											contacts={
+												state.contactsAtSession.filter(contact => state.locations[state.currentLocationIndex].characters.find( character => character.id === contact.id))
+											}
+											modifyContact={modifyContact}
+											contactsTemplate={state.contactsTemplate}
+											jobs={state.jobs}
+											countries={state.countries}
+											onFinish={() => setState({...state, changeRoomPopUp: true})}
+											shouldMinimize={state.shouldMinimize}
+											onMinimize={() => setState({...state, shouldMinimize: false})}
+										/>
 										{ state.changeRoomPopUp &&
-											<div style={{position: 'absolute', zIndex: 1000}}>
+											<div style={{position: 'absolute', zIndex: 1000, top:0, right:0, bottom:0, left:0}}>
 												<p>Texto Are you sure?</p>
 												<button onClick={() => setState({...state, changeRoomPopUp: false})}>
 													Voltar
 												</button>
 												<button onClick={() => {
 														if(state.currentLocationIndex + 1 < state.locations.length)
-															setState({...state, changeRoomPopUp: false, currentLocationIndex: state.currentLocationIndex + 1, showContacts: false})
+															setState({...state, changeRoomPopUp: false, currentLocationIndex: state.currentLocationIndex + 1, showContacts: false, shouldMinimize: true })
 														else {
 															setState({...state, scene: 'ENDGAME'})
 														}
