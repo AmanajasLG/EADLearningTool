@@ -253,9 +253,7 @@ const Game1 = (props) => {
 														}
 													</p>
 													<div id="popup-btns">
-														<button id="no-go" onClick={() => setState({...state, shouldCloseDialog: true, onMinimize: () => {
-															state.onMinimize = null
-														}})}>
+														<button id="no-go" onClick={() => setState({...state, shouldCloseDialog: true})}>
 															{state.wrongContacts > 0 ? "Keep trying" : "Not yet"}
 														</button>
 														<button id="go" onClick={ () => {
@@ -264,7 +262,7 @@ const Game1 = (props) => {
 																	...state,
 																	shouldCloseDialog: true,
 																	currentLocationIndex: state.currentLocationIndex + 1,
-																	onMinimize: () => {state.onMinimize = null}
+																	onMinimize: () => state.onMinimize = null
 																})
 															else
 																setState({...state, scene: 'ENDGAME'})
