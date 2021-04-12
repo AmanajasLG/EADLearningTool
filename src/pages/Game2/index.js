@@ -108,18 +108,29 @@ const Game2 = (props) => {
 	if(mission && state.locations.length === 0){
 		// safe copies
 		let availableCharacters = mission.missionCharacters.slice(0)
-		let locations = mission.locations.map( location => {
+		let locations = mission.locations.filter(location => {
+			return location.type === 'room'
+		}).map( location => {
 			delete location.characters
-			return {location: location, missionsCharacters: []}
+			return {location: location, missionCharacters: []}
 		})
 		
-		let tutorialCharacter = null;
-		const maxWeight = Math.max(mission.missionCharacters.length - mission.locations.length, 1)
+		let tutorialRoom = { location: mission.locations.find(location => {
+			return location.type === 'tutorial'
+		}),
+		 missionCharacters: []
+		}
+
+		console.log(tutorialRoom)
+
+		const maxWeight = Math.max(mission.missionCharacters.length - mission.locations.filter(location => {
+			return location.type === 'room'
+		}).length, 1)
 		//distribute on locations
 		while(availableCharacters.length > 0){
 			// se personagem for o de tutorial, separa ele e continua
 			if( availableCharacters[0].character.name === "Tutorial" ) {
-				tutorialCharacter = availableCharacters[0]
+				tutorialRoom.missionCharacters.push(availableCharacters[0])
 				availableCharacters.splice(0, 1)
 				continue;
 			}
@@ -127,7 +138,7 @@ const Game2 = (props) => {
 			// sorteia sala aleatoriamente com pesos que diminuem dependendo de quantos personagens já se tem
 			let totalWeight = 0
 			const weights = locations.map( (location) => {
-				let weight = maxWeight - location.missionsCharacters.length
+				let weight = maxWeight - location.missionCharacters.length
 				totalWeight += weight
 				return weight
 			})
@@ -162,29 +173,30 @@ const Game2 = (props) => {
 				selectedQuestions[3] = temp
 			}
 
-			locations[locationIndex].missionsCharacters = [...locations[locationIndex].missionsCharacters,
+			locations[locationIndex].missionCharacters = [...locations[locationIndex].missionCharacters,
 				{...availableCharacters[0],
 					selectedQuestions,
 					zDepth: Math.random()
 				}
 			]
+
 			availableCharacters.splice(0, 1)
 		}
 
 		// Aleatorizando ordem dos personagens em cada sala
 		for( let i = 0; i < locations.length; i++ ) {
-			let amountChars = locations[i].missionsCharacters.length
+			let amountChars = locations[i].missionCharacters.length
 			if( amountChars <= 1) continue
 			for( let j = 0; j < amountChars-1; j++ ) {
 				let exchangeWith = Math.floor(Math.random() * (amountChars - j)) + j
 				if (j === exchangeWith) continue // Não precisa trocar se for consigo mesmo
 				//swap
-				let aux = locations[i].missionsCharacters[j]
-				locations[i].missionsCharacters[j] = locations[i].missionsCharacters[exchangeWith]
-				locations[i].missionsCharacters[exchangeWith] = aux
+				let aux = locations[i].missionCharacters[j]
+				locations[i].missionCharacters[j] = locations[i].missionCharacters[exchangeWith]
+				locations[i].missionCharacters[exchangeWith] = aux
 			}
 		}
-		setState({...state, locations, tutorialCharacter})
+		setState({...state, locations, tutorialRoom})
 	}
 
 	const onStartGame = (e) => {
@@ -236,10 +248,10 @@ const Game2 = (props) => {
 			...state,
 			showConvo: true,
 			currentChar: character,
-			// convOptions: state.locations[state.currentRoom].missionsCharacters
+			// convOptions: state.locations[state.currentRoom].missionCharacters
 			// 							.find(mc => mc.character.id === character.id).selectedQuestions
 			dialogStep: 0,
-			convOptions: state.locations[state.currentRoom].missionsCharacters
+			convOptions: state.locations[state.currentRoom].missionCharacters
 										.find(c => c.character.id === character.id).selectedQuestions
 										.slice(0, state.questionsByStep)
 		})
@@ -264,12 +276,12 @@ const Game2 = (props) => {
 		} else {
 			let updateState = {}
 			// if(state.dialogStep !== state.totalDialogSteps){				
-			// 	updateState.convOptions = state.locations[state.currentRoom].missionsCharacters
+			// 	updateState.convOptions = state.locations[state.currentRoom].missionCharacters
 			// 	.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
 			// 	.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
 			// }else{
 			if(state.dialogStep < state.totalDialogSteps){
-				updateState.convOptions = state.locations[state.currentRoom].missionsCharacters
+				updateState.convOptions = state.locations[state.currentRoom].missionCharacters
 					.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
 					.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
 			} else if(state.dialogStep === state.totalDialogSteps) {
@@ -299,7 +311,7 @@ const Game2 = (props) => {
 			...state,
 			...dialogInitialState,
 			refreshDialog: null,
-			convOptions: state.locations[state.currentRoom].missionsCharacters
+			convOptions: state.locations[state.currentRoom].missionCharacters
 									.find(c => c.character.id === state.currentChar.id).selectedQuestions
 									.slice(0, state.questionsByStep)
 		})
@@ -389,15 +401,19 @@ const Game2 = (props) => {
 		}
 	}
 
+	console.log(state)
+
 	const tutorialScreen = (id) => {
 		return (
-			<div id="tutorial-screen">
-				<Character
-					// character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
-					// onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
-					character={state.tutorialCharacter.character}
-					onClick={setTutorialCharacter(state.tutorialCharacter.character)}
-				/>
+			<div id="tutorial-screen" style={{backgroundImage: `url("${state.tutorialRoom.location.backgroundAssets[0].image[0].url}")`}}>
+				{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
+						<Character
+						// character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
+						// onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
+						character={missionCharacter.character}
+						onClick={setTutorialCharacter(missionCharacter.character)}
+					/>
+				)}
 				<div id="tutorial-popup-1">
 					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
 					<span lang="en">Select someone to talk and help you find your guide.</span>
@@ -459,7 +475,7 @@ const Game2 = (props) => {
 							return (
 								<div id="room-itself">
 									<RoomSelect
-										buttonList={mission.locations.map((location, index) => index)}
+										buttonList={state.locations.map((location, index) => index)}
 										onChange={(num) => {
 											setState({...state, currentRoom: num})
 										}}
@@ -467,11 +483,11 @@ const Game2 = (props) => {
 									{/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
 										//? pq passar tudo ao invés de só passar a string? Que aí poderia ser local ou na rede... */}
 									<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
-										{state.locations[state.currentRoom].missionsCharacters.map((missionsCharacter, index) =>
+										{state.locations[state.currentRoom].missionCharacters.map((missionCharacter, index) =>
 											<Character key={index}
-												zDepth={missionsCharacter.zDepth}
-												character={missionsCharacter.character}
-												onClick={setCurrentCharacter(missionsCharacter.character)}
+												zDepth={missionCharacter.zDepth}
+												character={missionCharacter.character}
+												onClick={setCurrentCharacter(missionCharacter.character)}
 											/>
 										)}
 									</Sala>
