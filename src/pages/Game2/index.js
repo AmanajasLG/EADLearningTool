@@ -405,19 +405,24 @@ const Game2 = (props) => {
 
 	const tutorialScreen = (id) => {
 		return (
-			<div id="tutorial-screen" style={{backgroundImage: `url("${state.tutorialRoom.location.backgroundAssets[0].image[0].url}")`}}>
-				{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
-						<Character
-						// character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
-						// onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
-						character={missionCharacter.character}
-						onClick={setTutorialCharacter(missionCharacter.character)}
-					/>
-				)}
-				<div id="tutorial-popup-1">
-					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
-					<span lang="en">Select someone to talk and help you find your guide.</span>
-				</div>
+			<div id="room-itself" className="tutorial">
+				<Sala roomData={state.tutorialRoom.location} key={-1}>
+					{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
+							<Character
+							// character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
+							// onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
+							character={missionCharacter.character}
+							onClick={setTutorialCharacter(missionCharacter.character)}
+							key={index}
+						/>
+					)}
+					<div className="abs-fix">
+						<div id="tutorial-popup-1">
+							<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
+							<span lang="en">Select someone to talk and help you find your guide.</span>
+						</div>
+					</div>
+				</Sala>
 				{state.showConvo &&
 					<Conversa
 						onExited = {() => {setState({...state, showConvo: false, tutorialStep: state.tutorialStep-1})}}

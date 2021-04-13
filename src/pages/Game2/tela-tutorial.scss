@@ -1,38 +1,12 @@
-#tutorial-screen {
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: center center;
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
-	align-items: flex-end;
-	padding: 30vh 300px 5vh 300px;
-	z-index: 0;
-}
-
-#tutorial-screen .CharDiv {
-	flex: 0 1 auto;
-	height: 100%;
-}
-
-#tutorial-screen .CharDiv img {
-	flex: 1 1 auto;
-	object-fit: contain;
-	height: 100%;
-	width: auto;
-}
-
 #tutorial-popup-1 {
 	position: absolute;
-	top: 160px;
-	right: 200px;
-	width: 625px;
-	height: 300px;
+	top: 15vh;
+	right: 10vw;
+	width: 60vw;
+	max-width: 630px;
+	min-height: 300px;
+	padding: 25px;
+	color: #614641;
 	background-color: #F9AFA1;
 	box-shadow: #44444444 15px 15px;
 	display: flex;
@@ -46,13 +20,28 @@
 	border-radius: 40px; //TEMPORARIO enquanto não tem o blob das bordas
 }
 
-#tutorial-screen span[lang="pt-br"] {
+.abs-fix {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	pointer-events: none;
+}
+
+.tutorial #sala-content {
+	display: flex;
+	justify-content: flex-start;
+	// width: calc(var(--width) * 0.8);
+}
+
+#tutorial-popup-1 span[lang="pt-br"] {
 	font-weight: 600;
-	padding: 0 30px;
+	// padding: 0 30px;
 	margin-bottom: 10px;
 }
 
-#tutorial-screen span[lang="en"]::before {
+#tutorial-popup-1 span[lang="en"]::before {
 	content: "";
 	display: block;
 	border-top: 2px solid white;
@@ -60,10 +49,10 @@
 	width: 40%;
 }
 
-#tutorial-screen span[lang="en"] {
+#tutorial-popup-1 span[lang="en"] {
 	font-style: italic;
 	font-size: 0.8em;
-	padding: 0px 110px;
+	max-width: 400px;
 }
 
 #tutorial-popup-2-wrapper {
@@ -76,11 +65,14 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	animation: fadeIn 150ms linear forwards;
 }
 
 #tutorial-popup-2-content {
-	width: 900px;
-	padding: 30px 0px;
+	width: 80vw;
+	max-width: 900px;
+	margin: auto;
+	padding: 30px;
 	background-color: #F9AFA1;
 	box-shadow: #44444444 15px 15px;
 	display: flex;
@@ -92,6 +84,11 @@
 	line-height: 2.75rem;
 	text-align: center;
 	border-radius: 40px; //TEMPORARIO enquanto não tem o blob das bordas
+}
+
+#tutorial-popup-2-content span[lang="en"] {
+	margin-top: 25px;
+	font-style: italic;
 }
 
 #tutorial-popup-2-content button {
@@ -114,4 +111,9 @@
 #tutorial-popup-2-content button:hover {
 	background-color: #59316D;
 	color: #FFFFFF;
+}
+
+@keyframes fadeIn {
+	0%{ opacity: 0;}
+	100% {opacity: 1;}
 }
