@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/EADLearningTool/static/css/main.ecf984b2.chunk.css",
-    "main.js": "/EADLearningTool/static/js/main.c2fd6e65.chunk.js",
-    "main.js.map": "/EADLearningTool/static/js/main.c2fd6e65.chunk.js.map",
+    "main.css": "/EADLearningTool/static/css/main.37a7a113.chunk.css",
+    "main.js": "/EADLearningTool/static/js/main.75b9ed33.chunk.js",
+    "main.js.map": "/EADLearningTool/static/js/main.75b9ed33.chunk.js.map",
     "runtime-main.js": "/EADLearningTool/static/js/runtime-main.af8ce970.js",
     "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.af8ce970.js.map",
     "static/js/2.dd6cdc25.chunk.js": "/EADLearningTool/static/js/2.dd6cdc25.chunk.js",
@@ -10,10 +10,11 @@
     "static/js/3.41f5cbde.chunk.js": "/EADLearningTool/static/js/3.41f5cbde.chunk.js",
     "static/js/3.41f5cbde.chunk.js.map": "/EADLearningTool/static/js/3.41f5cbde.chunk.js.map",
     "index.html": "/EADLearningTool/index.html",
-    "static/css/main.ecf984b2.chunk.css.map": "/EADLearningTool/static/css/main.ecf984b2.chunk.css.map",
+    "static/css/main.37a7a113.chunk.css.map": "/EADLearningTool/static/css/main.37a7a113.chunk.css.map",
     "static/js/2.dd6cdc25.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.dd6cdc25.chunk.js.LICENSE.txt",
     "static/media/Celular Base.794704d0.svg": "/EADLearningTool/static/media/Celular Base.794704d0.svg",
     "static/media/Celular Sala.f026f530.svg": "/EADLearningTool/static/media/Celular Sala.f026f530.svg",
+    "static/media/Icone_jogo-tela_inicio.1e641e01.svg": "/EADLearningTool/static/media/Icone_jogo-tela_inicio.1e641e01.svg",
     "static/media/Mão dedão.60615287.svg": "/EADLearningTool/static/media/Mão dedão.60615287.svg",
     "static/media/Mão palma.ff873eea.svg": "/EADLearningTool/static/media/Mão palma.ff873eea.svg",
     "static/media/avatar1.48f082ac.svg": "/EADLearningTool/static/media/avatar1.48f082ac.svg",
@@ -26,13 +27,12 @@
     "static/media/lampada_apagada.3f2311d7.svg": "/EADLearningTool/static/media/lampada_apagada.3f2311d7.svg",
     "static/media/parabens_vitoria-persistente.62184df1.svg": "/EADLearningTool/static/media/parabens_vitoria-persistente.62184df1.svg",
     "static/media/parabens_vitoria-primeira.a06b772e.svg": "/EADLearningTool/static/media/parabens_vitoria-primeira.a06b772e.svg",
-    "static/media/pic-people-talk.3d385cc4.svg": "/EADLearningTool/static/media/pic-people-talk.3d385cc4.svg",
     "static/media/ícone_jogo1.244e8c29.svg": "/EADLearningTool/static/media/ícone_jogo1.244e8c29.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.af8ce970.js",
     "static/js/2.dd6cdc25.chunk.js",
-    "static/css/main.ecf984b2.chunk.css",
-    "static/js/main.c2fd6e65.chunk.js"
+    "static/css/main.37a7a113.chunk.css",
+    "static/js/main.75b9ed33.chunk.js"
   ]
 }
