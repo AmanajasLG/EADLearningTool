@@ -493,6 +493,7 @@ const Game2 = (props) => {
 												zDepth={missionCharacter.zDepth}
 												character={missionCharacter.character}
 												onClick={setCurrentCharacter(missionCharacter.character)}
+												// showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sobb hover do mouse
 											/>
 										)}
 									</Sala>
