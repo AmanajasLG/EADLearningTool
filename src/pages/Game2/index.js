@@ -19,6 +19,7 @@ import DialogCharacter from './components/DialogCharacter'
 import iconVitoriaPers from '../../img/Game2/parabens_vitoria-persistente.svg'
 import iconVitoriaPrim from '../../img/Game2/parabens_vitoria-primeira.svg'
 import iconDicas from '../../img/ícone_jogo1.svg'
+import iconInit from '../../img/Game2/Icone_jogo-tela_inicio.svg'
 
 const Game2 = (props) => {
 
@@ -465,9 +466,8 @@ const Game2 = (props) => {
 					switch(state.scene){
 						case "INIT":
 							return <Init
+										icon={iconInit}
 										name={mission.name} description={mission.description}
-										// nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang}).name}
-										// descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang}).description}
 										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
 										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
 										onStart={ onStartGame }

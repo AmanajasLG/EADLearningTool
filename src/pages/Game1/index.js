@@ -13,9 +13,11 @@ import initialState from './initialState.js'
 import stub from './stub.js'
 import Phone from './components/Phone'
 import Conversa from '../Game2/components/Conversa'
+import FullscreenOverlay from '../Game2/components/FullscreenOverlay'
+
+import iconInit from '../../img/Game1/ícone_jogo1.svg'
 
 import './index.scss'
-import FullscreenOverlay from '../Game2/components/FullscreenOverlay'
 
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState)
@@ -186,6 +188,7 @@ const Game1 = (props) => {
 						switch(state.scene){
 							case "INIT":
 								return <Init
+											icon={iconInit}
 											name={mission.name} description={mission.description}
 											onStart={ onStartGame }
 											onBack={ ()=> setState({...state, back: true}) }
