@@ -101,7 +101,7 @@
 #menu-options {
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: stretch;
 	min-height: 100%;
 }
@@ -109,7 +109,7 @@
 #menu-options > button {
 	flex: 1 1 0px;
 	min-height: 55px;
-	max-height: 45%;
+	max-height: 115px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background-color: rgba(255, 255, 255, 0.15);
 	color: #FFFFFF;
