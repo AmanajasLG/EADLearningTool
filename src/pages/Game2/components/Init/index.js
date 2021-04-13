@@ -1,13 +1,12 @@
 import React from 'react'
 import './index.scss'
-import classImage from '../../../../img/pic-people-talk.svg'
 
-const Init = ({name, description, nameTranlate = "Name", descriptionTranlate = "Description", onStart, onBack, onSeeTutorial}) => {
+const Init = ({icon, name, description, nameTranlate = "Name", descriptionTranlate = "Description", onStart, onBack, onSeeTutorial}) => {
     return (
         <div className="main-init-wrapper">
           <div className="inner-content">
             <div name="infos">
-              <img className="classImage" src={classImage} alt=""/>
+              <img className="classImage" src={icon} alt=""/>
               <h1 className="margin-half-top type-l type-display type-center">{name}</h1>
               <h1 className="type-m type-display type-center subtitle">{nameTranlate}</h1>
 

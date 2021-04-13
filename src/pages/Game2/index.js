@@ -19,6 +19,7 @@ import DialogCharacter from './components/DialogCharacter'
 import iconVitoriaPers from '../../img/Game2/parabens_vitoria-persistente.svg'
 import iconVitoriaPrim from '../../img/Game2/parabens_vitoria-primeira.svg'
 import iconDicas from '../../img/ícone_jogo1.svg'
+import iconInit from '../../img/Game2/Icone_jogo-tela_inicio.svg'
 
 const Game2 = (props) => {
 
@@ -405,19 +406,24 @@ const Game2 = (props) => {
 
 	const tutorialScreen = (id) => {
 		return (
-			<div id="tutorial-screen" style={{backgroundImage: `url("${state.tutorialRoom.location.backgroundAssets[0].image[0].url}")`}}>
-				{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
-						<Character
-						// character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
-						// onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
-						character={missionCharacter.character}
-						onClick={setTutorialCharacter(missionCharacter.character)}
-					/>
-				)}
-				<div id="tutorial-popup-1">
-					<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
-					<span lang="en">Select someone to talk and help you find your guide.</span>
-				</div>
+			<div id="room-itself" className="tutorial">
+				<Sala roomData={state.tutorialRoom.location} key={-1}>
+					{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
+							<Character
+							// character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
+							// onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
+							character={missionCharacter.character}
+							onClick={setTutorialCharacter(missionCharacter.character)}
+							key={index}
+						/>
+					)}
+					<div className="abs-fix">
+						<div id="tutorial-popup-1">
+							<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
+							<span lang="en">Select someone to talk and help you find your guide.</span>
+						</div>
+					</div>
+				</Sala>
 				{state.showConvo &&
 					<Conversa
 						onExited = {() => {setState({...state, showConvo: false, tutorialStep: state.tutorialStep-1})}}
@@ -460,9 +466,8 @@ const Game2 = (props) => {
 					switch(state.scene){
 						case "INIT":
 							return <Init
+										icon={iconInit}
 										name={mission.name} description={mission.description}
-										// nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang}).name}
-										// descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang}).description}
 										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
 										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
 										onStart={ onStartGame }
@@ -488,6 +493,7 @@ const Game2 = (props) => {
 												zDepth={missionCharacter.zDepth}
 												character={missionCharacter.character}
 												onClick={setCurrentCharacter(missionCharacter.character)}
+												// showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sobb hover do mouse
 											/>
 										)}
 									</Sala>
