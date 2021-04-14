@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/EADLearningTool/static/css/main.37a7a113.chunk.css",
-    "main.js": "/EADLearningTool/static/js/main.75b9ed33.chunk.js",
-    "main.js.map": "/EADLearningTool/static/js/main.75b9ed33.chunk.js.map",
+    "main.css": "/EADLearningTool/static/css/main.4152874a.chunk.css",
+    "main.js": "/EADLearningTool/static/js/main.7c0dafbd.chunk.js",
+    "main.js.map": "/EADLearningTool/static/js/main.7c0dafbd.chunk.js.map",
     "runtime-main.js": "/EADLearningTool/static/js/runtime-main.af8ce970.js",
     "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.af8ce970.js.map",
-    "static/js/2.dd6cdc25.chunk.js": "/EADLearningTool/static/js/2.dd6cdc25.chunk.js",
-    "static/js/2.dd6cdc25.chunk.js.map": "/EADLearningTool/static/js/2.dd6cdc25.chunk.js.map",
+    "static/js/2.e43bd0df.chunk.js": "/EADLearningTool/static/js/2.e43bd0df.chunk.js",
+    "static/js/2.e43bd0df.chunk.js.map": "/EADLearningTool/static/js/2.e43bd0df.chunk.js.map",
     "static/js/3.41f5cbde.chunk.js": "/EADLearningTool/static/js/3.41f5cbde.chunk.js",
     "static/js/3.41f5cbde.chunk.js.map": "/EADLearningTool/static/js/3.41f5cbde.chunk.js.map",
     "index.html": "/EADLearningTool/index.html",
-    "static/css/main.37a7a113.chunk.css.map": "/EADLearningTool/static/css/main.37a7a113.chunk.css.map",
-    "static/js/2.dd6cdc25.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.dd6cdc25.chunk.js.LICENSE.txt",
+    "static/css/main.4152874a.chunk.css.map": "/EADLearningTool/static/css/main.4152874a.chunk.css.map",
+    "static/js/2.e43bd0df.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.e43bd0df.chunk.js.LICENSE.txt",
     "static/media/Celular Base.794704d0.svg": "/EADLearningTool/static/media/Celular Base.794704d0.svg",
     "static/media/Celular Sala.f026f530.svg": "/EADLearningTool/static/media/Celular Sala.f026f530.svg",
     "static/media/Icone_jogo-tela_inicio.1e641e01.svg": "/EADLearningTool/static/media/Icone_jogo-tela_inicio.1e641e01.svg",
@@ -31,8 +31,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.af8ce970.js",
-    "static/js/2.dd6cdc25.chunk.js",
-    "static/css/main.37a7a113.chunk.css",
-    "static/js/main.75b9ed33.chunk.js"
+    "static/js/2.e43bd0df.chunk.js",
+    "static/css/main.4152874a.chunk.css",
+    "static/js/main.7c0dafbd.chunk.js"
   ]
 }
