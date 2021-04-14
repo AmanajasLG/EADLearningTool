@@ -15,6 +15,7 @@ import initialState from './initialState'
 import { headerConstants } from '../../_constants'
 import Conversa from './components/Conversa'
 import DialogCharacter from './components/DialogCharacter'
+import { Redirect } from 'react-router'
 
 import iconVitoriaPers from '../../img/Game2/parabens_vitoria-persistente.svg'
 import iconVitoriaPrim from '../../img/Game2/parabens_vitoria-primeira.svg'
@@ -622,6 +623,7 @@ const Game2 = (props) => {
 				</div>
 			</div>
 			}
+			{ state.back && <Redirect to='/userspace' />}
 		</div>
   )
 }
