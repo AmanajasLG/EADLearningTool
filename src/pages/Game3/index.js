@@ -14,7 +14,7 @@ import initialState from './initialState'
 const goRound = (value, max) => value >= 0 ? value % max : max - (Math.abs(value) % max)
 
 const Game3 = (props) => {
-  const [state, setState] = React.useState({...initialState})
+  const [state, setState] = React.useState({...initialState()})
   const dispatch = useDispatch()
   const mission = useSelector( state => state.game_3_missions.items.find( m => m.id === props.match.params.id) )
   const onStartGame = () => {
@@ -25,7 +25,7 @@ const Game3 = (props) => {
     if(!mission && props.match.params.id){
       dispatch(apiActions.game_3_missionsActions.getById(props.match.params.id))
     }
-  }, [props.match.params.id])
+  }, [dispatch, mission, props.match.params.id])
 
   const addProduct = (product) => () => setState({...state, cart: [...state.cart, product]})
 
@@ -85,7 +85,7 @@ const Game3 = (props) => {
   }
 
   //const { mission } = state
-  console.log('mission:', mission)
+  //console.log('mission:', mission)
   return(
     <div>
     { mission ?
@@ -130,7 +130,11 @@ const Game3 = (props) => {
             case 'MARKET':
               return(
                 <div>
-                  <Timer seconds={mission.seconds} /* onEnd={()=>setState({...state, scene: 'END_GAME', timeUp: true})}*//>
+                  <Timer
+                    run={state.runTimer} seconds={mission.seconds}
+                    onSecondPassed={(remaining) => setState({...state, remainingTime: remaining})}
+                    onEnd={() => setState({...state, scene: 'END_GAME', timeUp: true})} />
+
                   <button onClick={() => setState({...state, shopList: !state.shopList})}>
                     {state.shopList? 'Fechar' : 'Abrir'} lista de compras
                   </button>
@@ -151,7 +155,7 @@ const Game3 = (props) => {
                         Ir ao corredor {mission.aisles[goRound(state.currentAisle + 1, mission.aisles.length)].name}
                       </button>
 
-                      <button onClick={()=>setState({...state, checkout: true})}>
+                      <button onClick={() => setState({...state, checkout: true, runTimer: false})}>
                         Ir para o caixa
                       </button>
                     </div>
@@ -167,7 +171,7 @@ const Game3 = (props) => {
                         :
                         <div>
                           Está faltando coisa aí!
-                          <button onClick={() => setState({...state, checkout: false})}>Voltar às compras</button>
+                          <button onClick={() => setState({...state, checkout: false, runTimer: true})}>Voltar às compras</button>
                         </div>
                       }
                       {state.onPayment &&
