@@ -32,7 +32,7 @@ const Game2 = (props) => {
 	let mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
 	const loading = useSelector( state => state.missions.loading)
 	const userId = useSelector( state => state.authentication.user.user.id )
-	const lang = useSelector( state => state.authentication.user.user.language )
+	const lang = useSelector( state => state.authentication.user.user.language.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
 	const hasPlayed = useSelector( state => state.user_game_results.items.length > 0)
@@ -403,8 +403,6 @@ const Game2 = (props) => {
 		}
 	}
 
-	console.log(state)
-
 	const tutorialScreen = (id) => {
 		return (
 			<div id="room-itself" className="tutorial">
@@ -469,8 +467,8 @@ const Game2 = (props) => {
 							return <Init
 										icon={iconInit}
 										name={mission.name} description={mission.description}
-										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
-										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
+										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang}).name}
+										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang}).description}
 										onStart={ onStartGame }
 										onBack={() => setState({...state, back: true})}
 										onSeeTutorial={ state.hasPlayed ? () => {state.seeTutorial = true;onStartGame()} : null }
