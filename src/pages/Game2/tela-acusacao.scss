@@ -94,7 +94,7 @@
 	font-size: 0.9em;
 }
 
-#accusation-infos > :nth-child(2) {
+#tips-received {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -107,8 +107,8 @@
 	padding: 20px;
 }
 
-#accusation-infos > :nth-child(2) div {
-	margin-bottom: 0.35em;
+#tips-received > div:nth-child(n+3) {
+	margin-top: 0.35em;
 }
 
 #accusation-btns {
