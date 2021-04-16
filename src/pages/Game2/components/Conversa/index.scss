@@ -60,15 +60,13 @@
 #dialog-box {
 	background-color: #535c89;
 	border-radius: 0 1.5em 0 0;
-	flex-grow: 0;
+	flex: 0 0 250px;
 	padding: 15px;
 	margin-bottom: 75px;
 	box-shadow: 7px 7px 0px 0px #77777750;
 	display: flex;
 	flex-direction: column;
 	justify-content: stretch;
-	height: 24%;
-	max-height: 300px;
 	transition: 50ms ease-in-out;
 	overflow: hidden;
 }
