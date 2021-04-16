@@ -45,6 +45,7 @@ const GameContext = (props) => {
       <ReactAudioPlayer
 				src={music.url}
 				autoPlay volume={state.volume/100}
+        loop={true}
 			/>
       { state.config &&
         <ConfigWindow
