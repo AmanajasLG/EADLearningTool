@@ -322,7 +322,7 @@ const Game2 = (props) => {
 	const onMenuButtonClick = (answer) => {
 		let updateState = {}
 
-		if(state.tips.indexOf(answer.tip) === -1)
+		if(answer.tip && state.tips.indexOf(answer.tip) === -1)
 			updateState = {...updateState, tips: [...state.tips, answer.tip]}
 
 		if(answer.refresh)

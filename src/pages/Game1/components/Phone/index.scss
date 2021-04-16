@@ -227,7 +227,7 @@
 	color: #F9AFA1;
 }
 
-.contact-profile-pic div {
+.contact-profile-pic > div {
 	border: 2px solid #F9AFA1;
 	background-color: #fff;
 	border-radius: 100px;
@@ -235,9 +235,30 @@
 	height: 100%;
 	position: relative;
 	top: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	overflow: hidden;
 }
 
-.contato > div:not(:first-child) {
+.contact-profile-pic > div > div {
+	background-color: #59316D;
+	height: 50%;
+	width: 50%;
+	border-radius: 100%;
+}
+
+.contact-profile-pic > div > div:first-child {
+	transform-origin: 50% 80%;
+	transform: scale(0.85);
+}
+
+.contact-profile-pic > div > div:last-child {
+	transform-origin: 50% -10%;
+	transform: scale(1.75);
+}
+
+.contato > div:nth-child(n+2) {
 	margin-bottom: 10px;
 	padding: 0;
 	display: flex;

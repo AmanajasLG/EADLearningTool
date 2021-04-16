@@ -12,7 +12,7 @@ import FullscreenOverlay from '../../../Game2/components/FullscreenOverlay'
 // const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize}) => {
 	const [state,setState] = React.useState({maximized: false, shouldMinimize: false})
-	const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
+	// const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
 	
 	React.useEffect( () => {
 		setState({...state, contacts: contacts})
@@ -44,11 +44,11 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 		if(typeof(onMinimize) === "function") onMinimize()
 	}
 
-	const _addContato = () => {
-		if(onAddContact) onAddContact(newContact)
-		else throw new Error("Using phone without callback: onAddContact")
-		setNewContact({name: '', job: '', country: ''})
-	}
+	// const _addContato = () => {
+	// 	if(onAddContact) onAddContact(newContact)
+	// 	else throw new Error("Using phone without callback: onAddContact")
+	// 	setNewContact({name: '', job: '', country: ''})
+	// }
 
 	const _terminou = () => {
 		if(typeof(onFinish) === "function") onFinish()
@@ -59,7 +59,10 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 		return (
 			<div className="contato" key={key}>
 				<div className="contact-profile-pic">
-					<div></div>
+					<div>
+						<div></div>
+						<div></div>
+					</div>
 					<span>{key+1}</span>
 				</div>
 				<div className="name">
