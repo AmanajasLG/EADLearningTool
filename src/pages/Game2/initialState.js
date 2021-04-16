@@ -7,7 +7,7 @@ const initialState = () => ({
   endGame: false,
   found: false,
   locations:[],
-  tips: ['A cabeleireira sabe'],
+  tips: ['O engenheiro sabe'],
   acusation: false,
   tries: 0,
   validQuestions: [],

@@ -234,7 +234,7 @@ const Game2 = (props) => {
 					{
 						// answer: 'Olha, não sei quem você está procurando, cheguei aqui semana passada. A cabelereira deve saber!',
 						// question: 'Estou procurando alguém. Você pode me ajudar?',
-						answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...','A cabelereira deve saber!'],
+						answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...','O engenheiro deve saber!'],
 						question: {
 							question: 'Estou procurando alguém. Você pode me ajudar?',
 						},
