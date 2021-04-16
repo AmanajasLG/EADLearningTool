@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions, update } from '../../_actions'
+import { apiActions } from '../../_actions'
 
 import Init from '../Game2/components/Init'
 import Result from '../Game2/components/Result'
