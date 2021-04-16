@@ -59,7 +59,10 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 		return (
 			<div className="contato" key={key}>
 				<div className="contact-profile-pic">
-					<div></div>
+					<div>
+						<div></div>
+						<div></div>
+					</div>
 					<span>{key+1}</span>
 				</div>
 				<div className="name">
