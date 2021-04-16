@@ -137,22 +137,39 @@ const Game1 = (props) => {
 	const setCurrentChar = (character) => () => {
 		let convOptions = character.answers.filter( answer => mission?.questions?.find(question => question?.id === answer?.question?.id)) ?? []
 		if(convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
-		setState({...state, currentChar: character, convOptions: convOptions})
+		setState({...state, currentChar: character, questionsAsked: 0, convOptions: convOptions})
 	}
 
-	const afterWriter = () => {}
+	const afterWriter = () => {
+		let updatedState = {}
+		if( state.questionsAsked === state.maxQuestions && state.preSpeech.length === 0 ) {
+			updatedState.preSpeech = ["Espero que isso tenha sido tudo. Tenho que ir agora..."]
+			updatedState.convOptions = [{question: "Ah tá. Tchau!", answer: ["Tchau!"], close: true}]
+		} else if ( state.questionsAsked > state.maxQuestions ) {
+			updatedState.convOptions = []
+		}
+		if(state.close) {
+			updatedState.shouldCloseConvo = true
+			updatedState.close = false
+		}
 
-	const onMenuButtonClick = (answer) => () => {
+		setState({...state, ...updatedState})
+	}
+
+	const onMenuButtonClick = (answer) => {
 		//
 		//	Aplicar lógica adicional de click nos botões do menu
 		//
-		setState({...state,
-			dialogHistory:
-			[...state.dialogHistory,
-				answer.question.question,
-				answer.answer
-			]
-		})
+		let updatedState = {}
+		updatedState.questionsAsked = state.questionsAsked + 1
+		if( updatedState.questionsAsked < state.maxQuestions ) {
+			updatedState.convOptions = state.convOptions.filter( convOption => convOption !== answer ) // Esse é para remover as perguntas já feitas, se for pra fazer isso
+		} else {
+			updatedState.preSpeech = []
+			updatedState.convOptions = []
+		}
+		if( answer.close ) updatedState.close = true
+		setState({...state, ...updatedState})
 	}
 
 	const modifyContact = (contact) => {
@@ -238,7 +255,13 @@ const Game1 = (props) => {
 											onExited={closeDialog}
 											onConvoChoiceMade={onMenuButtonClick}
 										>
-											{/* Coisinha no canto superior esquerdo vai aqui */}
+											<div id="question-counter" className={state.questionsAsked >= state.maxQuestions ? "max" : null}>
+												<div id="question-counter-info">
+													<div>Você já fez</div>
+													<div className="numbers"><span>{Math.min(state.questionsAsked, state.maxQuestions)}</span>/{state.maxQuestions}</div>
+													<div>perguntas</div>
+												</div>
+											</div>
 										</Conversa>
 										}
 										{ state.changeRoomPopUp &&
