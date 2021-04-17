@@ -9,7 +9,8 @@ export const userService = {
     getById,
     find,
     update,
-    delete: _delete
+    delete: _delete,
+    getRoles
 }
 
 function login(email, password) {
@@ -117,6 +118,16 @@ function _delete(id){
         .then(handleResponse)
 }
 
+function getRoles(){
+  return api(
+    {
+      method: 'get',
+      url: '/users-permissions/roles',
+      headers: authHeader()
+    })
+    .then(handleResponse)
+}
+
 function handleResponse(response) {
   console.log(response)
 
@@ -131,3 +142,4 @@ function handleResponse(response) {
 
   return response.data
 }
+
