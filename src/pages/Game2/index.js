@@ -379,7 +379,7 @@ const Game2 = (props) => {
 	}
 
 	const checkEnd = () => {
-		if(state.tries < 3 && state.currentChar.name !== state.targetName){
+		if(state.tries < 2 && state.currentChar.name !== state.targetName){
 			state.tries++
 			setState({
 				...state,
