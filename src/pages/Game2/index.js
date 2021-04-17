@@ -125,9 +125,20 @@ const Game2 = (props) => {
 
 		console.log(tutorialRoom)
 
+		//* maxWeight representa a meta de personagens a se bater antes de se terminar de distribuir
+		//* os personagens faltantes entre as salas. Quanto menor o valor (sempre >=1), mais igualmente distribuido será
+
+		// Garante somente que nenhuma sala poderá ter todos os personagens:
+		// const maxWeight = mission.missionCharacters.length-1
+
+		// Nao sei pq mas esse valor sempre dá uma excelente distribuição, com boa diversidade de quantidades
+		// e mantendo chances incrivelmente pequenas de existir uma sala sem nenhum personagem:
 		const maxWeight = Math.max(mission.missionCharacters.length - mission.locations.filter(location => {
 			return location.type === 'room'
 		}).length, 1)
+		
+		// const maxWeight = 5
+
 		//distribute on locations
 		while(availableCharacters.length > 0){
 			// se personagem for o de tutorial, separa ele e continua
@@ -139,11 +150,25 @@ const Game2 = (props) => {
 
 			// sorteia sala aleatoriamente com pesos que diminuem dependendo de quantos personagens já se tem
 			let totalWeight = 0
-			const weights = locations.map( (location) => {
+			let maxRoom = 0
+			let possibleWeights = locations.map( (location) => {
+				maxRoom = Math.max(location.missionCharacters.length, maxRoom)
 				let weight = maxWeight - location.missionCharacters.length
 				totalWeight += weight
 				return weight
 			})
+			// Entra se todas as salas tem no mínimo maxWeight personagens
+			if(totalWeight <= 0) {
+				totalWeight = 0
+				maxWeight = maxRoom+1
+				possibleWeights = locations.map( (location) => {
+					let weight = maxWeight - location.missionCharacters.length
+					totalWeight += weight
+					return weight
+				})
+			}
+
+			const weights = possibleWeights
 			let rand = Math.floor(Math.random()*totalWeight)
 			let i = 0;
 			while( rand >= 0 ) rand -= weights[i++]
@@ -466,7 +491,8 @@ const Game2 = (props) => {
 						case "INIT":
 							return <Init
 										icon={iconInit}
-										name={mission.name} description={mission.description}
+										name={mission.name}
+										description={mission.description}
 										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang}).name}
 										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang}).description}
 										onStart={ onStartGame }
