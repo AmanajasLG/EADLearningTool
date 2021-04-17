@@ -147,7 +147,14 @@ const Game2 = (props) => {
 			let rand = Math.floor(Math.random()*totalWeight)
 			let i = 0;
 			while( rand >= 0 ) rand -= weights[i++]
-			const locationIndex = i-1
+			let locationIndex = i-1
+
+			while(locations[locationIndex].missionCharacters.length > 2){
+				rand = Math.floor(Math.random()*totalWeight)
+				i = 0;
+				while( rand >= 0 ) rand -= weights[i++]
+				locationIndex = i-1
+			}
 
 			//each character has some good and bad questions that can be asked
 			let availableAnswers = [...availableCharacters[0].answers]
@@ -454,6 +461,8 @@ const Game2 = (props) => {
 		setState({...initialState(), hasPlayed: true})
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
+
+	console.log(state)
 
 	return (
 		<div id="game2-wrapper">
