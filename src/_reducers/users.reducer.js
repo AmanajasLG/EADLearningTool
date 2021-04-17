@@ -74,6 +74,18 @@ export function users(state = {}, action) {
                     return user;
                 })
             };
+        case userConstants.GETROLES_REQUEST:
+            return {...state,
+                loading: true
+            };
+        case userConstants.GETROLES_SUCCESS:
+            return {...state,
+                roles: action.users.roles
+            };
+        case userConstants.GETROLES_FAILURE:
+            return {...state,
+                error: action.error
+            };
         default:
             return state
     }
