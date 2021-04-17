@@ -21,6 +21,7 @@ import iconVitoriaPers from '../../img/Game2/parabens_vitoria-persistente.svg'
 import iconVitoriaPrim from '../../img/Game2/parabens_vitoria-primeira.svg'
 import iconDicas from '../../img/ícone_jogo1.svg'
 import iconInit from '../../img/Game2/Icone_jogo-tela_inicio.svg'
+import FullscreenOverlay from './components/FullscreenOverlay'
 
 const Game2 = (props) => {
 
@@ -612,30 +613,38 @@ const Game2 = (props) => {
 								)
 					}
 				}())}
-				<div id="dialog-accusation-wrapper" hidden={state.acusation !== true || undefined} aria-hidden={state.acusation !== true || undefined}>
-					<div id="dialog-accusation">
-						<div id="accusation-infos">
-							<div>
-								<span lang="pt-br">Tem certeza?</span>
-								<span lang="en">Are you sure it's them?<br />Check your tips.</span>
-							</div>
-							<div id="tips-received">
-								<div id="accusation-icon">
-									<img src={iconDicas} alt="" />
+				{state.acusation &&
+				<FullscreenOverlay
+					showCloseBtn={false}
+					shouldExit={state.closeAcusation}
+					onReadyToExit={() => {setState({...state, closeAcusation: false, acusation: false})}}
+				>
+					<div id="dialog-accusation-wrapper">
+						<div id="dialog-accusation">
+							<div id="accusation-infos">
+								<div>
+									<span lang="pt-br">Tem certeza?</span>
+									<span lang="en">Are you sure it's them?<br />Check your tips.</span>
 								</div>
-								{state.tips.length > 0 ?
-									state.tips.map((tip, index) => <div key={index}>{tip}</div>)
-									:
-									<div>Nenhuma dica recebida.</div>
-								}
+								<div id="tips-received">
+									<div id="accusation-icon">
+										<img src={iconDicas} alt="" />
+									</div>
+									{state.tips.length > 0 ?
+										state.tips.map((tip, index) => <div key={index}>{tip}</div>)
+										:
+										<div>Nenhuma dica recebida.</div>
+									}
+								</div>
 							</div>
-						</div>
-						<div id="accusation-btns">
-							<Button onClick={() => setState({...state, acusation: false}) }>Não</Button>
-							<Button onClick={checkEnd}>Sim</Button>
+							<div id="accusation-btns">
+								<Button onClick={() => setState({...state, closeAcusation: true}) }>Não</Button>
+								<Button onClick={checkEnd}>Sim</Button>
+							</div>
 						</div>
 					</div>
-				</div>
+				</FullscreenOverlay>
+				}
 			</div>
 			}
 			{ state.back && <Redirect to='/userspace' />}

@@ -9,6 +9,7 @@ const initialState = () => ({
   locations:[],
   tips: ['O engenheiro sabe'],
   acusation: false,
+  closeAcusation: false,
   tries: 0,
   validQuestions: [],
   tutorialStep: 0,
