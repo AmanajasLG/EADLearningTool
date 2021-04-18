@@ -45,20 +45,20 @@ const App = () => {
         <Switch>
           <Route exact path={'/'} component={Home} />
           <Route path={`/login`} component={Login} />
-          <Route path={`${rootUrl}/register`} component={Register} />
-          <PrivateRoute exact path={`${rootUrl}/game1/:id`} render={(props) => <GameContext {...props}><Game1 /></GameContext>} />
-          <PrivateRoute exact path={`${rootUrl}/game2/:id`} render={(props) => <GameContext {...props}><Game2 /></GameContext>} />
-          <PrivateRoute exact path={`${rootUrl}/game3/:id`} render={(props) => <GameContext {...props}><Game3 /></GameContext>} />
-          <PrivateRoute exact path={`${rootUrl}/test`} component={TestPage} />
-          <PrivateRoute exact path={`${rootUrl}/userspace`} component={UserSpace} />
-          <PrivateRoute exact path={`${rootUrl}/missions`} component={Missions} />
-          <PrivateRoute exact path={`${rootUrl}/questions`} component={Questions} />
-          <PrivateRoute exact path={`${rootUrl}/questionnaires`} component={Questionnaires} />
-          <PrivateRoute exact path={`${rootUrl}/missions/create`} component={CreateMission} />
-          <PrivateRoute exact path={`${rootUrl}/missions/edit/:game/:id`} component={CreateMission} />
-          <PrivateRoute exact path={`${rootUrl}/characters`} component={Characters} />
-          <PrivateRoute exact path={`${rootUrl}/users`} component={UsersCRUD} />
-          <PrivateRoute exact path={`${rootUrl}/playSessions`} component={PlaySessions}/>
+          <Route path={`/register`} component={Register} />
+          <PrivateRoute exact path={`/game1/:id`} render={(props) => <GameContext {...props}><Game1 /></GameContext>} />
+          <PrivateRoute exact path={`/game2/:id`} render={(props) => <GameContext {...props}><Game2 /></GameContext>} />
+          <PrivateRoute exact path={`/game3/:id`} render={(props) => <GameContext {...props}><Game3 /></GameContext>} />
+          <PrivateRoute exact path={`/test`} component={TestPage} />
+          <PrivateRoute exact path={`/userspace`} component={UserSpace} />
+          <PrivateRoute exact path={`/missions`} component={Missions} />
+          <PrivateRoute exact path={`/questions`} component={Questions} />
+          <PrivateRoute exact path={`/questionnaires`} component={Questionnaires} />
+          <PrivateRoute exact path={`/missions/create`} component={CreateMission} />
+          <PrivateRoute exact path={`/missions/edit/:game/:id`} component={CreateMission} />
+          <PrivateRoute exact path={`/characters`} component={Characters} />
+          <PrivateRoute exact path={`/users`} component={UsersCRUD} />
+          <PrivateRoute exact path={`/playSessions`} component={PlaySessions}/>
         </Switch>
       </Router>
 
