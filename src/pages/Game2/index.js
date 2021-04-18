@@ -535,7 +535,7 @@ const Game2 = (props) => {
 									<div id="endGame-screen">
 										{state.gameEndState ?
 										<div id="end-panels">
-											<div id="painel-2-icon">
+											<div id="painel-icon">
 												<img src={state.tries === 0 ? iconVitoriaPrim : iconVitoriaPers} alt=""/>
 											</div>
 											<div id="endgame-messages">
@@ -568,32 +568,44 @@ const Game2 = (props) => {
 													<a href="#painel-1" className="prev-btn">{'❮'}</a>
 												</div>
 											</div>
-											<div id="endGame-action-btns-right">
+											<div id="endGame-action-btns">
 												<Button onClick={restart}>Tentar novamente</Button>
 												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 											</div>
 										</div> :
-										<div>
+										<div id="endGame-wrong-wrapper">
 											<div>
-												<div>
-													<div>Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</div>
-													<div>You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</div>
+												<div className="painel" id="painel-1">
+													<div id="painel-icon-derrota">
+														<img src={iconDerrota} alt=""/>
+													</div>
+													<span lang="pt-br">Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</span>
+													<span lang="en">You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</span>
 												</div>
-												<div>
-													<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
-													<div>clues</div>
-												</div>
-												<div>
-													<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
-													<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
+												<div className="painel" id="painel-3">
+													<div className="painel-2-wrapper">
+														<div className="painel-2-content" style={{backgroundImage: "url(" + blobLaranja + ")"}}>
+															<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
+															<div>clues</div>
+														</div>
+													</div>
+													<div className="painel-2-wrapper">
+														<div className="painel-2-content">
+															<div>
+																<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
+																<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</p>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div id="endGame-action-btns-wrong">
+											<div id="endGame-action-btns">
 												<Button onClick={restart}>Tentar novamente</Button>
 												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 											</div>
 										</div>
 										}
+										{state.gameEndState &&
 										<DialogCharacter
 											character={
 												mission.missionCharacters.find((mc) => {
@@ -601,6 +613,7 @@ const Game2 = (props) => {
 												}).character}
 											feeling={"rightAccusation"}
 										/>
+										}
 									</div>
 								)
 					}
