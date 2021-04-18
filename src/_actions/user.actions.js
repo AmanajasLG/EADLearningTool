@@ -5,7 +5,8 @@ import { alertActions } from './'
 export const userActions = {
     getAll,
     getById,
-    delete: _delete
+    delete: _delete,
+    getRoles
 }
 
 export const login = (email, password) => dispatch => {
@@ -121,4 +122,20 @@ function _delete(id){
     function request(id) { return {type: userConstants.DELETE_REQUEST, id} }
     function success(id) { return {type: userConstants.DELETE_SUCCESS, id} }
     function failure(id, error) { return {type: userConstants.DELETE_FAILURE, id, error} }
+}
+
+function getRoles(){
+    return dispatch => {
+        dispatch(request())
+
+        const r = userService.getRoles()
+            r.then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error.toString()))
+            )
+    }
+
+    function request() { return {type: userConstants.GETROLES_REQUEST} }
+    function success(users) { return {type: userConstants.GETROLES_SUCCESS, users} }
+    function failure(error) { return {type: userConstants.GETROLES_FAILURE, error} }
 }

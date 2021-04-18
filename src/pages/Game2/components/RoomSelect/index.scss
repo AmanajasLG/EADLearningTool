@@ -52,10 +52,9 @@
 	cursor: pointer;
 }
 
-.RoomBtn.disabled {
+.RoomBtn.disabled:not(#selected) {
 	pointer-events: none;
-	border-color: #AAAAAA55;
-	opacity: 0.9;
+	opacity: 0.2;
 }
 
 .RoomBtn:hover {

@@ -19,8 +19,13 @@ import { Redirect } from 'react-router'
 
 import iconVitoriaPers from '../../img/Game2/parabens_vitoria-persistente.svg'
 import iconVitoriaPrim from '../../img/Game2/parabens_vitoria-primeira.svg'
+import iconDerrota from '../../img/Game2/símbolo_feedback errado.svg'
 import iconDicas from '../../img/ícone_jogo1.svg'
 import iconInit from '../../img/Game2/Icone_jogo-tela_inicio.svg'
+import blobAzul from '../../img/bg-forma-azul.svg'
+import blobLaranja from '../../img/bg-forma-laranja.svg'
+import blobVerde from '../../img/bg-forma-verde.svg'
+import FullscreenOverlay from './components/FullscreenOverlay'
 
 const Game2 = (props) => {
 
@@ -32,7 +37,7 @@ const Game2 = (props) => {
 	let mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
 	const loading = useSelector( state => state.missions.loading)
 	const userId = useSelector( state => state.authentication.user.user.id )
-	const lang = useSelector( state => state.authentication.user.user.language )
+	const lang = useSelector( state => state.authentication.user.user.language.id )
 	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
 	const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
 	const hasPlayed = useSelector( state => state.user_game_results.items.length > 0)
@@ -100,6 +105,7 @@ const Game2 = (props) => {
 		mission = stub
 	}
 	*/
+
 	//Randomizar personagens para aparecer nas salas
 	//	Enquanto houver personagens na lista de personagens disponíveis
 	//		Escolhe um local ao acaso
@@ -125,9 +131,6 @@ const Game2 = (props) => {
 
 		console.log(tutorialRoom)
 
-		const maxWeight = Math.max(mission.missionCharacters.length - mission.locations.filter(location => {
-			return location.type === 'room'
-		}).length, 1)
 		//distribute on locations
 		while(availableCharacters.length > 0){
 			// se personagem for o de tutorial, separa ele e continua
@@ -139,11 +142,28 @@ const Game2 = (props) => {
 
 			// sorteia sala aleatoriamente com pesos que diminuem dependendo de quantos personagens já se tem
 			let totalWeight = 0
+			let crowdestRoomPop = 0
+			let emptiestRoomPop = 999
+			const minPerRoom = 1
+			const maxPerRoom = 5
+			locations.forEach( (location) => {
+				crowdestRoomPop = Math.max(location.missionCharacters.length, crowdestRoomPop)
+				emptiestRoomPop = Math.min(location.missionCharacters.length, emptiestRoomPop)
+			})
+			
+			const maxWeight = (() => {
+				if( emptiestRoomPop < minPerRoom ) return minPerRoom
+				else if( emptiestRoomPop < maxPerRoom ) return maxPerRoom
+				else return crowdestRoomPop+1
+			})()
+
+			totalWeight = 0
 			const weights = locations.map( (location) => {
 				let weight = maxWeight - location.missionCharacters.length
 				totalWeight += weight
 				return weight
 			})
+
 			let rand = Math.floor(Math.random()*totalWeight)
 			let i = 0;
 			while( rand >= 0 ) rand -= weights[i++]
@@ -232,9 +252,7 @@ const Game2 = (props) => {
 				convOptions:
 				[
 					{
-						// answer: 'Olha, não sei quem você está procurando, cheguei aqui semana passada. A cabelereira deve saber!',
-						// question: 'Estou procurando alguém. Você pode me ajudar?',
-						answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...','A cabelereira deve saber!'],
+						answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...','O engenheiro deve saber!'],
 						question: {
 							question: 'Estou procurando alguém. Você pode me ajudar?',
 						},
@@ -250,8 +268,6 @@ const Game2 = (props) => {
 			...state,
 			showConvo: true,
 			currentChar: character,
-			// convOptions: state.locations[state.currentRoom].missionCharacters
-			// 							.find(mc => mc.character.id === character.id).selectedQuestions
 			dialogStep: 0,
 			convOptions: state.locations[state.currentRoom].missionCharacters
 										.find(c => c.character.id === character.id).selectedQuestions
@@ -277,11 +293,6 @@ const Game2 = (props) => {
 			}) }, 1500)
 		} else {
 			let updateState = {}
-			// if(state.dialogStep !== state.totalDialogSteps){				
-			// 	updateState.convOptions = state.locations[state.currentRoom].missionCharacters
-			// 	.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
-			// 	.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
-			// }else{
 			if(state.dialogStep < state.totalDialogSteps){
 				updateState.convOptions = state.locations[state.currentRoom].missionCharacters
 					.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
@@ -322,7 +333,7 @@ const Game2 = (props) => {
 	const onMenuButtonClick = (answer) => {
 		let updateState = {}
 
-		if(state.tips.indexOf(answer.tip) === -1)
+		if(answer.tip && state.tips.indexOf(answer.tip) === -1)
 			updateState = {...updateState, tips: [...state.tips, answer.tip]}
 
 		if(answer.refresh)
@@ -348,8 +359,6 @@ const Game2 = (props) => {
 
 				//change character face
 				if(answer.correct){
-					// if(updateState.validQuestions.hasOwnProperty(answer.question.question)){
-					// 	updateState.validQuestions[answer.question.question]++
 					if(updateState.validQuestions.hasOwnProperty(answer.question)){
 						updateState.validQuestions[answer.question]++
 					} else {
@@ -372,7 +381,7 @@ const Game2 = (props) => {
 	}
 
 	const checkEnd = () => {
-		if(state.tries < 3 && state.currentChar.name !== state.targetName){
+		if(state.tries < 2 && state.currentChar.name !== state.targetName){
 			state.tries++
 			setState({
 				...state,
@@ -403,16 +412,12 @@ const Game2 = (props) => {
 		}
 	}
 
-	console.log(state)
-
 	const tutorialScreen = (id) => {
 		return (
 			<div id="room-itself" className="tutorial">
 				<Sala roomData={state.tutorialRoom.location} key={-1}>
 					{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
 							<Character
-							// character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
-							// onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
 							character={missionCharacter.character}
 							onClick={setTutorialCharacter(missionCharacter.character)}
 							key={index}
@@ -457,6 +462,8 @@ const Game2 = (props) => {
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
+	console.log(state)
+
 	return (
 		<div id="game2-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
@@ -468,9 +475,10 @@ const Game2 = (props) => {
 						case "INIT":
 							return <Init
 										icon={iconInit}
-										name={mission.name} description={mission.description}
-										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang})}
-										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang})}
+										name={mission.name}
+										description={mission.description}
+										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang}).name}
+										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang}).description}
 										onStart={ onStartGame }
 										onBack={() => setState({...state, back: true})}
 										onSeeTutorial={ state.hasPlayed ? () => {state.seeTutorial = true;onStartGame()} : null }
@@ -494,7 +502,7 @@ const Game2 = (props) => {
 												zDepth={missionCharacter.zDepth}
 												character={missionCharacter.character}
 												onClick={setCurrentCharacter(missionCharacter.character)}
-												// showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sobb hover do mouse
+												// showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sob hover do mouse
 											/>
 										)}
 									</Sala>
@@ -502,9 +510,6 @@ const Game2 = (props) => {
 										<Conversa
 											shouldExit={state.shouldCloseConvo}
 											prevDialogHistory={[]}
-											// clearDialogHistory={state.refreshDialog}
-											// charPreSpeech={state.preSpeech}
-											// convOptions={state.convOptions.reduce((acc, convOption) => { return [...acc, {...convOption, answers:convOption.answer, question: convOption.question.question, correct: convOption.question.correct} ] }, [])}
 											onClearDialogHistory={state.refreshDialog}
 											charPreSpeech={state.preSpeech}
 											convOptions={state.convOptions.reduce((acc, convOption) => {
@@ -527,7 +532,7 @@ const Game2 = (props) => {
 									<div id="endGame-screen">
 										{state.gameEndState ?
 										<div id="end-panels">
-											<div id="painel-2-icon">
+											<div id="painel-icon">
 												<img src={state.tries === 0 ? iconVitoriaPrim : iconVitoriaPers} alt=""/>
 											</div>
 											<div id="endgame-messages">
@@ -544,7 +549,7 @@ const Game2 = (props) => {
 												</div>}
 												<div className="painel" id="painel-2">
 													<div className="painel-2-wrapper">
-														<div className="painel-2-content">
+														<div className="painel-2-content" style={{backgroundImage: "url(" + (state.tips.length === tipsCount ? blobAzul : blobVerde) + ")"}}>
 															<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
 															<div>clues</div>
 														</div>
@@ -560,32 +565,44 @@ const Game2 = (props) => {
 													<a href="#painel-1" className="prev-btn">{'❮'}</a>
 												</div>
 											</div>
-											<div id="endGame-action-btns-right">
+											<div id="endGame-action-btns">
 												<Button onClick={restart}>Tentar novamente</Button>
 												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 											</div>
 										</div> :
-										<div>
+										<div id="endGame-wrong-wrapper">
 											<div>
-												<div>
-													<div>Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</div>
-													<div>You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</div>
+												<div className="painel" id="painel-1">
+													<div id="painel-icon-derrota">
+														<img src={iconDerrota} alt=""/>
+													</div>
+													<span lang="pt-br">Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</span>
+													<span lang="en">You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</span>
 												</div>
-												<div>
-													<div><span>{state.tips.length}</span>/<span>{tipsCount}</span></div>
-													<div>clues</div>
-												</div>
-												<div>
-													<div>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</div>
-													<div>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</div>
+												<div className="painel" id="painel-3">
+													<div className="painel-2-wrapper">
+														<div className="painel-2-content" style={{backgroundImage: "url(" + blobLaranja + ")"}}>
+															<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
+															<div>clues</div>
+														</div>
+													</div>
+													<div className="painel-2-wrapper">
+														<div className="painel-2-content">
+															<div>
+																<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
+																<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</p>
+															</div>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div id="endGame-action-btns-wrong">
+											<div id="endGame-action-btns">
 												<Button onClick={restart}>Tentar novamente</Button>
 												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
 											</div>
 										</div>
 										}
+										{state.gameEndState &&
 										<DialogCharacter
 											character={
 												mission.missionCharacters.find((mc) => {
@@ -593,34 +610,43 @@ const Game2 = (props) => {
 												}).character}
 											feeling={"rightAccusation"}
 										/>
+										}
 									</div>
 								)
 					}
 				}())}
-				<div id="dialog-accusation-wrapper" hidden={state.acusation !== true || undefined} aria-hidden={state.acusation !== true || undefined}>
-					<div id="dialog-accusation">
-						<div id="accusation-infos">
-							<div>
-								<span lang="pt-br">Tem certeza?</span>
-								<span lang="en">Are you sure it's them?<br />Check your tips.</span>
-							</div>
-							<div id="tips-received">
-								<div id="accusation-icon">
-									<img src={iconDicas} alt="" />
+				{state.acusation &&
+				<FullscreenOverlay
+					showCloseBtn={false}
+					shouldExit={state.closeAcusation}
+					onReadyToExit={() => {setState({...state, closeAcusation: false, acusation: false})}}
+				>
+					<div id="dialog-accusation-wrapper">
+						<div id="dialog-accusation">
+							<div id="accusation-infos">
+								<div>
+									<span lang="pt-br">Tem certeza?</span>
+									<span lang="en">Are you sure it's them?<br />Check your tips.</span>
 								</div>
-								{state.tips.length > 0 ?
-									state.tips.map((tip, index) => <div key={index}>{tip}</div>)
-									:
-									<div>Nenhuma dica recebida.</div>
-								}
+								<div id="tips-received">
+									<div id="accusation-icon">
+										<img src={iconDicas} alt="" />
+									</div>
+									{state.tips.length > 0 ?
+										state.tips.map((tip, index) => <div key={index}>{tip}</div>)
+										:
+										<div>Nenhuma dica recebida.</div>
+									}
+								</div>
 							</div>
-						</div>
-						<div id="accusation-btns">
-							<Button onClick={() => setState({...state, acusation: false}) }>Não</Button>
-							<Button onClick={checkEnd}>Sim</Button>
+							<div id="accusation-btns">
+								<Button onClick={() => setState({...state, closeAcusation: true}) }>Não</Button>
+								<Button onClick={checkEnd}>Sim</Button>
+							</div>
 						</div>
 					</div>
-				</div>
+				</FullscreenOverlay>
+				}
 			</div>
 			}
 			{ state.back && <Redirect to='/userspace' />}

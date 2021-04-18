@@ -13,9 +13,11 @@ const initialValue = {
 //DIALOG
   dialogHistory: [],
   answers: [],
+  preSpeech: [],
   currentChar: null,
   characterFeeling: 'init',
   showContacts: false,
+  maxQuestions: 4,
   // onMinimize: null,
   shouldMinimize: false,
   shouldCloseDialog: false,

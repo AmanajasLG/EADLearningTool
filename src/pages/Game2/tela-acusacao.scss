@@ -1,30 +1,28 @@
 #dialog-accusation-wrapper {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background-color: #FFFFFF80;
-	z-index: 20;
-	// Tive que colocar !important pq o bootstrap está sacaneando com o código
-	display: flex !important;
+	display: flex;
 	justify-content: center;
 	align-items: center;
-	transition: 100ms cubic-bezier(.5, 0, .5, 1);
+	height: 100%;
+	width: 100%;
+	animation: scalingAccusationDown 250ms cubic-bezier(.5,0,.5,1) backwards reverse;
 }
 
-#dialog-accusation-wrapper[hidden] {
-	opacity: 0;
-	pointer-events: none;
-	transition: 100ms 50ms cubic-bezier(.5, 0, .5, 1);
+#fullscreen-overlay.ExitAnim #dialog-accusation {
+	animation: scalingAccusationDown 100ms cubic-bezier(.5,0,.5,1) forwards;
 }
 
-#dialog-accusation-wrapper[hidden] #dialog-accusation {
-	transform: scale(0.95);
+@keyframes scalingAccusationDown {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(0.95);
+		opacity: 0;
+	}
 }
 
 #dialog-accusation {
-	transition: 150ms cubic-bezier(.5, 0, .5, 1);
 	width: 70vw;
 	min-height: 50vh;
 	max-width: 1200px;
@@ -94,7 +92,7 @@
 	font-size: 0.9em;
 }
 
-#accusation-infos > :nth-child(2) {
+#tips-received {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -107,8 +105,8 @@
 	padding: 20px;
 }
 
-#accusation-infos > :nth-child(2) div {
-	margin-bottom: 0.35em;
+#tips-received > div:nth-child(n+3) {
+	margin-top: 0.35em;
 }
 
 #accusation-btns {

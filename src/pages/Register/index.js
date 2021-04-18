@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { register } from '../../_actions'
+import { apiActions, register } from '../../_actions'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { useAlert } from 'react-alert'
 import { Link } from 'react-router-dom'
+import { MenuItem } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,13 +39,17 @@ const Register = () => {
   const classes = useStyles()
   const alert = useAlert()
 
+  const { languagesActions } = apiActions
+
   const [inputs, setInputs] = useState({
       email: '',
       password: '',
       username: '',
       firstName: '',
-      lastName: ''
+      lastName: '',
+      language: ''
   })
+  const languages = useSelector(state => state.languages.items)
   const [submitted, setSubmitted ] = useState(false)
   const registering = useSelector(state => state.authentication.registering)
   const dispatch = useDispatch()
@@ -54,9 +59,14 @@ const Register = () => {
       setInputs(inputs => ({...inputs, [name]: value}))
   }
 
+  React.useEffect(()=>{
+		dispatch(languagesActions.getAll())
+	}, [])
+
   function handleSubmit(e) {
       e.preventDefault()
       setSubmitted(true)
+
       if(inputs.email && inputs.password && inputs.username){
           dispatch(register(inputs))
             .then(() => {
@@ -147,6 +157,24 @@ const Register = () => {
                 className={submitted && !inputs.password ? 'danger' : ''}
                 onChange={handleChange}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="language"
+                label="Language"
+                type="language"
+                id="language"
+                className={submitted && !inputs.language ? 'danger' : ''}
+                onChange={handleChange}
+                select
+              >
+                {languages.map(language => 
+                        <MenuItem value={language.id}>{language.lang}</MenuItem>
+                      )}
+              </TextField>
             </Grid>
           </Grid>
           
