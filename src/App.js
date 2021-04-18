@@ -37,13 +37,14 @@ const App = () => {
 
   let gameMode = useSelector( state => state.header.state ) !== headerConstants.STATES.NORMAL;
   console.log('env:', process.env.NODE_ENV)
+  console.lor('rootUrl:', rootUrl)
   return (
     <div className={ "App" + (gameMode? " game-mode" : "")}>
       <Router basename={rootUrl}>
         <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn)}} />
         <Switch>
           <Route exact path={'/'} component={Home} />
-          <Route path={`${rootUrl}/login`} component={Login} />
+          <Route path={`/login`} component={Login} />
           <Route path={`${rootUrl}/register`} component={Register} />
           <PrivateRoute exact path={`${rootUrl}/game1/:id`} render={(props) => <GameContext {...props}><Game1 /></GameContext>} />
           <PrivateRoute exact path={`${rootUrl}/game2/:id`} render={(props) => <GameContext {...props}><Game2 /></GameContext>} />
