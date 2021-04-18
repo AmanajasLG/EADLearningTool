@@ -71,6 +71,7 @@ const Game1 = (props) => {
 				let characters = mission.characters.slice()
 				while( characters.length > 0 ) {
 					let randIdx = Math.floor(Math.random()*characters.length)
+					// percorre as salas uma por uma e ordem crescente repetidamente				E coloca um personagem aleatório dentro dela
 					data.locations[place=(place+1)%data.locations.length].characters.push( {...characters.splice(randIdx, 1)[0], zDepth: Math.random()} )
 				}
 			}
@@ -235,7 +236,6 @@ const Game1 = (props) => {
 											jobs={state.jobs}
 											countries={state.countries}
 											onFinish={() => setState({...state, changeRoomPopUp: true})}
-											// onMinimize={state.onMinimize}
 											onMinimize={() => setState({...state, shouldMinimize: false})}
 											shouldMinimize={state.shouldMinimize}
 											/>
@@ -291,7 +291,6 @@ const Game1 = (props) => {
 																	...state,
 																	shouldCloseDialog: true,
 																	currentLocationIndex: state.currentLocationIndex + 1,
-																	// onMinimize: () => state.onMinimize = null
 																	shouldMinimize: true
 																})
 															else
@@ -304,23 +303,6 @@ const Game1 = (props) => {
 											</div>
 										</FullscreenOverlay>
 										}
-										{/* { state.changeRoomPopUp &&
-											<div style={{position: 'absolute', zIndex: 1000, top:0, right:0, bottom:0, left:0}}>
-												<p>Texto Are you sure?</p>
-												<button onClick={() => setState({...state, changeRoomPopUp: false})}>
-													Voltar
-												</button>
-												<button onClick={() => {
-														if(state.currentLocationIndex + 1 < state.locations.length)
-															setState({...state, changeRoomPopUp: false, currentLocationIndex: state.currentLocationIndex + 1, showContacts: false, shouldMinimize: true })
-														else {
-															setState({...state, scene: 'ENDGAME'})
-														}
-												}}>
-													Avançar
-												</button>
-											</div>
-										} */}
 									</div>)
 								case 'ENDGAME':
 									return(

@@ -101,6 +101,7 @@ const Game2 = (props) => {
 		mission = stub
 	}
 	*/
+	
 	//Randomizar personagens para aparecer nas salas
 	//	Enquanto houver personagens na lista de personagens disponíveis
 	//		Escolhe um local ao acaso
@@ -247,8 +248,6 @@ const Game2 = (props) => {
 				convOptions:
 				[
 					{
-						// answer: 'Olha, não sei quem você está procurando, cheguei aqui semana passada. A cabelereira deve saber!',
-						// question: 'Estou procurando alguém. Você pode me ajudar?',
 						answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...','O engenheiro deve saber!'],
 						question: {
 							question: 'Estou procurando alguém. Você pode me ajudar?',
@@ -265,8 +264,6 @@ const Game2 = (props) => {
 			...state,
 			showConvo: true,
 			currentChar: character,
-			// convOptions: state.locations[state.currentRoom].missionCharacters
-			// 							.find(mc => mc.character.id === character.id).selectedQuestions
 			dialogStep: 0,
 			convOptions: state.locations[state.currentRoom].missionCharacters
 										.find(c => c.character.id === character.id).selectedQuestions
@@ -292,11 +289,6 @@ const Game2 = (props) => {
 			}) }, 1500)
 		} else {
 			let updateState = {}
-			// if(state.dialogStep !== state.totalDialogSteps){				
-			// 	updateState.convOptions = state.locations[state.currentRoom].missionCharacters
-			// 	.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
-			// 	.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
-			// }else{
 			if(state.dialogStep < state.totalDialogSteps){
 				updateState.convOptions = state.locations[state.currentRoom].missionCharacters
 					.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
@@ -363,8 +355,6 @@ const Game2 = (props) => {
 
 				//change character face
 				if(answer.correct){
-					// if(updateState.validQuestions.hasOwnProperty(answer.question.question)){
-					// 	updateState.validQuestions[answer.question.question]++
 					if(updateState.validQuestions.hasOwnProperty(answer.question)){
 						updateState.validQuestions[answer.question]++
 					} else {
@@ -424,8 +414,6 @@ const Game2 = (props) => {
 				<Sala roomData={state.tutorialRoom.location} key={-1}>
 					{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
 							<Character
-							// character={mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character}
-							// onClick={setTutorialCharacter(mission.missionCharacters.find(missionCharacters => missionCharacters.character.name === 'Tutorial').character)}
 							character={missionCharacter.character}
 							onClick={setTutorialCharacter(missionCharacter.character)}
 							key={index}
