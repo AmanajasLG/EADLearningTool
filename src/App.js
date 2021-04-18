@@ -37,7 +37,7 @@ const App = () => {
 
   let gameMode = useSelector( state => state.header.state ) !== headerConstants.STATES.NORMAL;
   console.log('env:', process.env.NODE_ENV)
-  console.lor('rootUrl:', rootUrl)
+  console.log('rootUrl:', rootUrl)
   return (
     <div className={ "App" + (gameMode? " game-mode" : "")}>
       <Router basename={rootUrl}>
