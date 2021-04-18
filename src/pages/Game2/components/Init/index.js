@@ -10,7 +10,7 @@ const Init = ({icon, name, description, nameTranlate = "Name", descriptionTranla
               <h1 className="margin-half-top type-l type-display type-center">{name}</h1>
               <h1 className="type-m type-display type-center subtitle">{nameTranlate}</h1>
 
-              <h2 className="margin-half-top type-s type-center">{description}</h2>
+              <h2 className="margin-half-top type-s type-center description">{description}</h2>
               <h2 className="type-s type-center subdescription">{descriptionTranlate}</h2>
             </div>
             <div id="btns">

@@ -73,10 +73,12 @@
 	min-width: 200px;
 	position: absolute;
 	transform: translateY(-100%);
+	border-radius: 1rem;
 }
 
 #small-phone-content:hover #small-phone-floating-text {
 	opacity: 1;
+	background-color: #FFFFFFDD;
 }
 
 #small-phone-floating-text span[lang="pt-br"] {
