@@ -71,7 +71,7 @@ const Game1 = (props) => {
 				let characters = mission.characters.slice()
 				while( characters.length > 0 ) {
 					let randIdx = Math.floor(Math.random()*characters.length)
-					data.locations[place=(place+1)%data.locations.length].characters.push( characters.splice(randIdx, 1)[0] )
+					data.locations[place=(place+1)%data.locations.length].characters.push( {...characters.splice(randIdx, 1)[0], zDepth: Math.random()} )
 				}
 			}
 
@@ -217,9 +217,10 @@ const Game1 = (props) => {
 											value={state.currentLocationIndex}
 											buttonList={state.locations.map( location => location.name)}
 										/>
-										<Sala roomData={state.locations[state.currentLocationIndex]}>
+										<Sala roomData={state.locations[state.currentLocationIndex]} key={state.currentLocationIndex}>
 											{state.locations[state.currentLocationIndex].characters.map((character, index) =>
 												<Character key={index}
+												zDepth={character.zDepth}
 												character={character}
 												onClick={setCurrentChar(character)}
 												/>
