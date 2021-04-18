@@ -502,7 +502,7 @@ const Game2 = (props) => {
 												zDepth={missionCharacter.zDepth}
 												character={missionCharacter.character}
 												onClick={setCurrentCharacter(missionCharacter.character)}
-												// showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sobb hover do mouse
+												// showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sob hover do mouse
 											/>
 										)}
 									</Sala>
@@ -510,9 +510,6 @@ const Game2 = (props) => {
 										<Conversa
 											shouldExit={state.shouldCloseConvo}
 											prevDialogHistory={[]}
-											// clearDialogHistory={state.refreshDialog}
-											// charPreSpeech={state.preSpeech}
-											// convOptions={state.convOptions.reduce((acc, convOption) => { return [...acc, {...convOption, answers:convOption.answer, question: convOption.question.question, correct: convOption.question.correct} ] }, [])}
 											onClearDialogHistory={state.refreshDialog}
 											charPreSpeech={state.preSpeech}
 											convOptions={state.convOptions.reduce((acc, convOption) => {
