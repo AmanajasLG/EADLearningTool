@@ -69,6 +69,7 @@ const CreateMissionGame1 = (props) => {
   const [createQuestion, setCreateQuestion] = React.useState(false)
 
   const createMission = () => {
+/*
     let data = {...state.mission,
       missionCharacters: state.mission.missionCharacters.map(missionCharacter => {
         return missionCharacter.id
@@ -76,15 +77,14 @@ const CreateMissionGame1 = (props) => {
       missionCharactersCreate: [...state.charactersConfigList, ...state.charactersList]
     }
 
-
-/*
 //  algo muito errado aqui
+
 //
     state.charactersConfigList = []
     state.charactersList = []
 
     dispatch(apiActions.missionsActions.create(data))
-    
+
     data = {...state.mission}
 
     let data = {...state.mission}
@@ -110,9 +110,9 @@ const CreateMissionGame1 = (props) => {
     state.charactersList = []
 
     dispatch(apiActions.missionsActions.update(data))
-    
+
     // data = {...state.mission}
-    // dispatch(apiActions[game+"Actions"].update(data))     
+    // dispatch(apiActions[game+"Actions"].update(data))
 
     data = {...state.mission}
     dispatch(apiActions[game+"Actions"].update(data))

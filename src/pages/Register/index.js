@@ -61,7 +61,7 @@ const Register = () => {
 
   React.useEffect(()=>{
 		dispatch(languagesActions.getAll())
-	}, [])
+	}, [dispatch, languagesActions])
 
   function handleSubmit(e) {
       e.preventDefault()
@@ -93,7 +93,7 @@ const Register = () => {
         <Typography component="h1" variant="h5">
           Register
         </Typography>
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>                
+        <form onSubmit={handleSubmit} className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -103,7 +103,7 @@ const Register = () => {
                 fullWidth
                 id="firstName"
                 label="First Name"
-                autoFocus                
+                autoFocus
                 onChange={handleChange}
               />
             </Grid>
@@ -171,13 +171,13 @@ const Register = () => {
                 onChange={handleChange}
                 select
               >
-                {languages.map(language => 
+                {languages.map(language =>
                         <MenuItem value={language.id}>{language.lang}</MenuItem>
                       )}
               </TextField>
             </Grid>
           </Grid>
-          
+
           <Button
             type="submit"
             fullWidth

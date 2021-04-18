@@ -50,8 +50,7 @@ const Game3 = (props) => {
     })
 
   const haveAll = () => {
-    var i
-    for(i = 0; i < mission.ingredients.length; i++)
+    for(let i = 0; i < mission.ingredients.length; i++)
         if(!state.cart.find( item => item.name === mission.ingredients[i].name))
           return false
     return true

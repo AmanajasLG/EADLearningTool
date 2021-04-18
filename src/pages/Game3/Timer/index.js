@@ -11,7 +11,7 @@ const Timer = ({seconds, onEnd, onSecondPassed, run = true}) => {
   const previousRef = React.useRef();
 
   React.useEffect(() => {
-    if(state === previousRef.current && state.seconds != seconds){
+    if(state === previousRef.current && state.seconds !== seconds){
       //console.log('external side effect update')***
       return
     }
@@ -32,7 +32,7 @@ const Timer = ({seconds, onEnd, onSecondPassed, run = true}) => {
 
       return () => clearTimeout(state.timeout)
     }
-  }, [state, onEnd, onSecondPassed, run])
+  }, [state, onEnd, onSecondPassed, run, seconds])
 
   return(
     <div>
