@@ -42,7 +42,7 @@ const App = () => {
       <Router basename={rootUrl}>
         <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn)}} />
         <Switch>
-          <Route exact path={`${rootUrl}/`} component={Home} />
+          <Route exact path={'/'} component={Home} />
           <Route path={`${rootUrl}/login`} component={Login} />
           <Route path={`${rootUrl}/register`} component={Register} />
           <PrivateRoute exact path={`${rootUrl}/game1/:id`} render={(props) => <GameContext {...props}><Game1 /></GameContext>} />
