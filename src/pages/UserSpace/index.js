@@ -115,6 +115,29 @@ const UserSpace = () => {
         </div>
       </div>
 
+      <div className="jogos">
+        <p>Jogar jogo 4</p>
+        <p>Missões:</p>
+        <Link to={'/game4/0'}>Stub</Link>
+        {/*
+        <div id="missoes">
+          {game3missions.loading ? <div id="loading">Loading...</div> :
+            game3missions && game3missions.items.map( (mission, index) =>
+            <div key={index} className="missao">
+              <Link to={`/game3/${mission.id}`}>
+                <div id="imagem"></div>
+                <div id="card-text-wrapper">
+                  <div id="nome-missao">{mission.name}</div>
+                  <div id="descricao">Descrição</div>
+                  <div id="recompensas">Recompensas</div>
+                </div>
+              </Link>
+            </div>)
+          }
+        </div>
+        */}
+      </div>
+
     </div>
   )
 }
