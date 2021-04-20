@@ -67,11 +67,13 @@ const Game1 = (props) => {
 			//distribute characters in locations
 			if (state.locations.length === 0) {
 				// data.locations = [...mission.locations]
-				data.locations = mission.locations.filter((location) => { return location.characters }) // Só pq o backend está trazendo info errada
+				data.locations = mission.locations.map((location) => { return location.characters ? location : { ...location, characters: [] } }) // Só pq o backend está trazendo info errada
+
 				let place = data.locations.length - 1
 				let characters = mission.characters.slice()
 				while (characters.length > 0) {
 					let randIdx = Math.floor(Math.random() * characters.length)
+
 					// percorre as salas uma por uma e ordem crescente repetidamente				E coloca um personagem aleatório dentro dela
 					data.locations[place = (place + 1) % data.locations.length].characters.push({ ...characters.splice(randIdx, 1)[0], zDepth: Math.random() })
 				}
@@ -202,7 +204,7 @@ const Game1 = (props) => {
 		})
 	}
 
-	console.log(mission)
+	console.log(state)
 
 	return (
 		<div id="game1-wrapper">
@@ -223,10 +225,10 @@ const Game1 = (props) => {
 							case "ROOM":
 								return (
 									<div id="room-itself">
-										<RoomSelect
+										{/* <RoomSelect
 											value={state.currentLocationIndex}
 											buttonList={state.locations.map(location => location.name)}
-										/>
+										/> */}
 										<Sala roomData={state.locations[state.currentLocationIndex]} key={state.currentLocationIndex}>
 											{state.locations[state.currentLocationIndex].characters.map((character, index) =>
 												<Character key={index}
