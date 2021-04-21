@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { useAlert } from 'react-alert'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { MenuItem } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
