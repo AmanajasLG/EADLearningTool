@@ -33,36 +33,36 @@ const Game2 = (props) => {
 
 	const id = props.match.params.id
 	const dispatch = useDispatch()
-	let error = useSelector( state => state.missions.error)
-	let mission = useSelector( state => state.missions.items.find(mission => mission.id === props.match.params.id))
-	const loading = useSelector( state => state.missions.loading)
-	const userId = useSelector( state => state.authentication.user.user.id )
-	const lang = useSelector( state => state.authentication.user.user.language.id )
-	const currentPlaySession = useSelector( state => state.play_sessions ? state.play_sessions.items[0] : {} )
+	let error = useSelector(state => state.missions.error)
+	let mission = useSelector(state => state.missions.items.find(mission => mission.id === props.match.params.id))
+	const loading = useSelector(state => state.missions.loading)
+	const userId = useSelector(state => state.authentication.user.user.id)
+	const lang = useSelector(state => state.authentication.user.user.language.id)
+	const currentPlaySession = useSelector(state => state.play_sessions ? state.play_sessions.items[0] : {})
 	const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
-	const hasPlayed = useSelector( state => state.user_game_results.items.length > 0)
+	const hasPlayed = useSelector(state => state.user_game_results.items.length > 0)
 
 	let tipsCount
 
-	if(mission)
+	if (mission)
 		tipsCount = mission.missionCharacters.filter(missionCharacter => { return missionCharacter.tip }).length
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init', preSpeech: null, convOptions: [] }
 
-	React.useEffect(()=>{
-		if(mission)
+	React.useEffect(() => {
+		if (mission)
 			dispatch(musicActions.set(mission.backgroundAudios[0].music[0].url))
 		return () => dispatch(musicActions.set(''))
 	}, [dispatch, mission])
 
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
-		if(id && !mission) dispatch(missionsActions.getById(props.match.params.id))
+		if (id && !mission) dispatch(missionsActions.getById(props.match.params.id))
 	}, [id, mission, dispatch, missionsActions, props.match.params.id])
 
 	// check if user already played the game
 	React.useEffect(() => {
 		let updateState = {}
-		if(mission && !state.checkedPlayed){
+		if (mission && !state.checkedPlayed) {
 			dispatch(user_game_resultsActions.find({
 				'user.id': userId,
 				'mission.id': mission.id
@@ -71,30 +71,30 @@ const Game2 = (props) => {
 			updateState.checkedPlayed = true
 		}
 		updateState.hasPlayed = hasPlayed
-		setState({...state, ...updateState})
+		setState({ ...state, ...updateState })
 		// eslint-disable-next-line
 	}, [userId, mission, dispatch, user_game_resultsActions, hasPlayed])
 
 	//track player actions
 	React.useEffect(() => {
-		if(!state.tracking || !currentPlaySession)
+		if (!state.tracking || !currentPlaySession)
 			return
 
-		const	getClickedObject = (e) => {
-				dispatch(player_actionsActions.create({
-					'play_session': currentPlaySession.id,
-					data:
-							{
-								tag: e.target.nodeName,
-								alt: e.target.alt,
-								className: e.target.className,
-								innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
-							}
-				}))
-			}
+		const getClickedObject = (e) => {
+			dispatch(player_actionsActions.create({
+				'play_session': currentPlaySession.id,
+				data:
+				{
+					tag: e.target.nodeName,
+					alt: e.target.alt,
+					className: e.target.className,
+					innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
+				}
+			}))
+		}
 		document.addEventListener("mousedown", getClickedObject)
 
-		setState(s => {return {...s, currentPlaySession, getClickedObject }})
+		setState(s => { return { ...s, currentPlaySession, getClickedObject } })
 		return () => {
 			document.removeEventListener("mousedown", getClickedObject)
 		}
@@ -113,28 +113,29 @@ const Game2 = (props) => {
 	//		Adiciona personagem ao local
 	//		Retira personagem da lista de personagens disponíveis
 
-	if(mission && state.locations.length === 0){
+	if (mission && state.locations.length === 0) {
 		// safe copies
 		let availableCharacters = mission.missionCharacters.slice(0)
 		let locations = mission.locations.filter(location => {
 			return location.type === 'room'
-		}).map( location => {
+		}).map(location => {
 			delete location.characters
-			return {location: location, missionCharacters: []}
+			return { location: location, missionCharacters: [] }
 		})
-		
-		let tutorialRoom = { location: mission.locations.find(location => {
-			return location.type === 'tutorial'
-		}),
-		 missionCharacters: []
+
+		let tutorialRoom = {
+			location: mission.locations.find(location => {
+				return location.type === 'tutorial'
+			}),
+			missionCharacters: []
 		}
 
 		console.log(tutorialRoom)
 
 		//distribute on locations
-		while(availableCharacters.length > 0){
+		while (availableCharacters.length > 0) {
 			// se personagem for o de tutorial, separa ele e continua
-			if( availableCharacters[0].character.name === "Tutorial" ) {
+			if (availableCharacters[0].character.name === "Tutorial") {
 				tutorialRoom.missionCharacters.push(availableCharacters[0])
 				availableCharacters.splice(0, 1)
 				continue;
@@ -146,28 +147,28 @@ const Game2 = (props) => {
 			let emptiestRoomPop = 999
 			const minPerRoom = 1
 			const maxPerRoom = 5
-			locations.forEach( (location) => {
+			locations.forEach((location) => {
 				crowdestRoomPop = Math.max(location.missionCharacters.length, crowdestRoomPop)
 				emptiestRoomPop = Math.min(location.missionCharacters.length, emptiestRoomPop)
 			})
-			
+
 			const maxWeight = (() => {
-				if( emptiestRoomPop < minPerRoom ) return minPerRoom
-				else if( emptiestRoomPop < maxPerRoom ) return maxPerRoom
-				else return crowdestRoomPop+1
+				if (emptiestRoomPop < minPerRoom) return minPerRoom
+				else if (emptiestRoomPop < maxPerRoom) return maxPerRoom
+				else return crowdestRoomPop + 1
 			})()
 
 			totalWeight = 0
-			const weights = locations.map( (location) => {
+			const weights = locations.map((location) => {
 				let weight = maxWeight - location.missionCharacters.length
 				totalWeight += weight
 				return weight
 			})
 
-			let rand = Math.floor(Math.random()*totalWeight)
+			let rand = Math.floor(Math.random() * totalWeight)
 			let i = 0;
-			while( rand >= 0 ) rand -= weights[i++]
-			const locationIndex = i-1
+			while (rand >= 0) rand -= weights[i++]
+			const locationIndex = i - 1
 
 			//each character has some good and bad questions that can be asked
 			let availableAnswers = [...availableCharacters[0].answers]
@@ -176,40 +177,41 @@ const Game2 = (props) => {
 
 			let selectedQuestions = []
 			// ? E se correct/ncorrect não tiveram a quantidade necessária de perguntas?
-			while(selectedQuestions.length < 4){
-				let source = selectedQuestions.length % 2 === 0? correct : ncorrect
+			while (selectedQuestions.length < 4) {
+				let source = selectedQuestions.length % 2 === 0 ? correct : ncorrect
 				let index = Math.floor(Math.random(0, source.length))
-				selectedQuestions.push( source[index] )
+				selectedQuestions.push(source[index])
 				source.splice(index, 1)
 			}
 
 			// Aleatorizando para que nem sempre venham as perguntas na ordem certo->errado
-			if(Math.floor(Math.random(0,1) < .5)){
+			if (Math.floor(Math.random(0, 1) < .5)) {
 				let temp = selectedQuestions[0]
 				selectedQuestions[0] = selectedQuestions[1]
 				selectedQuestions[1] = temp
 			}
-			if(Math.floor(Math.random(0, 1) > .5)){
+			if (Math.floor(Math.random(0, 1) > .5)) {
 				let temp = selectedQuestions[2]
 				selectedQuestions[2] = selectedQuestions[3]
 				selectedQuestions[3] = temp
 			}
 
 			locations[locationIndex].missionCharacters = [...locations[locationIndex].missionCharacters,
-				{...availableCharacters[0],
-					selectedQuestions,
-					zDepth: Math.random()
-				}
+			{
+				...availableCharacters[0],
+				selectedQuestions,
+				zDepth: Math.random()
+			}
 			]
 
 			availableCharacters.splice(0, 1)
 		}
 
 		// Aleatorizando ordem dos personagens em cada sala
-		for( let i = 0; i < locations.length; i++ ) {
+		for (let i = 0; i < locations.length; i++) {
 			let amountChars = locations[i].missionCharacters.length
-			if( amountChars <= 1) continue
-			for( let j = 0; j < amountChars-1; j++ ) {
+			if (amountChars <= 1) continue
+			for (let j = 0; j < amountChars - 1; j++) {
 				let exchangeWith = Math.floor(Math.random() * (amountChars - j)) + j
 				if (j === exchangeWith) continue // Não precisa trocar se for consigo mesmo
 				//swap
@@ -218,11 +220,11 @@ const Game2 = (props) => {
 				locations[i].missionCharacters[exchangeWith] = aux
 			}
 		}
-		setState({...state, locations, tutorialRoom})
+		setState({ ...state, locations, tutorialRoom })
 	}
 
 	const onStartGame = (e) => {
-		if(state.tracking){
+		if (state.tracking) {
 			dispatch(play_sessionsActions.create({
 				usersPermissionsUser: userId,
 				mission: mission.id
@@ -230,7 +232,7 @@ const Game2 = (props) => {
 		}
 
 		//check if should start or skip tutorial
-		setState({...state, scene: (!state.seeTutorial && state.hasPlayed) ? "ROOM" : "TUTORIAL"})
+		setState({ ...state, scene: (!state.seeTutorial && state.hasPlayed) ? "ROOM" : "TUTORIAL" })
 	}
 
 	const endTutorial = () => {
@@ -240,25 +242,26 @@ const Game2 = (props) => {
 			scene: "ROOM",
 			...dialogInitialState
 		}
-		setState({...state, ...updateState})
+		setState({ ...state, ...updateState })
 	}
 
 	const setTutorialCharacter = (character) => () => {
 		setState(
-			{...state,
+			{
+				...state,
 				tutorialStep: state.tutorialStep + 1,
 				showConvo: true,
 				currentChar: character,
 				convOptions:
-				[
-					{
-						answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...','O engenheiro deve saber!'],
-						question: {
-							question: 'Estou procurando alguém. Você pode me ajudar?',
-						},
-						close: false
-					}
-				]
+					[
+						{
+							answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...', 'O engenheiro deve saber!'],
+							question: {
+								question: 'Estou procurando alguém. Você pode me ajudar?',
+							},
+							close: false
+						}
+					]
 			})
 	}
 
@@ -270,8 +273,8 @@ const Game2 = (props) => {
 			currentChar: character,
 			dialogStep: 0,
 			convOptions: state.locations[state.currentRoom].missionCharacters
-										.find(c => c.character.id === character.id).selectedQuestions
-										.slice(0, state.questionsByStep)
+				.find(c => c.character.id === character.id).selectedQuestions
+				.slice(0, state.questionsByStep)
 		})
 	}
 
@@ -286,36 +289,38 @@ const Game2 = (props) => {
 	}
 
 	const afterWriter = () => {
-		if( state.scene === "TUTORIAL" ) {
-			setTimeout(() => { setState({
-				...state,
-				tutorialStep: state.tutorialStep + 1
-			}) }, 1500)
+		if (state.scene === "TUTORIAL") {
+			setTimeout(() => {
+				setState({
+					...state,
+					tutorialStep: state.tutorialStep + 1
+				})
+			}, 1500)
 		} else {
 			let updateState = {}
-			if(state.dialogStep < state.totalDialogSteps){
+			if (state.dialogStep < state.totalDialogSteps) {
 				updateState.convOptions = state.locations[state.currentRoom].missionCharacters
 					.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
 					.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
-			} else if(state.dialogStep === state.totalDialogSteps) {
-				if(state.correct < state.correctMinimum){
+			} else if (state.dialogStep === state.totalDialogSteps) {
+				if (state.correct < state.correctMinimum) {
 					updateState.preSpeech = state.currentChar.wrongAnswer
-					updateState.convOptions = [{refresh: true, question:{question: 'Sim'}}, {close: true, question:{question: 'Não'}, answer:state.currentChar.endDialog}]
+					updateState.convOptions = [{ refresh: true, question: { question: 'Sim' } }, { close: true, question: { question: 'Não' }, answer: state.currentChar.endDialog }]
 				} else {
-					updateState.convOptions = [{tip: state.currentChar.tip, question:{question: 'Estou procurando alguém. Você pode me ajudar?'}, answer:state.currentChar.rightAnswer, correct: true }]
+					updateState.convOptions = [{ tip: state.currentChar.tip, question: { question: 'Estou procurando alguém. Você pode me ajudar?' }, answer: state.currentChar.rightAnswer, correct: true }]
 				}
 			} else {
 				const tchaus = ['Ah tá, tchau!', 'Ok. Valeu!', 'Tchau!', 'Até mais!',
-								'Entendi... Muito obrigado!', 'Até logo!', 'Até a próxima!']
-				const rIdx = Math.floor(Math.random()*tchaus.length)
-				updateState.convOptions = [{close: true, question:{question: tchaus[rIdx], correct: true}, answer:state.currentChar.endDialog}]
+					'Entendi... Muito obrigado!', 'Até logo!', 'Até a próxima!']
+				const rIdx = Math.floor(Math.random() * tchaus.length)
+				updateState.convOptions = [{ close: true, question: { question: tchaus[rIdx], correct: true }, answer: state.currentChar.endDialog }]
 			}
-			if( state.closeAfterWritter ) {
+			if (state.closeAfterWritter) {
 				delete state.closeAfterWritter
 				updateState.convOptions = []
 				updateState.shouldCloseConvo = true
 			}
-			setState({...state, ...updateState})
+			setState({ ...state, ...updateState })
 		}
 	}
 
@@ -325,23 +330,23 @@ const Game2 = (props) => {
 			...dialogInitialState,
 			refreshDialog: null,
 			convOptions: state.locations[state.currentRoom].missionCharacters
-									.find(c => c.character.id === state.currentChar.id).selectedQuestions
-									.slice(0, state.questionsByStep)
+				.find(c => c.character.id === state.currentChar.id).selectedQuestions
+				.slice(0, state.questionsByStep)
 		})
 	}
 
 	const onMenuButtonClick = (answer) => {
 		let updateState = {}
 
-		if(answer.tip && state.tips.indexOf(answer.tip) === -1)
-			updateState = {...updateState, tips: [...state.tips, answer.tip]}
+		if (answer.tip && state.tips.indexOf(answer.tip) === -1)
+			updateState = { ...updateState, tips: [...state.tips, answer.tip] }
 
-		if(answer.refresh)
-			updateState = {...updateState, refreshDialog: onRefreshDialog}
-		else if(answer.close)
-			updateState = {...updateState, closeAfterWritter: true}
+		if (answer.refresh)
+			updateState = { ...updateState, refreshDialog: onRefreshDialog }
+		else if (answer.close)
+			updateState = { ...updateState, closeAfterWritter: true }
 		else {
-			if (state.scene === "TUTORIAL"){
+			if (state.scene === "TUTORIAL") {
 				updateState = {
 					...updateState,
 					characterFeeling: 'wrongQuestion',
@@ -358,8 +363,8 @@ const Game2 = (props) => {
 					updateState.spokenCharacters.push(state.currentChar.name)
 
 				//change character face
-				if(answer.correct){
-					if(updateState.validQuestions.hasOwnProperty(answer.question)){
+				if (answer.correct) {
+					if (updateState.validQuestions.hasOwnProperty(answer.question)) {
 						updateState.validQuestions[answer.question]++
 					} else {
 						updateState.validQuestions[answer.question] = 0
@@ -373,43 +378,36 @@ const Game2 = (props) => {
 			updateState = {
 				...updateState,
 				dialogStep: state.dialogStep + 1,
-				correct: state.correct + (answer.correct? 1 : 0)
+				correct: state.correct + (answer.correct ? 1 : 0)
 			}
 		}
 
-		setState({...state, ...updateState})
+		setState({ ...state, ...updateState })
 	}
 
 	const checkEnd = () => {
-		if(state.tries < 2 && state.currentChar.name !== state.targetName){
-			state.tries++
-			setState({
-				...state,
-				acusation: false,
-				characterFeeling: 'wrongAccusation',
-				preSpeech: state.currentChar.acusationAnswer
-			})
-		} else {
-			setState({...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, characterFeeling: state.currentChar.name === state.targetName ?
-			'rightAccusation' : 'wrongAccusation',
+
+		setState({
+			...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, characterFeeling: state.currentChar.name === state.targetName ?
+				'rightAccusation' : 'wrongAccusation',
 			currentChar: null
-			})
+		})
 
-			//aqui
-			dispatch(user_game_resultsActions.create({
-				user: userId,
-				mission: mission.id,
-				score: state.score,
-				tipsCount: state.tips.length,
-				spokenCharactersCount: state.spokenCharacters.length,
-				tries: state.tries,
-				won: state.gameEndState,
-				validQuestionsCount: Object.keys(state.validQuestions).length
-			}))
+		//aqui
+		dispatch(user_game_resultsActions.create({
+			user: userId,
+			mission: mission.id,
+			score: state.score,
+			tipsCount: state.tips.length,
+			spokenCharactersCount: state.spokenCharacters.length,
+			tries: state.tries,
+			won: state.gameEndState,
+			validQuestionsCount: Object.keys(state.validQuestions).length
+		}))
 
-			dispatch(headerActions.setAll(mission.name, mission.nameTranslate))
-			dispatch(headerActions.setState(headerConstants.STATES.OVERLAY))
-		}
+		dispatch(headerActions.setAll(mission.name, mission.nameTranslate))
+		dispatch(headerActions.setState(headerConstants.STATES.OVERLAY))
+
 	}
 
 	const tutorialScreen = (id) => {
@@ -417,7 +415,7 @@ const Game2 = (props) => {
 			<div id="room-itself" className="tutorial">
 				<Sala roomData={state.tutorialRoom.location} key={-1}>
 					{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
-							<Character
+						<Character
 							character={missionCharacter.character}
 							onClick={setTutorialCharacter(missionCharacter.character)}
 							key={index}
@@ -432,16 +430,16 @@ const Game2 = (props) => {
 				</Sala>
 				{state.showConvo &&
 					<Conversa
-						onExited = {() => {setState({...state, showConvo: false, tutorialStep: state.tutorialStep-1})}}
-						convOptions = {state.convOptions.reduce((acc, convOption) => {
-							let option = {...convOption, answers: convOption.answer, question: convOption.question.question}
+						onExited={() => { setState({ ...state, showConvo: false, tutorialStep: state.tutorialStep - 1 }) }}
+						convOptions={state.convOptions.reduce((acc, convOption) => {
+							let option = { ...convOption, answers: convOption.answer, question: convOption.question.question }
 							delete option.answer
-							return [...acc, option ]
+							return [...acc, option]
 						}, [])}
-						currentChar = {state.currentChar}
-						charFeeling = {state.characterFeeling}
-						afterWriter = {afterWriter}
-						onConvoChoiceMade = {onMenuButtonClick}
+						currentChar={state.currentChar}
+						charFeeling={state.characterFeeling}
+						afterWriter={afterWriter}
+						onConvoChoiceMade={onMenuButtonClick}
 					/>
 				}
 				{id === 2 &&
@@ -458,7 +456,7 @@ const Game2 = (props) => {
 	}
 
 	const restart = () => {
-		setState({...initialState(), hasPlayed: true})
+		setState({ ...initialState(), hasPlayed: true })
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
@@ -467,191 +465,191 @@ const Game2 = (props) => {
 	return (
 		<div id="game2-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
-			<div id="game2-content">
-				<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e)=>{ setState({...state, tracking: e.target.checked}) }} /></div>
-				{(function renderScene(){
-					// eslint-disable-next-line default-case
-					switch(state.scene){
-						case "INIT":
-							return <Init
-										icon={iconInit}
-										name={mission.name}
-										description={mission.description}
-										nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang}).name}
-										descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang}).description}
-										onStart={ onStartGame }
-										onBack={() => setState({...state, back: true})}
-										onSeeTutorial={ state.hasPlayed ? () => {state.seeTutorial = true;onStartGame()} : null }
-									/>
-						case "TUTORIAL":
-							return ( tutorialScreen(state.tutorialStep) )
-						case "ROOM":
-							return (
-								<div id="room-itself">
-									<RoomSelect
-										buttonList={state.locations.map((location, index) => index)}
-										onChange={(num) => {
-											setState({...state, currentRoom: num})
-										}}
-									/>
-									{/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
+				<div id="game2-content">
+					<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e) => { setState({ ...state, tracking: e.target.checked }) }} /></div>
+					{(function renderScene() {
+						// eslint-disable-next-line default-case
+						switch (state.scene) {
+							case "INIT":
+								return <Init
+									icon={iconInit}
+									name={mission.name}
+									description={mission.description}
+									nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang }).name}
+									descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang }).description}
+									onStart={onStartGame}
+									onBack={() => setState({ ...state, back: true })}
+									onSeeTutorial={state.hasPlayed ? () => { state.seeTutorial = true; onStartGame() } : null}
+								/>
+							case "TUTORIAL":
+								return (tutorialScreen(state.tutorialStep))
+							case "ROOM":
+								return (
+									<div id="room-itself">
+										<RoomSelect
+											buttonList={state.locations.map((location, index) => index)}
+											onChange={(num) => {
+												setState({ ...state, currentRoom: num })
+											}}
+										/>
+										{/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
 										//? pq passar tudo ao invés de só passar a string? Que aí poderia ser local ou na rede... */}
-									<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
-										{state.locations[state.currentRoom].missionCharacters.map((missionCharacter, index) =>
-											<Character key={index}
-												zDepth={missionCharacter.zDepth}
-												character={missionCharacter.character}
-												onClick={setCurrentCharacter(missionCharacter.character)}
+										<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
+											{state.locations[state.currentRoom].missionCharacters.map((missionCharacter, index) =>
+												<Character key={index}
+													zDepth={missionCharacter.zDepth}
+													character={missionCharacter.character}
+													onClick={setCurrentCharacter(missionCharacter.character)}
 												// showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sob hover do mouse
-											/>
-										)}
-									</Sala>
-									{state.showConvo &&
-										<Conversa
-											shouldExit={state.shouldCloseConvo}
-											prevDialogHistory={[]}
-											onClearDialogHistory={state.refreshDialog}
-											charPreSpeech={state.preSpeech}
-											convOptions={state.convOptions.reduce((acc, convOption) => {
-												let option = {...convOption, ...convOption.question, answers: convOption.answer}
-												delete option.answer
-												return [...acc, option ]
-											}, [])}
-											currentChar={state.currentChar}
-											charFeeling={state.characterFeeling}
-											afterWriter={afterWriter}
-											onExited={closeDialog}
-											onConvoChoiceMade={onMenuButtonClick}
-										>
-											<AcusationLamp onClick={() => setState({...state, acusation: true})} />
-										</Conversa>
-									}
-								</div>)
+												/>
+											)}
+										</Sala>
+										{state.showConvo &&
+											<Conversa
+												shouldExit={state.shouldCloseConvo}
+												prevDialogHistory={[]}
+												onClearDialogHistory={state.refreshDialog}
+												charPreSpeech={state.preSpeech}
+												convOptions={state.convOptions.reduce((acc, convOption) => {
+													let option = { ...convOption, ...convOption.question, answers: convOption.answer }
+													delete option.answer
+													return [...acc, option]
+												}, [])}
+												currentChar={state.currentChar}
+												charFeeling={state.characterFeeling}
+												afterWriter={afterWriter}
+												onExited={closeDialog}
+												onConvoChoiceMade={onMenuButtonClick}
+											>
+												<AcusationLamp onClick={() => setState({ ...state, acusation: true })} />
+											</Conversa>
+										}
+									</div>)
 							case "ENDGAME":
-								return(
+								return (
 									<div id="endGame-screen">
 										{state.gameEndState ?
-										<div id="end-panels">
-											<div id="painel-icon">
-												<img src={state.tries === 0 ? iconVitoriaPrim : iconVitoriaPers} alt=""/>
-											</div>
-											<div id="endgame-messages">
-												{state.tries === 0 ?
-												<div className="painel" id="painel-1">
-													<span lang="pt-br">Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</span>
-													<span lang="en">Well done! You have found the right person on your first try. You're going to rock on your new career!</span>
-													<a href="#painel-2" className="next-btn">{'❯'}</a>
-												</div> :
-												<div className="painel" id="painel-1">
-													<span lang="pt-br">Você encontrou a pessoa certa! Parabéns!</span>
-													<span lang="en">You have found the right person! Congrats!</span>
-													<a href="#painel-2" className="next-btn">{'❯'}</a>
-												</div>}
-												<div className="painel" id="painel-2">
-													<div className="painel-2-wrapper">
-														<div className="painel-2-content" style={{backgroundImage: "url(" + (state.tips.length === tipsCount ? blobAzul : blobVerde) + ")"}}>
-															<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
-															<div>clues</div>
+											<div id="end-panels">
+												<div id="painel-icon">
+													<img src={state.tries === 0 ? iconVitoriaPrim : iconVitoriaPers} alt="" />
+												</div>
+												<div id="endgame-messages">
+													{state.tries === 0 ?
+														<div className="painel" id="painel-1">
+															<span lang="pt-br">Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</span>
+															<span lang="en">Well done! You have found the right person on your first try. You're going to rock on your new career!</span>
+															<a href="#painel-2" className="next-btn">{'❯'}</a>
+														</div> :
+														<div className="painel" id="painel-1">
+															<span lang="pt-br">Você encontrou a pessoa certa! Parabéns!</span>
+															<span lang="en">You have found the right person! Congrats!</span>
+															<a href="#painel-2" className="next-btn">{'❯'}</a>
+														</div>}
+													<div className="painel" id="painel-2">
+														<div className="painel-2-wrapper">
+															<div className="painel-2-content" style={{ backgroundImage: "url(" + (state.tips.length === tipsCount ? blobAzul : blobVerde) + ")" }}>
+																<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
+																<div>clues</div>
+															</div>
 														</div>
+														<div className="painel-2-wrapper">
+															<div className="painel-2-content">
+																<div>
+																	<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
+																	<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</p>
+																</div>
+															</div>
+														</div>
+														<a href="#painel-1" className="prev-btn">{'❮'}</a>
 													</div>
-													<div className="painel-2-wrapper">
-														<div className="painel-2-content">
-															<div>
-																<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
-																<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</p>
+												</div>
+												<div id="endGame-action-btns">
+													<Button onClick={restart}>Tentar novamente</Button>
+													<Button onClick={() => setState({ ...state, back: true })}>Sair do jogo</Button>
+												</div>
+											</div> :
+											<div id="endGame-wrong-wrapper">
+												<div>
+													<div className="painel" id="painel-1">
+														<div id="painel-icon-derrota">
+															<img src={iconDerrota} alt="" />
+														</div>
+														<span lang="pt-br">Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</span>
+														<span lang="en">You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</span>
+													</div>
+													<div className="painel" id="painel-3">
+														<div className="painel-2-wrapper">
+															<div className="painel-2-content" style={{ backgroundImage: "url(" + blobLaranja + ")" }}>
+																<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
+																<div>clues</div>
+															</div>
+														</div>
+														<div className="painel-2-wrapper">
+															<div className="painel-2-content">
+																<div>
+																	<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
+																	<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</p>
+																</div>
 															</div>
 														</div>
 													</div>
-													<a href="#painel-1" className="prev-btn">{'❮'}</a>
+												</div>
+												<div id="endGame-action-btns">
+													<Button onClick={restart}>Tentar novamente</Button>
+													<Button onClick={() => setState({ ...state, back: true })}>Sair do jogo</Button>
 												</div>
 											</div>
-											<div id="endGame-action-btns">
-												<Button onClick={restart}>Tentar novamente</Button>
-												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
-											</div>
-										</div> :
-										<div id="endGame-wrong-wrapper">
-											<div>
-												<div className="painel" id="painel-1">
-													<div id="painel-icon-derrota">
-														<img src={iconDerrota} alt=""/>
-													</div>
-													<span lang="pt-br">Você ainda não encontrou a pessoa certa. Como você vai entender o que deve ser feito em seu novo trabalho? Você ainda precisa descobrir algumas dicas.</span>
-													<span lang="en">You still haven't found the right person. How will you understand what has to be done in your new job? There are clues yet to be found.</span>
-												</div>
-												<div className="painel" id="painel-3">
-													<div className="painel-2-wrapper">
-														<div className="painel-2-content" style={{backgroundImage: "url(" + blobLaranja + ")"}}>
-															<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
-															<div>clues</div>
-														</div>
-													</div>
-													<div className="painel-2-wrapper">
-														<div className="painel-2-content">
-															<div>
-																<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
-																<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</p>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-											<div id="endGame-action-btns">
-												<Button onClick={restart}>Tentar novamente</Button>
-												<Button onClick={() => setState({...state, back: true}) }>Sair do jogo</Button>
-											</div>
-										</div>
 										}
 										{state.gameEndState &&
-										<DialogCharacter
-											character={
-												mission.missionCharacters.find((mc) => {
-													return mc.character.name===state.targetName
-												}).character}
-											feeling={"rightAccusation"}
-										/>
+											<DialogCharacter
+												character={
+													mission.missionCharacters.find((mc) => {
+														return mc.character.name === state.targetName
+													}).character}
+												feeling={"rightAccusation"}
+											/>
 										}
 									</div>
 								)
-					}
-				}())}
-				{state.acusation &&
-				<FullscreenOverlay
-					showCloseBtn={false}
-					shouldExit={state.closeAcusation}
-					onReadyToExit={() => {setState({...state, closeAcusation: false, acusation: false})}}
-				>
-					<div id="dialog-accusation-wrapper">
-						<div id="dialog-accusation">
-							<div id="accusation-infos">
-								<div>
-									<span lang="pt-br">Tem certeza?</span>
-									<span lang="en">Are you sure it's them?<br />Check your tips.</span>
-								</div>
-								<div id="tips-received">
-									<div id="accusation-icon">
-										<img src={iconDicas} alt="" />
+						}
+					}())}
+					{state.acusation &&
+						<FullscreenOverlay
+							showCloseBtn={false}
+							shouldExit={state.closeAcusation}
+							onReadyToExit={() => { setState({ ...state, closeAcusation: false, acusation: false }) }}
+						>
+							<div id="dialog-accusation-wrapper">
+								<div id="dialog-accusation">
+									<div id="accusation-infos">
+										<div>
+											<span lang="pt-br">Tem certeza?</span>
+											<span lang="en">Are you sure it's them?<br />Check your tips.</span>
+										</div>
+										<div id="tips-received">
+											<div id="accusation-icon">
+												<img src={iconDicas} alt="" />
+											</div>
+											{state.tips.length > 0 ?
+												state.tips.map((tip, index) => <div key={index}>{tip}</div>)
+												:
+												<div>Nenhuma dica recebida.</div>
+											}
+										</div>
 									</div>
-									{state.tips.length > 0 ?
-										state.tips.map((tip, index) => <div key={index}>{tip}</div>)
-										:
-										<div>Nenhuma dica recebida.</div>
-									}
+									<div id="accusation-btns">
+										<Button onClick={() => setState({ ...state, closeAcusation: true })}>Não</Button>
+										<Button onClick={checkEnd}>Sim</Button>
+									</div>
 								</div>
 							</div>
-							<div id="accusation-btns">
-								<Button onClick={() => setState({...state, closeAcusation: true}) }>Não</Button>
-								<Button onClick={checkEnd}>Sim</Button>
-							</div>
-						</div>
-					</div>
-				</FullscreenOverlay>
-				}
-			</div>
+						</FullscreenOverlay>
+					}
+				</div>
 			}
 			{ state.back && <Redirect to='/userspace' />}
 		</div>
-  )
+	)
 }
 
 export default Game2
