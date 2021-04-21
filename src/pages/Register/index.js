@@ -51,6 +51,7 @@ const Register = () => {
   })
   const languages = useSelector(state => state.languages.items)
   const [submitted, setSubmitted ] = useState(false)
+  const [redirect, setRedirect] = useState(false)
   const registering = useSelector(state => state.authentication.registering)
   const dispatch = useDispatch()
 
@@ -72,7 +73,8 @@ const Register = () => {
             .then(() => {
               alert.success('User registred!')
               setTimeout(()=>{
-                window.location.href = "/userspace"
+                setRedirect(true)
+                //window.location.href = "/userspace"
               }, 3000)
             })
             .catch(error => {
@@ -84,7 +86,8 @@ const Register = () => {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container componexWidth="xs">
+      {redirect && <Redirect to={'/userspace'} />}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
