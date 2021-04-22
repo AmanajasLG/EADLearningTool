@@ -71,6 +71,13 @@
 	transition: 150ms linear;
 }
 
+button:disabled,
+button[disabled]{
+  border: 1px solid #999999 !important;
+  background-color: #575151 !important;
+  color: #666666 !important;
+}
+
 button#no-go:hover,
 button#go:hover {
 	background-color: #59316D;

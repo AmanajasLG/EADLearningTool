@@ -12,6 +12,7 @@ import RoomSelect from '../Game2/components/RoomSelect'
 import Sala from '../Game2/components/Sala'
 import Character from '../Game2/components/Character'
 import initialState from './initialState.js'
+import initialDialog from './initialDialog.js'
 import stub from './stub.js'
 import Phone from './components/Phone'
 import Conversa from '../Game2/components/Conversa'
@@ -96,6 +97,13 @@ const Game1 = (props) => {
 					}
 
 				}
+
+				data.locations[0].maxQuestions = 5
+				data.locations[1].maxQuestions = 7
+				data.locations[2].maxQuestions = 6
+				data.locations[3].maxQuestions = 10
+				data.locations[4].maxQuestions = 12
+
 			}
 
 			//list of all available jobs
@@ -138,7 +146,6 @@ const Game1 = (props) => {
 					}
 				})
 			}
-			console.log(data)
 
 			if (Object.keys(data).length > 0)
 				setState(state => { return { ...state, ...data } })
@@ -161,17 +168,47 @@ const Game1 = (props) => {
 	}
 
 	const setCurrentChar = (character) => () => {
-		let convOptions = character.answers
-		if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
-		setState({ ...state, currentChar: character.character, questionsAsked: 0, convOptions: convOptions })
+
+		// if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
+
+		if (!(state.dialogs.hasOwnProperty(character.character.name))) {
+			let convOptions = character.answers.reduce((acc, convOption) => {
+				let option = {
+					...convOption, ...convOption.question, answers: convOption.answer,
+					active: true
+				}
+				delete option.answer
+				return [...acc, option]
+			}, [])
+
+			setState({
+				...state, currentChar: character.character, convOptions: convOptions, dialogs: {
+					...state.dialogs, [character.character.name]: []
+				}
+			})
+		} else {
+			let convOptions = character.answers.reduce((acc, convOption) => {
+
+				let option = {
+					...convOption, ...convOption.question, answers: convOption.answer,
+					active: state.dialogs[character.character.name].find(dialog => dialog.text === convOption.question.question) ? false : true
+				}
+				delete option.answer
+				return [...acc, option]
+			}, [])
+
+			setState({ ...state, currentChar: character.character, convOptions: convOptions })
+		}
+
+
 	}
 
 	const afterWriter = () => {
 		let updatedState = {}
-		if (state.questionsAsked === state.maxQuestions && state.preSpeech.length === 0) {
+		if (state.questionsAsked === state.locations[state.currentLocationIndex].maxQuestions && state.preSpeech.length === 0) {
 			updatedState.preSpeech = ["Espero que isso tenha sido tudo. Tenho que ir agora..."]
-			updatedState.convOptions = [{ question: "Ah tá. Tchau!", answer: ["Tchau!"], close: true }]
-		} else if (state.questionsAsked > state.maxQuestions) {
+			updatedState.convOptions = [{ question: "Ah tá. Tchau!", answers: "Tchau!", close: true }]
+		} else if (state.questionsAsked > state.locations[state.currentLocationIndex].maxQuestions) {
 			updatedState.convOptions = []
 		}
 		if (state.close) {
@@ -187,15 +224,39 @@ const Game1 = (props) => {
 		//	Aplicar lógica adicional de click nos botões do menu
 		//
 		let updatedState = {}
-		updatedState.questionsAsked = state.questionsAsked + 1
-		if (updatedState.questionsAsked < state.maxQuestions) {
-			updatedState.convOptions = state.convOptions.filter(convOption => convOption !== answer) // Esse é para remover as perguntas já feitas, se for pra fazer isso
-		} else {
-			updatedState.preSpeech = []
-			updatedState.convOptions = []
+
+
+		if (state.dialogs[state.currentChar.name].length) {
+			updatedState.questionsAsked = state.questionsAsked + 1
+
+			if (updatedState.questionsAsked < state.locations[state.currentLocationIndex].maxQuestions) {
+				updatedState.convOptions = state.convOptions.map((convOption) => {
+					if (convOption.question === answer.question)
+						return { ...convOption, active: false }
+
+					return convOption
+				}, [])
+			}
+			else {
+				updatedState.preSpeech = []
+				updatedState.convOptions = []
+			}
 		}
+
 		if (answer.close) updatedState.close = true
-		setState({ ...state, ...updatedState })
+
+		setState({
+			...state, ...updatedState,
+			dialogs: {
+				...state.dialogs, [state.currentChar.name]: [...state.dialogs[state.currentChar.name], {
+					speaker: "player",
+					text: answer.question
+				},
+				{
+					text: answer.answers[0]
+				}]
+			}
+		})
 	}
 
 	const modifyContact = (contact) => {
@@ -210,7 +271,7 @@ const Game1 = (props) => {
 	}
 
 	const closeDialog = () => {
-		setState({ ...state, currentChar: null })
+		setState({ ...state, currentChar: null, shouldCloseConvo: false })
 	}
 
 	const restart = () => {
@@ -296,24 +357,20 @@ const Game1 = (props) => {
 										{state.currentChar &&
 											<Conversa
 												shouldExit={state.shouldCloseConvo}
-												prevDialogHistory={[]}
+												prevDialogHistory={state.dialogs[state.currentChar.name]}
 												onClearDialogHistory={state.refreshDialog}
 												charPreSpeech={state.preSpeech}
-												convOptions={state.convOptions.reduce((acc, convOption) => {
-													let option = { ...convOption, ...convOption.question, answers: convOption.answer }
-													delete option.answer
-													return [...acc, option]
-												}, [])}
+												convOptions={state.dialogs[state.currentChar.name].length ? state.convOptions : initialDialog}
 												currentChar={state.currentChar}
 												charFeeling={state.characterFeeling}
 												afterWriter={afterWriter}
 												onExited={closeDialog}
 												onConvoChoiceMade={onMenuButtonClick}
 											>
-												<div id="question-counter" className={state.questionsAsked >= state.maxQuestions ? "max" : null}>
+												<div id="question-counter" className={state.questionsAsked >= state.locations[state.currentLocationIndex].maxQuestions ? "max" : null}>
 													<div id="question-counter-info">
 														<div>Você já fez</div>
-														<div className="numbers"><span>{Math.min(state.questionsAsked, state.maxQuestions)}</span>/{state.maxQuestions}</div>
+														<div className="numbers"><span>{Math.min(state.questionsAsked, state.locations[state.currentLocationIndex].maxQuestions)}</span>/{state.locations[state.currentLocationIndex].maxQuestions}</div>
 														<div>perguntas</div>
 													</div>
 												</div>

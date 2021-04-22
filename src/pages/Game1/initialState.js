@@ -10,6 +10,7 @@ const initialValue = () => ({
     countries:[],
     contactsTemplate:[],
     contactsAtSession:[],
+    dialogs: {},
   //DIALOG
     dialogHistory: [],
     answers: [],
