@@ -142,7 +142,7 @@ const Game1 = (props) => {
 					return {
 						...contact,
 						job: contact.showJob ? contact.job : '',
-						country: contact.showCountry ? contact.showCountry : ''
+						country: contact.showCountry ? contact.country : ''
 					}
 				})
 			}
@@ -187,15 +187,19 @@ const Game1 = (props) => {
 				}
 			})
 		} else {
-			let convOptions = character.answers.reduce((acc, convOption) => {
+			let convOptions = []
+			if (state.questionsAsked <= state.locations[state.currentLocationIndex].maxQuestions) {
+				convOptions = character.answers.reduce((acc, convOption) => {
 
-				let option = {
-					...convOption, ...convOption.question, answers: convOption.answer,
-					active: state.dialogs[character.character.name].find(dialog => dialog.text === convOption.question.question) ? false : true
-				}
-				delete option.answer
-				return [...acc, option]
-			}, [])
+					let option = {
+						...convOption, ...convOption.question, answers: convOption.answer,
+						active: state.dialogs[character.character.name].find(dialog => dialog.text === convOption.question.question) ? false : true
+					}
+					delete option.answer
+					return [...acc, option]
+				}, [])
+			}
+
 
 			setState({ ...state, currentChar: character.character, convOptions: convOptions })
 		}
@@ -209,7 +213,7 @@ const Game1 = (props) => {
 			updatedState.preSpeech = ["Espero que isso tenha sido tudo. Tenho que ir agora..."]
 			updatedState.convOptions = [{ question: "Ah tá. Tchau!", answers: "Tchau!", close: true }]
 		} else if (state.questionsAsked > state.locations[state.currentLocationIndex].maxQuestions) {
-			updatedState.convOptions = []
+			updatedState.convOptions = [{ question: "...", answers: "Tchau!", close: true }]
 		}
 		if (state.close) {
 			updatedState.shouldCloseConvo = true
