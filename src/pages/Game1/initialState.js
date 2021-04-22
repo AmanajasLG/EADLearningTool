@@ -8,6 +8,7 @@ const initialValue = () => ({
   locations: [],
   jobs: [],
   countries: [],
+  names: [],
   contactsTemplate: [],
   contactsAtSession: [],
   dialogs: {},

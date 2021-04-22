@@ -124,6 +124,14 @@ const Game1 = (props) => {
 				}, [])
 			}
 
+			if (state.names.length === 0) {
+				data.names = mission.game_1_mission_characters.reduce((acc, missionCharacter) => {
+					if (!acc.includes(missionCharacter.character.name))
+						acc.push(missionCharacter.character.name)
+					return acc
+				}, [])
+			}
+
 			//resume characters as contacts
 			if (state.contactsTemplate.length === 0) {
 				//create full contact template
@@ -132,7 +140,8 @@ const Game1 = (props) => {
 						id: missionCharacter.character.id, name: missionCharacter.character.name, country: missionCharacter.character.country, job: missionCharacter.character.job,
 						//looks for mission configuration
 						showJob: missionCharacter.showJob,
-						showCountry: missionCharacter.showCountry
+						showCountry: missionCharacter.showCountry,
+						showName: missionCharacter.showName
 					})
 					return acc
 				}, [])
@@ -141,6 +150,7 @@ const Game1 = (props) => {
 				data.contactsAtSession = data.contactsTemplate.map(contact => {
 					return {
 						...contact,
+						name: contact.showName ? contact.name : '',
 						job: contact.showJob ? contact.job : '',
 						country: contact.showCountry ? contact.country : ''
 					}
@@ -150,7 +160,7 @@ const Game1 = (props) => {
 			if (Object.keys(data).length > 0)
 				setState(state => { return { ...state, ...data } })
 		}
-	}, [dispatch, id, mission, game_1_missionsActions, props.match.params.id, state.locations.length, state.contactsTemplate.length, state.countries.length, state.jobs.length])
+	}, [dispatch, id, mission, game_1_missionsActions, props.match.params.id, state.locations.length, state.contactsTemplate.length, state.countries.length, state.jobs.length, state.names.length])
 
 	if (error) {
 		error = null
@@ -355,6 +365,7 @@ const Game1 = (props) => {
 											}
 											modifyContact={modifyContact}
 											contactsTemplate={state.contactsTemplate}
+											names={state.names}
 											jobs={state.jobs}
 											countries={state.countries}
 											onFinish={onPhoneFinish}

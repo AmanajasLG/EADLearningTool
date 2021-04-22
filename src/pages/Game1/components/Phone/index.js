@@ -10,17 +10,17 @@ import './index.scss'
 import FullscreenOverlay from '../../../Game2/components/FullscreenOverlay'
 
 // const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
-const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize}) => {
-	const [state,setState] = React.useState({maximized: false, shouldMinimize: false})
+const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize }) => {
+	const [state, setState] = React.useState({ maximized: false, shouldMinimize: false })
 	// const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
-	
-	React.useEffect( () => {
-		setState({...state, contacts: contacts})
+
+	React.useEffect(() => {
+		setState({ ...state, contacts: contacts })
 		//eslint-disable-next-line
 	}, [contacts])
-	
-	React.useEffect( () => {
-		if(shouldMinimize) _shouldMinimize()
+
+	React.useEffect(() => {
+		if (shouldMinimize) _shouldMinimize()
 		//eslint-disable-next-line
 	}, [shouldMinimize])
 
@@ -30,18 +30,18 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 	// }, [onMinimize])
 
 	const _maximize = () => {
-		setState({...state, maximized: true})
+		setState({ ...state, maximized: true })
 	}
-	
+
 	const _shouldMinimize = () => {
-		setState({...state, shouldMinimize: true})
+		setState({ ...state, shouldMinimize: true })
 	}
 
 	const _minimized = () => {
 		// setState({...state, shouldMinimize: false, maximized: false})
 		state.shouldMinimize = false
 		state.maximized = false
-		if(typeof(onMinimize) === "function") onMinimize()
+		if (typeof (onMinimize) === "function") onMinimize()
 	}
 
 	// const _addContato = () => {
@@ -51,7 +51,7 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 	// }
 
 	const _terminou = () => {
-		if(typeof(onFinish) === "function") onFinish()
+		if (typeof (onFinish) === "function") onFinish()
 		else console.log("onFinish not set or is not a function")
 	}
 
@@ -63,22 +63,25 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 						<div></div>
 						<div></div>
 					</div>
-					<span>{key+1}</span>
-				</div>
-				<div className="name">
-					<p>Nome</p>
-					<input type="text" name="nome" placeholder="Nome do contato" value={contact.name} readOnly="readonly" onChange={()=>{}}/>
+					<span>{key + 1}</span>
 				</div>
 				<Dropdown
 					// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
-					onChange={e => modifyContact({...contact, job: e.target.value}) }
+					onChange={e => modifyContact({ ...contact, name: e.target.value })}
+					label={"Nome"}
+					value={contact.name}
+					optionList={names}
+				/>
+				<Dropdown
+					// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
+					onChange={e => modifyContact({ ...contact, job: e.target.value })}
 					label={"Profissão"}
 					value={contact.job}
 					optionList={jobs}
 				/>
 				<Dropdown
 					// style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
-					onChange={e => modifyContact({...contact, country: e.target.value})}
+					onChange={e => modifyContact({ ...contact, country: e.target.value })}
 					label={"Nacionalidade"}
 					value={contact.country}
 					optionList={countries}
@@ -87,7 +90,7 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 		)
 	}
 
-	return(
+	return (
 		<div id="phone">
 			<div id="small-phone-wrapper" className={state.maximized ? "maximized" : null}>
 				<div id="small-phone-inner-wrapper">
@@ -102,11 +105,11 @@ const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, count
 			</div>
 			{state.maximized &&
 				<FullscreenOverlay
-						bgRGBA={{r:249, g:175, b:161, a:0.69}}
-						closeHoverRGB={{r: 255, g: 255, b: 255}}
-						onClickClose={_shouldMinimize}
-						shouldExit={state.shouldMinimize}
-						onReadyToExit={_minimized}
+					bgRGBA={{ r: 249, g: 175, b: 161, a: 0.69 }}
+					closeHoverRGB={{ r: 255, g: 255, b: 255 }}
+					onClickClose={_shouldMinimize}
+					shouldExit={state.shouldMinimize}
+					onReadyToExit={_minimized}
 				>
 					<div id="big-phone-wrapper" className={state.shouldMinimize ? "minimizing" : null}>
 						<div id="big-phone-imgs">
