@@ -282,8 +282,8 @@ const Game1 = (props) => {
 	const onPhoneFinish = () => {
 		let wrongContacts = 0
 		state.locations[state.currentLocationIndex].missionCharacters.forEach((missionContact, index) => {
-			let answer = state.contactsAtSession.find( contactAtSession => contactAtSession.id === missionContact.character.id)
-			let gabarito = state.contactsTemplate.find( contactTemplate => contactTemplate.id === missionContact.character.id)
+			let answer = state.contactsAtSession.find(contactAtSession => contactAtSession.id === missionContact.character.id)
+			let gabarito = state.contactsTemplate.find(contactTemplate => contactTemplate.id === missionContact.character.id)
 			if (answer.job !== gabarito.job || answer.country !== gabarito.country)
 				wrongContacts++
 		})
@@ -296,16 +296,18 @@ const Game1 = (props) => {
 				...state,
 				shouldCloseDialog: true,
 				currentLocationIndex: state.currentLocationIndex + 1,
-				shouldMinimize: true
+				shouldMinimize: true,
+				questionsAsked: 0,
+				dialogs: {}
 			})
 		else {
-			let result = state.contactsAtSession.reduce( (acc, contact) => {
+			let result = state.contactsAtSession.reduce((acc, contact) => {
 				console.log('contact:', contact)
-				let gabarito = state.contactsTemplate.find( t => t.id === contact.id)
+				let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
 				console.log('gabarito:', gabarito)
-				return contact.job === gabarito.job && contact.country === gabarito.country? 1:0
+				return contact.job === gabarito.job && contact.country === gabarito.country ? 1 : 0
 			}, 0)
-			setState({ ...state, scene: 'ENDGAME', result: result})
+			setState({ ...state, scene: 'ENDGAME', result: result })
 		}
 	}
 
@@ -408,9 +410,9 @@ const Game1 = (props) => {
 							case 'ENDGAME':
 								return (
 									<div id="endGame-screen">
-										<div style={{display: 'flex', flexDirection: 'row'}}>
-											<div style={{width: '40%'}}>
-												<div id="big-phone-imgs" style={{width: 200}}>
+										<div style={{ display: 'flex', flexDirection: 'row' }}>
+											<div style={{ width: '40%' }}>
+												<div id="big-phone-imgs" style={{ width: 200 }}>
 													<img src={palma} alt="" />
 													<img src={bigPhone} alt="" />
 													<img src={dedao} alt="" />
@@ -421,7 +423,7 @@ const Game1 = (props) => {
 													<div className="painel-2-wrapper">
 														<div className="painel-2-content" style={{ backgroundImage: "url(" + blobLaranja + ")" }}>
 															<div>
-																<span>{state.result/state.contactsAtSession.length}%</span>
+																<span>{state.result / state.contactsAtSession.length}%</span>
 															</div>
 														</div>
 													</div>
@@ -433,7 +435,7 @@ const Game1 = (props) => {
 																	<Button onClick={restart}>Tentar novamente</Button>
 																	<Button onClick={() => setState({ ...state, back: true })}>Sair do jogo</Button>
 																</div>
-														</div>
+															</div>
 														</div>
 													</div>
 												</div>
