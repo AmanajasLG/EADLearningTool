@@ -320,7 +320,7 @@ const Game1 = (props) => {
 				scene: 'ENDGAME',
 				result: state.contactsAtSession.reduce((acc, contact) => {
 					let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
-					return acc + (contact.job === gabarito.job && contact.country === gabarito.country) ? 1 : 0
+					return acc + (contact.job === gabarito.job && contact.country === gabarito.country && contact.name === gabarito.name) ? 1 : 0
 				}, 0)
 			})
 		}
