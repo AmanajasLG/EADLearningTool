@@ -301,13 +301,14 @@ const Game1 = (props) => {
 				dialogs: {}
 			})
 		else {
-			let result = state.contactsAtSession.reduce((acc, contact) => {
-				console.log('contact:', contact)
-				let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
-				console.log('gabarito:', gabarito)
-				return contact.job === gabarito.job && contact.country === gabarito.country ? 1 : 0
-			}, 0)
-			setState({ ...state, scene: 'ENDGAME', result: result })
+			setState({
+				...state,
+				scene: 'ENDGAME',
+				result: state.contactsAtSession.reduce((acc, contact) => {
+					let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
+					return acc + (contact.job === gabarito.job && contact.country === gabarito.country) ? 1 : 0
+				}, 0)
+			})
 		}
 	}
 
