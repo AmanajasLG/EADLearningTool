@@ -18,7 +18,13 @@ import Conversa from '../Game2/components/Conversa'
 import FullscreenOverlay from '../Game2/components/FullscreenOverlay'
 import { headerConstants } from '../../_constants'
 
+import iconDerrota from '../../img/Game2/símbolo_feedback errado.svg'
+import blobLaranja from '../../img/bg-forma-laranja.svg'
 import iconInit from '../../img/Game1/ícone_jogo1.svg'
+
+import bigPhone from '../../img/Game1/Celular Base.svg'
+import dedao from '../../img/Game1/Mão dedão.svg'
+import palma from '../../img/Game1/Mão palma.svg'
 
 import './index.scss'
 
@@ -212,14 +218,34 @@ const Game1 = (props) => {
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
-	if (state.changeRoomPopUp) {
-		state.wrongContacts = 0
-		state.locations[state.currentLocationIndex].missionCharacters.forEach((contact, index) => {
-			let answer = state.contactsAtSession.find((contactAtSession) => { return contactAtSession.id === contact.id })
-			let gabarito = state.contactsTemplate.find((contactTemplate) => { return contactTemplate.id === contact.id })
+	const onPhoneFinish = () => {
+		let wrongContacts = 0
+		state.locations[state.currentLocationIndex].missionCharacters.forEach((missionContact, index) => {
+			let answer = state.contactsAtSession.find( contactAtSession => contactAtSession.id === missionContact.character.id)
+			let gabarito = state.contactsTemplate.find( contactTemplate => contactTemplate.id === missionContact.character.id)
 			if (answer.job !== gabarito.job || answer.country !== gabarito.country)
-				state.wrongContacts++
+				wrongContacts++
 		})
+		setState({ ...state, changeRoomPopUp: true, wrongContacts: wrongContacts })
+	}
+
+	const onGoNextRoom = () => {
+		if (state.currentLocationIndex + 1 < state.locations.length)
+			setState({
+				...state,
+				shouldCloseDialog: true,
+				currentLocationIndex: state.currentLocationIndex + 1,
+				shouldMinimize: true
+			})
+		else {
+			let result = state.contactsAtSession.reduce( (acc, contact) => {
+				console.log('contact:', contact)
+				let gabarito = state.contactsTemplate.find( t => t.id === contact.id)
+				console.log('gabarito:', gabarito)
+				return contact.job === gabarito.job && contact.country === gabarito.country? 1:0
+			}, 0)
+			setState({ ...state, scene: 'ENDGAME', result: result})
+		}
 	}
 
 	return (
@@ -263,7 +289,7 @@ const Game1 = (props) => {
 											contactsTemplate={state.contactsTemplate}
 											jobs={state.jobs}
 											countries={state.countries}
-											onFinish={() => setState({ ...state, changeRoomPopUp: true })}
+											onFinish={onPhoneFinish}
 											onMinimize={() => setState({ ...state, shouldMinimize: false })}
 											shouldMinimize={state.shouldMinimize}
 										/>
@@ -304,7 +330,7 @@ const Game1 = (props) => {
 														<span>Are you sure?</span>
 														<p>
 															{state.wrongContacts > 0 ?
-																state.wrongContacts + " people have the wrong data. Are you sure you want to continue? You may not be able to overcome this midlife crisis!"
+																`${state.wrongContacts} people have the wrong data. Are you sure you want to continue? You may not be able to overcome this midlife crisis!`
 																:
 																"Everything seems ok around here. Do you want to continue?"
 															}
@@ -313,17 +339,7 @@ const Game1 = (props) => {
 															<button id="no-go" onClick={() => setState({ ...state, shouldCloseDialog: true })}>
 																{state.wrongContacts > 0 ? "Keep trying" : "Not yet"}
 															</button>
-															<button id="go" onClick={() => {
-																if (state.currentLocationIndex + 1 < state.locations.length)
-																	setState({
-																		...state,
-																		shouldCloseDialog: true,
-																		currentLocationIndex: state.currentLocationIndex + 1,
-																		shouldMinimize: true
-																	})
-																else
-																	setState({ ...state, scene: 'ENDGAME' })
-															}}>
+															<button id="go" onClick={onGoNextRoom}>
 																{state.wrongContacts > 0 ? "Continue anyway" : "Let's go"}
 															</button>
 														</div>
@@ -334,10 +350,38 @@ const Game1 = (props) => {
 									</div>)
 							case 'ENDGAME':
 								return (
-									<div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, textAlign: "center", paddingTop: "45vh" }}>
-										Fim de jogo! tela de feedback
-										<Button onClick={restart}>Tentar novamente</Button>
-										<Button onClick={() => setState({ ...state, back: true })}>Sair do jogo</Button>
+									<div id="endGame-screen">
+										<div style={{display: 'flex', flexDirection: 'row'}}>
+											<div style={{width: '40%'}}>
+												<div id="big-phone-imgs" style={{width: 200}}>
+													<img src={palma} alt="" />
+													<img src={bigPhone} alt="" />
+													<img src={dedao} alt="" />
+												</div>
+											</div>
+											<div>
+												<div className="painel" id="painel-3">
+													<div className="painel-2-wrapper">
+														<div className="painel-2-content" style={{ backgroundImage: "url(" + blobLaranja + ")" }}>
+															<div>
+																<span>{state.result/state.contactsAtSession.length}%</span>
+															</div>
+														</div>
+													</div>
+													<div className="painel-2-wrapper">
+														<div className="painel-2-content">
+															<div>
+																<p>You got {state.result} correct contact informations.</p>
+																<div id="endGame-action-btns">
+																	<Button onClick={restart}>Tentar novamente</Button>
+																	<Button onClick={() => setState({ ...state, back: true })}>Sair do jogo</Button>
+																</div>
+														</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								)
 							default:
