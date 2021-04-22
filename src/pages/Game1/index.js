@@ -67,32 +67,42 @@ const Game1 = (props) => {
 			//distribute characters in locations
 			if (state.locations.length === 0) {
 				// data.locations = [...mission.locations]
-				data.locations = mission.locations.map((location) => { return location.characters ? location : { ...location, characters: [] } }) // Só pq o backend está trazendo info errada
+				data.locations = mission.locations.map((location) => { return { ...location, missionCharacters: [] } }) // Só pq o backend está trazendo info errada
 
-				let place = data.locations.length - 1
-				let characters = mission.characters.slice()
+				// let place = data.locations.length - 1
+				let place = 0
+				let charactersCount = 0
+				let characters = mission.game_1_mission_characters.slice()
 				while (characters.length > 0) {
-					let randIdx = Math.floor(Math.random() * characters.length)
+					// let randIdx = Math.floor(Math.random() * characters.length)
 
 					// percorre as salas uma por uma e ordem crescente repetidamente				E coloca um personagem aleatório dentro dela
-					data.locations[place = (place + 1) % data.locations.length].characters.push({ ...characters.splice(randIdx, 1)[0], zDepth: Math.random() })
+					// data.locations[place = (place + 1) % data.locations.length].missionCharacters.push({ ...characters.splice(randIdx, 1)[0], zDepth: Math.random() })
+					data.locations[place].missionCharacters.push({ ...characters.splice(0, 1)[0], zDepth: Math.random() })
+					charactersCount += 1
+
+					if (charactersCount > 3) {
+						place += 1
+						charactersCount = 0
+					}
+
 				}
 			}
 
 			//list of all available jobs
 			if (state.jobs.length === 0) {
-				data.jobs = mission.characters.reduce((acc, character) => {
-					if (!acc.includes(character.job))
-						acc.push(character.job)
+				data.jobs = mission.game_1_mission_characters.reduce((acc, missionCharacter) => {
+					if (!acc.includes(missionCharacter.character.job))
+						acc.push(missionCharacter.character.job)
 					return acc
 				}, [])
 			}
 
 			//list of all available countries
 			if (state.countries.length === 0) {
-				data.countries = mission.characters.reduce((acc, character) => {
-					if (!acc.includes(character.country))
-						acc.push(character.country)
+				data.countries = mission.game_1_mission_characters.reduce((acc, missionCharacter) => {
+					if (!acc.includes(missionCharacter.character.country))
+						acc.push(missionCharacter.character.country)
 					return acc
 				}, [])
 			}
@@ -100,14 +110,12 @@ const Game1 = (props) => {
 			//resume characters as contacts
 			if (state.contactsTemplate.length === 0) {
 				//create full contact template
-				data.contactsTemplate = mission.characters.reduce((acc, character) => {
+				data.contactsTemplate = mission.game_1_mission_characters.reduce((acc, missionCharacter) => {
 					acc.push({
-						id: character.id, name: character.name, country: character.country, job: character.job,
+						id: missionCharacter.character.id, name: missionCharacter.character.name, country: missionCharacter.character.country, job: missionCharacter.character.job,
 						//looks for mission configuration
-						showJob: character.game_1_mission_characters.length > 0 &&
-							character.game_1_mission_characters.find(config => config.game_1_mission === mission.id).showJob,
-						showCountry: character.game_1_mission_characters.length > 0 &&
-							character.game_1_mission_characters.find(config => config.game_1_mission === mission.id).showCountry
+						showJob: missionCharacter.showJob,
+						showCountry: missionCharacter.showCountry
 					})
 					return acc
 				}, [])
@@ -121,6 +129,8 @@ const Game1 = (props) => {
 					}
 				})
 			}
+			console.log(data)
+
 			if (Object.keys(data).length > 0)
 				setState(state => { return { ...state, ...data } })
 		}
@@ -142,9 +152,9 @@ const Game1 = (props) => {
 	}
 
 	const setCurrentChar = (character) => () => {
-		let convOptions = character.answers.filter(answer => mission?.questions?.find(question => question?.id === answer?.question?.id)) ?? []
+		let convOptions = character.answers
 		if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
-		setState({ ...state, currentChar: character, questionsAsked: 0, convOptions: convOptions })
+		setState({ ...state, currentChar: character.character, questionsAsked: 0, convOptions: convOptions })
 	}
 
 	const afterWriter = () => {
@@ -181,7 +191,7 @@ const Game1 = (props) => {
 
 	const modifyContact = (contact) => {
 		let index = state.contactsAtSession.indexOf(state.contactsAtSession.find(c => c.id === contact.id))
-		console.log('changing:', contact)
+		// console.log('changing:', contact)
 		setState({
 			...state,
 			contactsAtSession: [
@@ -196,15 +206,13 @@ const Game1 = (props) => {
 
 	if (state.changeRoomPopUp) {
 		state.wrongContacts = 0
-		state.locations[state.currentLocationIndex].characters.forEach((contact, index) => {
+		state.locations[state.currentLocationIndex].missionCharacters.forEach((contact, index) => {
 			let answer = state.contactsAtSession.find((contactAtSession) => { return contactAtSession.id === contact.id })
 			let gabarito = state.contactsTemplate.find((contactTemplate) => { return contactTemplate.id === contact.id })
 			if (answer.job !== gabarito.job || answer.country !== gabarito.country)
 				state.wrongContacts++
 		})
 	}
-
-	console.log(state)
 
 	return (
 		<div id="game1-wrapper">
@@ -230,17 +238,18 @@ const Game1 = (props) => {
 											buttonList={state.locations.map(location => location.name)}
 										/> */}
 										<Sala roomData={state.locations[state.currentLocationIndex]} key={state.currentLocationIndex}>
-											{state.locations[state.currentLocationIndex].characters.map((character, index) =>
+											{state.locations[state.currentLocationIndex].missionCharacters.map((character, index) =>
 												<Character key={index}
 													zDepth={character.zDepth}
-													character={character}
+													character={character.character}
 													onClick={setCurrentChar(character)}
 												/>
 											)}
 										</Sala>
 										<Phone
 											contacts={
-												state.contactsAtSession.filter(contact => state.locations[state.currentLocationIndex].characters.find(character => character.id === contact.id))
+												state.contactsAtSession.filter(contact => state.locations[state.currentLocationIndex].missionCharacters.find(character => character.character.id === contact.id
+												))
 											}
 											modifyContact={modifyContact}
 											contactsTemplate={state.contactsTemplate}
