@@ -2,7 +2,9 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions } from '../../_actions'
+import { apiActions, headerActions } from '../../_actions'
+
+import Button from '@material-ui/core/Button'
 
 import Init from '../Game2/components/Init'
 import Result from '../Game2/components/Result'
@@ -14,13 +16,14 @@ import stub from './stub.js'
 import Phone from './components/Phone'
 import Conversa from '../Game2/components/Conversa'
 import FullscreenOverlay from '../Game2/components/FullscreenOverlay'
+import { headerConstants } from '../../_constants'
 
 import iconInit from '../../img/Game1/ícone_jogo1.svg'
 
 import './index.scss'
 
 const Game1 = (props) => {
-	const [state, setState] = React.useState(initialState)
+	const [state, setState] = React.useState(initialState())
 
 	const { game_1_missionsActions, play_sessionsActions, player_actionsActions } = apiActions
 	const id = props.match.params.id
@@ -194,6 +197,11 @@ const Game1 = (props) => {
 		setState({ ...state, currentChar: null })
 	}
 
+	const restart = () => {
+		setState({ ...initialState(), hasPlayed: true })
+		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
+	}
+
 	if (state.changeRoomPopUp) {
 		state.wrongContacts = 0
 		state.locations[state.currentLocationIndex].characters.forEach((contact, index) => {
@@ -319,6 +327,8 @@ const Game1 = (props) => {
 								return (
 									<div style={{ position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, textAlign: "center", paddingTop: "45vh" }}>
 										Fim de jogo! tela de feedback
+										<Button onClick={restart}>Tentar novamente</Button>
+										<Button onClick={() => setState({ ...state, back: true })}>Sair do jogo</Button>
 									</div>
 								)
 							default:
