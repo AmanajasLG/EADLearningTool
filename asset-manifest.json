@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/EADLearningTool/static/css/main.de6ce371.chunk.css",
-    "main.js": "/EADLearningTool/static/js/main.f169c74b.chunk.js",
-    "main.js.map": "/EADLearningTool/static/js/main.f169c74b.chunk.js.map",
+    "main.js": "/EADLearningTool/static/js/main.afe2c434.chunk.js",
+    "main.js.map": "/EADLearningTool/static/js/main.afe2c434.chunk.js.map",
     "runtime-main.js": "/EADLearningTool/static/js/runtime-main.4d0d831f.js",
     "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.4d0d831f.js.map",
-    "static/js/2.be7eed6b.chunk.js": "/EADLearningTool/static/js/2.be7eed6b.chunk.js",
-    "static/js/2.be7eed6b.chunk.js.map": "/EADLearningTool/static/js/2.be7eed6b.chunk.js.map",
+    "static/js/2.9cc8283b.chunk.js": "/EADLearningTool/static/js/2.9cc8283b.chunk.js",
+    "static/js/2.9cc8283b.chunk.js.map": "/EADLearningTool/static/js/2.9cc8283b.chunk.js.map",
     "static/js/3.7a47506a.chunk.js": "/EADLearningTool/static/js/3.7a47506a.chunk.js",
     "static/js/3.7a47506a.chunk.js.map": "/EADLearningTool/static/js/3.7a47506a.chunk.js.map",
     "index.html": "/EADLearningTool/index.html",
     "static/css/main.de6ce371.chunk.css.map": "/EADLearningTool/static/css/main.de6ce371.chunk.css.map",
-    "static/js/2.be7eed6b.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.be7eed6b.chunk.js.LICENSE.txt",
+    "static/js/2.9cc8283b.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.9cc8283b.chunk.js.LICENSE.txt",
     "static/media/Celular Base.794704d0.svg": "/EADLearningTool/static/media/Celular Base.794704d0.svg",
     "static/media/Celular Sala.f026f530.svg": "/EADLearningTool/static/media/Celular Sala.f026f530.svg",
     "static/media/Icone_jogo-tela_inicio.1e641e01.svg": "/EADLearningTool/static/media/Icone_jogo-tela_inicio.1e641e01.svg",
@@ -34,8 +34,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.4d0d831f.js",
-    "static/js/2.be7eed6b.chunk.js",
+    "static/js/2.9cc8283b.chunk.js",
     "static/css/main.de6ce371.chunk.css",
-    "static/js/main.f169c74b.chunk.js"
+    "static/js/main.afe2c434.chunk.js"
   ]
 }
