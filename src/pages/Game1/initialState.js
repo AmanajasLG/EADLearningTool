@@ -1,16 +1,18 @@
 const initialValue = {
-//METADATA
+  //METADATA
   back: false,
-//GAME STATE
+  //GAME STATE
   scene: "INIT",
   endGame: false,
   currentLocationIndex: 0,
-  locations:[],
-  jobs:[],
-  countries:[],
-  contactsTemplate:[],
-  contactsAtSession:[],
-//DIALOG
+  locations: [],
+  jobs: [],
+  countries: [],
+  contactsTemplate: [],
+  contactsAtSession: [],
+  dialogs: {},
+  questionsAsked: 0,
+  //DIALOG
   dialogHistory: [],
   answers: [],
   preSpeech: [],
