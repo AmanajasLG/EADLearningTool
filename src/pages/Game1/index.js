@@ -179,9 +179,10 @@ const Game1 = (props) => {
 			})
 		} else {
 			let convOptions = character.answers.reduce((acc, convOption) => {
+
 				let option = {
 					...convOption, ...convOption.question, answers: convOption.answer,
-					active: state.dialogs[character.character.name].find(dialog => dialog.text === convOption.question) ? false : true
+					active: state.dialogs[character.character.name].find(dialog => dialog.text === convOption.question.question) ? false : true
 				}
 				delete option.answer
 				return [...acc, option]
@@ -220,7 +221,12 @@ const Game1 = (props) => {
 			updatedState.questionsAsked = state.questionsAsked + 1
 
 			if (updatedState.questionsAsked < state.locations[state.currentLocationIndex].maxQuestions) {
-				updatedState.convOptions = state.convOptions.filter(convOption => convOption !== answer) // Esse é para remover as perguntas já feitas, se for pra fazer isso
+				updatedState.convOptions = state.convOptions.map((convOption) => {
+					if (convOption.question === answer.question)
+						return { ...convOption, active: false }
+
+					return convOption
+				}, [])
 			}
 			else {
 				updatedState.preSpeech = []
