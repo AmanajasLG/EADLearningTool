@@ -9,7 +9,8 @@ import Game4 from './pages/Game4'
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom"
 
 import React from 'react'
@@ -44,6 +45,7 @@ const App = () => {
       <Router basename={rootUrl}>
         <AppHeader props={{isLogged: useSelector(state => state.authentication.loggedIn)}} />
         <Switch>
+          <Redirect path={'/EADLearningTool'} to={'/userspace'}/>
           <Route exact path={'/'} component={Home} />
           <Route path={`/login`} component={Login} />
           <Route path={`/register`} component={Register} />
