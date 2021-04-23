@@ -352,10 +352,11 @@ const Game1 = (props) => {
 							case "ROOM":
 								return (
 									<div id="room-itself">
-										{/* <RoomSelect
+										<RoomSelect
 											value={state.currentLocationIndex}
 											buttonList={state.locations.map(location => location.name)}
-										/> */}
+											showInBtnFormat={false}
+										/>
 										<Sala roomData={state.locations[state.currentLocationIndex]} key={state.currentLocationIndex}>
 											{state.locations[state.currentLocationIndex].missionCharacters.map((character, index) =>
 												<Character key={index}
