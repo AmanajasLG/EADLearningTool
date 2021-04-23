@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions, headerActions } from '../../_actions'
+import { apiActions, headerActions, musicActions } from '../../_actions'
 
 import Button from '@material-ui/core/Button'
 
@@ -42,6 +42,13 @@ const Game1 = (props) => {
 	//const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector(state => state.play_sessions ? state.play_sessions.items[0] : {})
 	const lang = useSelector(state => state.authentication.user.user.language.id)
+
+	React.useEffect(() => {
+		if (mission)
+			dispatch(musicActions.set(mission.background_audios[0].music[0].url))
+			return () => dispatch(musicActions.set(''))
+	}, [dispatch, mission])
+
 
 	//Track playerActions
 	React.useEffect(() => {

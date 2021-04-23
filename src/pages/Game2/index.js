@@ -50,7 +50,7 @@ const Game2 = (props) => {
 
 	React.useEffect(() => {
 		if (mission)
-			dispatch(musicActions.set(mission.backgroundAudios[0].music[0].url))
+			dispatch(musicActions.set(mission.background_audios[0].music[0].url))
 		return () => dispatch(musicActions.set(''))
 	}, [dispatch, mission])
 
