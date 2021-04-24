@@ -14,6 +14,8 @@ import { useAlert } from 'react-alert'
 import { Link, Redirect } from 'react-router-dom'
 import { MenuItem } from '@material-ui/core'
 
+import { login } from '../../_actions'
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -52,7 +54,9 @@ const Register = () => {
   const languages = useSelector(state => state.languages.items)
   const [submitted, setSubmitted ] = useState(false)
   const [redirect, setRedirect] = useState(false)
+  const [blocked, setBlocked] = useState(false)
   const registering = useSelector(state => state.authentication.registering)
+  const user = useSelector(state => state.authentication.user)
   const dispatch = useDispatch()
 
   function handleChange(e) {
@@ -64,30 +68,41 @@ const Register = () => {
 		dispatch(languagesActions.getAll())
 	}, [dispatch, languagesActions])
 
+  // É para executar somente no primeiro render
+  // Como um ComponentDidMount
+  React.useEffect(() => {
+    if( user?.user ) setRedirect(true)
+    // eslint-disable-next-line
+  }, [])
+
   function handleSubmit(e) {
       e.preventDefault()
       setSubmitted(true)
+      setBlocked(true)
+      alert.info("Creating your account. Hold tight!")
 
       if(inputs.email && inputs.password && inputs.username){
           dispatch(register(inputs))
             .then(() => {
-              alert.success('User registred!')
+              alert.success('Account succesfully created! Logging you in...')
+              dispatch(login(inputs.email, inputs.password))
               setTimeout(()=>{
                 setRedirect(true)
-                //window.location.href = "/userspace"
               }, 3000)
             })
             .catch(error => {
               alert.error(error)
+              setBlocked(false)
             })
       } else {
         alert.error('Required fields missing! Please, check your inputs and try again!')
+        setBlocked(false)
       }
   }
 
   return (
     <Container componexWidth="xs">
-      {redirect && <Redirect to={'/userspace'} />}
+      {(redirect && user?.user) && <Redirect to={'/userspace'} />}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -108,6 +123,7 @@ const Register = () => {
                 label="First Name"
                 autoFocus
                 onChange={handleChange}
+                disabled={blocked}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -119,6 +135,7 @@ const Register = () => {
                 name="lastName"
                 autoComplete="lname"
                 onChange={handleChange}
+                disabled={blocked}
               />
             </Grid>
             <Grid item xs={12}>
@@ -132,6 +149,7 @@ const Register = () => {
                 autoComplete="username"
                 className={submitted && !inputs.username ? 'danger' : ''}
                 onChange={handleChange}
+                disabled={blocked}
               />
             </Grid>
             <Grid item xs={12}>
@@ -145,6 +163,7 @@ const Register = () => {
                 autoComplete="email"
                 className={submitted && !inputs.email ? 'danger' : ''}
                 onChange={handleChange}
+                disabled={blocked}
               />
             </Grid>
             <Grid item xs={12}>
@@ -159,6 +178,7 @@ const Register = () => {
                 autoComplete="current-password"
                 className={submitted && !inputs.password ? 'danger' : ''}
                 onChange={handleChange}
+                disabled={blocked}
               />
             </Grid>
             <Grid item xs={12}>
@@ -173,10 +193,11 @@ const Register = () => {
                 className={submitted && !inputs.language ? 'danger' : ''}
                 onChange={handleChange}
                 select
+                disabled={blocked}
               >
-                {languages.map(language =>
-                        <MenuItem value={language.id}>{language.lang}</MenuItem>
-                      )}
+                {languages.map((language, index) =>
+                        <MenuItem value={language.id} key={index}>{language.lang}</MenuItem>
+                        )}
               </TextField>
             </Grid>
           </Grid>
@@ -187,6 +208,7 @@ const Register = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
+            disabled={blocked}
           >
           {registering && <span className="spinner-border spinner-border-sm mr-1"></span>}
            Sign Up
