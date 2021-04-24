@@ -8,11 +8,25 @@ import palma from '../../../../img/Game1/Mão palma.svg'
 
 import './index.scss'
 import FullscreenOverlay from '../../../Game2/components/FullscreenOverlay'
+import TextField from '@material-ui/core/TextField'
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+	underline: {
+	  "&&&:before": {
+		borderBottom: "none"
+	  },
+	  "&&:after": {
+		borderBottom: "none"
+	  }
+	}
+  });
 
 // const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize }) => {
 	const [state, setState] = React.useState({ maximized: false, shouldMinimize: false })
 	// const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
+	const classes = useStyles();
 
 	React.useEffect(() => {
 		setState({ ...state, contacts: contacts })
@@ -65,27 +79,53 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 					</div>
 					<span>{key + 1}</span>
 				</div>
-				<Dropdown
-					// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
-					onChange={e => modifyContact({ ...contact, name: e.target.value })}
-					label={"Nome"}
-					value={contact.name}
-					optionList={names}
-				/>
-				<Dropdown
-					// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
-					onChange={e => modifyContact({ ...contact, job: e.target.value })}
-					label={"Profissão"}
-					value={contact.job}
-					optionList={jobs}
-				/>
-				<Dropdown
-					// style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
-					onChange={e => modifyContact({ ...contact, country: e.target.value })}
-					label={"Nacionalidade"}
-					value={contact.country}
-					optionList={countries}
-				/>
+				{
+					contact.name === '' ? 
+					<Dropdown
+						// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
+						onChange={e => modifyContact({ ...contact, name: e.target.value })}
+						label={"Nome"}
+						value={contact.name}
+						optionList={names}
+					/> 
+					: 
+					<div className="Nome">
+						<p>Nome</p>
+						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.name} />
+					</div>
+				}
+
+				{
+					contact.job === '' ? 
+					<Dropdown
+						// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
+						onChange={e => modifyContact({ ...contact, job: e.target.value })}
+						label={"Profissão"}
+						value={contact.job}
+						optionList={jobs}
+					/> 
+					: 
+					<div className="Profissão">
+						<p>Profissão</p>
+						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.job} />
+					</div>
+				}
+
+				{
+					contact.country === '' ? 
+					<Dropdown
+						// style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
+						onChange={e => modifyContact({ ...contact, country: e.target.value })}
+						label={"Nacionalidade"}
+						value={contact.country}
+						optionList={countries}
+					/> 
+					: 
+					<div className="Nacionalidade">
+						<p>Nacionalidade</p>
+						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.country} />
+					</div>
+				}				
 			</div>
 		)
 	}
