@@ -34,7 +34,6 @@
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
-	pointer-events: none;
 	overflow-x: scroll;
 	-webkit-scroll-snap-type: mandatory;
 		-ms-scroll-snap-type: mandatory;
@@ -54,14 +53,24 @@
 	flex: 0 0 auto;
 	width: 100%;
 	height: 100%;
-	padding: 75px;
+	padding: 70px MIN(50px, calc(25vw - 200px));
 	scroll-snap-align: center;
+	line-height: 2.7rem;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+}
+
+.painel-1-wrapper {
+	overflow-y: auto;
+	max-height: 100%;
+}
+
+.painel-1-content {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	line-height: 2.7rem;
-	overflow: hidden;
 }
 
 .painel a {
@@ -96,11 +105,13 @@
 .painel .next-btn {
 	position: absolute;
 	right: calc( 75px / 2);
+	right: 0;
 }
 
 .painel .prev-btn {
 	position: absolute;
 	left: calc( 75px / 2);
+	left: 0;
 }
 
 .painel .next-btn,
@@ -114,6 +125,8 @@
 	border-left: 1.2rem solid #00000000;
 	border-radius: 2rem;
 	transition: 100ms linear;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 .painel .next-btn:hover,
@@ -131,15 +144,23 @@
 
 .painel-2-wrapper {
 	width: 50%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+	max-height: 100%;
 }
 
 .painel-2-content {
 	position: relative;
 	text-align: center;
+}
+
+.painel-2-wrapper:first-child {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.painel-2-wrapper:nth-child(2) {
+	overflow-y: auto;
+	padding: 1px 0px;
 }
 
 .painel-2-wrapper:first-child .painel-2-content {
@@ -259,8 +280,8 @@
 	padding: 0px 10vw;
 }
 
-#endGame-screen p {
-	margin: revert;
+#endGame-screen p:nth-child(n+2) {
+	margin-top: revert;
 }
 
 #painel-icon-derrota {

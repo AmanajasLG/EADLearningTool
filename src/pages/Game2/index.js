@@ -536,13 +536,21 @@ const Game2 = (props) => {
 												<div id="endgame-messages">
 													{state.tries === 0 ?
 														<div className="painel" id="painel-1">
-															<span lang="pt-br">Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</span>
-															<span lang="en">Well done! You have found the right person on your first try. You're going to rock on your new career!</span>
+															<div className="painel-1-wrapper">
+																<div className="painel-1-content">
+																	<span lang="pt-br">Muito bem! Você encontrou a pessoa na primeira tentativa. Vai arrasar na sua nova carreira!</span>
+																	<span lang="en">Well done! You have found the right person on your first try. You're going to rock on your new career!</span>
+																</div>
+															</div>
 															<a href="#painel-2" className="next-btn">{'❯'}</a>
 														</div> :
 														<div className="painel" id="painel-1">
-															<span lang="pt-br">Você encontrou a pessoa certa! Parabéns!</span>
-															<span lang="en">You have found the right person! Congrats!</span>
+															<div className="painel-1-wrapper">
+																<div className="painel-1-content">
+																	<span lang="pt-br">Você encontrou a pessoa certa! Parabéns!</span>
+																	<span lang="en">You have found the right person! Congrats!</span>
+																</div>
+															</div>
 															<a href="#painel-2" className="next-btn">{'❯'}</a>
 														</div>}
 													<div className="painel" id="painel-2">
