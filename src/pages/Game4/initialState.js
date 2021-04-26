@@ -1,14 +1,28 @@
 const initialState = (runTimer = true) => {
   return {
     scene: 'INIT',
-    selected: null,
     runTimer: runTimer,
     remainingTime: 0,
     timeUp: false,
-    cook: false,
+    showRecipe: false,
+
+    selectItem: true,
+    selected: null,
+
+    cookPhase: true,
+    shuffled: [],
     orderedLetters: [],
     result: '',
-    shuffled: []
+    prepared: [],
+
+    servePhase: false,
+    shuffledDishes: [],
+    shuffledDishesNames: [],
+    dishImageSelected: '',
+    dishNameSelected: '',
+    pairCheck: false,
+    tableDish: [],
+    allDishes: false
   }
 }
 

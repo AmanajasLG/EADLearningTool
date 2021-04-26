@@ -20,6 +20,20 @@ const stub = {
     {name: 'presunto'},
     {name: 'ovo'},
     {name: 'macarrão'}
+  ],
+  dishes:[
+    {name: 'garfo', img:'garfoImagem'},
+    {name: 'faca', img:'facaImagem'},
+    {name: 'prato', img:'pratoImagem'},
+    {name: 'furadeira', img:'furadeiraImagem'},
+    {name: 'tigela', img:'tigelaImagem'},
+    {name: 'copo', img:'copoImagem'},
+    {name: 'britadeira', img:'britadeiraImagem'}
+  ],
+  rightDishes:[
+    {name: 'garfo', img:'garfoImagem'},
+    {name: 'faca', img:'facaImagem'},
+    {name: 'prato', img:'pratoImagem'}
   ]
 }
 
