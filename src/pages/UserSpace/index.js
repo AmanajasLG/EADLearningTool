@@ -55,7 +55,6 @@ const UserSpace = () => {
       <div className="jogos">
         <p>Jogar jogo 1</p>
         <p>Missões:</p>
-        <Link to={'/game1/0'}>Stub</Link>
         <div id="missoes">
           {game1missions.loading ? <div id="loading">Loading...</div> :
             game1missions && game1missions.items.map( (mission, index) =>
@@ -76,7 +75,6 @@ const UserSpace = () => {
       <div className="jogos">
         <p>Jogar jogo 2</p>
         <p>Missões:</p>
-        <Link to={'/game2/0'}>Stub</Link>
         <div id="missoes">
           {missions.loading ? <div>Loading...</div> :
             missions && missions.items.map( (mission, index) =>
