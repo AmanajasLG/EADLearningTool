@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.scss'
 
-const Init = ({icon, name, description, nameTranlate = "Name", descriptionTranlate = "Description", onStart, onBack, onSeeTutorial}) => {
+const Init = ({icon, name, description, nameTranlate = "Name", descriptionTranlate = "Description", onStart, onBack, onSkipTutorial}) => {
     return (
         <div className="main-init-wrapper">
           <div className="inner-content">
@@ -16,7 +16,7 @@ const Init = ({icon, name, description, nameTranlate = "Name", descriptionTranla
             <div id="btns">
               { onBack && <button className="btn btn-center" id="btn-back" onClick={onBack}>Voltar</button> }
               { onStart && <button className="btn btn-center" id="btn-start" onClick={onStart}>Iniciar</button> }
-              { onSeeTutorial && <button className="btn btn-center" id="btn-tutorial" onClick={onSeeTutorial}>Ver tutorial</button> }
+              { onSkipTutorial && <button className="btn btn-center" id="btn-tutorial" onClick={onSkipTutorial}>Pular tutorial</button> }
             </div>
           </div>
         </div>

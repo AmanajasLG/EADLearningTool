@@ -479,7 +479,7 @@ const Game2 = (props) => {
 									descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang }).description}
 									onStart={onStartGame}
 									onBack={() => setState({ ...state, back: true })}
-									onSeeTutorial={state.hasPlayed ? () => { state.seeTutorial = true; onStartGame() } : null}
+									onSkipTutorial={state.hasPlayed ? () => { state.seeTutorial = false; onStartGame() } : null}
 								/>
 							case "TUTORIAL":
 								return (tutorialScreen(state.tutorialStep))

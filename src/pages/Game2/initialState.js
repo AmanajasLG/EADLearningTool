@@ -13,7 +13,7 @@ const initialState = () => ({
   tries: 0,
   validQuestions: [],
   tutorialStep: 0,
-  seeTutorial: false,
+  seeTutorial: true,
   hasPlayed: false,
   checkedPlayed: false,
 //DIALOG
