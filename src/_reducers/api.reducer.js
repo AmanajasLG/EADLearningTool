@@ -1,6 +1,5 @@
 
 import { apiCallConstants } from '../_constants'
-import { LOCATION_CHANGE } from 'react-router-redux';
 
 const initialState = {
   loading: false,
