@@ -344,8 +344,8 @@ const Game1 = (props) => {
 								return <Init
 									icon={iconInit}
 									name={mission.name} description={mission.description}
-									nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang }).name}
-									descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang }).description}
+									nameTranslate={mission.missionNameLanguages.find(name => { return name.language === lang }).name}
+									descriptionTranslate={mission.missionDescriptionLanguages.find(description => { return description.language === lang }).description}
 									onStart={onStartGame}
 									onBack={() => setState({ ...state, back: true })}
 								/>

@@ -3,7 +3,7 @@ import './sala.scss'
 
 const Sala = ({children, roomData, setCurrentChar}) => {
 
-  const img = roomData && roomData.backgroundAssets.length > 0 ? roomData.backgroundAssets[0].image[0].url : ""
+  const img = roomData && roomData.background.url ? roomData.background.url : ""
   return (
       // <div id="sala" style={{backgroundImage: `url("${img}")`}}>
       <div id="sala">
