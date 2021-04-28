@@ -1,89 +1,92 @@
+
+import { apiCallConstants } from '../_constants'
+import { LOCATION_CHANGE } from 'react-router-redux';
+
 const initialState = {
   loading: false,
   items: []
 }
 
-export const reducerBuilder = constants => (state = initialState, action) =>
-{
+export function apiCall (state = initialState, action) {
   switch (action.type) {
-      case constants.CREATE_REQUEST:
+      case apiCallConstants.CREATE_REQUEST:
           return {...state,
             error: null,
             creating: true
           }
-      case constants.CREATE_SUCCESS:
+      case apiCallConstants.CREATE_SUCCESS:
           return {...state,
             creating: false,
             items: [...state.items, action.data]
           }
-      case constants.CREATE_FAILURE:
+      case apiCallConstants.CREATE_FAILURE:
           return {
             error: action.error
           }
 
-      case constants.UPDATE_REQUEST:
+      case apiCallConstants.UPDATE_REQUEST:
           return {...state,
             error: null,
             updating: true
           }
-      case constants.UPDATE_SUCCESS:
+      case apiCallConstants.UPDATE_SUCCESS:
           let index = state.items.findIndex( item => item.id === action.data.id )
           let copy = [...state.items.slice(0, index), action.data, ...state.items.slice(index + 1)]
           return {...state, updating: false,
             items: copy
           }
-      case constants.UPDATE_FAILURE:
+      case apiCallConstants.UPDATE_FAILURE:
           return {...state, updating: false}
 
-      case constants.GETALL_REQUEST:
+      case apiCallConstants.GETALL_REQUEST:
           return {...state,
               error: null,
               loading: true
           };
-      case constants.GETALL_SUCCESS:
+      case apiCallConstants.GETALL_SUCCESS:
           return {...state,
               loading: false,
-              items: action.data
+              items: [ ...state.items, action.data ]
           };
-      case constants.GETALL_FAILURE:
+      case apiCallConstants.GETALL_FAILURE:
           return {...state,
               loading: false,
               error: action.error
           };
 
-      case constants.GETBYID_REQUEST:
+      case apiCallConstants.GETBYID_REQUEST:
           return {...state,
               error: null,
               loading: true
           };
-      case constants.GETBYID_SUCCESS:
+      case apiCallConstants.GETBYID_SUCCESS:
           return {...state,
               items: [...state.items, action.data],
               loading: false
           };
-      case constants.GETBYID_FAILURE:
+      case apiCallConstants.GETBYID_FAILURE:
           return {...state,
               loading: false,
               error: action.error
           };
 
-        case constants.FIND_REQUEST:
+        case apiCallConstants.FIND_REQUEST:
             return {...state,
                 error: null,
                 loading: true
             };
-        case constants.FIND_SUCCESS:
+        case apiCallConstants.FIND_SUCCESS:
             return {...state,
-                items: action.data,
+                items: [ ...state.items, action.data ],
                 loading: false
             };
-        case constants.FIND_FAILURE:
+        case apiCallConstants.FIND_FAILURE:
             return {...state,
                 loading: false,
                 error: action.error
             };
 
-      case constants.DELETE_REQUEST:
+      case apiCallConstants.DELETE_REQUEST:
           // add 'deleting:true' property to character being deleted
           return {
               ...state,
@@ -93,12 +96,12 @@ export const reducerBuilder = constants => (state = initialState, action) =>
                       : item
               )
           };
-      case constants.DELETE_SUCCESS:
+      case apiCallConstants.DELETE_SUCCESS:
           // remove deleted character from state
           return {...state,
               items: state.items.filter(item => item.id !== action.id)
           }
-      case constants.DELETE_FAILURE:
+      case apiCallConstants.DELETE_FAILURE:
           // remove 'deleting:true' property and add 'deleteError:[error]' property to character
           return {
               ...state,
@@ -112,7 +115,9 @@ export const reducerBuilder = constants => (state = initialState, action) =>
                   return item;
               })
           };
+      case LOCATION_CHANGE:
+        return state
       default:
-          return state
+        return state
   }
 }

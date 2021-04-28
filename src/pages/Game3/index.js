@@ -97,8 +97,8 @@ const Game3 = (props) => {
                 <Init name={mission.name} description={mission.description}
   							onStart={ onStartGame }
   							onBack={ () => setState({...state, back: true}) }
-                nameTranlate={'Tradução'}
-                descriptionTranlate={'Tradução'}
+                nameTranslate={'Tradução'}
+                descriptionTranslate={'Tradução'}
                 />
               )
             case 'TUTORIAL':
