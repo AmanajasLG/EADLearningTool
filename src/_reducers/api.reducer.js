@@ -114,8 +114,6 @@ export function apiCall (state = initialState, action) {
                   return item;
               })
           };
-      case LOCATION_CHANGE:
-        return state
       default:
         return state
   }
