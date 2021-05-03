@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions, headerActions, musicActions } from '../../_actions'
+import { apiActions, CallerBuilder, headerActions, musicActions } from '../../_actions'
 
 import Button from '@material-ui/core/Button'
 
@@ -32,20 +32,34 @@ import './index.scss'
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState())
 
-	const { game_1_missionsActions, play_sessionsActions, player_actionsActions } = apiActions
+	const { missionsActions, play_sessionsActions } = apiActions
 	const id = props.match.params.id
 	const dispatch = useDispatch()
 
-	const loading = useSelector(state => state.game_1_missions.loading)
-	let error = useSelector(state => state.game_1_missions.error)
-	let mission = useSelector(state => state.game_1_missions.items.find(mission => mission.id === props.match.params.id))
+	const loading = useSelector(state => state.missions.loading)
+	let error = useSelector(state => state.missions.error)
+	let mission = useSelector(state => state.missions.items.find(mission => mission.id === props.match.params.id))
+	let missionData = useSelector(state => state.apiCall.items.find(data => data.table === 'missionData') ? state.apiCall.items.find(data => data.table === 'missionData').data[0] : null)
 	//const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector(state => state.play_sessions ? state.play_sessions.items[0] : {})
-	const lang = useSelector(state => state.authentication.user.user.language.id)
+	const lang = useSelector(state => state.authentication.user.user.language)
+	let actions = {}
+
+	if (mission && Object.keys(actions).length === 0) {
+		mission.gameType.gameTables.forEach(gameTable => {				
+			actions[gameTable.type] = CallerBuilder(gameTable)
+		})
+	}
+
+	React.useEffect(()=>{
+		if(mission && Object.keys(actions).length !== 0 && !missionData){
+			dispatch(actions['missionData'].find({mission: mission.id}))
+		}
+	})
 
 	React.useEffect(() => {
 		if (mission)
-			dispatch(musicActions.set(mission.background_audios[0].music[0].url))
+			dispatch(musicActions.set(mission.backgroundAudio.url))
 			return () => dispatch(musicActions.set(''))
 	}, [dispatch, mission])
 
@@ -56,15 +70,15 @@ const Game1 = (props) => {
 			return
 
 		const getClickedObject = (e) => {
-			dispatch(player_actionsActions.create({
-				'play_session': currentPlaySession.id,
-				data:
+			dispatch(play_sessionsActions.update({id: currentPlaySession.id},
 				{
-					tag: e.target.nodeName,
-					alt: e.target.alt,
-					className: e.target.className,
-					innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
-				}
+					...currentPlaySession,
+					playerActions: [...currentPlaySession.playerActions, {
+						tag: e.target.nodeName,
+						alt: e.target.alt,
+						className: e.target.className,
+						innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
+					}]
 			}))
 		}
 		document.addEventListener("mousedown", getClickedObject)
@@ -73,85 +87,61 @@ const Game1 = (props) => {
 		return () => {
 			document.removeEventListener("mousedown", getClickedObject)
 		}
-	}, [dispatch, currentPlaySession, player_actionsActions, state.tracking])
+	}, [dispatch, currentPlaySession, play_sessionsActions, state.tracking])
 
 	React.useEffect(() => {
 		if (id && !mission)
-			dispatch(game_1_missionsActions.getById(props.match.params.id))
-		if (mission) {
+			dispatch(missionsActions.getById(props.match.params.id))
+		if (missionData) {
 			let data = {}
 
 			//distribute characters in locations
 			if (state.locations.length === 0) {
 				// data.locations = [...mission.locations]
-				data.locations = mission.locations.map((location) => { return { ...location, missionCharacters: [] } }) // Só pq o backend está trazendo info errada
-
-				// let place = data.locations.length - 1
-				let place = 0
-				let charactersCount = 0
-				let characters = mission.game_1_mission_characters.slice()
-				while (characters.length > 0) {
-					// let randIdx = Math.floor(Math.random() * characters.length)
-
-					// percorre as salas uma por uma e ordem crescente repetidamente				E coloca um personagem aleatório dentro dela
-					// data.locations[place = (place + 1) % data.locations.length].missionCharacters.push({ ...characters.splice(randIdx, 1)[0], zDepth: Math.random() })
-					data.locations[place].missionCharacters.push({ ...characters.splice(0, 1)[0], zDepth: Math.random() })
-					charactersCount += 1
-
-					if (charactersCount > 3) {
-						place += 1
-						charactersCount = 0
-					}
-
-				}
-
-				data.locations[0].maxQuestions = 5
-				data.locations[1].maxQuestions = 7
-				data.locations[2].maxQuestions = 6
-				data.locations[3].maxQuestions = 10
-				data.locations[4].maxQuestions = 12
-
+				data.locations = missionData.locations
 			}
 
 			//list of all available jobs
 			if (state.jobs.length === 0) {
-				data.jobs = mission.game_1_mission_characters.reduce((acc, missionCharacter) => {
+				data.jobs = missionData.locations.map(location => { return location.missionCharacters.reduce((acc, missionCharacter) => {
 					if (!acc.includes(missionCharacter.character.job))
 						acc.push(missionCharacter.character.job)
 					return acc
-				}, [])
+				}, [])}).flat()
 			}
 
 			//list of all available countries
 			if (state.countries.length === 0) {
-				data.countries = mission.game_1_mission_characters.reduce((acc, missionCharacter) => {
+				data.countries = missionData.locations.map(location => { return location.missionCharacters.reduce((acc, missionCharacter) => {
 					if (!acc.includes(missionCharacter.character.country))
 						acc.push(missionCharacter.character.country)
 					return acc
-				}, [])
+				}, [])}).flat()
 			}
 
 			if (state.names.length === 0) {
-				data.names = mission.game_1_mission_characters.reduce((acc, missionCharacter) => {
+				data.names = missionData.locations.map(location => { return location.missionCharacters.reduce((acc, missionCharacter) => {
 					if (!acc.includes(missionCharacter.character.name))
 						acc.push(missionCharacter.character.name)
 					return acc
-				}, [])
+				}, [])}).flat()
 			}
 
 			//resume characters as contacts
 			if (state.contactsTemplate.length === 0) {
 				//create full contact template
-				data.contactsTemplate = mission.game_1_mission_characters.reduce((acc, missionCharacter) => {
-					acc.push({
-						id: missionCharacter.character.id, name: missionCharacter.character.name, country: missionCharacter.character.country, job: missionCharacter.character.job,
-						//looks for mission configuration
-						showJob: missionCharacter.showJob,
-						showCountry: missionCharacter.showCountry,
-						showName: missionCharacter.showName
+				data.contactsTemplate = missionData.locations.map(location => { 
+					return location.missionCharacters.map(missionCharacter => {
+						return {
+							id: missionCharacter.character.id, name: missionCharacter.character.name, country: missionCharacter.character.country, job: missionCharacter.character.job,
+							//looks for mission configuration
+							showJob: missionCharacter.showJob,
+							showCountry: missionCharacter.showCountry,
+							showName: missionCharacter.showName
+						}
+						
 					})
-					return acc
-				}, [])
+				}).flat()
 
 				//create contact state shown to/ manipulated by to player
 				data.contactsAtSession = data.contactsTemplate.map(contact => {
@@ -167,7 +157,7 @@ const Game1 = (props) => {
 			if (Object.keys(data).length > 0)
 				setState(state => { return { ...state, ...data } })
 		}
-	}, [dispatch, id, mission, game_1_missionsActions, props.match.params.id, state.locations.length, state.contactsTemplate.length, state.countries.length, state.jobs.length, state.names.length])
+	}, [dispatch, id, mission, missionsActions, props.match.params.id, state.locations.length, state.contactsTemplate.length, state.countries.length, state.jobs.length, state.names.length, missionData])
 
 	if (error) {
 		error = null
@@ -325,10 +315,10 @@ const Game1 = (props) => {
 			setState({
 				...state,
 				scene: 'ENDGAME',
-				result: state.contactsAtSession.reduce((acc, contact) => {
+				result: state.contactsAtSession.filter(contact => {
 					let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
-					return acc + (contact.job === gabarito.job && contact.country === gabarito.country && contact.name === gabarito.name) ? 1 : 0
-				}, 0)
+					return (contact.job === gabarito.job && contact.country === gabarito.country && contact.name === gabarito.name)
+				}).length
 			})
 		}
 	}
@@ -344,8 +334,8 @@ const Game1 = (props) => {
 								return <Init
 									icon={iconInit}
 									name={mission.name} description={mission.description}
-									nameTranslate={mission.missionNameLanguages.find(name => { return name.language === lang }).name}
-									descriptionTranslate={mission.missionDescriptionLanguages.find(description => { return description.language === lang }).description}
+									nameTranslate={mission.nameTranslate.find(name => { return name.language.id === lang }).name}
+									descriptionTranslate={mission.descriptionTranslate.find(description => { return description.language.id === lang }).description}
 									onStart={onStartGame}
 									onBack={() => setState({ ...state, back: true })}
 								/>
@@ -357,7 +347,7 @@ const Game1 = (props) => {
 											buttonList={state.locations.map(location => location.name)}
 											showInBtnFormat={false}
 										/>
-										<Sala roomData={state.locations[state.currentLocationIndex]} key={state.currentLocationIndex}>
+										<Sala roomData={state.locations[state.currentLocationIndex].location} key={state.currentLocationIndex}>
 											{state.locations[state.currentLocationIndex].missionCharacters.map((character, index) =>
 												<Character key={index}
 													zDepth={character.zDepth}
@@ -447,7 +437,7 @@ const Game1 = (props) => {
 													<div className="painel-2-wrapper">
 														<div className="painel-2-content" style={{ backgroundImage: "url(" + blobLaranja + ")" }}>
 															<div>
-																<span>{state.result / state.contactsAtSession.length}%</span>
+																<span>{state.result / state.contactsAtSession.length * 100}%</span>
 															</div>
 														</div>
 													</div>
