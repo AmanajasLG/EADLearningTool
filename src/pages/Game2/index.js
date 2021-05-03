@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { apiActions, headerActions, musicActions } from '../../_actions'
+import { apiActions, CallerBuilder, headerActions, musicActions } from '../../_actions'
 import Init from './components/Init'
 import RoomSelect from './components/RoomSelect'
 import Sala from './components/Sala'
@@ -35,22 +35,33 @@ const Game2 = (props) => {
 	const dispatch = useDispatch()
 	let error = useSelector(state => state.missions.error)
 	let mission = useSelector(state => state.missions.items.find(mission => mission.id === props.match.params.id))
+	let missionData = useSelector(state => state.apiCall.items.find(data => data.table === 'missionData') ? state.apiCall.items.find(data => data.table === 'missionData').data[0] : null)
 	const loading = useSelector(state => state.missions.loading)
 	const userId = useSelector(state => state.authentication.user.user.id)
-	const lang = useSelector(state => state.authentication.user.user.language.id)
-	const currentPlaySession = useSelector(state => state.play_sessions ? state.play_sessions.items[0] : {})
-	const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
-	const hasPlayed = useSelector(state => state.user_game_results.items.length > 0)
+	const lang = useSelector(state => state.authentication.user.user.language)
+	let currentPlaySession = useSelector(state => state.play_sessions ? state.play_sessions.items[0] : {})
+	const { missionsActions, play_sessionsActions } = apiActions
+	// const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
+	const hasPlayed = useSelector(state => state.apiCall.items.find(data => data.table === 'result') ? state.apiCall.items.find(data => data.table === 'result').data.length > 0 : false)
 
 	let tipsCount
+	let actions = {}
 
-	if (mission)
-		tipsCount = mission.missionCharacters.filter(missionCharacter => { return missionCharacter.tip }).length
+	if (mission && Object.keys(actions).length === 0) {
+		mission.gameType.gameTables.forEach(gameTable => {				
+			actions[gameTable.type] = CallerBuilder(gameTable)
+		})
+	}
+
+	console.log(actions)
+
+	if (missionData)
+		tipsCount = missionData.missionCharacters.filter(missionCharacter => { return missionCharacter.tip }).length + 1
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init', preSpeech: null, convOptions: [] }
 
 	React.useEffect(() => {
 		if (mission)
-			dispatch(musicActions.set(mission.background_audios[0].music[0].url))
+			dispatch(musicActions.set(mission.backgroundAudio.url))
 		return () => dispatch(musicActions.set(''))
 	}, [dispatch, mission])
 
@@ -59,11 +70,17 @@ const Game2 = (props) => {
 		if (id && !mission) dispatch(missionsActions.getById(props.match.params.id))
 	}, [id, mission, dispatch, missionsActions, props.match.params.id])
 
+	React.useEffect(()=>{
+		if(mission && Object.keys(actions).length !== 0 && !missionData){
+			dispatch(actions['missionData'].find({mission: mission.id}))
+		}
+	})
+
 	// check if user already played the game
 	React.useEffect(() => {
 		let updateState = {}
 		if (mission && !state.checkedPlayed) {
-			dispatch(user_game_resultsActions.find({
+			dispatch(actions['result'].find({
 				'user.id': userId,
 				'mission.id': mission.id
 			}))
@@ -73,7 +90,8 @@ const Game2 = (props) => {
 		updateState.hasPlayed = hasPlayed
 		setState({ ...state, ...updateState })
 		// eslint-disable-next-line
-	}, [userId, mission, dispatch, user_game_resultsActions, hasPlayed])
+	}, [userId, mission, dispatch, hasPlayed])
+
 
 	//track player actions
 	React.useEffect(() => {
@@ -81,24 +99,25 @@ const Game2 = (props) => {
 			return
 
 		const getClickedObject = (e) => {
-			dispatch(player_actionsActions.create({
-				'play_session': currentPlaySession.id,
-				data:
+			dispatch(play_sessionsActions.update({id: currentPlaySession.id},
 				{
-					tag: e.target.nodeName,
-					alt: e.target.alt,
-					className: e.target.className,
-					innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
-				}
+					...currentPlaySession,
+					playerActions: [...currentPlaySession.playerActions, {
+						tag: e.target.nodeName,
+						alt: e.target.alt,
+						className: e.target.className,
+						innerHTML: e.target.innerHTML.includes('<div') ? null : e.target.innerHTML, clickTime: new Date()
+					}]
 			}))
 		}
+
 		document.addEventListener("mousedown", getClickedObject)
 
 		setState(s => { return { ...s, currentPlaySession, getClickedObject } })
 		return () => {
 			document.removeEventListener("mousedown", getClickedObject)
 		}
-	}, [dispatch, player_actionsActions, state.tracking, currentPlaySession])
+	}, [dispatch, play_sessionsActions, state.tracking, currentPlaySession])
 	/*//Testing tool
 	if(error){
 		error = null
@@ -113,33 +132,18 @@ const Game2 = (props) => {
 	//		Adiciona personagem ao local
 	//		Retira personagem da lista de personagens disponíveis
 
-	if (mission && state.locations.length === 0) {
+	if (missionData && state.locations.length === 0) {
 		// safe copies
-		let availableCharacters = mission.missionCharacters.slice(0)
-		let locations = mission.locations.filter(location => {
-			return location.type === 'room'
-		}).map(location => {
+		let availableCharacters = missionData.missionCharacters.slice(0)
+		let locations = missionData.locations.map(location => {
 			delete location.characters
 			return { location: location, missionCharacters: [] }
 		})
 
-		let tutorialRoom = {
-			location: mission.locations.find(location => {
-				return location.type === 'tutorial'
-			}),
-			missionCharacters: []
-		}
-
-		console.log(tutorialRoom)
+		let tutorialRoom = missionData.tutorial
 
 		//distribute on locations
 		while (availableCharacters.length > 0) {
-			// se personagem for o de tutorial, separa ele e continua
-			if (availableCharacters[0].character.name === "Tutorial") {
-				tutorialRoom.missionCharacters.push(availableCharacters[0])
-				availableCharacters.splice(0, 1)
-				continue;
-			}
 
 			// sorteia sala aleatoriamente com pesos que diminuem dependendo de quantos personagens já se tem
 			let totalWeight = 0
@@ -177,7 +181,7 @@ const Game2 = (props) => {
 
 			let selectedQuestions = []
 			// ? E se correct/ncorrect não tiveram a quantidade necessária de perguntas?
-			while (selectedQuestions.length < 4) {
+			while (selectedQuestions.length < 6) {
 				let source = selectedQuestions.length % 2 === 0 ? correct : ncorrect
 				let index = Math.floor(Math.random(0, source.length))
 				selectedQuestions.push(source[index])
@@ -245,23 +249,19 @@ const Game2 = (props) => {
 		setState({ ...state, ...updateState })
 	}
 
-	const setTutorialCharacter = (character) => () => {
+	const setTutorialCharacter = (tutorialCharacter) => () => {
 		setState(
 			{
 				...state,
 				tutorialStep: state.tutorialStep + 1,
 				showConvo: true,
-				currentChar: character,
-				convOptions:
-					[
-						{
-							answer: ['Olha, não sei quem você está procurando, cheguei aqui semana passada...', 'O engenheiro deve saber!'],
-							question: {
-								question: 'Estou procurando alguém. Você pode me ajudar?',
-							},
-							close: false
-						}
-					]
+				currentChar: tutorialCharacter.character,
+				convOptions: tutorialCharacter.answers.map(answer => {
+					return {
+						...answer,
+						answer: answer.answer.split(';')
+					}
+				})
 			})
 	}
 
@@ -273,7 +273,7 @@ const Game2 = (props) => {
 			currentChar: character,
 			dialogStep: 0,
 			convOptions: state.locations[state.currentRoom].missionCharacters
-				.find(c => c.character.id === character.id).selectedQuestions
+				.find(c => c.character.id === character.character.id).selectedQuestions
 				.slice(0, state.questionsByStep)
 		})
 	}
@@ -300,14 +300,14 @@ const Game2 = (props) => {
 			let updateState = {}
 			if (state.dialogStep < state.totalDialogSteps) {
 				updateState.convOptions = state.locations[state.currentRoom].missionCharacters
-					.find(mc => mc.character.id === state.currentChar.id).selectedQuestions
+					.find(mc => mc.character.id === state.currentChar.character.id).selectedQuestions
 					.slice(state.questionsByStep * state.dialogStep, state.questionsByStep * (state.dialogStep + 1))
 			} else if (state.dialogStep === state.totalDialogSteps) {
 				if (state.correct < state.correctMinimum) {
-					updateState.preSpeech = state.currentChar.wrongAnswer
+					updateState.preSpeech = state.currentChar.wrongEndAnswer
 					updateState.convOptions = [{ refresh: true, question: { question: 'Sim' } }, { close: true, question: { question: 'Não' }, answer: state.currentChar.endDialog }]
 				} else {
-					updateState.convOptions = [{ tip: state.currentChar.tip, question: { question: 'Estou procurando alguém. Você pode me ajudar?' }, answer: state.currentChar.rightAnswer, correct: true }]
+					updateState.convOptions = [{ tip: state.currentChar.tip, question: { question: 'Estou procurando alguém. Você pode me ajudar?' }, answer: state.currentChar.rightEndAnswer, correct: true }]
 				}
 			} else {
 				const tchaus = ['Ah tá, tchau!', 'Ok. Valeu!', 'Tchau!', 'Até mais!',
@@ -330,7 +330,7 @@ const Game2 = (props) => {
 			...dialogInitialState,
 			refreshDialog: null,
 			convOptions: state.locations[state.currentRoom].missionCharacters
-				.find(c => c.character.id === state.currentChar.id).selectedQuestions
+				.find(c => c.character.id === state.currentChar.character.id).selectedQuestions
 				.slice(0, state.questionsByStep)
 		})
 	}
@@ -359,8 +359,8 @@ const Game2 = (props) => {
 					validQuestions: state.validQuestions,
 					characterFeeling: null,
 				}
-				if (updateState.spokenCharacters.indexOf(state.currentChar.name) === -1)
-					updateState.spokenCharacters.push(state.currentChar.name)
+				if (updateState.spokenCharacters.indexOf(state.currentChar.character.name) === -1)
+					updateState.spokenCharacters.push(state.currentChar.character.name)
 
 				//change character face
 				if (answer.correct) {
@@ -388,24 +388,23 @@ const Game2 = (props) => {
 	const checkEnd = () => {
 
 		setState({
-			...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.name === state.targetName, characterFeeling: state.currentChar.name === state.targetName ?
+			...state, acusation: false, scene: "ENDGAME", gameEndState: state.currentChar.character.name === state.targetName, characterFeeling: state.currentChar.character.name === state.targetName ?
 				'rightAccusation' : 'wrongAccusation',
 			currentChar: null
 		})
 
 		//aqui
-		dispatch(user_game_resultsActions.create({
+		dispatch(actions['result'].create({
 			user: userId,
 			mission: mission.id,
 			score: state.score,
 			tipsCount: state.tips.length,
 			spokenCharactersCount: state.spokenCharacters.length,
-			tries: state.tries,
 			won: state.gameEndState,
 			validQuestionsCount: Object.keys(state.validQuestions).length
 		}))
 
-		dispatch(headerActions.setAll(mission.name, mission.nameTranslate))
+		dispatch(headerActions.setAll(mission.name, mission.nameTranslate.name))
 		dispatch(headerActions.setState(headerConstants.STATES.OVERLAY))
 
 	}
@@ -414,13 +413,10 @@ const Game2 = (props) => {
 		return (
 			<div id="room-itself" className="tutorial">
 				<Sala roomData={state.tutorialRoom.location} key={-1}>
-					{state.tutorialRoom.missionCharacters.map((missionCharacter, index) =>
 						<Character
-							character={missionCharacter.character}
-							onClick={setTutorialCharacter(missionCharacter.character)}
-							key={index}
+							character={state.tutorialRoom.character}
+							onClick={setTutorialCharacter(state.tutorialRoom)}
 						/>
-					)}
 					<div className="abs-fix">
 						<div id="tutorial-popup-1">
 							<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
@@ -460,8 +456,6 @@ const Game2 = (props) => {
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
-	console.log(state)
-
 	return (
 		<div id="game2-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
@@ -475,11 +469,11 @@ const Game2 = (props) => {
 									icon={iconInit}
 									name={mission.name}
 									description={mission.description}
-									nameTranlate={mission.missionNameLanguages.find(name => { return name.language === lang }).name}
-									descriptionTranlate={mission.missionDescriptionLanguages.find(description => { return description.language === lang }).description}
+									nameTranslate={mission.nameTranslate.find(name => { return name.language.id === lang }).name}
+									descriptionTranslate={mission.descriptionTranslate.find(description => { return description.language.id === lang }).description}
 									onStart={onStartGame}
 									onBack={() => setState({ ...state, back: true })}
-									onSeeTutorial={state.hasPlayed ? () => { state.seeTutorial = true; onStartGame() } : null}
+									onSkipTutorial={state.hasPlayed ? () => { state.seeTutorial = false; onStartGame() } : null}
 								/>
 							case "TUTORIAL":
 								return (tutorialScreen(state.tutorialStep))
@@ -499,7 +493,7 @@ const Game2 = (props) => {
 												<Character key={index}
 													zDepth={missionCharacter.zDepth}
 													character={missionCharacter.character}
-													onClick={setCurrentCharacter(missionCharacter.character)}
+													onClick={setCurrentCharacter(missionCharacter)}
 												// showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sob hover do mouse
 												/>
 											)}
@@ -515,7 +509,7 @@ const Game2 = (props) => {
 													delete option.answer
 													return [...acc, option]
 												}, [])}
-												currentChar={state.currentChar}
+												currentChar={state.currentChar.character}
 												charFeeling={state.characterFeeling}
 												afterWriter={afterWriter}
 												onExited={closeDialog}

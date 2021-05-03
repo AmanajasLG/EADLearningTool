@@ -1,5 +1,5 @@
 import { authHeader } from '../_helpers'
-import api from './api.services'
+import api from './apiDefault.services'
 
 export const userService = {
     login,

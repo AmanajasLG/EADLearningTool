@@ -7,7 +7,7 @@ const DialogCharacter = ({character, feeling}) => {
     if( character.characterAssets.length > 0 ) {
       characterImg = character.characterAssets
         .find(asset => asset.bodyPart === 'upperBody' && asset.type === feeling)
-        .image[0].url
+        .image.url
     }
   }
 
