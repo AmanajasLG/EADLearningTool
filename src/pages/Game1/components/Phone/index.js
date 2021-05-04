@@ -28,6 +28,8 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 	// const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
 	const classes = useStyles();
 
+	console.log(contacts)
+
 	React.useEffect(() => {
 		setState({ ...state, contacts: contacts })
 		//eslint-disable-next-line
@@ -80,7 +82,12 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 					<span>{key + 1}</span>
 				</div>
 				{
-					contact.name === '' ? 
+					contact.showName ? 
+					<div className="Nome">
+						<p>Nome</p>
+						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.name} />
+					</div>
+					: 
 					<Dropdown
 						// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
 						onChange={e => modifyContact({ ...contact, name: e.target.value })}
@@ -88,15 +95,15 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 						value={contact.name}
 						optionList={names}
 					/> 
-					: 
-					<div className="Nome">
-						<p>Nome</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.name} />
-					</div>
 				}
 
 				{
-					contact.job === '' ? 
+					contact.showJob ? 
+					<div className="Profissão">
+						<p>Profissão</p>
+						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.job} />
+					</div>
+					:
 					<Dropdown
 						// style={ contact.job === contactsTemplate?.find( template => template?.id === contact.id).job? {backgroundColor: '#cceecc'} : {}}
 						onChange={e => modifyContact({ ...contact, job: e.target.value })}
@@ -104,15 +111,15 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 						value={contact.job}
 						optionList={jobs}
 					/> 
-					: 
-					<div className="Profissão">
-						<p>Profissão</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.job} />
-					</div>
 				}
 
 				{
-					contact.country === '' ? 
+					contact.showCountry ?  
+					<div className="Nacionalidade">
+						<p>Nacionalidade</p>
+						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.country} />
+					</div>
+					:
 					<Dropdown
 						// style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
 						onChange={e => modifyContact({ ...contact, country: e.target.value })}
@@ -120,11 +127,6 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 						value={contact.country}
 						optionList={countries}
 					/> 
-					: 
-					<div className="Nacionalidade">
-						<p>Nacionalidade</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.country} />
-					</div>
 				}				
 			</div>
 		)
