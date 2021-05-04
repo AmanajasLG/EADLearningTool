@@ -205,7 +205,9 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 						</div>
 						{/* <div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}> */}
 						<div id="btn-terminei-wrapper">
-							<div id="btn-terminei" onClick={_terminou}>
+							<div id="btn-terminei" onClick={_terminou} style={{
+								display: contacts.filter(contact => (contact.job === '' || contact.country === '' || contact.name === '')).length > 0 ? 'none' : 'block'
+							}}>
 								Terminei!
 							</div>
 						</div>

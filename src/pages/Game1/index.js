@@ -107,7 +107,7 @@ const Game1 = (props) => {
 					if (!acc.includes(missionCharacter.character.job))
 						acc.push(missionCharacter.character.job)
 					return acc
-				}, [])}).flat()
+				}, [])}).flat().sort()
 			}
 
 			//list of all available countries
@@ -116,7 +116,7 @@ const Game1 = (props) => {
 					if (!acc.includes(missionCharacter.character.country))
 						acc.push(missionCharacter.character.country)
 					return acc
-				}, [])}).flat()
+				}, [])}).flat().sort()
 			}
 
 			if (state.names.length === 0) {
@@ -124,7 +124,7 @@ const Game1 = (props) => {
 					if (!acc.includes(missionCharacter.character.name))
 						acc.push(missionCharacter.character.name)
 					return acc
-				}, [])}).flat()
+				}, [])}).flat().sort()
 			}
 
 			//resume characters as contacts
