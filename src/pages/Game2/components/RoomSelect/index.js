@@ -37,8 +37,8 @@ const RoomSelect = ({value, buttonList, onChange, showInBtnFormat = true}) => {
 		return (
 			<div id="RoomSelect">
 				<div className="section-title">
-					<span lang="pt-br">Sala</span>
-					<span lang="en">Room {state+1}</span>
+					<span lang="pt-br">Sala {state + 1}/{buttonList.length}</span>
+					<span lang="en">Room {state + 1}/{buttonList.length}</span>
 				</div>
 			</div>
 			)
