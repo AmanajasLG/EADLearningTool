@@ -13,6 +13,7 @@ const initialValue = () => ({
   contactsAtSession: [],
   dialogs: {},
   questionsAsked: 0,
+  result: 0,
   //DIALOG
   dialogHistory: [],
   answers: [],

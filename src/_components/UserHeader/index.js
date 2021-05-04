@@ -14,9 +14,6 @@ const UserHeader = ({pageInfo}) => {
 	const dispatch = useDispatch()
 	const alert = useAlert()
 
-
-	console.log(headerInfo)
-
 	const clickProfile = () => {
 		setState({...state, view: 'profile'});
 		alert.show("Vc achou onde faz para abrir o seu perfil! \n\n Ending 3/15");
