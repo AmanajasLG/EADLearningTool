@@ -344,7 +344,7 @@ const Game1 = (props) => {
 									<div id="room-itself">
 										<RoomSelect
 											value={state.currentLocationIndex}
-											buttonList={state.locations.map(location => location.name)}
+											buttonList={state.locations.map(location => location.location.name)}
 											showInBtnFormat={false}
 										/>
 										<Sala roomData={state.locations[state.currentLocationIndex].location} key={state.currentLocationIndex}>
@@ -383,13 +383,6 @@ const Game1 = (props) => {
 												onExited={closeDialog}
 												onConvoChoiceMade={onMenuButtonClick}
 											>
-												<div id="question-counter" className={state.questionsAsked >= state.locations[state.currentLocationIndex].maxQuestions ? "max" : null}>
-													<div id="question-counter-info">
-														<div>Você já fez</div>
-														<div className="numbers"><span>{Math.min(state.questionsAsked, state.locations[state.currentLocationIndex].maxQuestions)}</span>/{state.locations[state.currentLocationIndex].maxQuestions}</div>
-														<div>perguntas</div>
-													</div>
-												</div>
 											</Conversa>
 										}
 										{ state.changeRoomPopUp &&
@@ -420,6 +413,13 @@ const Game1 = (props) => {
 												</div>
 											</FullscreenOverlay>
 										}
+										<div id="question-counter" className={state.questionsAsked >= state.locations[state.currentLocationIndex].maxQuestions ? "max" : null}>
+													<div id="question-counter-info">
+														<div>Você já fez</div>
+														<div className="numbers"><span>{Math.min(state.questionsAsked, state.locations[state.currentLocationIndex].maxQuestions)}</span>/{state.locations[state.currentLocationIndex].maxQuestions}</div>
+														<div>perguntas</div>
+													</div>
+												</div>
 									</div>)
 							case 'ENDGAME':
 								return (
