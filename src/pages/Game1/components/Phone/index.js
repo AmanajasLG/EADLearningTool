@@ -85,7 +85,7 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 					contact.showName ? 
 					<div className="Nome">
 						<p>Nome</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.name} />
+						<div className="phone-text-field">{contact.name}</div>
 					</div>
 					: 
 					<Dropdown
@@ -101,7 +101,7 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 					contact.showJob ? 
 					<div className="Profissão">
 						<p>Profissão</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.job} />
+						<div className="phone-text-field">{contact.job}</div>
 					</div>
 					:
 					<Dropdown
@@ -115,15 +115,15 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 
 				{
 					contact.showCountry ?  
-					<div className="Nacionalidade">
-						<p>Nacionalidade</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.country} />
+					<div className="País">
+						<p>País</p>
+						<div className="phone-text-field">{contact.country}</div>
 					</div>
 					:
 					<Dropdown
 						// style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
 						onChange={e => modifyContact({ ...contact, country: e.target.value })}
-						label={"Nacionalidade"}
+						label={"País"}
 						value={contact.country}
 						optionList={countries}
 					/> 
@@ -187,7 +187,7 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 											onChange={(event)=>setNewContact({...newContact, job: event.target.value})}
 										/>
 										<Dropdown
-											label={"Nacionalidade"}
+											label={"País"}
 											optionList={countries}
 											value={newContact.country}
 											onChange={(event)=>setNewContact({...newContact, country: event.target.value})}
