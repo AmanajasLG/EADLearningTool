@@ -1,40 +1,41 @@
 #message {
-	background-color: #EDE6F0;
-	min-width: 50px;
-	max-width: 90vw;
-	margin-top: 150px;
-	margin-bottom: auto;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 25px;
-	display: flex;
-	justify-content: center;
-	width: 250px;
-	flex-direction: column;
-	border-radius: 0.3rem;
-	border: solid 1px #EDE6F0;
-	font-family: 'assistant';
+  background-color: #ede6f0;
+  min-width: 50px;
+  max-width: 90vw;
+  margin-top: 150px;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 25px;
+  display: flex;
+  justify-content: center;
+  width: 250px;
+  flex-direction: column;
+  border-radius: 0.3rem;
+  border: solid 1px #ede6f0;
+  font-family: "assistant";
 }
 
 #message a {
-	display: block;
-	margin: 10px;
-	margin-top: 25px;
-	text-decoration: none;
+  display: block;
+  margin: 10px;
+  margin-top: 25px;
+  text-decoration: none;
 }
 
 a.btn-normal,
 .btn-normal {
-	border-radius: 40px 40px 40px 0px;
-	padding: 10px;
-	text-align: center;
-	background-color: #D6E3F4;
-	color: #59316D;
-	font-family: "barlow semibold";
-	transition: 100ms linear;
+  border-radius: 40px 40px 40px 0px;
+  padding: 10px;
+  text-align: center;
+  background-color: #d6e3f4;
+  color: #59316d;
+  font-family: "Barlow";
+  font-weight: 500;
+  transition: 100ms linear;
 }
 
 .btn-normal:hover {
-	background-color: #59316D;
-	color: white;
+  background-color: #59316d;
+  color: white;
 }

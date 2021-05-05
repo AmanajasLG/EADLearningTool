@@ -59,7 +59,8 @@
 }
 
 #popup-btns button {
-  font-family: "Barlow Extrabold";
+  font-family: "Barlow";
+  font-weight: 700;
   font-size: 1.3rem;
   color: #59316d;
   margin: 20px;
@@ -164,4 +165,39 @@ button#go::after {
   100% {
     transform: translateX(0%);
   }
+}
+
+// MUDANCAS
+
+.popup-content > p {
+  margin: 2rem 0;
+  font-style: italic;
+  font-size: 2rem;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.next-room-text {
+  color: #614641;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Barlow";
+  font-size: 1.75rem;
+  line-height: 2rem;
+  text-align: center;
+}
+
+.next-room-text span[lang="pt-br"] {
+  font-weight: 600;
+  // padding: 0 30px;
+  margin-bottom: 10px;
+}
+
+.next-room-text span[lang="en"]::before {
+  content: "";
+  display: block;
+  border-top: 2px solid white;
+  margin: 20px auto;
+  width: 40%;
 }
