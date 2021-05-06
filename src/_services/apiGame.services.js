@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { authHeader } from '../_helpers'
 
-const baseURL = 'http://localhost:1337'
+const baseURL = 'https://learning-tool-api.herokuapp.com'
 const api  = axios.create({ baseURL })
 
 const getAll = (routeName) => {
