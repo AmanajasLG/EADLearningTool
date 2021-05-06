@@ -130,7 +130,8 @@ const Game1 = (props) => {
 							//looks for mission configuration
 							showJob: missionCharacter.showJob,
 							showCountry: missionCharacter.showCountry,
-							showName: missionCharacter.showName
+							showName: missionCharacter.showName,
+							hasEmptyField: !(missionCharacter.showJob && missionCharacter.showCountry && missionCharacter.showName)
 						}
 						
 					})
@@ -299,7 +300,7 @@ const Game1 = (props) => {
 		state.locations[state.currentLocationIndex].missionCharacters.forEach((missionContact, index) => {
 			let answer = state.contactsAtSession.find(contactAtSession => contactAtSession.id === missionContact.character.id)
 			let gabarito = state.contactsTemplate.find(contactTemplate => contactTemplate.id === missionContact.character.id)
-			if (answer.job !== gabarito.job || answer.country !== gabarito.country)
+			if (answer.job !== gabarito.job || answer.country !== gabarito.country || answer.name !== gabarito.name)
 				wrongContacts++
 		})
 		setState({ ...state, changeRoomPopUp: true, wrongContacts: wrongContacts })
@@ -321,7 +322,7 @@ const Game1 = (props) => {
 				scene: 'ENDGAME',
 				result: state.contactsAtSession.filter(contact => {
 					let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
-					return (contact.job === gabarito.job && contact.country === gabarito.country && contact.name === gabarito.name)
+					return gabarito.hasEmptyField && (contact.job === gabarito.job && contact.country === gabarito.country && contact.name === gabarito.name)
 				}).length
 			})
 		}
@@ -342,7 +343,7 @@ const Game1 = (props) => {
 									descriptionTranslate={mission.descriptionTranslate.find(description => { return description.language.id === lang }).description}
 									onStart={onStartGame}
 									onBack={() => setState({ ...state, back: true })}
-									ready={state.locations ? true : false}
+									ready={state.locations.length > 0 ? true : false}
 								/>
 							case "ROOM":
 								return (
