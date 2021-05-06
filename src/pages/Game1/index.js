@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 
-import { apiActions, CallerBuilder, headerActions, musicActions } from '../../_actions'
+import { apiActions, gameActions, headerActions, musicActions } from '../../_actions'
 
 import Button from '@material-ui/core/Button'
 
@@ -32,30 +32,23 @@ import './index.scss'
 const Game1 = (props) => {
 	const [state, setState] = React.useState(initialState())
 
-	const { missionsActions, play_sessionsActions } = apiActions
+	const { play_sessionsActions } = apiActions
 	const id = props.match.params.id
 	const dispatch = useDispatch()
 
 	const loading = useSelector(state => state.missions.loading)
 	let error = useSelector(state => state.missions.error)
-	let mission = useSelector(state => state.missions.items.find(mission => mission.id === props.match.params.id))
-	let missionData = useSelector(state => state.apiCall.items.find(data => data.table === 'missionData') ? state.apiCall.items.find(data => data.table === 'missionData').data[0] : null)
+	let mission = useSelector(state => state.game.items.missions ? state.game.items.missions.find(mission => mission.id === props.match.params.id) : null)
+	const missionData = mission ? mission.missionData : null
 	//const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector(state => state.play_sessions ? state.play_sessions.items[0] : {})
-	const lang = useSelector(state => state.authentication.user.user.language)
-	let actions = {}
+	const lang = useSelector(state => state.authentication.user.user.language.id)
 
-	if (mission && Object.keys(actions).length === 0) {
-		mission.gameType.gameTables.forEach(gameTable => {				
-			actions[gameTable.type] = CallerBuilder(gameTable)
-		})
-	}
-
-	React.useEffect(()=>{
-		if(mission && Object.keys(actions).length !== 0 && !missionData){
-			dispatch(actions['missionData'].find({mission: mission.id}))
-		}
-	})
+	// React.useEffect(()=>{
+	// 	if(mission && Object.keys(actions).length !== 0 && !missionData){
+	// 		dispatch(actions['missionData'].find({mission: mission.id}))
+	// 	}
+	// })
 
 	React.useEffect(() => {
 		if (mission)
@@ -90,8 +83,8 @@ const Game1 = (props) => {
 	}, [dispatch, currentPlaySession, play_sessionsActions, state.tracking])
 
 	React.useEffect(() => {
-		if (id && !mission)
-			dispatch(missionsActions.getById(props.match.params.id))
+		if (id && !missionData)
+			dispatch(gameActions.getById('missions',props.match.params.id))
 		if (missionData) {
 			let data = {}
 
@@ -157,7 +150,7 @@ const Game1 = (props) => {
 			if (Object.keys(data).length > 0)
 				setState(state => { return { ...state, ...data } })
 		}
-	}, [dispatch, id, mission, missionsActions, props.match.params.id, state.locations.length, state.contactsTemplate.length, state.countries.length, state.jobs.length, state.names.length, missionData])
+	}, [dispatch, id, mission, props.match.params.id, state.locations.length, state.contactsTemplate.length, state.countries.length, state.jobs.length, state.names.length, missionData])
 
 	if (error) {
 		error = null
@@ -349,6 +342,7 @@ const Game1 = (props) => {
 									descriptionTranslate={mission.descriptionTranslate.find(description => { return description.language.id === lang }).description}
 									onStart={onStartGame}
 									onBack={() => setState({ ...state, back: true })}
+									ready={state.locations ? true : false}
 								/>
 							case "ROOM":
 								return (
@@ -407,9 +401,16 @@ const Game1 = (props) => {
 														<span>Are you sure?</span>
 														<p>
 															{state.wrongContacts > 0 ?
-																`${state.wrongContacts} people have the wrong data. Are you sure you want to continue? You may not be able to overcome this midlife crisis!`
+																<div className="next-room-text">
+																<span lang="pt-br">{`${state.wrongContacts}` + missionData.nextRoomTextWrong}</span>
+																<span lang="en">{`${state.wrongContacts}` + missionData.nextRoomTextWrongTranslate.find(translation => { return translation.language.id === lang }).text}</span>
+															</div>
 																:
-																"Everything seems ok around here. Do you want to continue?"
+																<div className="next-room-text">
+																<span lang="pt-br">{missionData.nextRoomTextRight}</span>
+																<span lang="en">{missionData.nextRoomTextRightTranslate.find(translation => { return translation.language.id === lang }).text}</span>
+															</div>
+															
 															}
 														</p>
 														<div id="popup-btns">

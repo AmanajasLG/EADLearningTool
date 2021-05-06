@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.scss'
 
-const Init = ({icon, name, description, nameTranslate = "Name", descriptionTranslate = "Description", onStart, onBack, onSeeTutorial}) => {
+const Init = ({icon, name, description, nameTranslate = "Name", descriptionTranslate = "Description", onStart, onBack, ready}) => {
     return (
         <div className="main-init-wrapper">
           <div className="inner-content">
@@ -13,10 +13,10 @@ const Init = ({icon, name, description, nameTranslate = "Name", descriptionTrans
               <h2 className="margin-half-top type-s type-center description">{description}</h2>
               <h2 className="type-s type-center subdescription">{descriptionTranslate}</h2>
             </div>
+            
             <div id="btns">
               { onBack && <button className="btn btn-center" id="btn-back" onClick={onBack}>Voltar</button> }
-              { onStart && <button className="btn btn-center" id="btn-start" onClick={onStart}>Iniciar</button> }
-              { onSeeTutorial && <button className="btn btn-center" id="btn-tutorial" onClick={ onSeeTutorial }>Pular tutorial</button> }
+              { ready && onStart && <button className="btn btn-center" id="btn-start" onClick={onStart}>Iniciar</button> }
             </div>
           </div>
         </div>
