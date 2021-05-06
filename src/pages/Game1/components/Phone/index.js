@@ -8,25 +8,12 @@ import palma from '../../../../img/Game1/Mão palma.svg'
 
 import './index.scss'
 import FullscreenOverlay from '../../../Game2/components/FullscreenOverlay'
-import TextField from '@material-ui/core/TextField'
-import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
-	underline: {
-	  "&&&:before": {
-		borderBottom: "none"
-	  },
-	  "&&:after": {
-		borderBottom: "none"
-	  }
-	}
-  });
 
 // const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize }) => {
 	const [state, setState] = React.useState({ maximized: false, shouldMinimize: false })
 	// const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
-	const classes = useStyles();
 
 	console.log(contacts)
 

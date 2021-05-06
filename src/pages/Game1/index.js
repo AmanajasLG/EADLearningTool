@@ -19,7 +19,6 @@ import Conversa from '../Game2/components/Conversa'
 import FullscreenOverlay from '../Game2/components/FullscreenOverlay'
 import { headerConstants } from '../../_constants'
 
-import iconDerrota from '../../img/Game2/símbolo_feedback errado.svg'
 import blobLaranja from '../../img/bg-forma-laranja.svg'
 import iconInit from '../../img/Game1/ícone_jogo1.svg'
 
