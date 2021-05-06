@@ -10,7 +10,6 @@ const EditCharacter = ({character, onDone}) => {
   })
 
   const editAnswer = (question, index) => e => {
-    console.log('question:', question)
     let aQ = _.cloneDeep(character.answers.find( answer => answer.question && answer.question.id === question.id))
 
     let changedIndex = {...state.answers[index], answer: e.target.value}
@@ -27,7 +26,7 @@ const EditCharacter = ({character, onDone}) => {
   }
   const getAnswer = (qId) => {
     let a = state.answers.find( answer => answer.question && answer.question.id ? answer.question.id === qId : answer.question === qId)
-    console.log('a:', a)
+    
     return a ? a.answer : ''
   }
 

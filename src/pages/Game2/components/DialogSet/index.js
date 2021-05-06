@@ -5,7 +5,6 @@ import Writer from '../Writer'
 import Menu from '../Menu'
 
 const DialogSet = ({children, onClose, character, characterFace, dialogHistory, writerText, onWriterDone, afterWrittenTime, writerCharacterTime, menuButtonList, onMenuButtonClick }) => {
-  console.log('children', children)
   //<AcusationLamp onClick={() => setState({...state, acusation: true})} />
   return(
     <div id="conversa" className='DialogPopUp'>

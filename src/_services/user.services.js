@@ -72,7 +72,6 @@ function find(data) {
 }
 
 function register(user) {
-  console.log(user)
     return api(
         {
           method: 'post',
@@ -129,7 +128,6 @@ function getRoles(){
 }
 
 function handleResponse(response) {
-  console.log(response)
 
   if(response.status !== 200){
       if(response.status === 401){

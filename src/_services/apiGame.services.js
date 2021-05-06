@@ -26,7 +26,6 @@ const getById = (routeName,id) => {
 }
 
 const find = (routeName,data) => {
-  console.log(data)
   return api(
     {
       method: 'get',

@@ -159,7 +159,6 @@ const CreateMissionGame1 = (props) => {
     setState({...state, charactersConfigList: [...state.charactersConfigList, missionCharacter], charactersList: state.charactersList.filter(d => d.character.id !== missionCharacter.character.id), newCharacterConfig: null})
   }
 
-  console.log(state)
 
   return(
     <div>

@@ -15,8 +15,6 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 	const [state, setState] = React.useState({ maximized: false, shouldMinimize: false })
 	// const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
 
-	console.log(contacts)
-
 	React.useEffect(() => {
 		setState({ ...state, contacts: contacts })
 		//eslint-disable-next-line
