@@ -39,7 +39,7 @@ const Game1 = (props) => {
 	let error = useSelector(state => state.missions.error)
 	let mission = useSelector(state => state.game.items.missions ? state.game.items.missions.find(mission => mission.id === props.match.params.id) : null)
 	const missionData = mission ? mission.missionData : null
-	//const userId = useSelector( state => state.authentication.user.user.id )
+	const userId = useSelector( state => state.authentication.user.user.id )
 	const currentPlaySession = useSelector(state => state.play_sessions ? state.play_sessions.items[0] : {})
 	const lang = useSelector(state => state.authentication.user.user.language.id)
 
@@ -316,14 +316,25 @@ const Game1 = (props) => {
 				dialogs: {}
 			})
 		else {
+			const result = state.contactsAtSession.filter(contact => {
+				let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
+				return gabarito.hasEmptyField && (contact.job === gabarito.job && contact.country === gabarito.country && contact.name === gabarito.name)
+			}).length
+			const score = result / state.contactsAtSession.length * 100
+
 			setState({
 				...state,
 				scene: 'ENDGAME',
-				result: state.contactsAtSession.filter(contact => {
-					let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
-					return gabarito.hasEmptyField && (contact.job === gabarito.job && contact.country === gabarito.country && contact.name === gabarito.name)
-				}).length
+				result,
+				score
 			})
+
+			dispatch(gameActions.create('results', {
+				user: userId,
+				mission: mission.id,
+				score: score,
+				won: score > 80
+			}))
 		}
 	}
 
@@ -449,7 +460,7 @@ const Game1 = (props) => {
 													<div className="painel-2-wrapper">
 														<div className="painel-2-content" style={{ backgroundImage: "url(" + blobLaranja + ")" }}>
 															<div>
-																<span>{state.result / state.contactsAtSession.length * 100}%</span>
+																<span>{state.score}%</span>
 															</div>
 														</div>
 													</div>
