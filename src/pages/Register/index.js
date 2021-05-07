@@ -101,7 +101,8 @@ const Register = () => {
   }
 
   return (
-    <Container componexWidth="xs">
+    <Container>
+    {/*<Container maxWidthXs="xs">*/}
       {(redirect && user?.user) && <Redirect to={'/userspace'} />}
       <CssBaseline />
       <div className={classes.paper}>
@@ -181,6 +182,7 @@ const Register = () => {
                 disabled={blocked}
               />
             </Grid>
+            {/*
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -200,6 +202,7 @@ const Register = () => {
                         )}
               </TextField>
             </Grid>
+            */}
           </Grid>
 
           <Button

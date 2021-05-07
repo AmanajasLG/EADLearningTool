@@ -25,43 +25,48 @@ const UserSpace = () => {
 
   return(
     <div id="userspace">
-      <p>Oi {user.username}!</p>
-
-      { user.role.type === "professor"  && <div id="area-criacao">
-        Área de criação
+      {!user.id ?
+        <div>Loading...</div>
+        :
         <div>
-          <Link to='/missions'>Ver Missões</Link>
-        </div>
+          <p>Oi {user.username}!</p>
 
-        <div>
-          <Link to='/characters'>Personagens</Link>
-        </div>
-
-        <div>
-          <Link to='/questions'>Perguntas</Link>
-        </div>
-      </div>
-    } 
-
-      <div className="jogos">
-        <p>Jogos:</p>
-        <div id="missoes">
-          {game.loading ? <div>Loading...</div> :
-            game.items.missions && game.items.missions.map( (mission, index) =>
-            <div key={index} className="missao">
-              <Link to={`/game${mission.gameType.game}/${mission.id}`}>
-                <div id="imagem"></div>
-                <div id="card-text-wrapper">
-                  <div id="nome-missao">{mission.name}</div>
-                  <div id="descricao">{mission.description}</div>
-                  <div id="recompensas">Recompensas</div>
-                </div>
-              </Link>
+          {/* user.role.type === "professor"  && <div id="area-criacao">
+            Área de criação
+            <div>
+              <Link to='/missions'>Ver Missões</Link>
             </div>
-          )}
-        </div>
-      </div>
 
+            <div>
+              <Link to='/characters'>Personagens</Link>
+            </div>
+
+            <div>
+              <Link to='/questions'>Perguntas</Link>
+            </div>
+          </div>
+        */}
+
+          <div className="jogos">
+            <p>Jogos:</p>
+            <div id="missoes">
+              {game.loading ? <div>Loading...</div> :
+                game.items.missions && game.items.missions.map( (mission, index) =>
+                <div key={index} className="missao">
+                  <Link to={`/game${mission.gameType.game}/${mission.id}`}>
+                    <div id="imagem"></div>
+                    <div id="card-text-wrapper">
+                      <div id="nome-missao">{mission.name}</div>
+                      <div id="descricao">{mission.description}</div>
+                      <div id="recompensas">Recompensas</div>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      }
     </div>
   )
 }

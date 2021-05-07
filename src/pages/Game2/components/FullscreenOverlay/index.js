@@ -22,7 +22,8 @@ const FullscreenOverlay = ({
 		onReadyToExit,
 		bgRGBA = {},
 		closeRGB = {},
-		closeHoverRGB = {}
+		closeHoverRGB = {},
+		style = {}
 	}) => {
 
 	if( showCloseBtn && onClickClose == null ) throw Error("Invalid callback for click on close button.")
@@ -43,7 +44,7 @@ const FullscreenOverlay = ({
 				<div
 					id="fullscreen-overlay-close-btn"
 					onClick={onClickClose}
-					style={{
+					style={{...style,
 						'--closeR': closeRGB.r ?? 89,
 						'--closeG': closeRGB.g ?? 49,
 						'--closeB': closeRGB.b ?? 109,

@@ -25,6 +25,9 @@ import iconInit from '../../img/Game2/Icone_jogo-tela_inicio.svg'
 import blobAzul from '../../img/bg-forma-azul.svg'
 import blobLaranja from '../../img/bg-forma-laranja.svg'
 import blobVerde from '../../img/bg-forma-verde.svg'
+
+import dedao from '../../img/Game1/Mão dedão.svg'
+import palma from '../../img/Game1/Mão palma.svg'
 import FullscreenOverlay from './components/FullscreenOverlay'
 
 const Game2 = (props) => {
@@ -70,7 +73,7 @@ const Game2 = (props) => {
 
 		if (hasPlayed)
 			setState({ ...state, ...updatedState, hasPlayed })
-		
+
 		// eslint-disable-next-line
 	}, [userId, mission, dispatch, hasPlayed])
 
@@ -445,7 +448,7 @@ const Game2 = (props) => {
 		<div id="game2-wrapper">
 			{loading ? <div>Loading...</div> : error ? <div>{error}</div> : mission &&
 				<div id="game2-content">
-					<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e) => { setState({ ...state, tracking: e.target.checked }) }} /></div>
+					{/*<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e) => { setState({ ...state, tracking: e.target.checked }) }} /></div>*/}
 					{(function renderScene() {
 						// eslint-disable-next-line default-case
 						switch (state.scene) {
@@ -473,6 +476,25 @@ const Game2 = (props) => {
 										/>
 										{/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
 										//? pq passar tudo ao invés de só passar a string? Que aí poderia ser local ou na rede... */}
+										<button onClick={() => setState({...state, showTips: true})}>Bloco</button>
+										{state.showTips &&
+											<FullscreenOverlay style={{zIndex: 100}} onClickClose={() => setState({...state, showTips: false})}>
+												<div>
+													Dicas:
+													<div id="big-phone-wrapper">
+														<div id="big-phone-imgs">
+															<img src={palma} alt="hand"/>
+															<img src={dedao} alt="thumb"/>
+															<div>
+																{state.tips.map((tip, index) =>
+																	<div key={index}>{tip}</div>
+																)}
+															</div>
+														</div>
+													</div>
+												</div>
+											</FullscreenOverlay>
+										}
 										<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
 											{state.locations[state.currentRoom].missionCharacters.map((missionCharacter, index) =>
 												<Character key={index}
