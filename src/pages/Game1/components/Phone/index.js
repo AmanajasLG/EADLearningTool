@@ -8,27 +8,12 @@ import palma from '../../../../img/Game1/Mão palma.svg'
 
 import './index.scss'
 import FullscreenOverlay from '../../../Game2/components/FullscreenOverlay'
-import TextField from '@material-ui/core/TextField'
-import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
-	underline: {
-	  "&&&:before": {
-		borderBottom: "none"
-	  },
-	  "&&:after": {
-		borderBottom: "none"
-	  }
-	}
-  });
 
 // const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, jobs, countries, onAddContact, onFinish, shouldMinimize, onMinimize }) => {
 	const [state, setState] = React.useState({ maximized: false, shouldMinimize: false })
 	// const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
-	const classes = useStyles();
-
-	console.log(contacts)
 
 	React.useEffect(() => {
 		setState({ ...state, contacts: contacts })
@@ -85,7 +70,7 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 					contact.showName ? 
 					<div className="Nome">
 						<p>Nome</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.name} />
+						<div className="phone-text-field">{contact.name}</div>
 					</div>
 					: 
 					<Dropdown
@@ -101,7 +86,7 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 					contact.showJob ? 
 					<div className="Profissão">
 						<p>Profissão</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.job} />
+						<div className="phone-text-field">{contact.job}</div>
 					</div>
 					:
 					<Dropdown
@@ -115,15 +100,15 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 
 				{
 					contact.showCountry ?  
-					<div className="Nacionalidade">
-						<p>Nacionalidade</p>
-						<TextField InputProps={{ classes }} editable={false} selectTextOnFocus={false} disabled={true} value={contact.country} />
+					<div className="País">
+						<p>País</p>
+						<div className="phone-text-field">{contact.country}</div>
 					</div>
 					:
 					<Dropdown
 						// style={ contact.country === contactsTemplate?.find( template => template?.id === contact.id).country? {backgroundColor: '#cceecc'} : {}}
 						onChange={e => modifyContact({ ...contact, country: e.target.value })}
-						label={"Nacionalidade"}
+						label={"País"}
 						value={contact.country}
 						optionList={countries}
 					/> 
@@ -187,7 +172,7 @@ const Phone = ({ children, modifyContact, contactsTemplate, names, contacts, job
 											onChange={(event)=>setNewContact({...newContact, job: event.target.value})}
 										/>
 										<Dropdown
-											label={"Nacionalidade"}
+											label={"País"}
 											optionList={countries}
 											value={newContact.country}
 											onChange={(event)=>setNewContact({...newContact, country: event.target.value})}

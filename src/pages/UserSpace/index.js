@@ -2,18 +2,17 @@ import './index.scss'
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
-import { apiActions } from '../../_actions'
+import { gameActions } from '../../_actions'
 
 const UserSpace = () => {
 
   const user = useSelector(state => state.authentication.user.user)
-  const missions = useSelector( state => state.missions)
+  const game = useSelector( state => state.game)
   const dispatch = useDispatch()
-  const { missionsActions } = apiActions
 
   React.useEffect(()=>{
-    dispatch(missionsActions.getAll())
-  }, [dispatch, missionsActions])
+    dispatch(gameActions.getAll('missions'))
+  }, [dispatch])
 
 
   // React.useEffect(()=>{
@@ -28,7 +27,7 @@ const UserSpace = () => {
     <div id="userspace">
       <p>Oi {user.username}!</p>
 
-      <div id="area-criacao">
+      { user.role.type === "professor"  && <div id="area-criacao">
         Área de criação
         <div>
           <Link to='/missions'>Ver Missões</Link>
@@ -42,12 +41,13 @@ const UserSpace = () => {
           <Link to='/questions'>Perguntas</Link>
         </div>
       </div>
+    } 
 
       <div className="jogos">
         <p>Jogos:</p>
         <div id="missoes">
-          {missions.loading ? <div>Loading...</div> :
-            missions && missions.items.map( (mission, index) =>
+          {game.loading ? <div>Loading...</div> :
+            game.items.missions && game.items.missions.map( (mission, index) =>
             <div key={index} className="missao">
               <Link to={`/game${mission.gameType.game}/${mission.id}`}>
                 <div id="imagem"></div>

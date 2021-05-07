@@ -1,119 +1,124 @@
 #tutorial-popup-1 {
-	position: absolute;
-	top: 15vh;
-	right: 10vw;
-	width: 60vw;
-	max-width: 630px;
-	min-height: 300px;
-	padding: 25px;
-	color: #614641;
-	background-color: #F9AFA1;
-	box-shadow: #44444444 15px 15px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Barlow';
-	font-size: 2.25rem;
-	line-height: 2.75rem;
-	text-align: center;
-	border-radius: 40px; //TEMPORARIO enquanto não tem o blob das bordas
+  position: absolute;
+  top: 15vh;
+  right: 10vw;
+  width: 60vw;
+  max-width: 630px;
+  min-height: 300px;
+  padding: 25px;
+  color: #614641;
+  background-color: #f9afa1;
+  box-shadow: #44444444 15px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Barlow";
+  font-size: 2.25rem;
+  line-height: 2.75rem;
+  text-align: center;
+  border-radius: 40px; //TEMPORARIO enquanto não tem o blob das bordas
 }
 
 .abs-fix {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	pointer-events: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
 }
 
 .tutorial #sala-content {
-	display: flex;
-	justify-content: flex-start;
-	// width: calc(var(--width) * 0.8);
+  display: flex;
+  justify-content: flex-start;
+  // width: calc(var(--width) * 0.8);
 }
 
 #tutorial-popup-1 span[lang="pt-br"] {
-	font-weight: 600;
-	// padding: 0 30px;
-	margin-bottom: 10px;
+  font-weight: 600;
+  // padding: 0 30px;
+  margin-bottom: 10px;
 }
 
 #tutorial-popup-1 span[lang="en"]::before {
-	content: "";
-	display: block;
-	border-top: 2px solid white;
-	margin: 20px auto;
-	width: 40%;
+  content: "";
+  display: block;
+  border-top: 2px solid white;
+  margin: 20px auto;
+  width: 40%;
 }
 
 #tutorial-popup-1 span[lang="en"] {
-	font-style: italic;
-	font-size: 0.8em;
-	max-width: 400px;
+  font-style: italic;
+  font-size: 0.8em;
+  max-width: 400px;
 }
 
 #tutorial-popup-2-wrapper {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	background-color: rgba(#FFFFFF, 0.7);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	animation: fadeIn 150ms linear forwards;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(#ffffff, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 150ms linear forwards;
 }
 
 #tutorial-popup-2-content {
-	width: 80vw;
-	max-width: 900px;
-	margin: auto;
-	padding: 30px;
-	background-color: #F9AFA1;
-	box-shadow: #44444444 15px 15px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Barlow';
-	font-size: 2rem;
-	line-height: 2.75rem;
-	text-align: center;
-	border-radius: 40px; //TEMPORARIO enquanto não tem o blob das bordas
+  width: 80vw;
+  max-width: 900px;
+  margin: auto;
+  padding: 30px;
+  background-color: #f9afa1;
+  box-shadow: #44444444 15px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Barlow";
+  font-size: 2rem;
+  line-height: 2.75rem;
+  text-align: center;
+  border-radius: 40px; //TEMPORARIO enquanto não tem o blob das bordas
 }
 
 #tutorial-popup-2-content span[lang="en"] {
-	margin-top: 25px;
-	font-style: italic;
+  margin-top: 25px;
+  font-style: italic;
 }
 
 #tutorial-popup-2-content button {
-	margin-top: 50px;
-	background-color: #D6E3F4;
-	border-radius: 3rem 3rem 3rem 0;
-	color: #59316D;
-	padding: 15px 40px;
-	text-transform: none;
-	font-family: 'Barlow Black';
-	font-size: 1.5rem;
-	transition: 100ms linear;
+  margin-top: 50px;
+  background-color: #d6e3f4;
+  border-radius: 3rem 3rem 3rem 0;
+  color: #59316d;
+  padding: 15px 40px;
+  text-transform: none;
+  font-family: "Barlow";
+  font-weight: 800;
+  font-size: 1.5rem;
+  transition: 100ms linear;
 }
 
 #tutorial-popup-2-content button::after {
-	content: "❯";
-	margin-left: 15px;
+  content: "❯";
+  margin-left: 15px;
 }
 
 #tutorial-popup-2-content button:hover {
-	background-color: #59316D;
-	color: #FFFFFF;
+  background-color: #59316d;
+  color: #ffffff;
 }
 
 @keyframes fadeIn {
-	0%{ opacity: 0;}
-	100% {opacity: 1;}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

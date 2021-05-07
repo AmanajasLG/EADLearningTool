@@ -15,7 +15,6 @@ const CreateCharacter = () => {
   const alert = useAlert()
 
   const create = () => {
-    console.log('called')
     dispatch(charactersActions.create({name: name, job: job, civilState: civilState})).then(() => {
         alert.success('Character created!')
     })

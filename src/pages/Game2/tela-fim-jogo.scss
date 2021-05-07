@@ -1,295 +1,296 @@
 #endGame-screen {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-color: #D6E3F4;
-	// z-index: -10;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #d6e3f4;
+  // z-index: -10;
 }
 
 #end-panels {
-	position: absolute;
-	width: 54.5vw;
-	right: 7%;
-	height: 56.5vh;
-	bottom: 15%;
-	margin-top: auto;
-	margin-bottom: auto;
-	background-color: #F9AFA1;
-	border-radius: 2.75em;
-	box-shadow: #44444440 25px 25px;
-	padding: 20px;
-	z-index: 0;
+  position: absolute;
+  width: 54.5vw;
+  right: 7%;
+  height: 56.5vh;
+  bottom: 15%;
+  margin-top: auto;
+  margin-bottom: auto;
+  background-color: #f9afa1;
+  border-radius: 2.75em;
+  box-shadow: #44444440 25px 25px;
+  padding: 20px;
+  z-index: 0;
 }
 
 #endGame-screen #CharacterPortrait {
-	width: 38.5vw;
-	height: 85vh;
-	max-width: none;
+  width: 38.5vw;
+  height: 85vh;
+  max-width: none;
 }
 
 #endgame-messages {
-	position: relative;
-	min-width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	overflow-x: scroll;
-	-webkit-scroll-snap-type: mandatory;
-		-ms-scroll-snap-type: mandatory;
-			scroll-snap-type: x mandatory;
-	scrollbar-width: none;
-	-ms-overflow-style: none;
-	scroll-behavior: smooth;
-	// scroll-behavior: auto;
+  position: relative;
+  min-width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  -webkit-scroll-snap-type: mandatory;
+  -ms-scroll-snap-type: mandatory;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  // scroll-behavior: auto;
 }
 
 #endgame-messages::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 .painel {
-	position: relative;
-	flex: 0 0 auto;
-	width: 100%;
-	height: 100%;
-	padding: 70px MIN(50px, calc(25vw - 200px));
-	scroll-snap-align: center;
-	line-height: 2.7rem;
-	overflow: hidden;
-	display: flex;
-	align-items: center;
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  height: 100%;
+  padding: 70px MIN(50px, calc(25vw - 200px));
+  scroll-snap-align: center;
+  line-height: 2.7rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .painel-1-wrapper {
-	overflow-y: auto;
-	max-height: 100%;
+  overflow-y: auto;
+  max-height: 100%;
 }
 
 .painel-1-content {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .painel a {
-	pointer-events: fill;
+  pointer-events: fill;
 }
 
 #painel-1 span {
-	display: block;
-	font-size: 2.3rem;
-	font-family: 'Barlow';
-	color: #583F3A;
-	text-align: center;
+  display: block;
+  font-size: 2.3rem;
+  font-family: "Barlow";
+  color: #583f3a;
+  text-align: center;
 }
 
 #painel-1 span[lang="pt-br"] {
-	font-weight: 600;
+  font-weight: 600;
 }
 
 #painel-1 span[lang="en"]::before {
-	content: "";
-	display: block;
-	border: #59316D solid;
-	border-width: 2px 0 0 0;
-	width: 200px;
-	margin: 40px auto;
+  content: "";
+  display: block;
+  border: #59316d solid;
+  border-width: 2px 0 0 0;
+  width: 200px;
+  margin: 40px auto;
 }
 
 #painel-1 span[lang="en"] {
-	font-style: italic;
+  font-style: italic;
 }
 
 .painel .next-btn {
-	position: absolute;
-	right: calc( 75px / 2);
-	right: 0;
+  position: absolute;
+  right: calc(75px / 2);
+  right: 0;
 }
 
 .painel .prev-btn {
-	position: absolute;
-	left: calc( 75px / 2);
-	left: 0;
+  position: absolute;
+  left: calc(75px / 2);
+  left: 0;
 }
 
 .painel .next-btn,
 .painel .prev-btn {
-	color: white;
-	font-size: 2rem;
-	text-decoration: none;
-	border-top: 0.5rem solid #00000000;
-	border-right: 1.2rem solid #00000000;
-	border-bottom: 0.6rem solid #00000000;
-	border-left: 1.2rem solid #00000000;
-	border-radius: 2rem;
-	transition: 100ms linear;
-	top: 50%;
-	transform: translateY(-50%);
+  color: white;
+  font-size: 2rem;
+  text-decoration: none;
+  border-top: 0.5rem solid #00000000;
+  border-right: 1.2rem solid #00000000;
+  border-bottom: 0.6rem solid #00000000;
+  border-left: 1.2rem solid #00000000;
+  border-radius: 2rem;
+  transition: 100ms linear;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .painel .next-btn:hover,
 .painel .prev-btn:hover {
-	background-color: #00000044;
+  background-color: #00000044;
 }
 
 #painel-2 {
-	position: relative;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: center;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .painel-2-wrapper {
-	width: 50%;
-	max-height: 100%;
+  width: 50%;
+  max-height: 100%;
 }
 
 .painel-2-content {
-	position: relative;
-	text-align: center;
+  position: relative;
+  text-align: center;
 }
 
 .painel-2-wrapper:first-child {
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .painel-2-wrapper:nth-child(2) {
-	overflow-y: auto;
-	padding: 1px 0px;
+  overflow-y: auto;
+  padding: 1px 0px;
 }
 
 .painel-2-wrapper:first-child .painel-2-content {
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-position: 50% 50%;
-	-webkit-background-clip: border-box;
-			background-clip: border-box;
-	padding: 75px 125px;
-	font-size: 3rem;
-	color: #59316D;
-	line-height: 1.2em;
-	font-family: 'Assistant';
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  padding: 75px 125px;
+  font-size: 3rem;
+  color: #59316d;
+  line-height: 1.2em;
+  font-family: "Assistant";
 }
 
 .painel-2-wrapper:first-child .painel-2-content span {
-	font-family: 'Abril Fatface';
+  font-family: "Abril Fatface";
 }
 
 .painel-2-wrapper:first-child .painel-2-content span:first-child {
-	font-size: 2em;
+  font-size: 2em;
 }
 
 .painel-2-wrapper:nth-child(2) .painel-2-content {
-	font-size: 1.8rem;
-	font-family: 'Barlow';
-	font-weight: 600;
-	line-height: 2rem;
-	// padding: 0 20px;
+  font-size: 1.8rem;
+  font-family: "Barlow";
+  font-weight: 600;
+  line-height: 2rem;
+  // padding: 0 20px;
 }
 
 #endGame-action-btns {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 #endGame-action-btns button {
-	text-transform: none;
-	font-family: 'Barlow ExtraBold';
-	font-size: 1.5rem;
-	margin: -15px 15px 0 15px;
-	border-radius: 3rem;
-	color: #59316D;
-	transition: 100ms linear;
-	min-width: 300px;
-	text-align: center;
+  text-transform: none;
+  font-family: "Barlow";
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin: -15px 15px 0 15px;
+  border-radius: 3rem;
+  color: #59316d;
+  transition: 100ms linear;
+  min-width: 300px;
+  text-align: center;
 }
 
 #endGame-action-btns button:hover {
-	//Usei !important aqui pra não ter que escrever uma regra pra cada button abaixo com o hover pra mudar só isso
-	background-color: #59316D !important;
-	color: white;
+  //Usei !important aqui pra não ter que escrever uma regra pra cada button abaixo com o hover pra mudar só isso
+  background-color: #59316d !important;
+  color: white;
 }
 
 #endGame-action-btns button:first-child::before {
-	content: "❮";
-	position: absolute;
-	left: 30px;
+  content: "❮";
+  position: absolute;
+  left: 30px;
 }
 
 #endGame-action-btns button:first-child {
-	background-color: #FFDEA9;
-	border-bottom-right-radius: 0;
-	padding: 12px 30px 12px 50px;
+  background-color: #ffdea9;
+  border-bottom-right-radius: 0;
+  padding: 12px 30px 12px 50px;
 }
 
 #endGame-action-btns button:nth-child(2) {
-	background-color: #FFCCA9;
-	border-bottom-left-radius: 0;
-	padding: 12px 50px 12px 30px;
+  background-color: #ffcca9;
+  border-bottom-left-radius: 0;
+  padding: 12px 50px 12px 30px;
 }
 
 #endGame-action-btns button:nth-child(2)::after {
-	content: "❯";
-	position: absolute;
-	right: 30px;
+  content: "❯";
+  position: absolute;
+  right: 30px;
 }
 
 #painel-icon {
-	position: absolute;
-	width: 100%;
-	height: 25vh;
-	overflow: visible;
-	display: flex;
-	justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 25vh;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
 }
 
 #painel-icon > img {
-	position: relative;
-	top: -77.5%;
+  position: relative;
+  top: -77.5%;
 }
 
 #endGame-wrong-wrapper {
-	width: 100vw;
-	height: 88vh;
-	margin-top: 12vh;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	align-items: stretch;
+  width: 100vw;
+  height: 88vh;
+  margin-top: 12vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: stretch;
 }
 
 #endGame-wrong-wrapper .painel {
-	width: unset;
-	height: unset;
-	flex: 1 1 0px;
-	padding: 20px;
+  width: unset;
+  height: unset;
+  flex: 1 1 0px;
+  padding: 20px;
 }
 
 #endGame-wrong-wrapper > div:first-child {
-	display: flex;
-	flex-direction: row;
-	max-width: 100vw;
-	max-height: 100vh;
-	padding: 0px 10vw;
+  display: flex;
+  flex-direction: row;
+  max-width: 100vw;
+  max-height: 100vh;
+  padding: 0px 10vw;
 }
 
-#endGame-screen p:nth-child(n+2) {
-	margin-top: revert;
+#endGame-screen p:nth-child(n + 2) {
+  margin-top: revert;
 }
 
 #painel-icon-derrota {
-	margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 
 #painel-3 {
-	background-color: #9999BB22;
-	background-clip: content-box;
-	border-radius: 5rem;
+  background-color: #9999bb22;
+  background-clip: content-box;
+  border-radius: 5rem;
 }

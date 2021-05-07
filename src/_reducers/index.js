@@ -6,8 +6,8 @@ import { users } from './users.reducer'
 import { alert } from './alert.reducer'
 import { header } from './header.reducer'
 import { music } from './music.reducer'
-import apiDefaultReducers from './apiDefault.reducers'
-import { apiCall } from './api.reducer'
+import apiReducers from './api.reducers'
+import { game } from './apiGame.reducer'
 
 const rootReducer = combineReducers({
     authentication,
@@ -16,8 +16,8 @@ const rootReducer = combineReducers({
     alert,
     header,
     music,
-    apiCall,
-    ...apiDefaultReducers,
+    game,
+    ...apiReducers,
 })
 
 export default rootReducer

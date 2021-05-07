@@ -1,5 +1,5 @@
 import { authHeader } from '../_helpers'
-import api from './apiDefault.services'
+import api from './api.services'
 
 export const userService = {
     login,
@@ -72,7 +72,6 @@ function find(data) {
 }
 
 function register(user) {
-  console.log(user)
     return api(
         {
           method: 'post',
@@ -129,7 +128,6 @@ function getRoles(){
 }
 
 function handleResponse(response) {
-  console.log(response)
 
   if(response.status !== 200){
       if(response.status === 401){

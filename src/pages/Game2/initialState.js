@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-anonymous-default-export
-const initialState = () => ({
+const initialState = (hasPlayed = false) => ({
 //GAME STATE
   scene: "INIT",
   currentRoom: 0,
@@ -14,8 +14,9 @@ const initialState = () => ({
   validQuestions: [],
   tutorialStep: 0,
   seeTutorial: true,
-  hasPlayed: false,
-  checkedPlayed: false,
+  hasPlayed: hasPlayed,
+  checkedPlayed: hasPlayed,
+  tipsCount: 0,
 //DIALOG
   dialogHistory: [],
   dialogStep: 0,

@@ -1,152 +1,156 @@
 .main-init-wrapper {
-	height: 100%;
-	width: 100%;
-	margin: 0;
-	padding: 10px 0;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .main-init-wrapper::after {
-	content: '';
-	position: absolute;
-	pointer-events: none;
-	z-index: -1;
-	background-image: url('../../../../img/formas-bottom-2.svg');
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-position: bottom center;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	width: 100%;
-	max-width: 1920px;
-	height: 100%;
-	margin-left: auto;
-	margin-right: auto;
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url("../../../../img/formas-bottom-2.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom center;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  max-width: 1920px;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .inner-content {
-	display: flex;
-	flex-direction: column ;
-	align-items: center;
-	justify-content: center;
-	max-width: 700px;
-	flex: 1 1 0px;
-	min-height: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 700px;
+  flex: 1 1 0px;
+  min-height: 0px;
 }
 
 .inner-content > div:first-child {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	min-height: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0px;
 }
 
 .inner-content > div:first-child > img {
-	flex: 1 1 0px;
-	min-height: 60px;
+  flex: 1 1 0px;
+  min-height: 60px;
 }
 
 .main-init-wrapper .margin-half-top {
-	margin-top: MAX(0.5rem, MIN(2.5rem, calc(50vh - 300px)));
+  margin-top: MAX(0.5rem, MIN(2.5rem, calc(50vh - 300px)));
 }
 
 #input-tracker {
-	position: absolute;
-	top: 10px;
-	left: 10px;
-	height: auto;
-	width: auto;
-	opacity: 0.25;
-	transition: 100ms linear;
-	z-index: 10;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: auto;
+  width: auto;
+  opacity: 0.25;
+  transition: 100ms linear;
+  z-index: 10;
 }
 
 #input-tracker:hover {
-	opacity: 1;
+  opacity: 1;
 }
 
 .type-display {
-	color: #59316D;
+  color: #59316d;
 }
 
 .subtitle {
-	font-family: 'barlow light';
+  font-family: "Barlow";
+  font-weight: 300;
 }
 
 .description {
-	font-family: 'Barlow';
-	font-weight: bold;
+  font-family: "Barlow";
+  font-weight: bold;
 }
 
 h2.type-s {
-	font-size: 1.2em;
-	padding-left: 60px;
-	padding-right: 60px;
+  font-size: 1.2em;
+  padding-left: 60px;
+  padding-right: 60px;
 }
 
 .subdescription::before {
-	content: '';
-	border-top: 2px solid #F9AFA1;
-	display: block;
-	width: 33%;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 15px;
-	margin-bottom: 10px;
+  content: "";
+  border-top: 2px solid #f9afa1;
+  display: block;
+  width: 33%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
 .subdescription {
-	font-family: 'barlow light';
-	font-style: italic;
+  font-family: "Barlow";
+  font-weight: 300;
+  font-style: italic;
 }
 
 #btns {
-	margin-top: 40px;
+  margin-top: 40px;
 }
 
 #btn-back::before {
-	content: "< ";
+  content: "< ";
 }
 
 #btn-start::after {
-	content: " >";
+  content: " >";
 }
 
 #btn-back,
 #btn-start,
 #btn-tutorial {
-	padding: 10px 30px;
-	font-family: 'barlow semibold';
-	transition: 100ms linear;
-	color: #59316D;
+  padding: 10px 30px;
+  font-family: "Barlow";
+  font-weight: 600;
+  transition: 100ms linear;
+  color: #59316d;
 }
 
 #btn-back {
-	background-color: #D6E3F4;
-	margin-right: 1em;
-	border-radius: 50px 50px 0px 50px;
+  background-color: #d6e3f4;
+  margin-right: 1em;
+  border-radius: 50px 50px 0px 50px;
 }
 
 #btn-start {
-	background-color: #F9AFA1;
-	margin-left: 1em;
-	border-radius: 50px 50px 50px 0px;
+  background-color: #f9afa1;
+  margin-left: 1em;
+  border-radius: 50px 50px 50px 0px;
 }
 
 #btn-tutorial {
-	display: block;
-	margin-top: 1.5em;
-	border-radius: 50px;
-	background-color: #FFCCA9;
+  display: block;
+  margin-top: 1.5em;
+  border-radius: 50px;
+  background-color: #ffcca9;
+  pointer-events: all;
 }
 
 #btn-start:hover,
 #btn-back:hover,
 #btn-tutorial:hover {
-	color: white;
-	background-color: #59316D;
+  color: white;
+  background-color: #59316d;
 }

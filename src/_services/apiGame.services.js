@@ -1,72 +1,71 @@
 import axios from 'axios'
 import { authHeader } from '../_helpers'
-import apiValues from '../apiValues'
 
 const baseURL = 'https://learning-tool-api.herokuapp.com'
 const api  = axios.create({ baseURL })
 
-const getAllBuilder = (routeName) => function getAll() {
+const getAll = (routeName) => {
     // pegar rota
     return api(
       {
         method: 'get',
-        url: `/${routeName.toLowerCase().replace(/_/g, '-')}`,
+        url: `/game/${routeName}`,
         headers: authHeader()
       })
       .then(handleResponse)
 }
 
-const getByIdBuilder = (routeName) => function getById(id){
+const getById = (routeName,id) => {
     return api(
         {
           method: 'get',
-          url: `/${routeName.toLowerCase().replace(/_/g, '-')}/${id}`,
+          url: `/game/${routeName}/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
 }
 
-const findBuilder = (routeName) => function find(data) {
+const find = (routeName,data) => {
   return api(
     {
       method: 'get',
-      url: `/${routeName.toLowerCase().replace(/_/g, '-')}`,
+      url: `/game/${routeName}`,
       headers: authHeader(),
-      query: data
+      params: data
     })
     .then(handleResponse)
 }
 
-const createBuilder = (routeName) => function create(data) {
+const create = (routeName,data) => {
     return api(
       {
         method: 'post',
-        url: `/${routeName.toLowerCase().replace(/_/g, '-')}`,
+        url: `/game/${routeName}`,
         headers: authHeader(),
-        data: data
+        params: data
       })
       .then(handleResponse)
 }
 
-const updateBuilder = (routeName) => function update(data){
+const update = (routeName,data) => {
     return api(
         {
           method: 'put',
-          url: `/${routeName.toLowerCase().replace(/_/g, '-')}/${data.id}`,
+          url: `/game/${routeName}/${data.id}`,
           headers:  {
             ...authHeader(),
           'Content-Type': 'application/json'
           },
-          data: data
+          params: data
         })
         .then(handleResponse)
 }
 
-const deleteBuilder = (routeName) => function _delete(id){
+const _delete = (routeName,id) => {
     return api(
         {
           method: 'delete',
-          url: `/${routeName.toLowerCase().replace(/_/g, '-')}/${id}`,
+          url: `/game/${routeName}/${id}`,
           headers: authHeader()
         })
         .then(handleResponse)
@@ -83,17 +82,14 @@ function handleResponse(response) {
   return response.data
 }
 
-let apiServices = {}
+const apiGameServices = {
+  getAll:   getAll,
+  getById:  getById,
+  find:     find,
+  create:   create,
+  update:   update,
+  delete:   _delete
+}
 
-apiValues.map( apiDataType =>
-  apiServices[`${apiDataType}`] = {
-    getAll:  getAllBuilder(apiDataType),
-    getById: getByIdBuilder(apiDataType),
-    find:  findBuilder(apiDataType),
-    create:  createBuilder(apiDataType),
-    update:  updateBuilder(apiDataType),
-    delete:  deleteBuilder(apiDataType)
-})
-
-export { apiServices, baseURL }
+export { apiGameServices, baseURL }
 export default api

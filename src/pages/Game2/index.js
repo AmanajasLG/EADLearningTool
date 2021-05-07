@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { apiActions, CallerBuilder, headerActions, musicActions } from '../../_actions'
+import { apiActions, gameActions, headerActions, musicActions } from '../../_actions'
 import Init from './components/Init'
 import RoomSelect from './components/RoomSelect'
 import Sala from './components/Sala'
@@ -34,29 +34,15 @@ const Game2 = (props) => {
 	const id = props.match.params.id
 	const dispatch = useDispatch()
 	let error = useSelector(state => state.missions.error)
-	let mission = useSelector(state => state.missions.items.find(mission => mission.id === props.match.params.id))
-	let missionData = useSelector(state => state.apiCall.items.find(data => data.table === 'missionData') ? state.apiCall.items.find(data => data.table === 'missionData').data[0] : null)
+	let mission = useSelector(state => state.game.items.missions ? state.game.items.missions.find(mission => mission.id === props.match.params.id) : null)
+	const missionData = mission ? mission.missionData : null
 	const loading = useSelector(state => state.missions.loading)
 	const userId = useSelector(state => state.authentication.user.user.id)
-	const lang = useSelector(state => state.authentication.user.user.language)
+	const lang = useSelector(state => state.authentication.user.user.language.id)
 	let currentPlaySession = useSelector(state => state.play_sessions ? state.play_sessions.items[0] : {})
-	const { missionsActions, play_sessionsActions } = apiActions
+	const { play_sessionsActions } = apiActions
 	// const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
-	const hasPlayed = useSelector(state => state.apiCall.items.find(data => data.table === 'result') ? state.apiCall.items.find(data => data.table === 'result').data.length > 0 : false)
-
-	let tipsCount
-	let actions = {}
-
-	if (mission && Object.keys(actions).length === 0) {
-		mission.gameType.gameTables.forEach(gameTable => {				
-			actions[gameTable.type] = CallerBuilder(gameTable)
-		})
-	}
-
-	console.log(actions)
-
-	if (missionData)
-		tipsCount = missionData.missionCharacters.filter(missionCharacter => { return missionCharacter.tip }).length + 1
+	const hasPlayed = useSelector(state => state.game.items.resultsCount ? state.game.items.resultsCount > 0 : false)
 	const dialogInitialState = { dialogHistory: [], dialogStep: 0, correct: 0, characterFeeling: 'init', preSpeech: null, convOptions: [] }
 
 	React.useEffect(() => {
@@ -67,28 +53,24 @@ const Game2 = (props) => {
 
 	//fetch mission if doesn't already have
 	React.useEffect(() => {
-		if (id && !mission) dispatch(missionsActions.getById(props.match.params.id))
-	}, [id, mission, dispatch, missionsActions, props.match.params.id])
-
-	React.useEffect(()=>{
-		if(mission && Object.keys(actions).length !== 0 && !missionData){
-			dispatch(actions['missionData'].find({mission: mission.id}))
-		}
-	})
+		if(!mission || !missionData)
+		dispatch(gameActions.getById('missions', id))
+	}, [id, mission, dispatch, missionData])
 
 	// check if user already played the game
 	React.useEffect(() => {
-		let updateState = {}
+		let updatedState = {}
 		if (mission && !state.checkedPlayed) {
-			dispatch(actions['result'].find({
-				'user.id': userId,
-				'mission.id': mission.id
+			dispatch(gameActions.find('results/count',{
+				'user': userId,
+				'mission': mission.id
 			}))
-
-			updateState.checkedPlayed = true
+			updatedState.checkedPlayed = true
 		}
-		updateState.hasPlayed = hasPlayed
-		setState({ ...state, ...updateState })
+
+		if (hasPlayed)
+			setState({ ...state, ...updatedState, hasPlayed })
+		
 		// eslint-disable-next-line
 	}, [userId, mission, dispatch, hasPlayed])
 
@@ -132,100 +114,103 @@ const Game2 = (props) => {
 	//		Adiciona personagem ao local
 	//		Retira personagem da lista de personagens disponíveis
 
-	if (missionData && state.locations.length === 0) {
-		// safe copies
-		let availableCharacters = missionData.missionCharacters.slice(0)
-		let locations = missionData.locations.map(location => {
-			delete location.characters
-			return { location: location, missionCharacters: [] }
-		})
-
-		let tutorialRoom = missionData.tutorial
-
-		//distribute on locations
-		while (availableCharacters.length > 0) {
-
-			// sorteia sala aleatoriamente com pesos que diminuem dependendo de quantos personagens já se tem
-			let totalWeight = 0
-			let crowdestRoomPop = 0
-			let emptiestRoomPop = 999
-			const minPerRoom = 1
-			const maxPerRoom = 5
-			locations.forEach((location) => {
-				crowdestRoomPop = Math.max(location.missionCharacters.length, crowdestRoomPop)
-				emptiestRoomPop = Math.min(location.missionCharacters.length, emptiestRoomPop)
+	React.useEffect(() => {
+		if (missionData && state.locations.length === 0) {
+			// safe copies
+			let availableCharacters = missionData.missionCharacters.slice(0)
+			let locations = missionData.locations.map(location => {
+				delete location.characters
+				return { location: location, missionCharacters: [] }
 			})
 
-			const maxWeight = (() => {
-				if (emptiestRoomPop < minPerRoom) return minPerRoom
-				else if (emptiestRoomPop < maxPerRoom) return maxPerRoom
-				else return crowdestRoomPop + 1
-			})()
+			let tutorialRoom = missionData.tutorial
 
-			totalWeight = 0
-			const weights = locations.map((location) => {
-				let weight = maxWeight - location.missionCharacters.length
-				totalWeight += weight
-				return weight
-			})
+			//distribute on locations
+			while (availableCharacters.length > 0) {
 
-			let rand = Math.floor(Math.random() * totalWeight)
-			let i = 0;
-			while (rand >= 0) rand -= weights[i++]
-			const locationIndex = i - 1
+				// sorteia sala aleatoriamente com pesos que diminuem dependendo de quantos personagens já se tem
+				let totalWeight = 0
+				let crowdestRoomPop = 0
+				let emptiestRoomPop = 999
+				const minPerRoom = 1
+				const maxPerRoom = 5
+				locations.forEach((location) => {
+					crowdestRoomPop = Math.max(location.missionCharacters.length, crowdestRoomPop)
+					emptiestRoomPop = Math.min(location.missionCharacters.length, emptiestRoomPop)
+				})
 
-			//each character has some good and bad questions that can be asked
-			let availableAnswers = [...availableCharacters[0].answers]
-			let correct = availableAnswers.filter(answer => answer.question.correct)
-			let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
+				const maxWeight = (() => {
+					if (emptiestRoomPop < minPerRoom) return minPerRoom
+					else if (emptiestRoomPop < maxPerRoom) return maxPerRoom
+					else return crowdestRoomPop + 1
+				})()
 
-			let selectedQuestions = []
-			// ? E se correct/ncorrect não tiveram a quantidade necessária de perguntas?
-			while (selectedQuestions.length < 6) {
-				let source = selectedQuestions.length % 2 === 0 ? correct : ncorrect
-				let index = Math.floor(Math.random(0, source.length))
-				selectedQuestions.push(source[index])
-				source.splice(index, 1)
+				totalWeight = 0
+				const weights = locations.map((location) => {
+					let weight = maxWeight - location.missionCharacters.length
+					totalWeight += weight
+					return weight
+				})
+
+				let rand = Math.floor(Math.random() * totalWeight)
+				let i = 0;
+				while (rand >= 0) rand -= weights[i++]
+				const locationIndex = i - 1
+
+				//each character has some good and bad questions that can be asked
+				let availableAnswers = [...availableCharacters[0].answers]
+				let correct = availableAnswers.filter(answer => answer.question.correct)
+				let ncorrect = availableAnswers.filter(answer => !answer.question.correct)
+
+				let selectedQuestions = []
+				// ? E se correct/ncorrect não tiveram a quantidade necessária de perguntas?
+				while (selectedQuestions.length < 6) {
+					let source = selectedQuestions.length % 2 === 0 ? correct : ncorrect
+					let index = Math.floor(Math.random(0, source.length))
+					selectedQuestions.push(source[index])
+					source.splice(index, 1)
+				}
+
+				// Aleatorizando para que nem sempre venham as perguntas na ordem certo->errado
+				if (Math.floor(Math.random(0, 1) < .5)) {
+					let temp = selectedQuestions[0]
+					selectedQuestions[0] = selectedQuestions[1]
+					selectedQuestions[1] = temp
+				}
+				if (Math.floor(Math.random(0, 1) > .5)) {
+					let temp = selectedQuestions[2]
+					selectedQuestions[2] = selectedQuestions[3]
+					selectedQuestions[3] = temp
+				}
+
+				locations[locationIndex].missionCharacters = [...locations[locationIndex].missionCharacters,
+				{
+					...availableCharacters[0],
+					selectedQuestions,
+					zDepth: Math.random()
+				}
+				]
+
+				availableCharacters.splice(0, 1)
 			}
 
-			// Aleatorizando para que nem sempre venham as perguntas na ordem certo->errado
-			if (Math.floor(Math.random(0, 1) < .5)) {
-				let temp = selectedQuestions[0]
-				selectedQuestions[0] = selectedQuestions[1]
-				selectedQuestions[1] = temp
+			// Aleatorizando ordem dos personagens em cada sala
+			for (let i = 0; i < locations.length; i++) {
+				let amountChars = locations[i].missionCharacters.length
+				if (amountChars <= 1) continue
+				for (let j = 0; j < amountChars - 1; j++) {
+					let exchangeWith = Math.floor(Math.random() * (amountChars - j)) + j
+					if (j === exchangeWith) continue // Não precisa trocar se for consigo mesmo
+					//swap
+					let aux = locations[i].missionCharacters[j]
+					locations[i].missionCharacters[j] = locations[i].missionCharacters[exchangeWith]
+					locations[i].missionCharacters[exchangeWith] = aux
+				}
 			}
-			if (Math.floor(Math.random(0, 1) > .5)) {
-				let temp = selectedQuestions[2]
-				selectedQuestions[2] = selectedQuestions[3]
-				selectedQuestions[3] = temp
-			}
-
-			locations[locationIndex].missionCharacters = [...locations[locationIndex].missionCharacters,
-			{
-				...availableCharacters[0],
-				selectedQuestions,
-				zDepth: Math.random()
-			}
-			]
-
-			availableCharacters.splice(0, 1)
+			const tipsCount = missionData.missionCharacters.filter(missionCharacter => { return missionCharacter.tip }).length + 1
+			setState(state => {return { ...state, locations, tutorialRoom, tipsCount }})
 		}
-
-		// Aleatorizando ordem dos personagens em cada sala
-		for (let i = 0; i < locations.length; i++) {
-			let amountChars = locations[i].missionCharacters.length
-			if (amountChars <= 1) continue
-			for (let j = 0; j < amountChars - 1; j++) {
-				let exchangeWith = Math.floor(Math.random() * (amountChars - j)) + j
-				if (j === exchangeWith) continue // Não precisa trocar se for consigo mesmo
-				//swap
-				let aux = locations[i].missionCharacters[j]
-				locations[i].missionCharacters[j] = locations[i].missionCharacters[exchangeWith]
-				locations[i].missionCharacters[exchangeWith] = aux
-			}
-		}
-		setState({ ...state, locations, tutorialRoom })
-	}
+	}, [missionData, state.locations])
 
 	const onStartGame = (e) => {
 		if (state.tracking) {
@@ -234,9 +219,8 @@ const Game2 = (props) => {
 				mission: mission.id
 			}))
 		}
-
 		//check if should start or skip tutorial
-		setState({ ...state, scene: (!state.seeTutorial && state.hasPlayed) ? "ROOM" : "TUTORIAL" })
+		setState({ ...state, scene: "TUTORIAL" })
 	}
 
 	const endTutorial = () => {
@@ -394,7 +378,7 @@ const Game2 = (props) => {
 		})
 
 		//aqui
-		dispatch(actions['result'].create({
+		dispatch(gameActions.create('results', {
 			user: userId,
 			mission: mission.id,
 			score: state.score,
@@ -421,6 +405,7 @@ const Game2 = (props) => {
 						<div id="tutorial-popup-1">
 							<span lang="pt-br">Selecione alguém para conversar e te ajudar a encontrar o seu guia.</span>
 							<span lang="en">Select someone to talk and help you find your guide.</span>
+							{hasPlayed ? <button className="btn btn-center" id="btn-tutorial" onClick={() => { setState({...state, scene: "ROOM"}) }}>Skip tutorial</button> : null}
 						</div>
 					</div>
 				</Sala>
@@ -452,7 +437,7 @@ const Game2 = (props) => {
 	}
 
 	const restart = () => {
-		setState({ ...initialState(), hasPlayed: true })
+		setState({ ...initialState(true,true)})
 		dispatch(headerActions.setState(headerConstants.STATES.HIDDEN))
 	}
 
@@ -473,7 +458,7 @@ const Game2 = (props) => {
 									descriptionTranslate={mission.descriptionTranslate.find(description => { return description.language.id === lang }).description}
 									onStart={onStartGame}
 									onBack={() => setState({ ...state, back: true })}
-									onSkipTutorial={state.hasPlayed ? () => { state.seeTutorial = false; onStartGame() } : null}
+									ready={state.tutorialRoom ? true : false}
 								/>
 							case "TUTORIAL":
 								return (tutorialScreen(state.tutorialStep))
@@ -549,15 +534,15 @@ const Game2 = (props) => {
 														</div>}
 													<div className="painel" id="painel-2">
 														<div className="painel-2-wrapper">
-															<div className="painel-2-content" style={{ backgroundImage: "url(" + (state.tips.length === tipsCount ? blobAzul : blobVerde) + ")" }}>
-																<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
+															<div className="painel-2-content" style={{ backgroundImage: "url(" + (state.tips.length === state.tipsCount ? blobAzul : blobVerde) + ")" }}>
+																<div><span>{state.tips.length ?? 0}</span>/<span>{state.tipsCount}</span></div>
 																<div>clues</div>
 															</div>
 														</div>
 														<div className="painel-2-wrapper">
 															<div className="painel-2-content">
 																<div>
-																	<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
+																	<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {state.tipsCount} existing clues.</p>
 																	<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful.</p>
 																</div>
 															</div>
@@ -582,14 +567,14 @@ const Game2 = (props) => {
 													<div className="painel" id="painel-3">
 														<div className="painel-2-wrapper">
 															<div className="painel-2-content" style={{ backgroundImage: "url(" + blobLaranja + ")" }}>
-																<div><span>{state.tips.length ?? 0}</span>/<span>{tipsCount}</span></div>
+																<div><span>{state.tips.length ?? 0}</span>/<span>{state.tipsCount}</span></div>
 																<div>clues</div>
 															</div>
 														</div>
 														<div className="painel-2-wrapper">
 															<div className="painel-2-content">
 																<div>
-																	<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {tipsCount} existing clues.</p>
+																	<p>After talking to {state.spokenCharacters.length} people, you found {state.tips.length} of the {state.tipsCount} existing clues.</p>
 																	<p>Regarding the questions you asked, {Object.keys(state.validQuestions).length} of them were useful. Try asking more relevant questions!</p>
 																</div>
 															</div>

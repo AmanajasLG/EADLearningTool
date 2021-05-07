@@ -13,8 +13,6 @@ import Question from '../Question'
 const EditMission = ({mission, onDone}) => {
   const [state, setState] = React.useState(mission)
 
-  console.log(mission)
-
   const [charList, setCharList] = React.useState(mission.missionCharacters)
   const [locationList, setLocationList] = React.useState(mission.locations)
   const [questionList, setQuestionList] = React.useState(mission.questions)
