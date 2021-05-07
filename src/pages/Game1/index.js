@@ -320,7 +320,7 @@ const Game1 = (props) => {
 				let gabarito = state.contactsTemplate.find(t => t.id === contact.id)
 				return gabarito.hasEmptyField && (contact.job === gabarito.job && contact.country === gabarito.country && contact.name === gabarito.name)
 			}).length
-			const score = result / state.contactsAtSession.length * 100
+			const score = result / state.contactsAtSession.filter(contact => contact.hasEmptyField).length * 100
 
 			setState({
 				...state,
