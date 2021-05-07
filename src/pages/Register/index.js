@@ -81,7 +81,7 @@ const Register = () => {
       setBlocked(true)
       alert.info("Creating your account. Hold tight!")
 
-      if(inputs.email && inputs.password && inputs.username){
+      if(inputs.email && inputs.password && inputs.username && inputs.language){
           dispatch(register(inputs))
             .then(() => {
               alert.success('Account succesfully created! Logging you in...')
@@ -183,21 +183,21 @@ const Register = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="language"
-                label="Language"
-                type="language"
-                id="language"
-                className={submitted && !inputs.language ? 'danger' : ''}
-                onChange={handleChange}
-                select
-                disabled={blocked}
-              >
-                {languages.map((language, index) =>
-                        <MenuItem value={language.id} key={index}>{language.lang}</MenuItem>
-                        )}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="language"
+                  label="Language"
+                  type="language"
+                  id="language"
+                  className={submitted && !inputs.language ? 'danger' : ''}
+                  onChange={handleChange}
+                  select
+                  disabled={blocked}
+                >
+                  {languages.map((language, index) =>
+                    <MenuItem value={language.id} key={index}>{language.name}</MenuItem>
+                  )}
               </TextField>
             </Grid>
           </Grid>
