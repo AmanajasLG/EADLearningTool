@@ -14,18 +14,20 @@ const initialValue = () => ({
   dialogs: {},
   questionsAsked: 0,
   result: 0,
+  totalFields: 0,
+  mainError: [],
   //DIALOG
   dialogHistory: [],
   answers: [],
   preSpeech: [],
   currentChar: null,
-  characterFeeling: 'init',
+  characterFeeling: "init",
   showContacts: false,
   maxQuestions: 4,
   // onMinimize: null,
   shouldMinimize: false,
   shouldCloseDialog: false,
   wrongContacts: 0,
-})
+});
 
-export default initialValue
+export default initialValue;
