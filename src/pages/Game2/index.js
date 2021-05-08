@@ -28,6 +28,8 @@ import blobVerde from '../../img/bg-forma-verde.svg'
 
 import dedao from '../../img/Game1/Mão dedão.svg'
 import palma from '../../img/Game1/Mão palma.svg'
+import bloco from '../../img/Game2/bloco.svg'
+import blocoButton from '../../img/Game2/blocoButton.svg'
 import FullscreenOverlay from './components/FullscreenOverlay'
 
 const Game2 = (props) => {
@@ -476,14 +478,14 @@ const Game2 = (props) => {
 										/>
 										{/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
 										//? pq passar tudo ao invés de só passar a string? Que aí poderia ser local ou na rede... */}
-										<button onClick={() => setState({...state, showTips: true})}>Bloco</button>
-										{state.showTips &&
+										{state.showTips ?
 											<FullscreenOverlay style={{zIndex: 100}} onClickClose={() => setState({...state, showTips: false})}>
 												<div>
 													Dicas:
 													<div id="big-phone-wrapper">
 														<div id="big-phone-imgs">
 															<img src={palma} alt="hand"/>
+															<img src={bloco} alt="note"/>
 															<img src={dedao} alt="thumb"/>
 															<div>
 																{state.tips.map((tip, index) =>
@@ -494,6 +496,10 @@ const Game2 = (props) => {
 													</div>
 												</div>
 											</FullscreenOverlay>
+											:
+											<Button onClick={() => setState({...state, showTips: true})}>
+												<img style={{width: 90}} src={blocoButton} alt="tips"/>
+											</Button>
 										}
 										<Sala roomData={state.locations[state.currentRoom].location} key={state.currentRoom}>
 											{state.locations[state.currentRoom].missionCharacters.map((missionCharacter, index) =>
