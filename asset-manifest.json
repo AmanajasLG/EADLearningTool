@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/EADLearningTool/static/css/main.0499808a.chunk.css",
-    "main.js": "/EADLearningTool/static/js/main.539d38d4.chunk.js",
-    "main.js.map": "/EADLearningTool/static/js/main.539d38d4.chunk.js.map",
+    "main.js": "/EADLearningTool/static/js/main.b6864b5f.chunk.js",
+    "main.js.map": "/EADLearningTool/static/js/main.b6864b5f.chunk.js.map",
     "runtime-main.js": "/EADLearningTool/static/js/runtime-main.199d65f1.js",
     "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.199d65f1.js.map",
     "static/js/2.d7819591.chunk.js": "/EADLearningTool/static/js/2.d7819591.chunk.js",
@@ -38,6 +38,6 @@
     "static/js/runtime-main.199d65f1.js",
     "static/js/2.d7819591.chunk.js",
     "static/css/main.0499808a.chunk.css",
-    "static/js/main.539d38d4.chunk.js"
+    "static/js/main.b6864b5f.chunk.js"
   ]
 }
