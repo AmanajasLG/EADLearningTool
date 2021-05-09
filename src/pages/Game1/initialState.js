@@ -16,6 +16,7 @@ const initialValue = () => ({
   result: 0,
   totalFields: 0,
   mainError: [],
+  feedback: {},
   //DIALOG
   dialogHistory: [],
   answers: [],

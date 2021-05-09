@@ -21,11 +21,16 @@ import Phone from "./components/Phone";
 import Conversa from "../Game2/components/Conversa";
 import FullscreenOverlay from "../Game2/components/FullscreenOverlay";
 import { headerConstants } from "../../_constants";
-import Feedback from "./components/Feedback";
-
+import bigPhone from "../../img/Game1/Celular Base.svg";
+import dedao from "../../img/Game1/Mão dedão.svg";
+import palma from "../../img/Game1/Mão palma.svg";
+import blobLowScore from "../../img/Score Baixo_blob.svg";
+import blobLaranja from "../../img/bg-forma-laranja.svg";
 import iconInit from "../../img/Game1/ícone_jogo1.svg";
 
 import "./index.scss";
+import "./feedback-screen.scss";
+import { Button } from "@material-ui/core";
 
 const Game1 = (props) => {
   const [state, setState] = React.useState(initialState());
@@ -497,6 +502,9 @@ const Game1 = (props) => {
         mainError: mainError.reduce((max, obj) =>
           max.count > obj.count ? max : obj
         ),
+        feedback: missionData.feedbacks.find(
+          (feedback) => feedback.minScore <= score && score <= feedback.maxScore
+        ),
       });
 
       dispatch(
@@ -507,6 +515,17 @@ const Game1 = (props) => {
           won: score > 80,
         })
       );
+
+      dispatch(
+        headerActions.setAll(
+          mission.name,
+          mission.nameTranslate.find((name) => {
+            return name.language.id === lang;
+          }).name
+        )
+      );
+
+      dispatch(headerActions.setState(headerConstants.STATES.OVERLAY));
     }
   };
 
@@ -519,7 +538,7 @@ const Game1 = (props) => {
       ) : (
         mission && (
           <div id="game1-content">
-            <div id="input-tracker">
+            {/* <div id="input-tracker">
               TrackInput:{" "}
               <input
                 type="checkbox"
@@ -527,7 +546,7 @@ const Game1 = (props) => {
                   setState({ ...state, tracking: e.target.checked });
                 }}
               />
-            </div>
+            </div> */}
             {(function renderScene() {
               switch (state.scene) {
                 case "INIT":
@@ -697,10 +716,8 @@ const Game1 = (props) => {
                         id="question-counter"
                         className={
                           state.questionsAsked >=
-                          state.locations[state.currentLocationIndex]
-                            .maxQuestions
-                            ? "max"
-                            : null
+                            state.locations[state.currentLocationIndex]
+                              .maxQuestions && "max"
                         }
                       >
                         <div id="question-counter-info">
@@ -726,36 +743,191 @@ const Game1 = (props) => {
                   );
                 case "ENDGAME":
                   return (
-                    <Feedback
-                      restart={restart}
-                      score={state.score}
-                      result={state.result}
-                      totalFields={state.totalFields}
-                      leave={() => setState({ ...state, back: true })}
-                      feedback={missionData.feedbacks.find(
-                        (feedback) =>
-                          feedback.minScore <= state.score &&
-                          state.score <= feedback.maxScore
+                    <div id="feedback-endGame-screen">
+                      {state.score > 30 ? (
+                        <div id="feedback-end-panels">
+                          <div id="feedback-painel-icon">
+                            <img src={state.feedback.topAsset.url} alt="" />
+                          </div>
+                          <div id="feedback-endgame-messages">
+                            <div
+                              className="feedback-painel"
+                              id="feedback-painel-1-win"
+                            >
+                              <div className="feedback-painel-1-wrapper">
+                                <div className="feedback-painel-1-content">
+                                  <span lang="pt-br">
+                                    {" "}
+                                    {state.feedback.text.replace(
+                                      "xxxx",
+                                      state.score
+                                    )}
+                                  </span>
+                                  <span lang="en">
+                                    {state.feedback.textTranslate
+                                      .find((text) => text.language.id === lang)
+                                      .text.replace("xxxx", state.score)}
+                                  </span>
+                                </div>
+                              </div>
+                              {state.score < 100 && (
+                                <a
+                                  href="#feedback-painel-2"
+                                  className="next-btn"
+                                >
+                                  {"❯"}
+                                </a>
+                              )}
+                            </div>
+                            {state.score < 100 && (
+                              <div
+                                className="feedback-painel"
+                                id="feedback-painel-2"
+                              >
+                                <div className="feedback-painel-2-wrapper">
+                                  <div
+                                    className="feedback-painel-2-content"
+                                    style={{
+                                      backgroundImage:
+                                        "url(" + blobLaranja + ")",
+                                    }}
+                                  >
+                                    <div>
+                                      <span>{state.result}</span>/
+                                      <span>{state.totalFields}</span>
+                                    </div>
+                                    <div>correct items</div>
+                                  </div>
+                                </div>
+                                <div className="feedback-painel-2-wrapper">
+                                  <div className="feedback-painel-2-content">
+                                    <div>
+                                      <p>
+                                        You've had a hard time remembering your
+                                        friend's{" "}
+                                        {state.mainError.metricTranslate.text.toLowerCase()}
+                                        . I hope they don't mind.
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                                <a
+                                  href="#feedback-painel-1-win"
+                                  className="prev-btn"
+                                >
+                                  {"❮"}
+                                </a>
+                              </div>
+                            )}
+                          </div>
+                          <div id="feedback-endGame-action-btns">
+                            <Button onClick={restart}>Tentar novamente</Button>
+                            <Button
+                              onClick={() => setState({ ...state, back: true })}
+                            >
+                              Sair do jogo
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div id="feedback-endGame-wrong-wrapper">
+                          <div>
+                            <div
+                              className="feedback-painel feedback-panel-1-defeat"
+                              id="feedback-painel-1"
+                            >
+                              <div id="feedback-painel-icon-derrota">
+                                <img src={state.feedback.topAsset.url} alt="" />
+                              </div>
+                              <span lang="pt-br">
+                                {state.feedback.text.replace(
+                                  "xxxx",
+                                  state.score
+                                )}
+                              </span>
+                              <span lang="en">
+                                {state.feedback.textTranslate
+                                  .find((text) => text.language.id === lang)
+                                  .text.replace("xxxx", state.score)}
+                              </span>
+                            </div>
+                            <div
+                              className="feedback-painel"
+                              id="feedback-painel-3"
+                              style={{
+                                backgroundImage: "url(" + blobLowScore + ")",
+                              }}
+                            >
+                              <div className="feedback-painel-2-wrapper">
+                                <div
+                                  className="feedback-painel-2-content"
+                                  style={{
+                                    backgroundImage: "url(" + blobLaranja + ")",
+                                  }}
+                                >
+                                  <div>
+                                    <span>{state.result}</span>/
+                                    <span>{state.totalFields}</span>
+                                  </div>
+                                  <div>correct</div>
+                                  <div>items</div>
+                                </div>
+                              </div>
+                              <div className="feedback-painel-2-wrapper">
+                                <div className="feedback-painel-2-content">
+                                  <div>
+                                    <p lang="pt-br">
+                                      Lembrar o(a){" "}
+                                      {state.mainError.metric.toLowerCase()} dos
+                                      seus amigos foi o mais difícil pra você.
+                                      Espero que eles não se importem.
+                                    </p>
+                                    <p lang="en">
+                                      You've had a hard time remembering your
+                                      friend's{" "}
+                                      {state.mainError.metricTranslate.text.toLowerCase()}
+                                      . I hope they don't mind.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="feedback-endGame-action-btns">
+                            <Button onClick={restart}>Tentar novamente</Button>
+                            <Button
+                              onClick={() => setState({ ...state, back: true })}
+                            >
+                              Sair do jogo
+                            </Button>
+                          </div>
+                        </div>
                       )}
-                      lang={lang}
-                      mainError={state.mainError}
-                    />
+                      {state.feedback.mobileBackground && (
+                        <div id="feedback-phone-div">
+                          <div id="feedback-phone">
+                            <img src={palma} alt="" />
+                            <img src={bigPhone} alt="" />
+                            <img
+                              src={state.feedback.mobileBackground.url}
+                              alt=""
+                            />
+                            <img src={dedao} alt="" />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   );
                 default:
                   return <div>Error</div>;
               }
             })()}
-            {
-              !state.gameEndState && <div></div> // Não dá para ser !endGame pq ele vira true na hora que aparece para o jogador se apresentar
-            }
-            {state.endGame ? (
-              <Result gameEndState={state.gameEndState} />
-            ) : null}
-            {state.tries > 0 ? (
+            {state.endGame && <Result gameEndState={state.gameEndState} />}
+            {state.tries > 0 && (
               <div>
                 {state.tries} tentativa{state.tries > 1 ? "s" : ""}!
               </div>
-            ) : null}
+            )}
             {state.back && <Redirect to="/userspace" />}
           </div>
         )
