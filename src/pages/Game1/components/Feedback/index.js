@@ -37,16 +37,6 @@ const Feedback = ({
         <div>
           <div className="painel" id="painel-3">
             <div className="painel-2-wrapper">
-              <div
-                className="painel-2-content"
-                style={{ backgroundImage: "url(" + blobLaranja + ")" }}
-              >
-                <div>
-                  <span>{score}%</span>
-                </div>
-              </div>
-            </div>
-            <div className="painel-2-wrapper">
               <div className="painel-2-content">
                 <div>
                   {/* <img src={feedback.topAsset.url} alt="" /> */}
@@ -59,13 +49,37 @@ const Feedback = ({
                         .find((text) => text.language.id === lang)
                         .text.replace("xxxx", score)}
                     </span>
-                    <div id="endGame-action-btns">
-                      <Button onClick={restart}>Tentar novamente</Button>
-                      <Button onClick={leave}>Sair do jogo</Button>
-                    </div>
                   </div>
                 </div>
               </div>
+              {score < 100 ? (
+                <div
+                  className="painel-2-content"
+                  style={{ backgroundImage: "url(" + blobLaranja + ")" }}
+                >
+                  <div>
+                    <span>
+                      {result}/{totalFields}
+                    </span>
+                  </div>
+                  <div>
+                    <span lang="pt-br">
+                      Lembrar o(a) {mainError.metric.toLowerCase()} dos seus
+                      amigos foi o mais difícil pra você. Espero que eles não se
+                      importem.
+                    </span>
+                    <span lang="en">
+                      You've had a hard time remembering your friend's{" "}
+                      {mainError.metricTranslate.text.toLowerCase()}. I hope
+                      they don't mind.
+                    </span>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+            <div id="endGame-action-btns">
+              <Button onClick={restart}>Tentar novamente</Button>
+              <Button onClick={leave}>Sair do jogo</Button>
             </div>
           </div>
         </div>

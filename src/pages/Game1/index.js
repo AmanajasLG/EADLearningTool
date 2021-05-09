@@ -450,23 +450,15 @@ const Game1 = (props) => {
     else {
       // CALCULATE RESULT WITH WRONG ITEM AND FIND THE MATRIC THE USER MISSED THE MOST
       let result = 0;
-      let mainError = [
-        {
-          metric: "a profissão",
-          metricTranslate: "job",
+      let mainError = missionData.metrics.map((metric) => {
+        return {
+          metric: metric.name,
+          metricTranslate: metric.nameTranslate.find(
+            (translate) => translate.language.id === lang
+          ),
           count: 0,
-        },
-        {
-          metric: "o país",
-          metricTranslate: "country",
-          count: 0,
-        },
-        {
-          metric: "o nome",
-          metricTranslate: "name",
-          count: 0,
-        },
-      ];
+        };
+      });
       state.contactsAtSession.forEach((contact) => {
         let gabarito = state.contactsTemplate.find((t) => t.id === contact.id);
 
@@ -478,14 +470,20 @@ const Game1 = (props) => {
               : 0) +
             (contact.name === gabarito.name && !gabarito.showName ? 1 : 0);
 
-          mainError[0].count +=
-            contact.job !== gabarito.job && !gabarito.showJob ? 1 : 0;
-          mainError[1].count +=
-            contact.country !== gabarito.country && !gabarito.showCountry
-              ? 1
-              : 0;
-          mainError[2].count +=
-            contact.name !== gabarito.name && !gabarito.showName ? 1 : 0;
+          mainError.forEach((metric) => {
+            if (metric.name === "Profissão") {
+              metric.count +=
+                contact.job !== gabarito.job && !gabarito.showJob ? 1 : 0;
+            } else if (metric.name === "País") {
+              metric.count +=
+                contact.country !== gabarito.country && !gabarito.showCountry
+                  ? 1
+                  : 0;
+            } else if (metric.name === "Nome") {
+              metric.count +=
+                contact.name !== gabarito.name && !gabarito.showName ? 1 : 0;
+            }
+          });
         }
       });
 
