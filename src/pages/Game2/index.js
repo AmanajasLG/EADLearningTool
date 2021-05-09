@@ -625,10 +625,10 @@ const Game2 = (props) => {
 										{state.gameEndState &&
 											<DialogCharacter
 												character={
-													mission.missionCharacters.find((mc) => {
+													missionData.missionCharacters.find((mc) => {
 														return mc.character.name === state.targetName
 													}).character}
-												feeling={"rightAccusation"}
+												feeling={"win"}
 											/>
 										}
 									</div>
