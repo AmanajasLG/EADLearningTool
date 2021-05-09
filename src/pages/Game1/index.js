@@ -651,7 +651,7 @@ const Game1 = (props) => {
                           <div className="popup-wrapper">
                             <div className="popup-content">
                               <span>Are you sure?</span>
-                              <p>
+                              <div>
                                 {state.wrongContacts > 0 ? (
                                   <div className="next-room-text">
                                     <span lang="pt-br">
@@ -687,7 +687,7 @@ const Game1 = (props) => {
                                     </span>
                                   </div>
                                 )}
-                              </p>
+                              </div>
                               <div id="popup-btns">
                                 <button
                                   id="no-go"
@@ -716,8 +716,10 @@ const Game1 = (props) => {
                         id="question-counter"
                         className={
                           state.questionsAsked >=
-                            state.locations[state.currentLocationIndex]
-                              .maxQuestions && "max"
+                          state.locations[state.currentLocationIndex]
+                            .maxQuestions
+                            ? "max"
+                            : ""
                         }
                       >
                         <div id="question-counter-info">
