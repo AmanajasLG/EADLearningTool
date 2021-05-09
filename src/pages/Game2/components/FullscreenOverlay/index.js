@@ -37,14 +37,14 @@ const FullscreenOverlay = ({
 		<div id="fullscreen-overlay"
 			 className={shouldExit ? "ExitAnim" : null}
 			 onAnimationEnd={shouldExit ? _readyToExit : null}
-			 style={{'--bgR': bgRGBA.r ?? 255, '--bgG': bgRGBA.g ?? 255, '--bgB': bgRGBA.b ?? 255, '--bgA': bgRGBA.a ?? 0.73}}
+			 style={{...style, '--bgR': bgRGBA.r ?? 255, '--bgG': bgRGBA.g ?? 255, '--bgB': bgRGBA.b ?? 255, '--bgA': bgRGBA.a ?? 0.73}}
 		>
 			{children}
 			{showCloseBtn &&
 				<div
 					id="fullscreen-overlay-close-btn"
 					onClick={onClickClose}
-					style={{...style,
+					style={{
 						'--closeR': closeRGB.r ?? 89,
 						'--closeG': closeRGB.g ?? 49,
 						'--closeB': closeRGB.b ?? 109,

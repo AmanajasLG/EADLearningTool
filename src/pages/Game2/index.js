@@ -481,23 +481,30 @@ const Game2 = (props) => {
 										{state.showTips ?
 											<FullscreenOverlay style={{zIndex: 100}} onClickClose={() => setState({...state, showTips: false})}>
 												<div>
-													Dicas:
 													<div id="big-phone-wrapper">
 														<div id="big-phone-imgs">
 															<img src={palma} alt="hand"/>
-															<img src={bloco} alt="note"/>
+															<img style={{marginLeft: '22.5%'}} src={bloco} alt="note"/>
 															<img src={dedao} alt="thumb"/>
-															<div>
-																{state.tips.map((tip, index) =>
-																	<div key={index}>{tip}</div>
-																)}
+														</div>
+														<div id="big-phone-screen-wrapper">
+															<div id="big-phone-screen-content" className="section-title">
+																<span lang="pt-br">Dicas:</span>
+																<div>
+																	{state.tips.map((tip, index) =>
+																		<div key={index} style={{position: 'absolute', padding: '10%', width:'100%' }}>
+																			<div>{tip}</div>
+																			<hr/>
+																		</div>
+																	)}
+																</div>
 															</div>
 														</div>
 													</div>
 												</div>
 											</FullscreenOverlay>
 											:
-											<Button onClick={() => setState({...state, showTips: true})}>
+											<Button style={{position: 'absolute'}} onClick={() => setState({...state, showTips: true})}>
 												<img style={{width: 90}} src={blocoButton} alt="tips"/>
 											</Button>
 										}
