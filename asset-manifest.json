@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/EADLearningTool/static/css/main.aef5a4bd.chunk.css",
-    "main.js": "/EADLearningTool/static/js/main.aea3b09f.chunk.js",
-    "main.js.map": "/EADLearningTool/static/js/main.aea3b09f.chunk.js.map",
-    "runtime-main.js": "/EADLearningTool/static/js/runtime-main.199d65f1.js",
-    "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.199d65f1.js.map",
-    "static/js/2.d7819591.chunk.js": "/EADLearningTool/static/js/2.d7819591.chunk.js",
-    "static/js/2.d7819591.chunk.js.map": "/EADLearningTool/static/js/2.d7819591.chunk.js.map",
-    "static/js/3.ec18988c.chunk.js": "/EADLearningTool/static/js/3.ec18988c.chunk.js",
-    "static/js/3.ec18988c.chunk.js.map": "/EADLearningTool/static/js/3.ec18988c.chunk.js.map",
+    "main.js": "/EADLearningTool/static/js/main.c871feac.chunk.js",
+    "main.js.map": "/EADLearningTool/static/js/main.c871feac.chunk.js.map",
+    "runtime-main.js": "/EADLearningTool/static/js/runtime-main.aaa6afd3.js",
+    "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.aaa6afd3.js.map",
+    "static/js/2.c763203d.chunk.js": "/EADLearningTool/static/js/2.c763203d.chunk.js",
+    "static/js/2.c763203d.chunk.js.map": "/EADLearningTool/static/js/2.c763203d.chunk.js.map",
+    "static/js/3.78729e26.chunk.js": "/EADLearningTool/static/js/3.78729e26.chunk.js",
+    "static/js/3.78729e26.chunk.js.map": "/EADLearningTool/static/js/3.78729e26.chunk.js.map",
     "index.html": "/EADLearningTool/index.html",
     "static/css/main.aef5a4bd.chunk.css.map": "/EADLearningTool/static/css/main.aef5a4bd.chunk.css.map",
-    "static/js/2.d7819591.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.d7819591.chunk.js.LICENSE.txt",
+    "static/js/2.c763203d.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.c763203d.chunk.js.LICENSE.txt",
     "static/media/Celular Base.794704d0.svg": "/EADLearningTool/static/media/Celular Base.794704d0.svg",
     "static/media/Celular Sala.f026f530.svg": "/EADLearningTool/static/media/Celular Sala.f026f530.svg",
     "static/media/Icone_jogo-tela_inicio.1e641e01.svg": "/EADLearningTool/static/media/Icone_jogo-tela_inicio.1e641e01.svg",
@@ -36,9 +36,9 @@
     "static/media/ícone_jogo1.244e8c29.svg": "/EADLearningTool/static/media/ícone_jogo1.244e8c29.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.199d65f1.js",
-    "static/js/2.d7819591.chunk.js",
+    "static/js/runtime-main.aaa6afd3.js",
+    "static/js/2.c763203d.chunk.js",
     "static/css/main.aef5a4bd.chunk.css",
-    "static/js/main.aea3b09f.chunk.js"
+    "static/js/main.c871feac.chunk.js"
   ]
 }
