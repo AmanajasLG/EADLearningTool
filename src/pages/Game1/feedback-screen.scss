@@ -3,8 +3,6 @@
   position: absolute;
   height: 100%;
   width: 100%;
-  transform-origin: 26% 45%;
-  transform: scale(2.5);
 }
 
 #feedback-phone > img {
@@ -346,15 +344,8 @@
 
 #feedback-phone-div {
   width: 38.5vw;
-  height: 85vh;
-  max-width: none;
   position: absolute;
   bottom: 0;
-  width: 50%;
-  max-width: 250px;
   height: 85vh;
   pointer-events: none;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
 }
