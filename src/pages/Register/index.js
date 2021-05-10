@@ -182,7 +182,7 @@ const Register = () => {
                 disabled={blocked}
               />
             </Grid>
-            {/*
+
             <Grid item xs={12}>
               <TextField
                   variant="outlined"
@@ -202,7 +202,7 @@ const Register = () => {
                   )}
               </TextField>
             </Grid>
-            */}
+            
           </Grid>
 
           <Button
