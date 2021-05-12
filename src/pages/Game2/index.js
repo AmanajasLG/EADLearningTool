@@ -26,7 +26,6 @@ import iconVitoriaPers from "../../img/Game2/parabens_vitoria-persistente.svg";
 import iconVitoriaPrim from "../../img/Game2/parabens_vitoria-primeira.svg";
 import iconDerrota from "../../img/Game2/símbolo_feedback errado.svg";
 import iconDicas from "../../img/ícone_jogo1.svg";
-import iconInit from "../../img/Game2/Icone_jogo-tela_inicio.svg";
 import blobAzul from "../../img/bg-forma-azul.svg";
 import blobLaranja from "../../img/bg-forma-laranja.svg";
 import blobVerde from "../../img/bg-forma-verde.svg";
@@ -601,7 +600,7 @@ const Game2 = (props) => {
                 case "INIT":
                   return (
                     <Init
-                      icon={iconInit}
+                      icon={mission.initIcon.url}
                       name={mission.name}
                       description={mission.description}
                       nameTranslate={

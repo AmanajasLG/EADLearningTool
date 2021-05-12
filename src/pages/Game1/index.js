@@ -26,7 +26,6 @@ import dedao from "../../img/Game1/Mão dedão.svg";
 import palma from "../../img/Game1/Mão palma.svg";
 import blobLowScore from "../../img/Score Baixo_blob.svg";
 import blobLaranja from "../../img/bg-forma-laranja.svg";
-import iconInit from "../../img/Game1/ícone_jogo1.svg";
 
 import "./index.scss";
 import "./feedback-screen.scss";
@@ -552,7 +551,7 @@ const Game1 = (props) => {
                 case "INIT":
                   return (
                     <Init
-                      icon={iconInit}
+                      icon={mission.initIcon.url}
                       name={mission.name}
                       description={mission.description}
                       nameTranslate={
