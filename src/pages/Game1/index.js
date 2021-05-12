@@ -551,7 +551,7 @@ const Game1 = (props) => {
                 case "INIT":
                   return (
                     <Init
-                      icon={mission.initIcon.url}
+                      icon={mission.initIcon ? mission.initIcon.url : ""}
                       name={mission.name}
                       description={mission.description}
                       nameTranslate={
