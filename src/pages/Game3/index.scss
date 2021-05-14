@@ -1,0 +1,34 @@
+.list-icon {
+  width: 60px;
+}
+
+.cart {
+  display: inline-block;
+}
+.cart-items {
+  height: 40vh;
+  width: 25vw;
+  background-color: rgb(137, 213, 216);
+  border-radius: 20px;
+  padding: 2vh 2vw;
+}
+.cart-item {
+  display: inline-block;
+  margin: 10px;
+}
+.cart-item-img {
+  max-height: 70px;
+  max-width: 70px;
+}
+
+.shop-list {
+  position: absolute;
+  top: 0;
+  padding: 100px;
+  margin-left: 40vw;
+}
+.shop-list-item-check,
+.shop-list-item-img {
+  max-height: 20px;
+  max-width: 20px;
+}

@@ -1,0 +1,34 @@
+.intro-recipe {
+}
+
+.ingredients-list {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 65px 20px 15px 25px;
+  overflow: hidden;
+  display: flex;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.rotated {
+  transform: rotate(21deg);
+  position: absolute;
+}
+
+.ingredients {
+  margin-top: 165px;
+  margin-left: 180px;
+}
+
+.ingredients img {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.ingredient {
+  display: block;
+  font-size: 1.3rem;
+  line-height: 3.87rem;
+}

@@ -1,5 +1,10 @@
 import React from "react";
+import "./index.scss";
+
 import DialogCharacter from "../../../Game2/components/DialogCharacter";
+
+import ingredientsListRotated from "../../../../img/Game3/ingredients-list-rotated.svg";
+import kitchen from "../../../../img/Game3/kitchen.svg";
 
 const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
   const [state, setState] = React.useState({ screen: 0 });
@@ -7,7 +12,12 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
   return (
     <div id="room-itself" className="intro">
       {state.screen === 0 && (
-        <div id="dialog-interact">
+        <div
+          id="dialog-interact"
+          style={{
+            backgroundImage: "url(" + { kitchen } + ")",
+          }}
+        >
           <div id="dialogos">
             <div id="dialog-box">
               <span lang="pt-br">
@@ -34,6 +44,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
 
       {state.screen === 1 && (
         <div id="dialog-interact">
+          <img src={recipe.image} alt="" />
           <div id="dialogos">
             <div id="dialog-box">
               <span lang="pt-br">{recipe.description}</span>
@@ -52,9 +63,9 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
       )}
 
       {state.screen === 2 && (
-        <div id="dialog-interact">
+        <div className="intro-recipe">
           <div>
-            <img src={recipe.img} alt="" />
+            <img src={recipe.image} alt="" />
             <span>{recipe.name}</span>
             <button
               className="btn btn-center"
@@ -65,10 +76,16 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
             </button>
           </div>
 
-          <div>
-            {ingredientsList.map((ingredient, index) => (
-              <div key={index}>{ingredient.description}</div>
-            ))}
+          <div className="ingredients-list">
+            <img src={ingredientsListRotated} alt="" />
+            <div className="rotated ingredients">
+              {ingredientsList.map((ingredient, index) => (
+                <div className="ingredient">
+                  <img src={ingredient.image} alt="" />
+                  <span>{ingredient.description}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

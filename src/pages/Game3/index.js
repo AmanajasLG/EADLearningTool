@@ -1,6 +1,7 @@
 import React from "react";
 import { Redirect, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import "./index.scss";
 
 import {
   apiActions,
@@ -18,6 +19,14 @@ import initialState from "./initialState";
 import Aisle from "./components/Aisle";
 import Intro from "./components/Intro";
 import Tutorial from "./components/Tutorial";
+
+import cart from "../../img/Game3/cart.svg";
+import ingredientsListBg from "../../img/Game3/ingredients-list.svg";
+import listCheck from "../../img/Game3/check.svg";
+import listIcon from "../../img/Game3/list-icon.svg";
+import checkout from "../../img/Game3/checkout.svg";
+
+import { numberToMoney } from "../../_helpers";
 
 const goRound = (value, max) =>
   value >= 0 ? value % max : max - (Math.abs(value) % max);
@@ -134,7 +143,7 @@ const Game3 = (props) => {
             return description.language.id === lang;
           }
         ).text,
-        img: recipe.image ? recipe.image.url : "",
+        image: recipe.image ? recipe.image.url : "",
       };
 
       let aisles;
@@ -146,12 +155,20 @@ const Game3 = (props) => {
           image: ingredient.asset.image ? ingredient.asset.image.url : "",
           tag:
             ingredient.measure === "unidade"
-              ? ingredient.price
-              : `${ingredient.price}/${ingredient.unityValue}${ingredient.measure}`,
+              ? `R$ ${ingredient.price.toFixed(2)}`
+              : `R$ ${(
+                  ingredient.price *
+                  (100 / ingredient.unityValue)
+                ).toFixed(2)}/100${ingredient.measure}`,
+          tooltip:
+            ingredient.measure === "unidade"
+              ? 1
+              : `${ingredient.unityValue}${ingredient.measure}`,
           unityValue: ingredient.unityValue,
           quantity: ingredient.quantity,
           measure: ingredient.measure,
           price: ingredient.price,
+          shelfCount: 10,
         };
       });
 
@@ -214,19 +231,23 @@ const Game3 = (props) => {
     });
   };
 
+  const checkShoppingList = (ingredient) => {
+    if (
+      ingredient.measure === "unidade"
+        ? state.cart[ingredient.name] !== ingredient.quantity
+        : state.cart[ingredient.name] * ingredient.unityValue !==
+          ingredient.quantity
+    )
+      return false;
+
+    return true;
+  };
+
   const haveAll = () => {
     for (let i = 0; i < state.ingredientsList.length; i++) {
       if (!state.cart.hasOwnProperty(state.ingredientsList[i].name))
         return false;
-      if (
-        state.ingredientsList[i].measure === "unidade"
-          ? state.cart[state.ingredientsList[i].name] !==
-            state.ingredientsList[i].quantity
-          : state.cart[state.ingredientsList[i].name] *
-              state.ingredientsList[i].unityValue !==
-            state.ingredientsList[i].quantity
-      )
-        return false;
+      if (!checkShoppingList(state.ingredientsList[i])) return false;
     }
 
     return true;
@@ -272,9 +293,6 @@ const Game3 = (props) => {
     );
 
     updateData.change = updateData.paymentAmount - state.price;
-    console.log(updateData.paymentAmount);
-    console.log(state.price);
-    console.log(updateData.change);
     setState({ ...state, ...updateData });
   };
 
@@ -312,10 +330,10 @@ const Game3 = (props) => {
   //const { mission } = state
   //console.log('mission:', mission)
   return (
-    <div>
+    <div id="game2-wrapper">
       {mission ? (
         //verificar se é possível generalizar esses gameX-wrapper
-        <div id="game2-wrapper">
+        <div id="game2-content">
           {(function renderScene() {
             switch (state.scene) {
               case "INIT":
@@ -361,7 +379,7 @@ const Game3 = (props) => {
               case "MARKET":
                 return (
                   <div>
-                    <Timer
+                    {/* <Timer
                       run={state.runTimer}
                       seconds={missionData.seconds}
                       onSecondPassed={() => {}}
@@ -373,17 +391,19 @@ const Game3 = (props) => {
                           remainingTime: remaining,
                         })
                       }
-                    />
+                    /> */}
 
-                    <button
+                    <img
                       onClick={() =>
                         setState({ ...state, shopList: !state.shopList })
                       }
-                    >
-                      {state.shopList ? "Fechar" : "Abrir"} lista de compras
-                    </button>
+                      src={listIcon}
+                      alt=""
+                      className="list-icon"
+                    />
+
                     {!state.checkout && (
-                      <div>
+                      <div style={{ width: "60vw", display: "inline-block" }}>
                         <Aisle
                           products={state.aisles[state.currentAisle]}
                           aisleName={state.currentAisle}
@@ -391,14 +411,14 @@ const Game3 = (props) => {
                         />
 
                         <button className="Voltar" onClick={toPreviousaisle}>
-                          Anterior
+                          {"<"}
                         </button>
 
                         <button className="Avançar" onClick={toNextaisle}>
-                          Próximo
+                          {">"}
                         </button>
 
-                        <button
+                        <img
                           onClick={() =>
                             setState({
                               ...state,
@@ -406,9 +426,9 @@ const Game3 = (props) => {
                               runTimer: false,
                             })
                           }
-                        >
-                          Ir para o caixa
-                        </button>
+                          src={checkout}
+                          alt=""
+                        />
                       </div>
                     )}
 
@@ -436,7 +456,7 @@ const Game3 = (props) => {
                         {state.onPayment && (
                           <div>
                             Hora de pagar! Sua compra deu{" "}
-                            {Number.parseFloat(state.price).toFixed(2)}
+                            {numberToMoney(state.price)}
                             <button onClick={doPayment}>
                               Finalizar Compra
                             </button>
@@ -444,14 +464,15 @@ const Game3 = (props) => {
                               state.paymentAmount < state.price && (
                                 <div>Opa, pagament insuficiente.</div>
                               )}
-                            {state.change ? (
+                            {state.change && (
                               <div className="PopUp">
                                 <div>Seu troco! {state.change}</div>
                                 <div>O troco está correto?</div>
                                 <button onClick={receiveChange}>Yes</button>
                                 <button onClick={receiveChange}>No</button>
                               </div>
-                            ) : (
+                            )}
+                            {state.change === 0 && (
                               <div>
                                 Seu pagamento esta certo!
                                 <button onClick={receiveChange}>HOORAY!</button>
@@ -459,10 +480,7 @@ const Game3 = (props) => {
                             )}
                             <div>
                               {missionData.money.map((money, index) => (
-                                <Button
-                                  key={index}
-                                  onClick={addToPayment(money)}
-                                >
+                                <Button onClick={addToPayment(money)}>
                                   <img
                                     style={{ width: 50 }}
                                     src={money.image.url}
@@ -473,7 +491,7 @@ const Game3 = (props) => {
                             </div>
                             <div>
                               {state.payment.map((money, index) => (
-                                <div key={index}>
+                                <div>
                                   <img
                                     style={{ width: 50 }}
                                     src={money.image.url}
@@ -490,28 +508,67 @@ const Game3 = (props) => {
                       </div>
                     )}
 
-                    <div className="carrinho">
-                      {Object.keys(state.cart).map((product, index) => (
-                        <div key={index}>
-                          {state.cart[product] > 0 && product}
-                          {!state.checkout && state.cart[product] > 0 && (
-                            <button onClick={removeProduct(product)}>
-                              Remover {state.cart[product]}
-                            </button>
-                          )}
-                        </div>
-                      ))}
+                    <div className="cart">
+                      <div className="cart-items">
+                        {Object.keys(state.cart).map((product, index) =>
+                          state.cart[product] > 0 ? (
+                            <div className="cart-item">
+                              <img
+                                src={
+                                  state.ingredientsList.find(
+                                    (ingredient) => ingredient.name === product
+                                  ).image
+                                }
+                                alt=""
+                                onClick={removeProduct(product)}
+                                className="cart-item-img"
+                              />
+                              <span>{state.cart[product]}</span>
+                            </div>
+                          ) : null
+                        )}
+                      </div>
+                      <img
+                        src={cart}
+                        alt=""
+                        style={{ marginTop: -90, position: "relative" }}
+                      />
                     </div>
 
                     {state.shopList && (
-                      <div className="Lista de compras">
-                        <div>
-                          {state.ingredientsList.map((ingredient, index) => (
-                            <div key={index}>
-                              {ingredient.name} {ingredient.quantity}
-                            </div>
-                          ))}
-                        </div>
+                      <div
+                        className="shop-list"
+                        style={{
+                          backgroundImage: "url(" + ingredientsListBg + ")",
+                          backgroundRepeat: "no-repeat",
+                          backgroundSize: "contain",
+                        }}
+                      >
+                        {state.ingredientsList.map((ingredient, index) => (
+                          <div>
+                            {checkShoppingList(ingredient) ? (
+                              <img
+                                src={listCheck}
+                                alt=""
+                                className="shop-list-item-check"
+                              />
+                            ) : (
+                              <div
+                                style={{
+                                  width: 20,
+                                  height: 20,
+                                  display: "inline-block",
+                                }}
+                              ></div>
+                            )}{" "}
+                            <img
+                              src={ingredient.image}
+                              alt=""
+                              className="shop-list-item-img"
+                            />
+                            {ingredient.description}
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
