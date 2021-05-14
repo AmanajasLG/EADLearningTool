@@ -2,7 +2,6 @@ import React from "react";
 import "./index.scss";
 
 import shelf from "../../../../img/Game3/shelf.svg";
-import { ShowChart } from "@material-ui/icons";
 
 const Aisle = ({ products, aisleName, addProduct }) => {
   // const [state, setState] = React.useState({ seconds: seconds, timeout: null });

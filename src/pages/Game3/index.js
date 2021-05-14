@@ -379,7 +379,7 @@ const Game3 = (props) => {
               case "MARKET":
                 return (
                   <div>
-                    {/* <Timer
+                    <Timer
                       run={state.runTimer}
                       seconds={missionData.seconds}
                       onSecondPassed={() => {}}
@@ -391,7 +391,7 @@ const Game3 = (props) => {
                           remainingTime: remaining,
                         })
                       }
-                    /> */}
+                    />
 
                     <img
                       onClick={() =>

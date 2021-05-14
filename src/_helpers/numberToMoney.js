@@ -1,5 +1,3 @@
-import { WorkSharp } from "@material-ui/icons";
-
 export function numberToMoney(n) {
   var string = n.toString(),
     units,
