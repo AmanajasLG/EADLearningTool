@@ -14,7 +14,6 @@ const UserSpace = () => {
     dispatch(gameActions.getAll('missions'))
   }, [dispatch])
 
-
   // React.useEffect(()=>{
   //   dispatch(game_1_missionsActions.getAll())
   // }, [dispatch, game_1_missionsActions])
@@ -65,6 +64,14 @@ const UserSpace = () => {
               )}
             </div>
           </div>
+          {process.env.NODE_ENV === 'development' &&
+            <div>
+              Development
+              <div>
+                <Link to='/game5/0'>Game5 Stub</Link>
+              </div>
+            </div>
+          }
         </div>
       }
     </div>
