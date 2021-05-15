@@ -199,6 +199,10 @@ const Game3 = (props) => {
           acc[ingredient.type] = [...(acc[ingredient.type] || []), ingredient];
           return acc;
         }, {});
+
+        aisles = Object.keys(aisles).reduce((acc, aisle) => {
+          return [...acc, aisles[aisle]];
+        }, []);
       }
 
       setState((state) => {
@@ -249,14 +253,14 @@ const Game3 = (props) => {
     });
   };
 
-  const toPreviousaisle = () => {
+  const toPreviousAisle = () => {
     setState({
       ...state,
       currentAisle: goRound(state.currentAisle - 1, state.aisles.length),
     });
   };
 
-  const toNextaisle = () => {
+  const toNextAisle = () => {
     setState({
       ...state,
       currentAisle: goRound(state.currentAisle + 1, state.aisles.length),
@@ -452,7 +456,22 @@ const Game3 = (props) => {
                   <Tutorial
                     chef={missionData.character}
                     seconds={missionData.seconds}
-                    goToMarket={() => setState({ ...state, scene: "MARKET" })}
+                    hasPlayed={timesPlayed > 0}
+                    aisle={state.aisles[state.currentAisle]}
+                    cart={state.cart}
+                    ingredientsList={state.ingredientsList}
+                    addProduct={addProduct}
+                    removeProduct={removeProduct}
+                    toPreviousAisle={toPreviousAisle}
+                    toNextAisle={toNextAisle}
+                    goToMarket={() =>
+                      setState({
+                        ...state,
+                        scene: "MARKET",
+                        currentAisle: 0,
+                        cart: [],
+                      })
+                    }
                   />
                 );
               case "MARKET":
@@ -479,35 +498,26 @@ const Game3 = (props) => {
                           alt=""
                           className="list-icon"
                         />
-                        <div style={{ width: "60vw", display: "inline-block" }}>
-                          <Aisle
-                            products={state.aisles[state.currentAisle]}
-                            aisleName={state.currentAisle}
-                            addProduct={addProduct}
-                          />
 
-                          <button className="Voltar" onClick={toPreviousaisle}>
-                            {"<"}
-                          </button>
+                        <Aisle
+                          products={state.aisles[state.currentAisle]}
+                          addProduct={addProduct}
+                          toPreviousAisle={toPreviousAisle}
+                          toNextAisle={toNextAisle}
+                        />
 
-                          <button className="Avançar" onClick={toNextaisle}>
-                            {">"}
-                          </button>
-
-                          <img
-                            onClick={() =>
-                              setState({
-                                ...state,
-                                checkoutConfirm: true,
-                                runTimer: false,
-                                shopList: false,
-                              })
-                            }
-                            src={checkout}
-                            alt=""
-                          />
-                        </div>
-
+                        <img
+                          onClick={() =>
+                            setState({
+                              ...state,
+                              checkoutConfirm: true,
+                              runTimer: false,
+                              shopList: false,
+                            })
+                          }
+                          src={checkout}
+                          alt=""
+                        />
                         <div className="cart">
                           <div className="cart-items">
                             {state.cart.map((product, index) => (
