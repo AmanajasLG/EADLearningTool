@@ -25,6 +25,9 @@ import ingredientsListBg from "../../img/Game3/ingredients-list.svg";
 import listCheck from "../../img/Game3/check.svg";
 import listIcon from "../../img/Game3/list-icon.svg";
 import checkout from "../../img/Game3/checkout.svg";
+import blobLaranja from "../../img/bg-forma-laranja.svg";
+import hourglassFull from "../../img/Game3/hourglass-full.svg";
+import hourglassEmpty from "../../img/Game3/hourglass-empty.svg";
 
 import { numberToMoney } from "../../_helpers";
 
@@ -59,6 +62,13 @@ const splitArrayIntoChunksOfLen = (arr, len) => {
     chunks.push(arr.slice(i, (i += len)));
   }
   return chunks;
+};
+
+const zeroFill = (s, size) => {
+  while (s.length < size) {
+    s = "0" + s;
+  }
+  return s;
 };
 
 const Game3 = (props) => {
@@ -254,23 +264,25 @@ const Game3 = (props) => {
   };
 
   const addToPayment = (money) => () => {
-    setState({ ...state, payment: [...state.payment, money] });
-  };
-
-  const removeFromPayment = (index) => () => {
     setState({
       ...state,
-      payment: [
-        ...state.payment.slice(0, index),
-        ...state.payment.slice(index + 1),
-      ],
+      payment: state.payment.hasOwnProperty(money)
+        ? { ...state.payment, [money]: state.payment[money] + 1 }
+        : { ...state.payment, [money]: 1 },
+    });
+  };
+
+  const removeFromPayment = (money) => () => {
+    setState({
+      ...state,
+      payment: { ...state.payment, [money]: state.payment[money] - 1 },
     });
   };
 
   const moveToPayment = () => {
     setState({
       ...state,
-      onPayment: true,
+      scene: "CASHIER",
       price: Object.keys(state.cart)
         .reduce((acc, product) => {
           return (
@@ -287,10 +299,11 @@ const Game3 = (props) => {
 
   const doPayment = () => {
     let updateData = {};
-    updateData.paymentAmount = state.payment.reduce(
-      (acc, money) => money.value + acc,
-      0
-    );
+    updateData.paymentAmount = Object.keys(state.payment)
+      .reduce((acc, money) => {
+        return acc + parseFloat(money) * state.payment[money];
+      }, 0)
+      .toFixed(2);
 
     updateData.change = updateData.paymentAmount - state.price;
     setState({ ...state, ...updateData });
@@ -382,7 +395,12 @@ const Game3 = (props) => {
                     <Timer
                       run={state.runTimer}
                       seconds={missionData.seconds}
-                      onSecondPassed={() => {}}
+                      onToPayment={(remaining) => {
+                        setState({
+                          ...state,
+                          remainingTime: remaining,
+                        });
+                      }}
                       onEnd={(remaining) =>
                         setState({
                           ...state,
@@ -453,58 +471,6 @@ const Game3 = (props) => {
                             </button>
                           </div>
                         )}
-                        {state.onPayment && (
-                          <div>
-                            Hora de pagar! Sua compra deu{" "}
-                            {numberToMoney(state.price)}
-                            <button onClick={doPayment}>
-                              Finalizar Compra
-                            </button>
-                            {state.paymentAmount &&
-                              state.paymentAmount < state.price && (
-                                <div>Opa, pagament insuficiente.</div>
-                              )}
-                            {state.change && (
-                              <div className="PopUp">
-                                <div>Seu troco! {state.change}</div>
-                                <div>O troco está correto?</div>
-                                <button onClick={receiveChange}>Yes</button>
-                                <button onClick={receiveChange}>No</button>
-                              </div>
-                            )}
-                            {state.change === 0 && (
-                              <div>
-                                Seu pagamento esta certo!
-                                <button onClick={receiveChange}>HOORAY!</button>
-                              </div>
-                            )}
-                            <div>
-                              {missionData.money.map((money, index) => (
-                                <Button onClick={addToPayment(money)}>
-                                  <img
-                                    style={{ width: 50 }}
-                                    src={money.image.url}
-                                    alt="money"
-                                  />
-                                </Button>
-                              ))}
-                            </div>
-                            <div>
-                              {state.payment.map((money, index) => (
-                                <div>
-                                  <img
-                                    style={{ width: 50 }}
-                                    src={money.image.url}
-                                    alt="money"
-                                  />
-                                  <button onClick={removeFromPayment(index)}>
-                                    Remover
-                                  </button>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
                       </div>
                     )}
 
@@ -573,18 +539,117 @@ const Game3 = (props) => {
                     )}
                   </div>
                 );
+              case "CASHIER":
+                return (
+                  <div>
+                    <div>
+                      Hora de pagar! Sua compra deu {numberToMoney(state.price)}
+                      <button onClick={doPayment}>Finalizar Compra</button>
+                      {state.paymentAmount &&
+                        state.paymentAmount < state.price && (
+                          <div>Opa, pagament insuficiente.</div>
+                        )}
+                      {state.change && (
+                        <div className="PopUp">
+                          <div>Seu troco! {state.change}</div>
+                          <div>O troco está correto?</div>
+                          <button onClick={receiveChange}>Yes</button>
+                          <button onClick={receiveChange}>No</button>
+                        </div>
+                      )}
+                      {state.change === 0 && (
+                        <div>
+                          Seu pagamento esta certo!
+                          <button onClick={receiveChange}>HOORAY!</button>
+                        </div>
+                      )}
+                      <div>
+                        {missionData.money.map((money, index) => (
+                          <Button onClick={addToPayment(money.value)}>
+                            <img
+                              style={{ width: 50 }}
+                              src={money.image.url}
+                              alt="money"
+                            />
+                          </Button>
+                        ))}
+                      </div>
+                      <div>
+                        {Object.keys(state.payment).map((money, index) =>
+                          state.payment[money] > 0 ? (
+                            <div className="payment-money">
+                              {console.log(money)}
+                              <img
+                                src={
+                                  missionData.money.find((moneyObj) => {
+                                    console.log(moneyObj);
+                                    console.log(money);
+                                    return moneyObj.value === parseFloat(money);
+                                  }).image.url
+                                }
+                                alt=""
+                                onClick={removeFromPayment(money)}
+                                className="payment-money-img"
+                              />
+                              <span>{state.payment[money]}</span>
+                            </div>
+                          ) : null
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
               case "END_GAME":
                 return (
                   <div>
-                    {state.timeUp && <div>Seu tempo acabou!</div>}
-                    {state.win && (
+                    {state.timeUp && (
                       <div>
-                        Parabens!! isso e isso deu certo, mas isso e isso deu
-                        errado!
+                        <img src={hourglassEmpty} alt="" />
+                        <span>O tempo acabou!</span>
+                        <p lang="pt-br">
+                          Fazer compras pode ser mais complicado do que parece.
+                        </p>
+                        <p lang="en">
+                          Time is up! Doing the groceries might be harder than
+                          it looks.
+                        </p>
                       </div>
                     )}
-                    <button onClick={() => setState({ ...initialState() })}>
-                      Jogar novamente
+                    {state.win && (
+                      <div>
+                        <img src={hourglassFull} alt="" />
+                        <p lang="pt-br">Você finalizou em:</p>
+                        <p lang="en">Finished in:</p>
+                      </div>
+                    )}
+                    <div
+                      className="feedback-painel-2-content"
+                      style={{
+                        backgroundImage: "url(" + blobLaranja + ")",
+                      }}
+                    >
+                      {state.timeUp && <div> 00:00</div>}
+                      {state.win && (
+                        <div>
+                          {zeroFill(
+                            Math.floor(
+                              (missionData.seconds - state.remainingTime) / 60
+                            ).toString(),
+                            2
+                          )}
+                          :
+                          {zeroFill(
+                            (
+                              (missionData.seconds - state.remainingTime) %
+                              60
+                            ).toString(),
+                            2
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <button onClick={() => setState({ ...initialState(true) })}>
+                      Tentar novamente
                     </button>
                     <Link to={"/userspace"}>Sair do jogo</Link>
                   </div>

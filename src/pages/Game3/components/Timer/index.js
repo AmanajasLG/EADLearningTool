@@ -6,8 +6,12 @@ const zeroFill = (s, size) => {
   }
   return s;
 };
-const Timer = ({ seconds, onEnd, onSecondPassed, run = true }) => {
-  const [state, setState] = React.useState({ seconds: seconds, timeout: null });
+const Timer = ({ seconds, onEnd, onToPayment, run = true }) => {
+  const [state, setState] = React.useState({
+    seconds: seconds,
+    timeout: null,
+    sentRemaning: false,
+  });
   const previousRef = React.useRef();
 
   React.useEffect(() => {
@@ -16,7 +20,15 @@ const Timer = ({ seconds, onEnd, onSecondPassed, run = true }) => {
       return;
     }
 
-    if (!run) return state.timeout ? () => clearTimeout(state.timeout) : null;
+    if (!run && !state.sentRemaning) {
+      onToPayment(state.seconds);
+      setState({ ...state, sentRemaning: true });
+    } else if (run && state.sentRemaning)
+      setState({ ...state, sentRemaning: false });
+
+    if (!run) {
+      return state.timeout ? () => clearTimeout(state.timeout) : null;
+    }
 
     if (state.seconds === 0) {
       if (onEnd) onEnd(state.seconds);
@@ -28,7 +40,7 @@ const Timer = ({ seconds, onEnd, onSecondPassed, run = true }) => {
 
       return () => clearTimeout(state.timeout);
     }
-  }, [state, onEnd, onSecondPassed, run, seconds]);
+  }, [state, onEnd, onToPayment, run, seconds]);
 
   return (
     <div>

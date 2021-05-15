@@ -1,6 +1,7 @@
 import React from "react";
 import DialogCharacter from "../../../Game2/components/DialogCharacter";
 import Aisle from "../Aisle";
+import hourglassFull from "../../../../img/Game3/hourglass-full.svg";
 
 const zeroFill = (s, size) => {
   while (s.length < size) {
@@ -58,6 +59,7 @@ const Tutorial = ({ chef, addProduct, aisles, seconds, goToMarket }) => {
 
       {state.screen === 2 && (
         <div>
+          <img src={hourglassFull} alt="" />
           <span>Você tem</span>
           <span>
             {zeroFill(Math.floor(seconds / 60).toString(), 2)}:
