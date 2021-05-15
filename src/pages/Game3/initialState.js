@@ -1,7 +1,7 @@
 const initialState = (checkedPlayed) => {
   return {
     scene: "INIT",
-    cart: {},
+    cart: [],
     tutorialRoom: {},
     recipe: {},
     ingredientsList: [],
@@ -9,13 +9,13 @@ const initialState = (checkedPlayed) => {
     currentAisle: 0,
     checkout: false,
     onPayment: false,
-    payment: {},
+    payment: [],
     win: false,
     change: null,
-    paymentAmount: null,
     runTimer: true,
     reaminingTime: 0,
     checkedPlayed: checkedPlayed,
+    moneySelection: false,
   };
 };
 
