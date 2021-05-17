@@ -1,10 +1,9 @@
 import React from "react";
 import "./index.scss";
 
-import DialogCharacter from "../../../Game2/components/DialogCharacter";
+import DialogCharacter from "../../../../_components/DialogCharacter";
 
-import ingredientsListRotated from "../../../../img/Game3/ingredients-list-rotated.svg";
-import kitchen from "../../../../img/Game3/kitchen.svg";
+import { ingredientsListRotated, kitchen } from "../../../../img";
 
 const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
   const [state, setState] = React.useState({ screen: 0 });

@@ -1,27 +1,23 @@
 import React from "react";
 import "./index.scss";
-import DialogCharacter from "../../../Game2/components/DialogCharacter";
-import Aisle from "../Aisle";
+import DialogCharacter from "../../../../_components/DialogCharacter";
+import Aisle from "../../../../_components/Aisle";
 
-import hourglassFull from "../../../../img/Game3/hourglass-full.svg";
-import cartImg from "../../../../img/Game3/cart.svg";
-import checkout from "../../../../img/Game3/checkout.svg";
-import ingredientsListBg from "../../../../img/Game3/ingredients-list.svg";
-import listCheck from "../../../../img/Game3/check.svg";
-import listIcon from "../../../../img/Game3/list-icon.svg";
-
-const zeroFill = (s, size) => {
-  while (s.length < size) {
-    s = "0" + s;
-  }
-  return s;
-};
+import {
+  hourglassFull,
+  cart,
+  checkout,
+  ingredientsListBg,
+  listCheck,
+  listIcon,
+} from "../../../../img";
+import { zeroFill } from "../../../../_helpers";
 
 const Tutorial = ({
   chef,
   aisle,
   seconds,
-  cart,
+  shoppingCart,
   ingredientsList,
   hasPlayed,
   addProduct,
@@ -150,7 +146,7 @@ const Tutorial = ({
           />
           <div className="cart">
             <div className="cart-items">
-              {cart.map((product, index) => (
+              {shoppingCart.map((product, index) => (
                 <div className="cart-item">
                   <img
                     src={
@@ -167,7 +163,7 @@ const Tutorial = ({
               ))}
             </div>
             <img
-              src={cartImg}
+              src={cart}
               alt=""
               style={{ marginTop: -50, position: "relative" }}
             />

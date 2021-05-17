@@ -4,6 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import "./index.scss";
 
 import {
+  goRound,
+  splitArrayIntoChunksOfLen,
+  zeroFill,
+  numberToMoney,
+  shuffle,
+} from "../../_helpers";
+
+import {
   apiActions,
   gameActions,
   headerActions,
@@ -13,69 +21,29 @@ import { headerConstants } from "../../_constants";
 
 import Button from "@material-ui/core/Button";
 
-import Init from "../Game2/components/Init";
-import Timer from "./components/Timer";
 import initialState from "./initialState";
-import Aisle from "./components/Aisle";
+
+import Init from "../../_components/Init";
+import Timer from "../../_components/Timer";
+import Aisle from "../../_components/Aisle";
 import Intro from "./components/Intro";
 import Tutorial from "./components/Tutorial";
+import DialogCharacter from "../../_components/DialogCharacter";
 
-import cart from "../../img/Game3/cart.svg";
-import ingredientsListBg from "../../img/Game3/ingredients-list.svg";
-import recipeBg from "../../img/Game3/recipe-bg.svg";
-import listCheck from "../../img/Game3/check.svg";
-import listIcon from "../../img/Game3/list-icon.svg";
-import checkout from "../../img/Game3/checkout.svg";
-import wallet from "../../img/Game3/wallet.svg";
-import blobLaranja from "../../img/bg-forma-laranja.svg";
-import hourglassFull from "../../img/Game3/hourglass-full.svg";
-import hourglassEmpty from "../../img/Game3/hourglass-empty.svg";
-import cashierTable from "../../img/Game3/chashier-table.svg";
-import cashierBg from "../../img/Game3/cashier-bg.svg";
-
-import { numberToMoney } from "../../_helpers";
-import DialogCharacter from "../Game2/components/DialogCharacter";
-
-const goRound = (value, max) =>
-  value >= 0 ? value % max : max - (Math.abs(value) % max);
-
-const shuffle = (array) => {
-  var currentIndex = array.length,
-    temporaryValue,
-    randomIndex,
-    shuffledArray = [...array];
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = shuffledArray[currentIndex];
-    shuffledArray[currentIndex] = shuffledArray[randomIndex];
-    shuffledArray[randomIndex] = temporaryValue;
-  }
-
-  return shuffledArray;
-};
-
-const splitArrayIntoChunksOfLen = (arr, len) => {
-  var chunks = [],
-    i = 0,
-    n = arr.length;
-  while (i < n) {
-    chunks.push(arr.slice(i, (i += len)));
-  }
-  return chunks;
-};
-
-const zeroFill = (s, size) => {
-  while (s.length < size) {
-    s = "0" + s;
-  }
-  return s;
-};
+import {
+  cart,
+  ingredientsListBg,
+  recipeBg,
+  listCheck,
+  listIcon,
+  checkout,
+  wallet,
+  blobLaranja,
+  hourglassFull,
+  hourglassEmpty,
+  cashierTable,
+  cashierBg,
+} from "../../img";
 
 const Game3 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -458,7 +426,7 @@ const Game3 = (props) => {
                     seconds={missionData.seconds}
                     hasPlayed={timesPlayed > 0}
                     aisle={state.aisles[state.currentAisle]}
-                    cart={state.cart}
+                    shoppingCart={state.cart}
                     ingredientsList={state.ingredientsList}
                     addProduct={addProduct}
                     removeProduct={removeProduct}

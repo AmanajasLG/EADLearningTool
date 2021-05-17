@@ -1,34 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import Init from "../Game2/components/Init";
-import Timer from "../Game3/components/Timer";
-import Recipe from "./components/Recipe";
+import Init from "../../_components/Init";
+import Timer from "../../_components/Timer";
+import Recipe from "../../_components/Recipe";
 
 import stub from "./stub";
 import initialState from "./initialState";
 
-const shuffleArray = (array) => {
-  let copy = array.slice(0);
-  let shuffled = [];
-  while (copy.length > 0) {
-    let index = Math.trunc(Math.random() * 100) % copy.length;
-    shuffled.push(copy[index]);
-    copy = [...copy.slice(0, index), ...copy.slice(index + 1)];
-  }
-  return shuffled;
-};
-
-const shuffleString = (word) => {
-  let copy = word.slice(0);
-  let shuffled = [];
-  while (copy.length > 0) {
-    let index = Math.trunc(Math.random() * 100) % copy.length;
-    shuffled.push(copy[index]);
-    copy = copy.slice(0, index) + copy.slice(index + 1);
-  }
-  return shuffled;
-};
+import { shuffle } from "../../_helpers";
 
 const Game4 = () => {
   const [state, setState] = React.useState(initialState());
@@ -177,10 +157,10 @@ const Game4 = () => {
                       ...state,
                       cookPhase: false,
                       servePhase: true,
-                      shuffledDishesNames: shuffleArray(
+                      shuffledDishesNames: shuffle(
                         mission.dishes.map((item) => item.name)
                       ),
-                      shuffledDishes: shuffleArray(
+                      shuffledDishes: shuffle(
                         mission.dishes.map((item) => item.img)
                       ),
                     })
@@ -240,7 +220,7 @@ const Game4 = () => {
                             setState({
                               ...state,
                               orderedLetters: [],
-                              shuffled: shuffleString(state.selected.name),
+                              shuffled: shuffle(state.selected.name.split("")),
                             })
                           }
                         >
@@ -305,8 +285,8 @@ const Game4 = () => {
                                     setState({
                                       ...state,
                                       selectItem: false,
-                                      shuffled: shuffleString(
-                                        state.selected.name
+                                      shuffled: shuffle(
+                                        state.selected.name.split("")
                                       ),
                                     })
                                   }

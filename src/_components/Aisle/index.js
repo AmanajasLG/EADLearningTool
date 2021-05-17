@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.scss";
 
-import shelf from "../../../../img/Game3/shelf.svg";
+import { shelf } from "../../img";
 
 const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
   // const [state, setState] = React.useState({ seconds: seconds, timeout: null });

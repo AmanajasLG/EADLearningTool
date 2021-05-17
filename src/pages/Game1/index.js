@@ -9,23 +9,19 @@ import {
   musicActions,
 } from "../../_actions";
 
-import Init from "../Game2/components/Init";
+import Init from "../../_components/Init";
 import Result from "../Game2/components/Result";
-import RoomSelect from "../Game2/components/RoomSelect";
-import Sala from "../Game2/components/Sala";
-import Character from "../Game2/components/Character";
+import RoomSelect from "../../_components/RoomSelect";
+import Sala from "../../_components/Sala";
+import Character from "../../_components/Character";
 import initialState from "./initialState.js";
 import initialDialog from "./initialDialog.js";
 import stub from "./stub.js";
-import Phone from "./components/Phone";
-import Conversa from "../Game2/components/Conversa";
-import FullscreenOverlay from "../Game2/components/FullscreenOverlay";
+import Phone from "../../_components/Phone";
+import Conversa from "../../_components/Conversa";
+import FullscreenOverlay from "../../_components/FullscreenOverlay";
 import { headerConstants } from "../../_constants";
-import bigPhone from "../../img/Game1/Celular Base.svg";
-import dedao from "../../img/Game1/Mão dedão.svg";
-import palma from "../../img/Game1/Mão palma.svg";
-import blobLowScore from "../../img/Score Baixo_blob.svg";
-import blobLaranja from "../../img/bg-forma-laranja.svg";
+import { bigPhone, dedao, palma, blobLowScore, blobLaranja } from "../../img";
 
 import "./index.scss";
 import "./feedback-screen.scss";
