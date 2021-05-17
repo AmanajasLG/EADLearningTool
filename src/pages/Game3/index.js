@@ -22,14 +22,19 @@ import Tutorial from "./components/Tutorial";
 
 import cart from "../../img/Game3/cart.svg";
 import ingredientsListBg from "../../img/Game3/ingredients-list.svg";
+import recipeBg from "../../img/Game3/recipe-bg.svg";
 import listCheck from "../../img/Game3/check.svg";
 import listIcon from "../../img/Game3/list-icon.svg";
 import checkout from "../../img/Game3/checkout.svg";
+import wallet from "../../img/Game3/wallet.svg";
 import blobLaranja from "../../img/bg-forma-laranja.svg";
 import hourglassFull from "../../img/Game3/hourglass-full.svg";
 import hourglassEmpty from "../../img/Game3/hourglass-empty.svg";
+import cashierTable from "../../img/Game3/chashier-table.svg";
+import cashierBg from "../../img/Game3/cashier-bg.svg";
 
 import { numberToMoney } from "../../_helpers";
+import DialogCharacter from "../Game2/components/DialogCharacter";
 
 const goRound = (value, max) =>
   value >= 0 ? value % max : max - (Math.abs(value) % max);
@@ -37,7 +42,8 @@ const goRound = (value, max) =>
 const shuffle = (array) => {
   var currentIndex = array.length,
     temporaryValue,
-    randomIndex;
+    randomIndex,
+    shuffledArray = [...array];
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
@@ -46,12 +52,12 @@ const shuffle = (array) => {
     currentIndex -= 1;
 
     // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
+    temporaryValue = shuffledArray[currentIndex];
+    shuffledArray[currentIndex] = shuffledArray[randomIndex];
+    shuffledArray[randomIndex] = temporaryValue;
   }
 
-  return array;
+  return shuffledArray;
 };
 
 const splitArrayIntoChunksOfLen = (arr, len) => {
@@ -123,7 +129,7 @@ const Game3 = (props) => {
       }
     }
     // eslint-disable-next-line
-  }, [userId, mission, dispatch]);
+  }, [userId, mission, dispatch, state.checkedPlayed]);
 
   React.useEffect(() => {
     if (
@@ -143,6 +149,7 @@ const Game3 = (props) => {
         );
 
       let resumeRecipe = {
+        id: recipe.id,
         name: recipe.name,
         nameTranslate: recipe.nameTranslate.find((name) => {
           return name.language.id === lang;
@@ -174,9 +181,9 @@ const Game3 = (props) => {
             ingredient.measure === "unidade"
               ? 1
               : `${ingredient.unityValue}${ingredient.measure}`,
-          unityValue: ingredient.unityValue,
+          unityValue:
+            ingredient.measure === "unidade" ? 1 : ingredient.unityValue,
           quantity: ingredient.quantity,
-          measure: ingredient.measure,
           price: ingredient.price,
           shelfCount: 10,
         };
@@ -192,6 +199,10 @@ const Game3 = (props) => {
           acc[ingredient.type] = [...(acc[ingredient.type] || []), ingredient];
           return acc;
         }, {});
+
+        aisles = Object.keys(aisles).reduce((acc, aisle) => {
+          return [...acc, aisles[aisle]];
+        }, []);
       }
 
       setState((state) => {
@@ -212,29 +223,44 @@ const Game3 = (props) => {
     lang,
   ]);
 
-  const addProduct = (product) => () =>
-    setState({
-      ...state,
-      cart: state.cart.hasOwnProperty(product)
-        ? { ...state.cart, [product]: state.cart[product] + 1 }
-        : { ...state.cart, [product]: 1 },
-    });
+  const addProduct = (product) => () => {
+    const index = state.cart.findIndex(
+      (ingredient) => ingredient.name === product
+    );
+    let cartUpdate = [...state.cart];
 
-  const removeProduct = (product) => () => {
+    if (index >= 0) cartUpdate[index].count += 1;
+    else cartUpdate.push({ name: product, count: 1 });
+
     setState({
       ...state,
-      cart: { ...state.cart, [product]: state.cart[product] - 1 },
+      cart: cartUpdate,
+    });
+  };
+  const removeProduct = (index) => () => {
+    let cartUpdate = [...state.cart];
+
+    if (cartUpdate[index].count > 1) cartUpdate[index].count -= 1;
+    else
+      cartUpdate = [
+        ...state.cart.slice(0, index),
+        ...state.cart.slice(index + 1),
+      ];
+
+    setState({
+      ...state,
+      cart: cartUpdate,
     });
   };
 
-  const toPreviousaisle = () => {
+  const toPreviousAisle = () => {
     setState({
       ...state,
       currentAisle: goRound(state.currentAisle - 1, state.aisles.length),
     });
   };
 
-  const toNextaisle = () => {
+  const toNextAisle = () => {
     setState({
       ...state,
       currentAisle: goRound(state.currentAisle + 1, state.aisles.length),
@@ -242,12 +268,11 @@ const Game3 = (props) => {
   };
 
   const checkShoppingList = (ingredient) => {
-    if (
-      ingredient.measure === "unidade"
-        ? state.cart[ingredient.name] !== ingredient.quantity
-        : state.cart[ingredient.name] * ingredient.unityValue !==
-          ingredient.quantity
-    )
+    let cartIngredient = state.cart.find(
+      (cartItem) => cartItem.name === ingredient.name
+    );
+    if (!cartIngredient) return false;
+    if (cartIngredient.count * ingredient.unityValue !== ingredient.quantity)
       return false;
 
     return true;
@@ -255,27 +280,57 @@ const Game3 = (props) => {
 
   const haveAll = () => {
     for (let i = 0; i < state.ingredientsList.length; i++) {
-      if (!state.cart.hasOwnProperty(state.ingredientsList[i].name))
-        return false;
       if (!checkShoppingList(state.ingredientsList[i])) return false;
     }
 
     return true;
   };
 
-  const addToPayment = (money) => () => {
+  const moveToCheckout = () => {
     setState({
       ...state,
-      payment: state.payment.hasOwnProperty(money)
-        ? { ...state.payment, [money]: state.payment[money] + 1 }
-        : { ...state.payment, [money]: 1 },
+      checkout: true,
+      checkoutConfirm: false,
+      price: state.cart
+        .reduce((acc, product) => {
+          return (
+            acc +
+            state.ingredientsList.find(
+              (ingredient) => ingredient.name === product.name
+            ).price *
+              product.count
+          );
+        }, 0)
+        .toFixed(2),
     });
   };
 
-  const removeFromPayment = (money) => () => {
+  const addToPayment = (money) => () => {
+    const index = state.payment.findIndex(
+      (moneyObj) => moneyObj.value === money
+    );
+    let paymentUpdate = [...state.payment];
+
+    if (index >= 0) paymentUpdate[index].count += 1;
+    else paymentUpdate.push({ value: money, count: 1 });
     setState({
       ...state,
-      payment: { ...state.payment, [money]: state.payment[money] - 1 },
+      payment: paymentUpdate,
+    });
+  };
+
+  const removeFromPayment = (index) => () => {
+    let paymentUpdate = [...state.payment];
+
+    if (paymentUpdate[index].count > 1) paymentUpdate[index].count -= 1;
+    else
+      paymentUpdate = [
+        ...state.payment.slice(0, index),
+        ...state.payment.slice(index + 1),
+      ];
+    setState({
+      ...state,
+      payment: paymentUpdate,
     });
   };
 
@@ -283,51 +338,49 @@ const Game3 = (props) => {
     setState({
       ...state,
       scene: "CASHIER",
-      price: Object.keys(state.cart)
-        .reduce((acc, product) => {
-          return (
-            acc +
-            state.ingredientsList.find(
-              (ingredient) => ingredient.name === product
-            ).price *
-              state.cart[product]
-          );
-        }, 0)
-        .toFixed(2),
+      runTimer: true,
+      moneySelection: true,
     });
   };
 
   const doPayment = () => {
-    let updateData = {};
-    updateData.paymentAmount = Object.keys(state.payment)
-      .reduce((acc, money) => {
-        return acc + parseFloat(money) * state.payment[money];
-      }, 0)
-      .toFixed(2);
-
-    updateData.change = updateData.paymentAmount - state.price;
-    setState({ ...state, ...updateData });
+    setState({
+      ...state,
+      change:
+        state.payment
+          .reduce((acc, money) => {
+            return acc + money.value * money.count;
+          }, 0)
+          .toFixed(2) - state.price,
+      moneySelection: false,
+      runTimer: false,
+    });
   };
 
-  const receiveChange = () => {
-    let updateData = {};
-    updateData.scene = "END_GAME";
-    updateData.win = true;
-    setState({ ...state, ...updateData });
+  const getWrongItemsInCart = () =>
+    state.ingredientsList
+      .filter((ingredient) => {
+        return !checkShoppingList(ingredient);
+      })
+      .map((ingredient) => ({
+        ingredient: ingredient.name,
+        rightQuantity: ingredient.quantity,
+        userQuantity: state.cart.hasOwnProperty(ingredient.name)
+          ? state.cart[ingredient.name] * ingredient.unityValue
+          : 0,
+      }));
+
+  const restart = () => {
+    setState({ ...initialState(false) });
+    dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
   };
 
-  const endGame = () => {
-    // dispatch(
-    //   gameActions.create("results", {
-    //     user: userId,
-    //     mission: mission.id,
-    //     score: state.score,
-    //     tipsCount: state.tips.length,
-    //     spokenCharactersCount: state.spokenCharacters.length,
-    //     won: state.gameEndState,
-    //     validQuestionsCount: Object.keys(state.validQuestions).length,
-    //   })
-    // );
+  const endGame = (timeUp) => {
+    setState({
+      ...state,
+      scene: "END_GAME",
+      timeUp: timeUp,
+    });
 
     dispatch(
       headerActions.setAll(
@@ -338,6 +391,23 @@ const Game3 = (props) => {
       )
     );
     dispatch(headerActions.setState(headerConstants.STATES.OVERLAY));
+
+    let wrongIngredients = getWrongItemsInCart();
+
+    dispatch(
+      gameActions.create("results", {
+        user: userId,
+        mission: mission.id,
+        secondsTaken: timeUp
+          ? missionData.seconds + 1
+          : missionData.seconds - state.remainingTime,
+        recipe: state.recipe.id,
+        rightPayment: state.change === 0,
+        won: state.change === 0 && !timeUp && wrongIngredients.length === 0,
+        wrongIngredients:
+          wrongIngredients.length > 0 ? JSON.stringify(wrongIngredients) : null,
+      })
+    );
   };
 
   //const { mission } = state
@@ -386,7 +456,22 @@ const Game3 = (props) => {
                   <Tutorial
                     chef={missionData.character}
                     seconds={missionData.seconds}
-                    goToMarket={() => setState({ ...state, scene: "MARKET" })}
+                    hasPlayed={timesPlayed > 0}
+                    aisle={state.aisles[state.currentAisle]}
+                    cart={state.cart}
+                    ingredientsList={state.ingredientsList}
+                    addProduct={addProduct}
+                    removeProduct={removeProduct}
+                    toPreviousAisle={toPreviousAisle}
+                    toNextAisle={toNextAisle}
+                    goToMarket={() =>
+                      setState({
+                        ...state,
+                        scene: "MARKET",
+                        currentAisle: 0,
+                        cart: [],
+                      })
+                    }
                   />
                 );
               case "MARKET":
@@ -395,111 +480,188 @@ const Game3 = (props) => {
                     <Timer
                       run={state.runTimer}
                       seconds={missionData.seconds}
-                      onToPayment={(remaining) => {
+                      onStop={(remaining) => {
                         setState({
                           ...state,
                           remainingTime: remaining,
                         });
                       }}
-                      onEnd={(remaining) =>
-                        setState({
-                          ...state,
-                          scene: "END_GAME",
-                          timeUp: true,
-                          remainingTime: remaining,
-                        })
-                      }
+                      onEnd={() => endGame(true)}
                     />
-
-                    <img
-                      onClick={() =>
-                        setState({ ...state, shopList: !state.shopList })
-                      }
-                      src={listIcon}
-                      alt=""
-                      className="list-icon"
-                    />
-
-                    {!state.checkout && (
-                      <div style={{ width: "60vw", display: "inline-block" }}>
-                        <Aisle
-                          products={state.aisles[state.currentAisle]}
-                          aisleName={state.currentAisle}
-                          addProduct={addProduct}
+                    {!state.checkout && !state.checkoutConfirm && (
+                      <div>
+                        <img
+                          onClick={() =>
+                            setState({ ...state, shopList: !state.shopList })
+                          }
+                          src={listIcon}
+                          alt=""
+                          className="list-icon"
                         />
 
-                        <button className="Voltar" onClick={toPreviousaisle}>
-                          {"<"}
-                        </button>
-
-                        <button className="Avançar" onClick={toNextaisle}>
-                          {">"}
-                        </button>
+                        <Aisle
+                          products={state.aisles[state.currentAisle]}
+                          addProduct={addProduct}
+                          toPreviousAisle={toPreviousAisle}
+                          toNextAisle={toNextAisle}
+                        />
 
                         <img
                           onClick={() =>
                             setState({
                               ...state,
-                              checkout: true,
+                              checkoutConfirm: true,
                               runTimer: false,
+                              shopList: false,
                             })
                           }
                           src={checkout}
                           alt=""
+                        />
+                        <div className="cart">
+                          <div className="cart-items">
+                            {state.cart.map((product, index) => (
+                              <div className="cart-item">
+                                <img
+                                  src={
+                                    state.ingredientsList.find(
+                                      (ingredient) =>
+                                        ingredient.name === product.name
+                                    ).image
+                                  }
+                                  alt=""
+                                  onClick={removeProduct(index)}
+                                  className="cart-item-img"
+                                />
+                                <span>{product.count}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <img
+                            src={cart}
+                            alt=""
+                            style={{ marginTop: -50, position: "relative" }}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {state.checkoutConfirm && (
+                      <div>
+                        <div className="confirm-blob">
+                          <p lang="pt-br">Tem certeza que isso é tudo?</p>
+                          <p lang="en">Are you sure that's all?</p>
+                          <button
+                            className="btn btn-center"
+                            id="btn-cancel-checkout"
+                            onClick={() =>
+                              setState({
+                                ...state,
+                                checkoutConfirm: false,
+                                runTimer: true,
+                              })
+                            }
+                          >
+                            Voltar
+                          </button>
+
+                          <button
+                            className="btn btn-center"
+                            id="btn-go-to-checkout"
+                            onClick={moveToCheckout}
+                          >
+                            Continuar
+                          </button>
+                        </div>
+                        <div className="cart-items">
+                          {state.cart.map((product, index) => (
+                            <div className="cart-item">
+                              <img
+                                src={
+                                  state.ingredientsList.find(
+                                    (ingredient) =>
+                                      ingredient.name === product.name
+                                  ).image
+                                }
+                                alt=""
+                                onClick={removeProduct(index)}
+                                className="cart-item-img"
+                              />
+                              <span>{product.count}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <img
+                          src={cart}
+                          alt=""
+                          style={{ marginTop: -90, position: "relative" }}
                         />
                       </div>
                     )}
 
                     {state.checkout && (
                       <div>
-                        Caixa
-                        {haveAll() ? (
-                          <button onClick={moveToPayment}>Pagar</button>
-                        ) : (
-                          <div>
-                            Está faltando coisa aí!
-                            <button
-                              onClick={() =>
-                                setState({
-                                  ...state,
-                                  checkout: false,
-                                  runTimer: true,
-                                })
-                              }
-                            >
-                              Voltar às compras
-                            </button>
-                          </div>
-                        )}
+                        <div id="dialog-interact">
+                          {haveAll() ? (
+                            <div id="dialogos">
+                              <div id="dialog-box">
+                                <span lang="pt-br">
+                                  Maravilha! Sua compra deu{" "}
+                                  {numberToMoney(state.price)}. Agora você só
+                                  precisa selecionar a quatidade correta de
+                                  dinheiro. Fique atento ap limite de tempo.
+                                </span>
+                                <span lang="en">
+                                  Wonderful! That's {numberToMoney(state.price)}
+                                  . Now all you have to do is select the right
+                                  amount of money. Mind the time limit.
+                                </span>
+                              </div>{" "}
+                              <button
+                                className="btn btn-center"
+                                id="btn-move-to-payment"
+                                onClick={moveToPayment}
+                              >
+                                Continuar
+                              </button>
+                            </div>
+                          ) : (
+                            <div id="dialogos">
+                              <div id="dialog-box">
+                                <span lang="pt-br">
+                                  Você selecionou {getWrongItemsInCart().length}{" "}
+                                  ingrediente(s) incorretamente!
+                                </span>
+                                <span lang="en">
+                                  You selected {getWrongItemsInCart().length}{" "}
+                                  ingredient(s) incorrectly!
+                                </span>
+                              </div>
+                              <button
+                                className="btn btn-center"
+                                id="btn-back-to-market"
+                                onClick={() =>
+                                  setState({
+                                    ...state,
+                                    checkout: false,
+                                    runTimer: true,
+                                  })
+                                }
+                              >
+                                Continuar
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <DialogCharacter
+                            character={missionData.character}
+                            feeling="default"
+                          />
+                          <img src={cashierTable} alt="" />
+                        </div>
                       </div>
                     )}
-
-                    <div className="cart">
-                      <div className="cart-items">
-                        {Object.keys(state.cart).map((product, index) =>
-                          state.cart[product] > 0 ? (
-                            <div className="cart-item">
-                              <img
-                                src={
-                                  state.ingredientsList.find(
-                                    (ingredient) => ingredient.name === product
-                                  ).image
-                                }
-                                alt=""
-                                onClick={removeProduct(product)}
-                                className="cart-item-img"
-                              />
-                              <span>{state.cart[product]}</span>
-                            </div>
-                          ) : null
-                        )}
-                      </div>
-                      <img
-                        src={cart}
-                        alt=""
-                        style={{ marginTop: -90, position: "relative" }}
-                      />
-                    </div>
 
                     {state.shopList && (
                       <div
@@ -542,67 +704,131 @@ const Game3 = (props) => {
               case "CASHIER":
                 return (
                   <div>
-                    <div>
-                      Hora de pagar! Sua compra deu {numberToMoney(state.price)}
-                      <button onClick={doPayment}>Finalizar Compra</button>
-                      {state.paymentAmount &&
-                        state.paymentAmount < state.price && (
-                          <div>Opa, pagament insuficiente.</div>
-                        )}
-                      {state.change && (
-                        <div className="PopUp">
-                          <div>Seu troco! {state.change}</div>
-                          <div>O troco está correto?</div>
-                          <button onClick={receiveChange}>Yes</button>
-                          <button onClick={receiveChange}>No</button>
-                        </div>
-                      )}
-                      {state.change === 0 && (
-                        <div>
-                          Seu pagamento esta certo!
-                          <button onClick={receiveChange}>HOORAY!</button>
-                        </div>
-                      )}
+                    <Timer
+                      run={state.runTimer}
+                      seconds={state.remainingTime}
+                      onStop={(remaining) => {
+                        setState({
+                          ...state,
+                          remainingTime: remaining,
+                        });
+                      }}
+                      onEnd={() => endGame(true)}
+                    />
+                    {state.moneySelection && (
                       <div>
-                        {missionData.money.map((money, index) => (
-                          <Button onClick={addToPayment(money.value)}>
-                            <img
-                              style={{ width: 50 }}
-                              src={money.image.url}
-                              alt="money"
-                            />
-                          </Button>
-                        ))}
-                      </div>
-                      <div>
-                        {Object.keys(state.payment).map((money, index) =>
-                          state.payment[money] > 0 ? (
+                        <div className="selected-money">
+                          {state.payment.map((money, index) => (
                             <div className="payment-money">
-                              {console.log(money)}
                               <img
                                 src={
                                   missionData.money.find((moneyObj) => {
-                                    console.log(moneyObj);
-                                    console.log(money);
-                                    return moneyObj.value === parseFloat(money);
+                                    return moneyObj.value === money.value;
                                   }).image.url
                                 }
                                 alt=""
-                                onClick={removeFromPayment(money)}
+                                onClick={removeFromPayment(index)}
                                 className="payment-money-img"
                               />
-                              <span>{state.payment[money]}</span>
+                              <span>{money.count}</span>
                             </div>
-                          ) : null
-                        )}
+                          ))}
+                        </div>
+
+                        <div>
+                          <div>
+                            {missionData.money.map((money, index) => (
+                              <Button onClick={addToPayment(money.value)}>
+                                <img
+                                  style={{ width: 50 }}
+                                  src={money.image.url}
+                                  alt="money"
+                                />
+                              </Button>
+                            ))}
+                          </div>
+                          <img src={wallet} alt="" />
+                          <button
+                            className="btn btn-center"
+                            id="btn-do-payment"
+                            onClick={doPayment}
+                          >
+                            Continuar
+                          </button>
+                        </div>
+                        <div>
+                          <DialogCharacter
+                            character={missionData.character}
+                            feeling="default"
+                          />
+                          <img src={cashierTable} alt="" />
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {!state.moneySelection && (
+                      <div id="dialog-interact">
+                        <div id="dialogos">
+                          {state.change < 0 && (
+                            <div id="dialog-box">
+                              <span lang="pt-br">
+                                Nossos patrocinadores vão ter que me pagar um
+                                extra para completar sua compra.
+                              </span>
+                              <span lang="en">
+                                Our sponsors will need to give me an extra to
+                                pay for the rest of your purchase.
+                              </span>
+                            </div>
+                          )}
+                          {state.change > 0 && (
+                            <div id="dialog-box">
+                              <span lang="pt-br">
+                                Bem... Obirgada pela gorgeta!
+                              </span>
+                              <span lang="en">Well... Thanks for the tip!</span>
+                            </div>
+                          )}
+                          {state.change === 0 && (
+                            <div id="dialog-box">
+                              <span lang="pt-br">
+                                Você pagou exatamente o que devia para o caixa
+                                do supermercado! Mexer com dinheiro é contigo
+                                mesmo!
+                              </span>
+                              <span lang="en">
+                                You gave the exact amout to the supermarket's
+                                cashier! Dealing with money is clearly not a
+                                problem for you!
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          className="btn btn-center"
+                          id="btn-end-game"
+                          onClick={() => endGame(false)}
+                        >
+                          Continuar
+                        </button>
+
+                        <div>
+                          <DialogCharacter
+                            character={missionData.character}
+                            feeling={
+                              state.change < 0 ? "wrongPayment" : "default"
+                            }
+                          />
+                          <img src={cashierTable} alt="" />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               case "END_GAME":
                 return (
                   <div>
-                    {state.timeUp && (
+                    {state.timeUp ? (
                       <div>
                         <img src={hourglassEmpty} alt="" />
                         <span>O tempo acabou!</span>
@@ -614,8 +840,7 @@ const Game3 = (props) => {
                           it looks.
                         </p>
                       </div>
-                    )}
-                    {state.win && (
+                    ) : (
                       <div>
                         <img src={hourglassFull} alt="" />
                         <p lang="pt-br">Você finalizou em:</p>
@@ -628,8 +853,9 @@ const Game3 = (props) => {
                         backgroundImage: "url(" + blobLaranja + ")",
                       }}
                     >
-                      {state.timeUp && <div> 00:00</div>}
-                      {state.win && (
+                      {state.timeUp ? (
+                        <div> 0:00</div>
+                      ) : (
                         <div>
                           {zeroFill(
                             Math.floor(
@@ -648,9 +874,7 @@ const Game3 = (props) => {
                         </div>
                       )}
                     </div>
-                    <button onClick={() => setState({ ...initialState(true) })}>
-                      Tentar novamente
-                    </button>
+                    <button onClick={restart}>Tentar novamente</button>
                     <Link to={"/userspace"}>Sair do jogo</Link>
                   </div>
                 );

@@ -3,17 +3,16 @@ import "./index.scss";
 
 import shelf from "../../../../img/Game3/shelf.svg";
 
-const Aisle = ({ products, aisleName, addProduct }) => {
+const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
   // const [state, setState] = React.useState({ seconds: seconds, timeout: null });
 
   return (
-    <div>
+    <div className="aisle-div">
       <img
         src={shelf}
         alt=""
         style={{ position: "absolute", zIndex: -1, width: "60vw" }}
       />
-      {/* {aisleName && <div>Corredor: {aisleName}</div>} */}
       <div id="shelves">
         {products.map((product) => (
           <div className="products">
@@ -39,6 +38,13 @@ const Aisle = ({ products, aisleName, addProduct }) => {
           </div>
         ))}
       </div>
+      <button className="Voltar" onClick={toPreviousAisle}>
+        {"<"}
+      </button>
+
+      <button className="Avançar" onClick={toNextAisle}>
+        {">"}
+      </button>
     </div>
   );
 };

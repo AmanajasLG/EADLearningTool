@@ -1,0 +1,15 @@
+.tutorial-blob {
+  width: 20vw;
+  height: 20vh;
+  position: absolute;
+  background-color: coral;
+  z-index: 100;
+}
+
+.blob-left {
+  left: 30px;
+}
+
+.blob-right {
+  right: 30px;
+}
