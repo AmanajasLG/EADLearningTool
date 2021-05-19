@@ -61,7 +61,7 @@ const Game3 = (props) => {
         )
       : null
   );
-  const missionData = mission ? mission.missionData : null;
+  let missionData = mission ? mission.missionData : null;
 
   let currentPlaySession = useSelector((state) =>
     state.play_sessions ? state.play_sessions.items[0] : {}
@@ -105,16 +105,15 @@ const Game3 = (props) => {
       state.ingredientsList.length === 0 &&
       state.checkedPlayed
     ) {
+      missionData.seconds =
+        missionData.seconds - 30 * (timesPlayed > 2 ? 2 : timesPlayed);
       // safe copies
-      let recipe = missionData.recipes.find(
-        (recipe) => recipe.difficulty === timesPlayed
-      );
       let tutorialRoom = missionData.tutorial;
 
-      if (!recipe)
-        recipe = missionData.recipes.reduce((max, obj) =>
-          max.difficulty > obj.difficulty ? max : obj
-        );
+      let recipe =
+        missionData.recipes[
+          Math.floor(Math.random() * missionData.recipes.length)
+        ];
 
       let resumeRecipe = {
         id: recipe.id,
