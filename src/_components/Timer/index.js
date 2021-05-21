@@ -1,11 +1,6 @@
 import React from "react";
+import { zeroFill } from "../../_helpers";
 
-const zeroFill = (s, size) => {
-  while (s.length < size) {
-    s = "0" + s;
-  }
-  return s;
-};
 const Timer = ({ seconds, onEnd, onStop, run = true }) => {
   const [state, setState] = React.useState({
     seconds: seconds,

@@ -6,35 +6,39 @@ import {
   headerActions,
   musicActions,
 } from "../../_actions";
-import Init from "./components/Init";
-import RoomSelect from "./components/RoomSelect";
-import Sala from "./components/Sala";
-import Character from "./components/Character";
+import { headerConstants } from "../../_constants";
+
+import Init from "../../_components/Init";
+import RoomSelect from "../../_components/RoomSelect";
+import Sala from "../../_components/Sala";
+import Character from "../../_components/Character";
+import AcusationLamp from "../../_components/AcusationLamp";
+import Conversa from "../../_components/Conversa";
+import DialogCharacter from "../../_components/DialogCharacter";
+import FullscreenOverlay from "../../_components/FullscreenOverlay";
+
+import { Redirect } from "react-router";
+import initialState from "./initialState";
 import Button from "@material-ui/core/Button";
+
+import {
+  iconVitoriaPers,
+  iconVitoriaPrim,
+  iconDerrota,
+  iconDicas,
+  blobAzul,
+  blobLaranja,
+  blobVerde,
+  dedao,
+  palma,
+  bloco,
+  blocoButton,
+} from "../../img";
+
 import "./index.scss";
 import "./tela-acusacao.scss";
 import "./tela-fim-jogo.scss";
 import "./tela-tutorial.scss";
-import AcusationLamp from "./components/AcusationLamp";
-import initialState from "./initialState";
-import { headerConstants } from "../../_constants";
-import Conversa from "./components/Conversa";
-import DialogCharacter from "./components/DialogCharacter";
-import { Redirect } from "react-router";
-
-import iconVitoriaPers from "../../img/Game2/parabens_vitoria-persistente.svg";
-import iconVitoriaPrim from "../../img/Game2/parabens_vitoria-primeira.svg";
-import iconDerrota from "../../img/Game2/símbolo_feedback errado.svg";
-import iconDicas from "../../img/ícone_jogo1.svg";
-import blobAzul from "../../img/bg-forma-azul.svg";
-import blobLaranja from "../../img/bg-forma-laranja.svg";
-import blobVerde from "../../img/bg-forma-verde.svg";
-
-import dedao from "../../img/Game1/Mão dedão.svg";
-import palma from "../../img/Game1/Mão palma.svg";
-import bloco from "../../img/Game2/bloco.svg";
-import blocoButton from "../../img/Game2/blocoButton.svg";
-import FullscreenOverlay from "./components/FullscreenOverlay";
 
 const Game2 = (props) => {
   const [state, setState] = React.useState(initialState());

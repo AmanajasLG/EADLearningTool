@@ -1,4 +1,4 @@
-export function numberToMoney(n) {
+function numberToMoney(n) {
   var string = n.toString(),
     units,
     tens,
@@ -118,3 +118,47 @@ export function numberToMoney(n) {
 
   return words.join(" ");
 }
+
+function goRound(value, max) {
+  return value >= 0 ? value % max : max - (Math.abs(value) % max);
+}
+
+function shuffle(array) {
+  var currentIndex = array.length,
+    temporaryValue,
+    randomIndex,
+    shuffledArray = [...array];
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = shuffledArray[currentIndex];
+    shuffledArray[currentIndex] = shuffledArray[randomIndex];
+    shuffledArray[randomIndex] = temporaryValue;
+  }
+
+  return shuffledArray;
+}
+
+function splitArrayIntoChunksOfLen(arr, len) {
+  var chunks = [],
+    i = 0,
+    n = arr.length;
+  while (i < n) {
+    chunks.push(arr.slice(i, (i += len)));
+  }
+  return chunks;
+}
+
+function zeroFill(s, size) {
+  while (s.length < size) {
+    s = "0" + s;
+  }
+  return s;
+}
+
+export { numberToMoney, zeroFill, splitArrayIntoChunksOfLen, shuffle, goRound };
