@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="821" height="684.072" viewBox="0 0 821 684.072">
+  <defs>
+    <filter id="Retângulo_2312" x="0" y="299.072" width="807" height="385" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" dy="5" input="SourceAlpha"/>
+      <feGaussianBlur result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Retângulo_2313" x="0" y="299.072" width="821" height="38" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" input="SourceAlpha"/>
+      <feGaussianBlur result="blur-2"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Caminho_17012" x="350.282" y="0" width="379.933" height="304.193" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" dy="5" input="SourceAlpha"/>
+      <feGaussianBlur result="blur-3"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Grupo_9573" data-name="Grupo 9573" transform="translate(98 -595.928)">
+    <g transform="matrix(1, 0, 0, 1, -98, 595.93)" filter="url(#Retângulo_2312)">
+      <g id="Retângulo_2312-2" data-name="Retângulo 2312" transform="translate(0 299.07)" fill="#917250" stroke="#5a316b" stroke-width="3">
+        <rect width="802" height="380" stroke="none"/>
+        <rect x="1.5" y="1.5" width="799" height="377" fill="none"/>
+      </g>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, -98, 595.93)" filter="url(#Retângulo_2313)">
+      <g id="Retângulo_2313-2" data-name="Retângulo 2313" transform="translate(0 299.07)" fill="#917250" stroke="#5a316b" stroke-width="3">
+        <rect width="816" height="38" stroke="none"/>
+        <rect x="1.5" y="1.5" width="813" height="35" fill="none"/>
+      </g>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, -98, 595.93)" filter="url(#Caminho_17012)">
+      <path id="Caminho_17012-2" data-name="Caminho 17012" d="M2708.076,1498.669h-18.613v-30.722a2,2,0,0,0-2-2h-82.225v-49.874H2659.4a2,2,0,0,0,2-2v-52.035a2,2,0,0,0-2-2h-130.34a2,2,0,0,0-2,2v52.035a2,2,0,0,0,2,2h54.17v49.874H2501a2,2,0,0,0-2,2v30.722h-26.561a1.976,1.976,0,0,0-.573.093c-.033.01-.065.019-.1.03a1.993,1.993,0,0,0-.5.26.256.256,0,0,1-.026.013c-.343.257-34.366,25.985-51.822,72.793a128.481,128.481,0,0,0-34.908,16.527c-17.4,11.583-40.083,32.842-49.311,68.344a2,2,0,0,0,1.936,2.5h370.933a2,2,0,0,0,2-2V1500.669A2,2,0,0,0,2708.076,1498.669Z" transform="translate(-1984.86 -1360.04)" fill="#59316d"/>
+    </g>
+    <g id="Grupo_8605" data-name="Grupo 8605" transform="translate(-1584.988 -722.994)">
+      <g id="Grupo_8600" data-name="Grupo 8600">
+        <g id="Retângulo_2314" data-name="Retângulo 2314">
+          <rect id="Retângulo_2314-2" data-name="Retângulo 2314" width="186.459" height="32.723" transform="translate(2003.131 1426.831)" fill="#292d30"/>
+        </g>
+        <g id="Retângulo_2315" data-name="Retângulo 2315">
+          <rect id="Retângulo_2315-2" data-name="Retângulo 2315" width="18.005" height="62.421" transform="translate(2087.36 1364.41)" fill="#404549"/>
+        </g>
+        <g id="Retângulo_2316" data-name="Retângulo 2316">
+          <rect id="Retângulo_2316-2" data-name="Retângulo 2316" width="130.34" height="52.035" transform="translate(2031.19 1320.922)" fill="#292d30"/>
+        </g>
+        <g id="Retângulo_2317" data-name="Retângulo 2317">
+          <rect id="Retângulo_2317-2" data-name="Retângulo 2317" width="103.228" height="30.197" transform="translate(2044.746 1331.841)" fill="#404549"/>
+        </g>
+        <g id="Retângulo_2318" data-name="Retângulo 2318">
+          <rect id="Retângulo_2318-2" data-name="Retângulo 2318" width="235.634" height="156.561" transform="translate(1974.57 1459.553)" fill="#404549"/>
+        </g>
+        <g id="Caminho_17005" data-name="Caminho 17005">
+          <path id="Caminho_17005-2" data-name="Caminho 17005" d="M1974.57,1616.115V1459.554s-34.161,25.439-51.5,72.855c0,0-66.244,16.162-83.8,83.706Z" fill="#292d30"/>
+        </g>
+      </g>
+      <g id="Grupo_8599" data-name="Grupo 8599">
+        <path id="Caminho_17006" data-name="Caminho 17006" d="M1839.271,1618.115a2,2,0,0,1-1.936-2.5c9.228-35.5,31.908-56.76,49.311-68.343a128.469,128.469,0,0,1,34.908-16.527c17.456-46.808,51.478-72.536,51.822-72.793a2,2,0,0,1,1.194-.4h26.562v-30.722a2,2,0,0,1,2-2h82.228v-49.874h-54.17a2,2,0,0,1-2-2v-52.035a2,2,0,0,1,2-2h130.34a2,2,0,0,1,2,2v52.035a2,2,0,0,1-2,2h-54.165v49.874h82.226a2,2,0,0,1,2,2v30.722H2210.2a2,2,0,0,1,2,2v156.561a2,2,0,0,1-2,2Zm2.616-4H2208.2V1461.553h-18.613a2,2,0,0,1-2-2v-30.722h-82.226a2,2,0,0,1-2-2v-53.874a2,2,0,0,1,2-2h54.165v-48.035H2033.19v48.035h54.17a2,2,0,0,1,2,2v53.874a2,2,0,0,1-2,2h-82.228v30.722a2,2,0,0,1-2,2H1975.25c-4.468,3.488-34.4,28.05-50.3,71.543a2,2,0,0,1-1.4,1.256c-.163.04-16.545,4.143-34.806,16.328C1872.377,1561.6,1851.174,1581.392,1841.887,1614.115Z" fill="#59316d"/>
+      </g>
+      <g id="Grupo_8600-2" data-name="Grupo 8600">
+        <path id="Caminho_17007" data-name="Caminho 17007" d="M1974.57,1618.114a2,2,0,0,1-2-2V1459.553a2,2,0,0,1,4,0v156.561A2,2,0,0,1,1974.57,1618.114Z" fill="#59316d"/>
+      </g>
+      <g id="Grupo_8601" data-name="Grupo 8601">
+        <path id="Caminho_17008" data-name="Caminho 17008" d="M2189.591,1461.554H2003.132a2,2,0,0,1,0-4h186.459a2,2,0,0,1,0,4Z" fill="#59316d"/>
+      </g>
+      <g id="Grupo_8602" data-name="Grupo 8602">
+        <path id="Caminho_17009" data-name="Caminho 17009" d="M2105.365,1428.831h-18a2,2,0,0,1,0-4h18a2,2,0,0,1,0,4Z" fill="#59316d"/>
+      </g>
+      <g id="Grupo_8603" data-name="Grupo 8603">
+        <path id="Caminho_17010" data-name="Caminho 17010" d="M2108.83,1374.957h-21.47a2,2,0,0,1,0-4h21.47a2,2,0,0,1,0,4Z" fill="#59316d"/>
+      </g>
+      <g id="Grupo_8604" data-name="Grupo 8604">
+        <path id="Caminho_17011" data-name="Caminho 17011" d="M2147.975,1364.038H2044.746a2,2,0,0,1-2-2v-30.2a2,2,0,0,1,2-2h103.229a2,2,0,0,1,2,2v30.2A2,2,0,0,1,2147.975,1364.038Zm-101.229-4h99.229v-26.2h-99.229Z" fill="#59316d"/>
+      </g>
+    </g>
+  </g>
+</svg>
