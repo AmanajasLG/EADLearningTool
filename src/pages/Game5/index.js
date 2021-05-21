@@ -1,9 +1,8 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-import Init from '../Game2/components/Init'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
-import Button from '@material-ui/core/Button'
+import Init from '../../_components/Init'
+import DressingCharacter from '../../_components/DressingCharacter'
+import Wardrobe from '../../_components/Wardrobe'
 
 
 
@@ -76,45 +75,29 @@ const Game5 = () => {
                 }
                 {state.dressingContext &&
                   <div>
-                    <div>
-                      <img src="" alt="character"/>
-                      <div>
-                        {state.clothesTypes.map((item, index) =>
-                          <div key={index}>{item}: {state.clothes[index]? state.clothes[index].name : "none"}
-                            {state.clothes[index] &&
-                              <button onClick={() => {
-                                let clothes = [...state.clothes]
-                                clothes[index] = null
-                                setState({...state, clothes:clothes})
-                              }}>Remove</button>
-                            }
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div>
-                      <Tabs value={state.dressingTabIndex} onChange={(e, value) => setState({...state, dressingTabIndex: value})}>
-                        <Tab label="Head"></Tab>
-                        <Tab label="Top"></Tab>
-                        <Tab label="Bottom"></Tab>
-                        <Tab label="Shoes"></Tab>
-                      </Tabs>
-                      {
-                        <div>
-                          {mission.clothes.filter( item => item.type === state.dressingTabIndex)
-                          .map((item, index) => {
-                              var clothes = [...state.clothes]
-                              clothes[item.type] = item
-                              return <Button key={index} onClick={()=> setState({...state, clothes: clothes})}>{item.name}</Button>
-                            }
-                          )}
-                        </div>
+                    <DressingCharacter clothesTypes={state.clothesTypes} clothes={state.clothes}
+                      onRemoveClick={ index => () => {
+                        let clothes = [...state.clothes]
+                        clothes[index] = null
+                        setState({...state, clothes:clothes})
+                      }}
+                    />
+                    <Wardrobe clothes={mission.clothes}
+                      onClothesClick={ item => () =>
+                        {
+                          var clothes = [...state.clothes]
+                          clothes[item.type] = item
+                          setState({...state, clothes: clothes})
+                        }
                       }
-                    </div>
+                    />
                     <button onClick={() =>{
                         let clotheCount = state.clothes.reduce((acc, item)=> (item === null ? acc: acc + 1), 0)
                         setState({...state, ready: clotheCount >= 2, readyAlert: clotheCount < 2})
-                      }}>Estou pronto!</button>
+                      }}
+                    >
+                      Estou pronto!
+                    </button>
                     {state.readyAlert &&
                       <div>
                         Não pode sair vestido tão pouco!

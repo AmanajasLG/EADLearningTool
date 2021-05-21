@@ -46,7 +46,7 @@ const Game1 = (props) => {
   const missionData = mission ? mission.missionData : null;
   const userId = useSelector((state) => state.authentication.user.user.id);
   const currentPlaySession = useSelector((state) =>
-    state.play_sessions ? state.play_sessions.items[0] : {}
+    state.play_sessions ? state.play_sessions.items[state.play_sessions.items.length - 1] : {}
   );
   const lang = useSelector(
     (state) => state.authentication.user.user.language.id
@@ -65,26 +65,29 @@ const Game1 = (props) => {
 
   //Track playerActions
   React.useEffect(() => {
-    if (!state.tracking || !currentPlaySession) return;
+    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
 
     const getClickedObject = (e) => {
       dispatch(
         play_sessionsActions.update(
-          { id: currentPlaySession.id },
-          {
-            ...currentPlaySession,
-            playerActions: [
-              ...currentPlaySession.playerActions,
-              {
-                tag: e.target.nodeName,
-                alt: e.target.alt,
-                className: e.target.className,
-                innerHTML: e.target.innerHTML.includes("<div")
-                  ? null
-                  : e.target.innerHTML,
-                clickTime: new Date(),
-              },
-            ],
+          { id: currentPlaySession.id,
+            data: {
+              actions:
+              [...currentPlaySession.data.actions,
+                {
+                  tag: e.target.nodeName,
+                  src: e.target.src,
+                  alt: e.target.alt,
+                  className: e.target.className,
+                  class: e.target.class,
+                  id: e.target.id,
+                  innerHTML: e.target.innerHTML.includes("<div")
+                    ? null
+                    : e.target.innerHTML,
+                  clickTime: new Date(),
+                }
+              ]
+            }
           }
         )
       );
@@ -242,8 +245,9 @@ const Game1 = (props) => {
     if (state.tracking) {
       dispatch(
         play_sessionsActions.create({
-          //usersPergame_1_missionsUser: userId,
-          //mission: mission.id
+          user: userId,
+          mission: mission.id,
+          data: {actions:[]}
         })
       );
     }

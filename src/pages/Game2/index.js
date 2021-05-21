@@ -106,26 +106,29 @@ const Game2 = (props) => {
 
   //track player actions
   React.useEffect(() => {
-    if (!state.tracking || !currentPlaySession) return;
+    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
 
     const getClickedObject = (e) => {
       dispatch(
         play_sessionsActions.update(
-          { id: currentPlaySession.id },
-          {
-            ...currentPlaySession,
-            playerActions: [
-              ...currentPlaySession.playerActions,
-              {
-                tag: e.target.nodeName,
-                alt: e.target.alt,
-                className: e.target.className,
-                innerHTML: e.target.innerHTML.includes("<div")
-                  ? null
-                  : e.target.innerHTML,
-                clickTime: new Date(),
-              },
-            ],
+          { id: currentPlaySession.id,
+            data: {
+              actions:
+              [...currentPlaySession.data.actions,
+                {
+                  tag: e.target.nodeName,
+                  src: e.target.src,
+                  alt: e.target.alt,
+                  className: e.target.className,
+                  class: e.target.class,
+                  id: e.target.id,
+                  innerHTML: e.target.innerHTML.includes("<div")
+                    ? null
+                    : e.target.innerHTML,
+                  clickTime: new Date(),
+                }
+              ]
+            }
           }
         )
       );
@@ -269,11 +272,12 @@ const Game2 = (props) => {
   }, [missionData, state.locations]);
 
   const onStartGame = (e) => {
-    if (state.tracking) {
+    if (mission.trackPlayerInput) {
       dispatch(
         play_sessionsActions.create({
-          usersPermissionsUser: userId,
+          user: userId,
           mission: mission.id,
+          data:{actions:[]}
         })
       );
     }

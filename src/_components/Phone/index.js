@@ -141,7 +141,7 @@ const Phone = ({
               <span lang="pt-br">Adicione um novo contato</span>
               <span lang="default">Add a new contact</span>
             </div>
-            <img src={smallPhone} alt="" />
+            <img src={smallPhone} alt="phone-small" />
           </div>
         </div>
       </div>

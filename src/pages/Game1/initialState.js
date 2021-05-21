@@ -29,6 +29,7 @@ const initialValue = () => ({
   shouldMinimize: false,
   shouldCloseDialog: false,
   wrongContacts: 0,
+  tracking: true
 });
 
 export default initialValue;
