@@ -1,0 +1,15 @@
+.instructionText{
+  padding: 10px;
+  padding-left: 0px;
+}
+
+.instructionText.default {
+  color: white;
+  font-family: "Barlow";
+  font-weight: bold;
+}
+
+.instructionText.translation{
+  color: #BCACC4;
+  font-style: italic;
+}

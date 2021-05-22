@@ -30,24 +30,6 @@
 	margin-right: auto;
 }
 
-#CharacterPortrait {
-	position: absolute;
-	bottom: 0;
-	width: 50%;
-	max-width: 800px;
-	height: 85vh;
-	pointer-events: none;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-}
-
-#CharacterPortrait * {
-	position: relative;
-	max-height: 100%;
-	left: 0;
-}
-
 #dialogos {
 	margin-left: auto;
 	margin: 0 10% 0px auto;
