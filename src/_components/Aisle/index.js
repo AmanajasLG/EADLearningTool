@@ -16,15 +16,27 @@ const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
         height: "100vh",
         position: "relative"
       }}>
-        <button className="Voltar" onClick={toPreviousAisle}>{"<"}</button>
+        <button
+          className="Voltar"
+          onClick={toPreviousAisle}
+          style={{
+            border: "none",
+            width: "50px",
+            height: "50px",
+            fontSize: "3rem",
+            backgroundColor: "transparent",
+            pointerEvents: "all",
+            cursor: "pointer"
+          }}>{"❮"}</button>
         <div style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          position: "relative"
+          position: "relative",
+          minWidth: 0
         }}>
           <div>
-            <img src={shelf} alt=""/>
+            <img src={shelf} alt="" style={{width:"100%"}}/>
             <div name="items" style={{
               position: "absolute",
               top: "-33%",
@@ -71,7 +83,18 @@ const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
             </div>
           </div>
         </div>
-        <button className="Avançar" onClick={toNextAisle}>{">"}</button>
+        <button
+          className="Avançar"
+          onClick={toNextAisle}
+          style={{
+            border: "none",
+            width: "50px",
+            height: "50px",
+            fontSize: "3rem",
+            backgroundColor: "transparent",
+            pointerEvents: "all",
+            cursor: "pointer"
+          }}>{"❯"}</button>
       </div>
     </div>
   );
