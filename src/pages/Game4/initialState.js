@@ -1,29 +1,34 @@
-const initialState = (runTimer = true) => {
+const initialState = (checkedPlayed = false) => {
   return {
-    scene: 'INIT',
-    runTimer: runTimer,
+    scene: "INIT",
+    runTimer: false,
     remainingTime: 0,
     timeUp: false,
     showRecipe: false,
+    ingredientsList: [],
+    recipe: {},
+    shuffledIngredients: [],
+    tablewares: [],
+    recipeContinue: false,
+    checkedPlayed: checkedPlayed,
 
-    selectItem: true,
-    selected: null,
+    showIngredients: true,
+    selectedIngredient: null,
+    tableIngredient: null,
+    wrongIngredientNotification: false,
+    wrongIngredientNameNotification: false,
 
-    cookPhase: true,
-    shuffled: [],
-    orderedLetters: [],
-    result: '',
+    shuffledName: [],
+    userLetterOrder: [],
+    result: "",
     prepared: [],
 
-    servePhase: false,
-    shuffledDishes: [],
-    shuffledDishesNames: [],
-    dishImageSelected: '',
-    dishNameSelected: '',
-    pairCheck: false,
-    tableDish: [],
-    allDishes: false
-  }
-}
+    tablewareImagePick: true,
+    shuffledTablewares: [],
+    shuffledTablewaresNames: [],
+    tablewareImageSelected: null,
+    tableTablewares: [],
+  };
+};
 
-export default initialState
+export default initialState;

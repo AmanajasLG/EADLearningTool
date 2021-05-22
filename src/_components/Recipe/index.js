@@ -1,21 +1,57 @@
-import React from 'react'
+import React from "react";
+import marked from "marked";
+import parse from "html-react-parser";
 
-const Recipe = ({recipe, closeText, onClose}) => {
-  return(
+import { ingredientsListBg, listCheck } from "../../img";
+
+const Recipe = ({
+  ingredientsList,
+  closeText,
+  onClose,
+  hasImage,
+  showCheck,
+}) => {
+  return (
     <div>
-      Receita
-      <div>
-        {recipe.map( (ingredient, index) =>
-          <div key={index}>
-            {ingredient.name}
+      <div
+        className="shop-list"
+        style={{
+          backgroundImage: "url(" + ingredientsListBg + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "contain",
+        }}
+      >
+        {ingredientsList.map((ingredient, index) => (
+          <div>
+            {showCheck(ingredient) ? (
+              <img src={listCheck} alt="" className="shop-list-item-check" />
+            ) : (
+              <div
+                style={{
+                  width: 20,
+                  height: 20,
+                  display: "inline-block",
+                }}
+              ></div>
+            )}{" "}
+            {hasImage ? (
+              <img
+                src={ingredient.image}
+                alt=""
+                className="shop-list-item-img"
+              />
+            ) : (
+              <span>{ingredient.order}. </span>
+            )}
+            {parse(marked.parseInline(ingredient.description))};
           </div>
-        )}
+        ))}
       </div>
-      <button onClick={onClose? onClose : () =>{}}>
-        {closeText? closeText : "Fechar"}
+      <button onClick={onClose ? onClose : () => {}}>
+        {closeText ? closeText : "Fechar"}
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default Recipe
+export default Recipe;
