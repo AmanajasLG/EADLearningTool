@@ -21,7 +21,7 @@
 /* Tooltip text */
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
+  width: 100%;
   background-color: black;
   color: #fff;
   text-align: center;
@@ -30,6 +30,7 @@
 
   /* Position the tooltip text - see examples below! */
   position: absolute;
+  top: 105%;
   z-index: 1;
 }
 

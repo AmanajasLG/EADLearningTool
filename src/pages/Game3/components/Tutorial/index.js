@@ -117,7 +117,7 @@ const Tutorial = ({
           <div className="cart">
             <div className="cart-items">
               {shoppingCart.map((product, index) => (
-                <div className="cart-item">
+                <div className="cart-item" key={index}>
                   <img
                     src={
                       ingredientsList.find(
