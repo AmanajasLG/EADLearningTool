@@ -71,61 +71,31 @@ const Tutorial = ({
       setState({ ...state, tutorialLine: 4, shopList: !state.shopList });
   };
 
+  const tutorialText = [
+    ["Clique em qualquer item para adicioná-lo ao carrinho.", "Click on any item to add it to your cart."],
+    ["Clique em qualquer item do seu carrinho para retirá-lo.", "Click on any item from your cart to remove it."],
+    ["Use as setas para navegar pelas prateleiras.", "Use the arrows t move through shelves."],
+    ["Passe o mouse sobre o bloco de notas para ver a lista de compras.", "Hover the mouse over the notepad to see the shopping list."],
+    ["Clique no ícone de dinheiro para finalizar sua compra.", "Click on the cash icon to checkout."]
+  ].map( (line, index) => {return {ptbr: line[0], preferred: line[1]} } )
+
+  const blobPosition = (state.tutorialLine === 2 || state.tutorialLine === 3) ? "blob-right" : "blob-left";
+
   return (
     <div id="room-itself" className="tutorial">
       {state.step === 0 && (
         <div>
           <div
-            className={
-              "tutorial-blob " +
-              (state.tutorialLine === 2 || state.tutorialLine === 3
-                ? "blob-right"
-                : "blob-left")
-            }
+            className={"tutorial-blob " + blobPosition}
           >
-            {state.tutorialLine === 0 && (
-              <div className="blob-left">
+            {(state.tutorialLine >= 0 && state.tutorialLine <= 4) && (
+              <div className={blobPosition}>
                 <span lang="pt-br">
-                  Clique em qualquer item para adicioná-lo ao carrinho.
-                </span>
-                <span lang="en">Click on any item to add it to your cart.</span>
-              </div>
-            )}
-            {state.tutorialLine === 1 && (
-              <div className="blob-left">
-                <span lang="pt-br">
-                  Clique em qualquer item do seu carrinho para retirá-lo.
+                  {tutorialText[state.tutorialLine].ptbr}
                 </span>
                 <span lang="en">
-                  Click on any item from your cart to remove it.
+                  {tutorialText[state.tutorialLine].preferred}
                 </span>
-              </div>
-            )}
-            {state.tutorialLine === 2 && (
-              <div className="blob-right">
-                <span lang="pt-br">
-                  Use as setas para navegar pelas prateleiras.
-                </span>
-                <span lang="en">Use the arrows to move through shelves.</span>
-              </div>
-            )}
-            {state.tutorialLine === 3 && (
-              <div className="blob-right">
-                <span lang="pt-br">
-                  Passe o mouse sobre o bloco de notas para ver a lista de
-                  compras.
-                </span>
-                <span lang="en">
-                  Hover the mouse over the notepad to see the shopping list.
-                </span>
-              </div>
-            )}
-            {state.tutorialLine === 4 && (
-              <div className="blob-left">
-                <span lang="pt-br">
-                  Clique no icone de dinheiro para finalizar sua compra.
-                </span>
-                <span lang="en">Click on the cash icon to checkout.</span>
               </div>
             )}
             {hasPlayed && (
