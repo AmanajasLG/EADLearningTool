@@ -21,7 +21,7 @@ const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
                 onClick={addProduct(product.name)}
                 className="tooltip"
                 style={{
-                  backgroundImage: "url(" + product.image + ")",
+                  backgroundImage: "url(" + product.shelfImage + ")",
                   backgroundSize: "cover",
                   height: 60,
                   width: 60,

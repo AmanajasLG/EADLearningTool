@@ -103,10 +103,9 @@ const Game3 = (props) => {
     if (
       missionData &&
       state.ingredientsList.length === 0 &&
-      state.checkedPlayed
+      timesPlayed !== undefined
     ) {
-      missionData.seconds =
-        missionData.seconds - 30 * (timesPlayed > 2 ? 2 : timesPlayed);
+      missionData.seconds -= 30 * (timesPlayed > 2 ? 2 : timesPlayed);
       // safe copies
       let tutorialRoom = missionData.tutorial;
 
@@ -137,6 +136,7 @@ const Game3 = (props) => {
           description: ingredient.description,
           type: ingredient.type,
           image: ingredient.asset.image ? ingredient.asset.image.url : "",
+          shelfImage: ingredient.shelfImage ? ingredient.shelfImage.url : "",
           tag:
             ingredient.measure === "unidade"
               ? `R$ ${ingredient.price.toFixed(2)}`
@@ -182,13 +182,7 @@ const Game3 = (props) => {
         };
       });
     }
-  }, [
-    missionData,
-    state.ingredientsList,
-    state.checkedPlayed,
-    timesPlayed,
-    lang,
-  ]);
+  }, [missionData, state.ingredientsList, timesPlayed, lang]);
 
   const addProduct = (product) => () => {
     const index = state.cart.findIndex(
@@ -623,7 +617,7 @@ const Game3 = (props) => {
                         <div>
                           <DialogCharacter
                             character={missionData.character}
-                            feeling="default"
+                            feeling={haveAll() ? "default" : "wrongPayment"}
                           />
                           <img src={cashierTable} alt="" />
                         </div>
