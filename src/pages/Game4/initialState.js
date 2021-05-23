@@ -29,7 +29,7 @@ const initialState = (checkedPlayed = false) => {
     wrongIngredientSelected: [],
     wrongIngredientNameOrder: [],
     wrongTablewarePairSelected: [],
-    // wrongTablewareSelected: [],
+    wrongTablewareSelected: [],
 
     // NOTIFICATIONS
     tutorialIngredientSelectionNotification: false,
