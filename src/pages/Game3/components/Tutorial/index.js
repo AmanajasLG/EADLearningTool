@@ -73,7 +73,7 @@ const Tutorial = ({
   };
 
   const tutorialText = [
-    ["Clique em qualquer item para adicioná-lo ao carrinho.", "Click on any item to add it to your cart."],
+    ["Clique em qualquer item para <strong>adicioná-lo</strong> ao carrinho.", "Click on any item to <strong>add it</strong> to your cart."],
     ["Clique em qualquer item do seu carrinho para retirá-lo.", "Click on any item from your cart to remove it."],
     ["Use as setas para navegar pelas prateleiras.", "Use the arrows to move through shelves."],
     ["Passe o mouse sobre o bloco de notas para ver a lista de compras.", "Hover the mouse over the notepad to see the shopping list."],
@@ -90,13 +90,9 @@ const Tutorial = ({
             className={tutorialStyles.tutorialBlob + " " + blobPosition}
           >
             {(state.tutorialLine >= 0 && state.tutorialLine <= 4) && (
-              <div className={blobPosition}>
-                <span lang="pt-br">
-                  {tutorialText[state.tutorialLine].ptbr}
-                </span>
-                <span lang="en">
-                  {tutorialText[state.tutorialLine].preferred}
-                </span>
+              <div>
+                <span lang="pt-br" dangerouslySetInnerHTML={{__html: tutorialText[state.tutorialLine].ptbr}}></span>
+                <span lang="en" dangerouslySetInnerHTML={{__html: tutorialText[state.tutorialLine].preferred}}></span>
               </div>
             )}
             {hasPlayed && (
