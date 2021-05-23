@@ -1,0 +1,54 @@
+.listIcon {
+  width: 60px;
+}
+
+.cart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cart > img {
+  max-width: 80%;
+  align-self: center;
+  margin-top: -26%;
+}
+
+.cartItems {
+  height: 60vh;
+  background-color: #cbe7de;
+  border-radius: 20px 0px 0px 20px;
+  padding: 2vh 2vw;
+}
+
+.cartItem {
+  display: inline-block;
+  margin: 10px;
+}
+
+.cartItemImg {
+  height: 70px;
+  max-width: 70px;
+}
+
+.shopList {
+  position: absolute;
+  top: 0;
+  padding: 100px;
+  margin-left: 40vw;
+}
+
+.shopListItemCheck,
+.shopListItemImg {
+  max-height: 20px;
+  max-width: 20px;
+}
+
+.paymentMoneyImg {
+  max-width: 50px;
+}
+
+.paymentMoney {
+  display: inline;
+}

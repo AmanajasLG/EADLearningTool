@@ -1,0 +1,22 @@
+.tutorialBlob {
+  width: 20vw;
+  height: 20vh;
+  position: absolute;
+  background-color: coral;
+  z-index: 100;
+}
+
+#tutorialGrid {
+  display: grid;
+  grid-template-columns: 77.55% auto;
+  height: 100%;
+  position: relative;
+}
+
+.blobLeft {
+  left: 30px;
+}
+
+.blobRight {
+  right: 30px;
+}
