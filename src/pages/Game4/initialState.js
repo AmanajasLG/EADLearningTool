@@ -14,7 +14,8 @@ const initialState = (checkedPlayed = false) => {
 
     showIngredients: true,
     selectedIngredient: null,
-    tableIngredient: null,
+    tableIngredients: [],
+    sortNameIngredient: null,
 
     shuffledName: [],
     userLetterOrder: [],
@@ -29,7 +30,7 @@ const initialState = (checkedPlayed = false) => {
     wrongIngredientSelected: [],
     wrongIngredientNameOrder: [],
     wrongTablewarePairSelected: [],
-    // wrongTablewareSelected: [],
+    wrongTablewareSelected: [],
 
     // NOTIFICATIONS
     tutorialIngredientSelectionNotification: false,
