@@ -1,6 +1,6 @@
 import React from "react";
 import "./index.scss";
-import Button from '@material-ui/core/Button'
+import Button from '../../../../_components/Button'
 
 import DialogCharacter from "../../../../_components/DialogCharacter";
 import DialogBox from '../../../../_components/DialogBox'
@@ -49,14 +49,12 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
             <h1 className="margin-half-top type-l type-display type-center">
               {recipe.name}
             </h1>
-            <button
-              style={{display: 'block', margin: '30px auto 0 auto', color: '#59316D', backgroundColor: '#F9AFA1'}}
-              className="btn"
-              id="btn-end-tutorial"
+            <Button blink
+              style={{display: 'block', margin: '30px auto 0 auto'}}
               onClick={goToTutorial}
             >
               Continuar
-            </button>
+            </Button>
           </div>
           <IngredientList ingredientsList={ingredientsList}/>
         </div>

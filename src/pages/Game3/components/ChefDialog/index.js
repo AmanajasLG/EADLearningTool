@@ -21,7 +21,7 @@ const ChefDialog = ({onContinue, text, translation, chef}) => {
         </div>
 
         <Button onClick={onContinue} blink
-          style={{position: 'absolute', right: '-10px', bottom: '-10px'}}
+          style={{position: 'absolute', right: '30px', bottom: '-20px'}}
         >
           Continuar >
         </Button>
