@@ -180,7 +180,7 @@ const Game4 = (props) => {
     } else {
       let updatedState = {
         showIngredients: false,
-        tableIngredient: state.selectedIngredient,
+        sortNameIngredient: state.selectedIngredient,
         selectedIngredient: null,
         shuffledName: state.selectedIngredient.nameShuffled.map((letter) => {
           return {
@@ -214,11 +214,11 @@ const Game4 = (props) => {
 
   const checkIngredientName = () => {
     if (
-      state.tableIngredient.shuffleName ===
+      state.sortNameIngredient.shuffleName ===
       state.userLetterOrder.reduce((acc, letter) => acc + letter.letter, "")
     ) {
       let updateIngredientsList = state.ingredientsList.map((ingredient) => {
-        if (ingredient.name === state.tableIngredient.name)
+        if (ingredient.name === state.sortNameIngredient.name)
           return {
             ...ingredient,
             done: true,
@@ -228,7 +228,7 @@ const Game4 = (props) => {
 
       let updateShuffledIngredients = state.shuffledIngredients.map(
         (ingredient) => {
-          if (ingredient.name === state.tableIngredient.name)
+          if (ingredient.name === state.sortNameIngredient.name)
             return {
               ...ingredient,
               done: true,
@@ -249,11 +249,15 @@ const Game4 = (props) => {
       } else {
         setState({
           ...state,
-          tableIngredient: null,
+          sortNameIngredient: null,
           ingredientsList: updateIngredientsList,
           shuffledIngredients: updateShuffledIngredients,
           showIngredients: true,
           userLetterOrder: [],
+          tableIngredients: [
+            ...state.tableIngredients,
+            state.sortNameIngredient,
+          ],
           // showRecipe: true,
           // recipeContinue: true,
         });
@@ -265,7 +269,7 @@ const Game4 = (props) => {
         wrongIngredientNameOrder: [
           ...state.wrongIngredientNameOrder,
           {
-            writeOrderName: state.tableIngredient.shuffleName,
+            writeOrderName: state.sortNameIngredient.shuffleName,
             userOrderInput: state.userLetterOrder.reduce(
               (acc, letter) => acc + letter.letter,
               ""
@@ -281,7 +285,7 @@ const Game4 = (props) => {
       ...state,
       wrongIngredientNameNotification: false,
       userLetterOrder: [],
-      shuffledName: state.tableIngredient.nameShuffled.map((letter) => {
+      shuffledName: state.sortNameIngredient.nameShuffled.map((letter) => {
         return {
           letter: letter,
           selected: false,
@@ -771,11 +775,52 @@ const Game4 = (props) => {
 
                     {!state.doneCooking && (
                       <div className="conter">
-                        {state.tableIngredient && (
+                        {state.showIngredients ? (
+                          <div>
+                            {state.tableIngredients.map((ingredient, index) => (
+                              <img
+                                src={ingredient.image}
+                                alt={ingredient.name}
+                                key={ingredient.name}
+                                className={
+                                  "conter-ingredient" +
+                                  (index % 2
+                                    ? " conter-ingredient-even"
+                                    : " conter-ingredient-odd")
+                                }
+                                style={{
+                                  width:
+                                    (window.innerWidth * 0.9) /
+                                    state.shuffledIngredients.length,
+                                }}
+                              />
+                            ))}
+                            {[
+                              ...Array(
+                                state.ingredientsList.length -
+                                  state.tableIngredients.length
+                              ),
+                            ].map((item, index) => (
+                              <div
+                                className={
+                                  "conter-ingredient" +
+                                  (index % 2
+                                    ? " conter-ingredient-even"
+                                    : " conter-ingredient-odd")
+                                }
+                                style={{
+                                  width:
+                                    (window.innerWidth * 0.9) /
+                                    state.shuffledIngredients.length,
+                                }}
+                              ></div>
+                            ))}
+                          </div>
+                        ) : (
                           <img
-                            src={state.tableIngredient.image}
+                            src={state.sortNameIngredient.image}
                             alt=""
-                            className="conter-ingredient absolute-center"
+                            className="conter-ingredient-solo absolute-center"
                           />
                         )}
                       </div>

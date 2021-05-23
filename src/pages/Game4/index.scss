@@ -159,6 +159,18 @@
 }
 
 .conter-ingredient {
+  display: inline-block;
+}
+
+.conter-ingredient-even {
+  margin-top: 15vh;
+}
+
+.conter-ingredient-odd {
+  margin-top: -5vh;
+}
+
+.conter-ingredient-solo {
   margin-top: -5vh;
   height: 35vh;
   z-index: 10000;
@@ -185,6 +197,11 @@
   display: inline-block;
   margin: 2vh 3vw;
   cursor: pointer;
+}
+
+.shuffled-letters span:hover {
+  -webkit-filter: drop-shadow(6px 3px 0px rgb(248, 122, 122));
+  filter: drop-shadow(6px 3px 0px rgb(248, 122, 122));
 }
 
 .ordered-letters-div {
