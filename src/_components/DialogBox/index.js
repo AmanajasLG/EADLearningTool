@@ -3,7 +3,7 @@ import React from 'react'
 const style = (alternative) => ({
   backgroundColor: alternative? '#59316D' : '#535c89',
 	borderRadius: '0 1.5em 0 0',
-	height: 240,
+	height: '30%',
 	padding: 15,
 	marginBottom: 75,
 	boxShadow: '7px 7px 0px 0px #77777750',

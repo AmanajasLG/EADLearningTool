@@ -56,7 +56,14 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
               Continuar
             </Button>
           </div>
-          <IngredientList ingredientsList={ingredientsList}/>
+          <IngredientList>
+            {ingredientsList.map((ingredient, index) =>
+              <div className="ingredient" key={index}>
+                <img className="ingredientImg" src={ingredient.image} alt="" />
+                <span>{ingredient.description}</span>
+              </div>
+            )}
+          </IngredientList>
         </div>
       )}
     </div>

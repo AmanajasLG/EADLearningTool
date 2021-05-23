@@ -3,12 +3,13 @@ import "./index.scss";
 import marked from "marked";
 import parse from "html-react-parser";
 
-import DialogCharacter from "../../../../_components/DialogCharacter";
-
+import ChefDialog from "../../../Game3/components/ChefDialog"
+import IngredientList from "../../../Game3/components/IngredientList"
+import TimerAnounce from '../../../../_components/TimerAnounce'
+import Button from '../../../../_components/Button'
 import {
   ingredientsListRotated,
-  kitchen,
-  hourglassFull,
+  kitchen
 } from "../../../../img";
 
 import { zeroFill } from "../../../../_helpers";
@@ -19,101 +20,53 @@ const Intro = ({ chef, recipe, ingredientsList, seconds, goToKitchen }) => {
   return (
     <div id="room-itself" className="intro">
       {state.screen === 0 && (
-        <div
-          id="dialog-interact"
-          style={{
-            backgroundImage: "url(" + { kitchen } + ")",
-          }}
-        >
-          <div id="dialogos">
-            <div id="dialog-box">
-              <span lang="pt-br">
-                No episódio de hoje, vamos ter o desafio de preparar{" "}
-                {recipe.name}!!
-              </span>
-              <span lang="en">
-                In today's episode, we'll face the challenge of preparing{" "}
-                {recipe.nameTranslate}!!
-              </span>
-            </div>
-            <button
-              className="btn btn-center"
-              id="btn-end-tutorial"
-              onClick={() => setState({ screen: 1 })}
-            >
-              Continuar
-            </button>
-          </div>
-          <DialogCharacter character={chef} feeling="init" />
+        <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%'}}>
+          <ChefDialog chef={chef} onContinue={() => setState({ screen: 1 })}
+            text={`No episódio de hoje, vamos ter o desafio de preparar ${recipe.name}!!`}
+            translation={`In today's episode, we'll face the challenge of preparing ${recipe.nameTranslate}!!`}
+          />
         </div>
       )}
 
       {state.screen === 1 && (
-        <div id="dialog-interact">
-          <img src={recipe.image} alt="" />
-          <div id="dialogos">
-            <div id="dialog-box">
-              <span lang="pt-br">{recipe.description}</span>
-              <span lang="en">{recipe.descriptionTranslate}</span>
-            </div>
-            <button
-              className="btn btn-center"
-              id="btn-end-tutorial"
-              onClick={() => setState({ screen: 2 })}
-            >
-              Continuar
-            </button>
-          </div>
-          <DialogCharacter character={chef} feeling="init" />
+        <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%'}}>
+          <img style={{position: 'absolute', right: '30%', width: '30%'}}  src={recipe.image} alt="" />
+          <ChefDialog chef={chef} onContinue={() => setState({ screen: 2 })}
+            text={recipe.description}
+            translation={recipe.descriptionTranslate}/>
         </div>
       )}
 
       {state.screen === 2 && (
         <div className="intro-recipe">
-          <div>
-            <img src={recipe.image} alt="" />
-            <span>{recipe.name}</span>
-            <button
-              className="btn btn-center"
-              id="btn-end-tutorial"
+          <div style={{width: 400, marginLeft: '10%'}}>
+            <div>
+              <img src={recipe.image} alt="" style={{width: 400}}/>
+            </div>
+            <h1 className="margin-half-top type-l type-display type-center">
+              {recipe.name}
+            </h1>
+            <Button blink
+              style={{display: 'block', margin: '30px auto 0 auto'}}
               onClick={() => setState({ screen: 3 })}
             >
               Continuar
-            </button>
+            </Button>
           </div>
-
-          <div className="ingredients-list">
-            <img src={ingredientsListRotated} alt="" />
-            <div className="rotated ingredients">
-              {ingredientsList.map((ingredient, index) => (
-                <div className="ingredient">
-                  {ingredient.order}.{" "}
-                  {parse(marked.parseInline(ingredient.description))};
-                </div>
-              ))}
-            </div>
-          </div>
+          <IngredientList>
+            {ingredientsList.map((ingredient, index) => (
+              <div className="ingredient">
+                {ingredient.order}.{" "}
+                {parse(marked.parseInline(ingredient.description))};
+              </div>
+            ))}
+          </IngredientList>
         </div>
       )}
 
-      {state.screen === 3 && (
-        <div>
-          <img src={hourglassFull} alt="" />
-          <span>Você tem</span>
-          <span>
-            {zeroFill(Math.floor(seconds / 60).toString(), 2)}:
-            {zeroFill((seconds % 60).toString(), 2)}
-          </span>
-          <span>minutos</span>
-          <button
-            className="btn btn-center"
-            id="btn-end-tutorial"
-            onClick={goToKitchen}
-          >
-            Estou pronto!
-          </button>
-        </div>
-      )}
+      {state.screen === 3 &&
+        <TimerAnounce seconds={seconds} onReady={goToKitchen} />
+      }
     </div>
   );
 };

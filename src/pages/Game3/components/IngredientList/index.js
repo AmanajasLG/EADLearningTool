@@ -1,9 +1,11 @@
 import React from 'react'
 import { ingredientsListBg } from '../../../../img'
+import parse from "html-react-parser";
+import marked from "marked";
 
 import './index.scss'
 
-const IngredientList = ({ingredientsList}) => {
+const IngredientList = ({children}) => {
   return(
     <div style={{
       backgroundImage: `url(${ingredientsListBg})`,
@@ -15,12 +17,7 @@ const IngredientList = ({ingredientsList}) => {
       marginTop: 10
     }}>
       <div style={{position: 'absolute', width: 400}}>
-        {ingredientsList.map((ingredient, index) => (
-          <div className="ingredient" key={index}>
-            <img className="ingredientImg" src={ingredient.image} alt="" />
-            <span>{ingredient.description}</span>
-          </div>
-        ))}
+        {children}
       </div>
     </div>
   )

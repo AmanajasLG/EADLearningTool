@@ -1,11 +1,11 @@
 import React from "react";
 import tutorialStyles from "./index.module.scss";
 import gameStyles from "../../index.module.scss";
-import DialogCharacter from "../../../../_components/DialogCharacter";
+import ChefDialog from "../ChefDialog";
 import Aisle from "../../../../_components/Aisle";
-
+import Button from '../../../../_components/Button'
+import TimerAnounce from '../../../../_components/TimerAnounce'
 import {
-  hourglassFull,
   cart,
   checkout,
   ingredientsListBg,
@@ -187,48 +187,22 @@ const Tutorial = ({
       )}
 
       {state.step === 1 && (
-        <div id="dialog-interact">
-          <div id="dialogos">
-            <div id="dialog-box">
-              <span lang="pt-br">
-                Agora você está pronto para começar as compras! Coloque tudo que
-                está na lista no carrinho antes que o tempo acabe!
-              </span>
-              <span lang="en">
-                Now you're ready to start shopping! Put everything on the list
-                in the cart before time runs out!
-              </span>
-            </div>
-            <button
-              className="btn btn-center"
-              id="btn-end-tutorial"
-              onClick={() => setState({ step: 2 })}
-            >
-              Continuar
-            </button>
-          </div>
-          <DialogCharacter character={chef} feeling="init" />
+        <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%'}}>
+          <ChefDialog chef={chef} onContinue={() => setState({ step: 2 })}
+            text="Agora você está pronto para começar as compras! Coloque tudo que está na lista no carrinho antes que o tempo acabe!"
+            translation={"Now you're ready to start shopping! Put everything on the list in the cart before time runs out!"}/>
         </div>
       )}
 
-      {state.step === 2 && (
-        <div>
-          <img src={hourglassFull} alt="" />
-          <span>Você tem</span>
-          <span>
-            {zeroFill(Math.floor(seconds / 60).toString(), 2)}:
-            {zeroFill((seconds % 60).toString(), 2)}
-          </span>
-          <span>minutos</span>
-          <button
-            className="btn btn-center"
-            id="btn-end-tutorial"
-            onClick={goToMarket}
-          >
-            Estou pronto!
-          </button>
-        </div>
-      )}
+      {state.step === 2 &&
+        <TimerAnounce seconds={seconds} onReady={goToMarket}/>
+      }
+
+      {process.env.NODE_ENV === 'development' &&
+        <button style={{position: 'absolute', bottom: 0}} onClick={goToMarket}>
+          Pula tutorial
+        </button>
+      }
     </div>
   );
 };
