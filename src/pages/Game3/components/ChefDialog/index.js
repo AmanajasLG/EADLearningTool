@@ -1,21 +1,8 @@
 import React from 'react'
 import DialogBox from '../../../../_components/DialogBox'
-import Button from '@material-ui/core/Button'
+import Button from '../../../../_components/Button'
 import DialogCharacter from '../../../../_components/DialogCharacter'
 import './index.scss'
-
-const buttonStyle = {
-  fontFamily: 'Barlow',
-  fontWeight: 'bold',
-  color: '#59316D',
-  border: 'none',
-  width: 100, height: 50,
-  position: 'absolute',
-  right: '-10px', bottom: '-10px',
-  backgroundColor: '#F9AFA1',
-  borderRadius: '50px 50px 50px 0px',
-  cursor: 'pointer'
-}
 
 const ChefDialog = ({onContinue, text, translation, chef}) => {
   return (
@@ -33,17 +20,16 @@ const ChefDialog = ({onContinue, text, translation, chef}) => {
           </div>
         </div>
 
-        <button
-          style={buttonStyle}
-          onClick={onContinue}
+        <Button onClick={onContinue} blink
+          style={{position: 'absolute', right: '-10px', bottom: '-10px'}}
         >
           Continuar >
-        </button>
+        </Button>
       </DialogBox>
       <DialogCharacter character={chef} feeling="init" style={{height: 650, left:0}}/>
     </div>
   )
 }
-
+//
 
 export default ChefDialog
