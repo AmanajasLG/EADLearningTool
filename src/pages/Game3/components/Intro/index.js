@@ -4,9 +4,9 @@ import Button from '@material-ui/core/Button'
 
 import DialogCharacter from "../../../../_components/DialogCharacter";
 import DialogBox from '../../../../_components/DialogBox'
-import { ingredientsListRotated, kitchen } from "../../../../img";
+import { kitchen } from "../../../../img";
 import ChefDialog from '../ChefDialog'
-
+import IngredientList from '../IngredientList'
 
 const instructionText=(recipeName, recipeNameTranslate)=> ({
   en: `Shop for the items in the list before the time is up! In today's
@@ -58,19 +58,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
               Continuar
             </button>
           </div>
-          <div>
-            <div className="ingredients-list">
-              <img src={ingredientsListRotated} alt="" />
-              <div className="rotated ingredients">
-                {ingredientsList.map((ingredient, index) => (
-                  <div className="ingredient" key={index}>
-                    <img src={ingredient.image} alt="" />
-                    <span>{ingredient.description}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <IngredientList ingredientsList={ingredientsList}/>
         </div>
       )}
     </div>
