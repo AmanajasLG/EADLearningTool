@@ -25,6 +25,8 @@ import {
   hourglassEmpty,
   hourglassFull,
   blobLaranja,
+  right,
+  error,
 } from "../../img";
 import DialogCharacter from "../../_components/DialogCharacter";
 
@@ -84,7 +86,8 @@ const Game4 = (props) => {
       state.ingredientsList.length === 0 &&
       timesPlayed !== undefined
     ) {
-      missionData.seconds -= 60 * (timesPlayed > 2 ? 2 : timesPlayed);
+      let remainingTime =
+        missionData.seconds - 60 * (timesPlayed > 2 ? 2 : timesPlayed);
       // safe copies
 
       let recipe =
@@ -147,6 +150,7 @@ const Game4 = (props) => {
           ingredientsList,
           shuffledIngredients,
           tablewares,
+          remainingTime,
         };
       });
     }
@@ -159,11 +163,22 @@ const Game4 = (props) => {
       (ingredient) => !ingredient.done
     );
 
+    console.log(state.wrongIngredientSelected);
+
     if (state.selectedIngredient.name !== currentIngredient.name) {
-      setState({ ...state, wrongIngredientNotification: true });
-    } else {
       setState({
         ...state,
+        wrongIngredientNotification: true,
+        wrongIngredientSelected: [
+          ...state.wrongIngredientSelected,
+          {
+            rightIngredient: currentIngredient.name,
+            userSelected: state.selectedIngredient.name,
+          },
+        ],
+      });
+    } else {
+      let updatedState = {
         showIngredients: false,
         tableIngredient: state.selectedIngredient,
         selectedIngredient: null,
@@ -173,6 +188,26 @@ const Game4 = (props) => {
             selected: false,
           };
         }),
+      };
+
+      console.log(
+        state.ingredientsList.findIndex(
+          (ingredient) => ingredient.name === currentIngredient.name
+        )
+      );
+
+      if (
+        state.ingredientsList.findIndex(
+          (ingredient) => ingredient.name === currentIngredient.name
+        ) === 0
+      ) {
+        updatedState.tutorialIngredientNameSelectionNotification = true;
+        updatedState.runTimer = false;
+      }
+
+      setState({
+        ...state,
+        ...updatedState,
       });
     }
   };
@@ -217,14 +252,27 @@ const Game4 = (props) => {
           tableIngredient: null,
           ingredientsList: updateIngredientsList,
           shuffledIngredients: updateShuffledIngredients,
-          showRecipe: true,
           showIngredients: true,
           userLetterOrder: [],
-          recipeContinue: true,
+          // showRecipe: true,
+          // recipeContinue: true,
         });
       }
     } else {
-      setState({ ...state, wrongIngredientNameNotification: true });
+      setState({
+        ...state,
+        wrongIngredientNameNotification: true,
+        wrongIngredientNameOrder: [
+          ...state.wrongIngredientNameOrder,
+          {
+            writeOrderName: state.tableIngredient.shuffleName,
+            userOrderInput: state.userLetterOrder.reduce(
+              (acc, letter) => acc + letter.letter,
+              ""
+            ),
+          },
+        ],
+      });
     }
   };
 
@@ -274,43 +322,94 @@ const Game4 = (props) => {
           return [...acc, { name: tableware.name, choosen: false }];
         }, [])
       ),
+      tutorialTablewareSelectionNotification: true,
     });
   };
 
   const addTableware = (selectedTableware) => () => {
-    setState({
-      ...state,
-      shuffledTablewaresNames: state.shuffledTablewaresNames.map(
-        (tableware) => {
-          if (tableware.name === selectedTableware.name)
+    if (selectedTableware.name !== state.tablewareImageSelected.name) {
+      setState({
+        ...state,
+        wrongCombiantionNotification: true,
+        wrongTablewarePairSelected: [
+          ...state.wrongTablewarePairSelected,
+          {
+            imageSelected: state.tablewareImageSelected.name,
+            nameSelected: selectedTableware.name,
+          },
+        ],
+      });
+    } else {
+      setState({
+        ...state,
+        shuffledTablewaresNames: state.shuffledTablewaresNames.map(
+          (tableware) => {
+            if (tableware.name === selectedTableware.name)
+              return {
+                ...tableware,
+                choosen: true,
+              };
+
+            return tableware;
+          }
+        ),
+        shuffledTablewares: state.shuffledTablewares.map((tableware) => {
+          if (tableware.name === state.tablewareImageSelected.name)
             return {
               ...tableware,
               choosen: true,
             };
 
           return tableware;
-        }
-      ),
-      shuffledTablewares: state.shuffledTablewares.map((tableware) => {
-        if (tableware.name === state.tablewareImageSelected.name)
-          return {
-            ...tableware,
-            choosen: true,
-          };
+        }),
+        tablewareImagePick: true,
+        tableTablewares: [
+          ...state.tableTablewares,
+          state.tablewareImageSelected,
+        ],
+        tablewareImageSelected: null,
+      });
+    }
+  };
 
-        return tableware;
-      }),
-      tablewareImagePick: true,
-      tablewareImageSelected: null,
-      tableTablewares: [
-        ...state.tableTablewares,
-        {
-          imageName: state.tablewareImageSelected.name,
-          name: selectedTableware.name,
-        },
-      ],
+  const checkTableware = () => {
+    console.log(
+      state.tableTablewares
+        .filter((tableware) => !tableware.correct)
+        .map((tableware) => tableware.name)
+    );
+    setState({
+      ...state,
+      wrongTablewareSelected: state.tableTablewares
+        .filter((tableware) => !tableware.correct)
+        .map((tableware) => {
+          return { name: tableware.name };
+        }),
+      endConfirmation: true,
+      runTimer: false,
     });
   };
+
+  // const clearTableTableware = () => {
+  //   setState({
+  //     ...state,
+  //     wrongTablewareNotification: false,
+  //     shuffledTablewaresNames: state.shuffledTablewaresNames.map(
+  //       (tableware) => {
+  //         return {
+  //           ...tableware,
+  //           choosen: false,
+  //         };
+  //       }
+  //     ),
+  //     shuffledTablewares: state.shuffledTablewares.map((tableware) => {
+  //       return {
+  //         ...tableware,
+  //         choosen: false,
+  //       };
+  //     }),
+  //   });
+  // };
 
   const restart = () => {
     setState({ ...initialState(false) });
@@ -343,275 +442,72 @@ const Game4 = (props) => {
           : missionData.seconds - state.remainingTime,
         recipe: state.recipe.id,
         won: !timeUp,
+        wrongIngredientSelected: state.wrongIngredientSelected.length
+          ? JSON.stringify(state.wrongIngredientSelected)
+          : null,
+        wrongIngredientNameOrder: state.wrongIngredientNameOrder.length
+          ? JSON.stringify(state.wrongIngredientNameOrder)
+          : null,
+        wrongTablewarePairSelected: state.wrongTablewarePairSelected.length
+          ? JSON.stringify(state.wrongTablewarePairSelected)
+          : null,
+        wrongTablewareSelected: state.wrongTablewareSelected.length
+          ? JSON.stringify(state.wrongTablewareSelected)
+          : null,
       })
     );
   };
 
   return (
-    <div>
-      {(function renderScene() {
-        switch (state.scene) {
-          case "INIT":
-            return (
-              <Init
-                icon={mission.initIcon ? mission.initIcon.url : ""}
-                name={mission.name}
-                description={mission.description}
-                nameTranslate={
-                  mission.nameTranslate.find((name) => {
-                    return name.language.id === lang;
-                  }).name
-                }
-                descriptionTranslate={
-                  mission.descriptionTranslate.find((description) => {
-                    return description.language.id === lang;
-                  }).description
-                }
-                onStart={onStartGame}
-                onBack={() => setState({ ...state, back: true })}
-                ready={state.ingredientsList.length > 0}
-              />
-            );
-          case "INTRO":
-            return (
-              <Intro
-                recipe={state.recipe}
-                chef={missionData.character}
-                ingredientsList={state.ingredientsList}
-                goToTutorial={() => setState({ ...state, scene: "TUTORIAL" })}
-              />
-            );
-          case "TUTORIAL":
-            return (
-              <div>
-                Tutorial
-                <div>Apresentador</div>
-                <div>
-                  Fala
-                  <Recipe
-                    ingredientsList={state.ingredientsList}
-                    closeText={"Estou pronto"}
-                    onClose={() =>
-                      setState({ ...state, scene: "COOK", runTimer: true })
+    <div id="game2-wrapper">
+      {mission ? (
+        //verificar se é possível generalizar esses gameX-wrapper
+        <div id="game2-content">
+          {(function renderScene() {
+            switch (state.scene) {
+              case "INIT":
+                return (
+                  <Init
+                    icon={mission.initIcon ? mission.initIcon.url : ""}
+                    name={mission.name}
+                    description={mission.description}
+                    nameTranslate={
+                      mission.nameTranslate.find((name) => {
+                        return name.language.id === lang;
+                      }).name
                     }
-                    hasImage={false}
-                    showCheck={(ingredient) => true}
+                    descriptionTranslate={
+                      mission.descriptionTranslate.find((description) => {
+                        return description.language.id === lang;
+                      }).description
+                    }
+                    onStart={onStartGame}
+                    onBack={() => setState({ ...state, back: true })}
+                    ready={state.ingredientsList.length > 0}
                   />
-                </div>
-              </div>
-            );
-          case "COOK":
-            return (
-              <div>
-                <Timer
-                  run={state.runTimer}
-                  seconds={missionData.seconds}
-                  onStop={(remaining) => {
-                    setState({
-                      ...state,
-                      remainingTime: remaining,
-                    });
-                  }}
-                  onEnd={() => endGame(true)}
-                />
-
-                {state.showIngredients ? (
+                );
+              case "INTRO":
+                return (
+                  <Intro
+                    recipe={state.recipe}
+                    chef={missionData.character}
+                    ingredientsList={state.ingredientsList}
+                    goToKitchen={() =>
+                      setState({
+                        ...state,
+                        scene: "COOK",
+                        tutorialIngredientSelectionNotification: true,
+                      })
+                    }
+                    seconds={state.remainingTime}
+                  />
+                );
+              case "COOK":
+                return (
                   <div>
-                    {!state.recipeContinue && (
-                      <img
-                        onClick={() =>
-                          setState({
-                            ...state,
-                            showRecipe: !state.showRecipe,
-                          })
-                        }
-                        src={listIcon}
-                        alt=""
-                        className="list-icon"
-                      />
-                    )}
-                    {state.showRecipe && (
-                      <Recipe
-                        ingredientsList={state.ingredientsList}
-                        closeText={
-                          state.recipeContinue ? "Continuar" : "Fechar"
-                        }
-                        onClose={(e) =>
-                          setState({
-                            ...state,
-                            showRecipe: false,
-                            recipeContinue: false,
-                          })
-                        }
-                        hasImage={false}
-                        showCheck={(ingredient) => ingredient.done}
-                      />
-                    )}
-                    <div>
-                      {state.shuffledIngredients.map((ingredient, index) => (
-                        <img
-                          src={ingredient.image}
-                          alt=""
-                          onClick={() =>
-                            setState({
-                              ...state,
-                              selectedIngredient: { ...ingredient },
-                            })
-                          }
-                          style={{
-                            opacity: ingredient.done ? 0 : 1,
-                            pointerEvents: ingredient.done ? "none" : "auto",
-                          }}
-                          className={
-                            (state.selectedIngredient
-                              ? ingredient.name ===
-                                state.selectedIngredient.name
-                                ? "selected"
-                                : ""
-                              : "") + " ingredient-selection-img"
-                          }
-                        />
-                      ))}
-                    </div>
-                    {state.selectedIngredient && (
-                      <button onClick={checkRightIngredient}>
-                        Adicionar à bancada
-                      </button>
-                    )}
-                  </div>
-                ) : (
-                  <div>
-                    <div>
-                      {state.shuffledName.map((letter, index) => (
-                        <span
-                          key={index}
-                          onClick={addLetter(letter, index)}
-                          style={{
-                            opacity: letter.selected ? 0 : 1,
-                            pointerEvents: letter.selected ? "none" : "auto",
-                          }}
-                          className="letter"
-                        >
-                          {letter.letter}
-                        </span>
-                      ))}
-                    </div>
-                    <div>
-                      <div>
-                        {state.userLetterOrder.reduce(
-                          (acc, letter) => acc + letter.letter,
-                          ""
-                        )}
-                      </div>
-                      <div>
-                        <div onClick={clearIngredientName}>x</div>
-                        <div onClick={checkIngredientName}>ok</div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {state.wrongIngredientNotification && (
-                  <div>
-                    <div>Esse item não é o que você precisa agora.</div>
-                    <button
-                      onClick={() =>
-                        setState({
-                          ...state,
-                          selectedIngredient: null,
-                          wrongIngredientNotification: false,
-                        })
-                      }
-                    >
-                      Continuar
-                    </button>
-                  </div>
-                )}
-
-                {state.wrongIngredientNameNotification && (
-                  <div>
-                    <div>
-                      {state.userLetterOrder.reduce(
-                        (acc, letter) => acc + letter.letter,
-                        ""
-                      )}{" "}
-                      não serve para sua receita.
-                    </div>
-                    <button onClick={() => clearIngredientName()}>
-                      Continuar
-                    </button>
-                  </div>
-                )}
-
-                {!state.doneCooking && (
-                  <div>
-                    Mesa
-                    <div>
-                      {state.tableIngredient && (
-                        <img src={state.tableIngredient.image} alt="" />
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {state.doneCooking && (
-                  <div>
-                    <div id="dialog-interact">
-                      <div id="dialogos">
-                        <div id="dialog-box">
-                          <span lang="pt-br">
-                            Parabéns! Parece bom, mas você não vai me servir na
-                            panela, né? Escolha <strong>três</strong> utensílios
-                            adequados para servir seu prato! Nem mais, nem
-                            menos.
-                          </span>
-                          <span lang="en">
-                            Congratulations! It looks good, but you`re not going
-                            to serv me in the pan, are you? Choose{" "}
-                            <strong>three</strong> approppriate utensils to
-                            serve your dish! No more, no less.
-                          </span>
-                        </div>
-                        <button
-                          className="btn btn-center"
-                          id="btn-move-to-payment"
-                          onClick={moveToServing}
-                        >
-                          Continuar
-                        </button>
-                      </div>
-                    </div>
-                    <div>
-                      <DialogCharacter
-                        character={missionData.character}
-                        feeling={"default"}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          case "SERVE":
-            return (
-              <div>
-                {!state.endConfirmation && (
-                  <div>
-                    {state.tableTablewares.length === 3 && (
-                      <img
-                        onClick={() =>
-                          setState({
-                            ...state,
-                            endConfirmation: true,
-                            runTimer: false,
-                          })
-                        }
-                        src={silverCloche}
-                        alt=""
-                      />
-                    )}
                     <Timer
                       run={state.runTimer}
-                      seconds={900}
+                      seconds={state.remainingTime}
                       onStop={(remaining) => {
                         setState({
                           ...state,
@@ -620,157 +516,660 @@ const Game4 = (props) => {
                       }}
                       onEnd={() => endGame(true)}
                     />
-                    <div>
-                      {state.shuffledTablewares.map((tableware, index) => (
-                        <img
-                          key={index}
-                          src={tableware.image}
-                          style={{
-                            opacity: tableware.choosen
-                              ? 0
-                              : !state.tablewareImagePick
-                              ? 0.4
-                              : 1,
-                            pointerEvents: tableware.choosen
-                              ? "none"
-                              : !state.tablewareImagePick
-                              ? "none"
-                              : "auto",
-                            height: 100,
-                            border: "1px solid red",
-                          }}
+
+                    {state.tutorialIngredientSelectionNotification && (
+                      <div className="tutorial-blob blob-right">
+                        <div>
+                          <span lang="pt-br">
+                            Clique no ingrediente que você deseja colocar na
+                            bancada e confirme.
+                          </span>
+                          <span lang="en">
+                            Click on the ingredient you want to put on the
+                            conter and confirm.
+                          </span>
+                        </div>
+                        <button
+                          className="btn btn-center"
+                          id="btn-end-tutorial"
                           onClick={() =>
                             setState({
                               ...state,
-                              tablewareImagePick: false,
-                              tablewareImageSelected: tableware,
+                              runTimer: true,
+                              tutorialIngredientSelectionNotification: false,
                             })
                           }
-                          className={
-                            (tableware === state.tablewareNameSelected
-                              ? "selected"
-                              : "") + " ingredient-selection-img"
-                          }
-                          alt=""
-                        />
-                      ))}
-                    </div>
-                    <div>
-                      {state.shuffledTablewaresNames.map((tableware, index) => (
-                        <div
-                          key={index}
-                          style={{
-                            opacity: tableware.choosen
-                              ? 0
-                              : state.tablewareImagePick
-                              ? 0.4
-                              : 1,
-                            pointerEvents: tableware.choosen
-                              ? "none"
-                              : state.tablewareImagePick
-                              ? "none"
-                              : "auto",
-                          }}
-                          onClick={addTableware(tableware)}
-                        >
-                          {tableware.name}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {state.endConfirmation && (
-                  <div>
-                    <div id="dialog-interact">
-                      <div id="dialogos">
-                        <div id="dialog-box">
-                          <span lang="pt-br">
-                            Parabéns! Você é o mais novo finalista do
-                            MestreCuca! Agora, aguarde a deliberação dos
-                            jurados.{" "}
-                          </span>
-                          <span lang="en">
-                            Congrats! You are the brand new finalist of
-                            MestreCuca! Now, wait while the judges decide.{" "}
-                          </span>
-                        </div>{" "}
-                        <button
-                          className="btn btn-center"
-                          id="btn-move-to-payment"
-                          onClick={endGame(false)}
                         >
                           Continuar
                         </button>
                       </div>
-                    </div>
-                    <div>
-                      <DialogCharacter
-                        character={missionData.character}
-                        feeling={"default"}
-                      />
-                    </div>
+                    )}
+
+                    {state.tutorialIngredientNameSelectionNotification && (
+                      <div className="tutorial-blob blob-right">
+                        <div>
+                          <span lang="pt-br">
+                            Selecione as letras na ordem correta para escrever o
+                            nome do ingrediente.
+                          </span>
+                          <span lang="en">
+                            Select the letters in the correct order to write the
+                            name of the ingredient.
+                          </span>
+                        </div>
+                        <button
+                          className="btn btn-center"
+                          id="btn-end-tutorial"
+                          onClick={() =>
+                            setState({
+                              ...state,
+                              runTimer: true,
+                              tutorialIngredientNameSelectionNotification: false,
+                            })
+                          }
+                        >
+                          Continuar
+                        </button>
+                      </div>
+                    )}
+                    {!state.doneCooking &&
+                      (state.showIngredients ? (
+                        <div>
+                          {!state.recipeContinue && (
+                            <img
+                              onClick={() =>
+                                setState({
+                                  ...state,
+                                  showRecipe: !state.showRecipe,
+                                })
+                              }
+                              src={listIcon}
+                              alt=""
+                              className="list-icon"
+                            />
+                          )}
+                          {state.showRecipe && (
+                            <Recipe
+                              ingredientsList={state.ingredientsList}
+                              closeText={
+                                state.recipeContinue ? "Continuar" : "Fechar"
+                              }
+                              onClose={(e) =>
+                                setState({
+                                  ...state,
+                                  showRecipe: false,
+                                  recipeContinue: false,
+                                })
+                              }
+                              hasImage={false}
+                              showCheck={(ingredient) => ingredient.done}
+                            />
+                          )}
+                          <div>
+                            {state.shuffledIngredients.map(
+                              (ingredient, index) => (
+                                <img
+                                  src={ingredient.image}
+                                  alt=""
+                                  onClick={() =>
+                                    setState({
+                                      ...state,
+                                      selectedIngredient: { ...ingredient },
+                                    })
+                                  }
+                                  style={{
+                                    opacity: ingredient.done ? 0 : 1,
+                                    pointerEvents: ingredient.done
+                                      ? "none"
+                                      : "auto",
+                                  }}
+                                  className={
+                                    (state.selectedIngredient
+                                      ? ingredient.name ===
+                                        state.selectedIngredient.name
+                                        ? "selected"
+                                        : ""
+                                      : "") + " ingredient-selection-img"
+                                  }
+                                />
+                              )
+                            )}
+                          </div>
+                          {state.selectedIngredient && (
+                            <button onClick={checkRightIngredient}>
+                              Adicionar à bancada
+                            </button>
+                          )}
+                        </div>
+                      ) : (
+                        <div>
+                          <div>
+                            {state.shuffledName.map((letter, index) => (
+                              <span
+                                key={index}
+                                onClick={addLetter(letter, index)}
+                                style={{
+                                  opacity: letter.selected ? 0 : 1,
+                                  pointerEvents: letter.selected
+                                    ? "none"
+                                    : "auto",
+                                }}
+                                className="letter"
+                              >
+                                {letter.letter}
+                              </span>
+                            ))}
+                          </div>
+                          <div>
+                            <div>
+                              {state.userLetterOrder.reduce(
+                                (acc, letter) => acc + letter.letter,
+                                ""
+                              )}
+                            </div>
+                            <div>
+                              <div onClick={clearIngredientName}>x</div>
+                              <div onClick={checkIngredientName}>ok</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                    {state.wrongIngredientNotification && (
+                      <div>
+                        <div>Esse item não é o que você precisa agora.</div>
+                        <button
+                          onClick={() =>
+                            setState({
+                              ...state,
+                              selectedIngredient: null,
+                              wrongIngredientNotification: false,
+                            })
+                          }
+                        >
+                          Continuar
+                        </button>
+                      </div>
+                    )}
+
+                    {state.wrongIngredientNameNotification && (
+                      <div>
+                        <div>
+                          {state.userLetterOrder.reduce(
+                            (acc, letter) => acc + letter.letter,
+                            ""
+                          )}{" "}
+                          não serve para sua receita.
+                        </div>
+                        <button onClick={() => clearIngredientName()}>
+                          Continuar
+                        </button>
+                      </div>
+                    )}
+
+                    {!state.doneCooking && (
+                      <div>
+                        Mesa
+                        <div>
+                          {state.tableIngredient && (
+                            <img src={state.tableIngredient.image} alt="" />
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {state.doneCooking && (
+                      <div>
+                        <div id="dialog-interact">
+                          <div id="dialogos">
+                            <div id="dialog-box">
+                              <span lang="pt-br">
+                                Parabéns! Parece bom, mas você não vai me servir
+                                na panela, né? Escolha <strong>três</strong>{" "}
+                                utensílios adequados para servir seu prato! Nem
+                                mais, nem menos.
+                              </span>
+                              <span lang="en">
+                                Congratulations! It looks good, but you`re not
+                                going to serv me in the pan, are you? Choose{" "}
+                                <strong>three</strong> approppriate utensils to
+                                serve your dish! No more, no less.
+                              </span>
+                            </div>
+                            <button
+                              className="btn btn-center"
+                              id="btn-move-to-payment"
+                              onClick={moveToServing}
+                            >
+                              Continuar
+                            </button>
+                          </div>
+                        </div>
+                        <div>
+                          <DialogCharacter
+                            character={missionData.character}
+                            feeling={"default"}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            );
-          case "END_GAME":
-            return (
-              <div>
-                {state.timeUp ? (
+                );
+              case "SERVE":
+                return (
                   <div>
-                    <img src={hourglassEmpty} alt="" />
-                    <span>O tempo acabou!</span>
-                    <p lang="pt-br">
-                      Fazer compras pode ser mais complicado do que parece.
-                    </p>
-                    <p lang="en">
-                      Time is up! Doing the groceries might be harder than it
-                      looks.
-                    </p>
+                    {!state.endConfirmation && (
+                      <div>
+                        {state.wrongCombiantionNotification && (
+                          <div>
+                            <div>Esse não é o nome desse item.</div>
+                            <button
+                              onClick={() =>
+                                setState({
+                                  ...state,
+                                  tablewareImagePick: true,
+                                  tablewareImageSelected: null,
+                                  wrongCombiantionNotification: false,
+                                })
+                              }
+                            >
+                              Continuar
+                            </button>
+                          </div>
+                        )}
+
+                        {state.tutorialTablewareSelectionNotification && (
+                          <div>
+                            <div>Quais 3 utensilios você vai escolher?</div>
+                          </div>
+                        )}
+
+                        {state.tableTablewares.length === 3 && (
+                          <img
+                            onClick={() => checkTableware()}
+                            src={silverCloche}
+                            alt=""
+                            style={{ position: "absoule", width: 150 }}
+                          />
+                        )}
+                        <Timer
+                          run={state.runTimer}
+                          seconds={state.remainingTime}
+                          onStop={(remaining) => {
+                            setState({
+                              ...state,
+                              remainingTime: remaining,
+                            });
+                          }}
+                          onEnd={() => endGame(true)}
+                        />
+                        <div>
+                          {state.shuffledTablewares.map((tableware, index) => (
+                            <img
+                              key={index}
+                              src={tableware.image}
+                              style={{
+                                opacity: tableware.choosen
+                                  ? 0
+                                  : !state.tablewareImagePick
+                                  ? 0.4
+                                  : 1,
+                                pointerEvents: tableware.choosen
+                                  ? "none"
+                                  : !state.tablewareImagePick
+                                  ? "none"
+                                  : "auto",
+                                height: 100,
+                                border: "1px solid red",
+                              }}
+                              onClick={() =>
+                                setState({
+                                  ...state,
+                                  tutorialTablewareSelectionNotification: false,
+                                  tablewareImagePick: false,
+                                  tablewareImageSelected: tableware,
+                                })
+                              }
+                              className={
+                                (tableware === state.tablewareNameSelected
+                                  ? "selected"
+                                  : "") + " ingredient-selection-img"
+                              }
+                              alt=""
+                            />
+                          ))}
+                        </div>
+                        <div>
+                          {state.shuffledTablewaresNames.map(
+                            (tableware, index) => (
+                              <div
+                                key={index}
+                                style={{
+                                  opacity: tableware.choosen
+                                    ? 0
+                                    : state.tablewareImagePick
+                                    ? 0.4
+                                    : 1,
+                                  pointerEvents: tableware.choosen
+                                    ? "none"
+                                    : state.tablewareImagePick
+                                    ? "none"
+                                    : "auto",
+                                }}
+                                onClick={addTableware(tableware)}
+                              >
+                                {tableware.name}
+                              </div>
+                            )
+                          )}
+                        </div>
+
+                        <div>
+                          {state.tableTablewares.map((tableware, index) => (
+                            <img
+                              key={index}
+                              src={tableware.image}
+                              alt=""
+                              style={{ width: 100 }}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {state.endConfirmation && (
+                      <div>
+                        <div id="dialog-interact">
+                          <div id="dialogos">
+                            <div id="dialog-box">
+                              <span lang="pt-br">
+                                Parabéns! Você é o mais novo finalista do
+                                MestreCuca! Agora, aguarde a deliberação dos
+                                jurados.{" "}
+                              </span>
+                              <span lang="en">
+                                Congrats! You are the brand new finalist of
+                                MestreCuca! Now, wait while the judges decide.{" "}
+                              </span>
+                            </div>{" "}
+                            <button
+                              className="btn btn-center"
+                              id="btn-move-to-payment"
+                              onClick={endGame(false)}
+                            >
+                              Continuar
+                            </button>
+                          </div>
+                        </div>
+                        <div>
+                          <DialogCharacter
+                            character={missionData.character}
+                            feeling={"default"}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
-                ) : (
+                );
+              case "END_GAME":
+                return (
                   <div>
-                    <img src={hourglassFull} alt="" />
-                    <p lang="pt-br">Você finalizou em:</p>
-                    <p lang="en">Finished in:</p>
-                  </div>
-                )}
-                <div
-                  className="feedback-painel-2-content"
-                  style={{
-                    backgroundImage: "url(" + blobLaranja + ")",
-                  }}
-                >
-                  {state.timeUp ? (
-                    <div> 0:00</div>
-                  ) : (
-                    <div>
-                      {zeroFill(
-                        Math.floor(
-                          (missionData.seconds - state.remainingTime) / 60
-                        ).toString(),
-                        2
-                      )}
-                      :
-                      {zeroFill(
-                        (
-                          (missionData.seconds - state.remainingTime) %
-                          60
-                        ).toString(),
-                        2
+                    {state.timeUp ? (
+                      <div>
+                        <img src={hourglassEmpty} alt="" />
+                        <span>O tempo acabou!</span>
+                        <p lang="pt-br">
+                          Cozinhar pode ser mais complicado do que parece.
+                        </p>
+                        <p lang="en">
+                          Time is up! Cooking might be harder than it looks.
+                        </p>
+                      </div>
+                    ) : (
+                      <div>
+                        <img src={hourglassFull} alt="" />
+                        <p lang="pt-br">Você finalizou em:</p>
+                        <div>
+                          {state.wrongIngredientSelected.length ? (
+                            <div>
+                              <p lang="pt-br">
+                                <img
+                                  src={error}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Você se confundiu um pouco, mas conseguiu
+                                preparar os ingredientes na ordem certa!
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p lang="pt-br">
+                                <img
+                                  src={right}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Você pegou os ingredientes certos de primeira!
+                              </p>
+                            </div>
+                          )}
+                          {state.wrongIngredientNameOrder.length ? (
+                            <div>
+                              <p lang="pt-br">
+                                <img
+                                  src={error}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Dar nomes aos ingredientes te deu algum
+                                trabalho!
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p lang="pt-br">
+                                <img
+                                  src={right}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Acertar os nomes foi moleza para você!
+                              </p>
+                            </div>
+                          )}
+                          {state.wrongTablewarePairSelected.length ? (
+                            <div>
+                              <p lang="pt-br">
+                                <img
+                                  src={error}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Você teve um pouco de dificuldade em ligar os
+                                utensílios aos seus nomes.
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p lang="pt-br">
+                                <img
+                                  src={right}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Ligar os utensílios aos seus nomes foi fácil
+                                para você!
+                              </p>
+                            </div>
+                          )}
+                          {state.wrongTablewareSelected.length ? (
+                            <div>
+                              <p lang="pt-br">
+                                <img
+                                  src={error}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                E você tem alguns problemas sobre como servir
+                                sua comida...
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p lang="pt-br">
+                                <img
+                                  src={right}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                E você sabe exatamente onde servir sua comida!
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        <p lang="en">Finished in:</p>
+                        <div>
+                          {state.wrongIngredientSelected.length ? (
+                            <div>
+                              <p lang="en">
+                                <img
+                                  src={error}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                You messed it up a bit but managed to preper the
+                                ingredients in the right order!
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p lang="en">
+                                <img
+                                  src={right}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                You picked the right ingredients on your first
+                                try!
+                              </p>
+                            </div>
+                          )}
+                          {state.wrongIngredientNameOrder.length ? (
+                            <div>
+                              <p lang="en">
+                                <img
+                                  src={error}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Naming the ingredients gave you some trouble!
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p lang="en">
+                                <img
+                                  src={right}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Getting the names right was a piece of cake for
+                                you!
+                              </p>
+                            </div>
+                          )}
+                          {state.wrongTablewarePairSelected.length ? (
+                            <div>
+                              <p lang="en">
+                                <img
+                                  src={error}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Matching the kitchen utensils with their names
+                                was a bit tough for you.
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p lang="en">
+                                <img
+                                  src={right}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                Matching the kitchen utensils with their names
+                                was pretty easy for you!
+                              </p>
+                            </div>
+                          )}
+                          {state.wrongTablewareSelected.length ? (
+                            <div>
+                              <p lang="en">
+                                <img
+                                  src={error}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                And you've got some problems with how to serve
+                                your food...
+                              </p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p lang="en">
+                                <img
+                                  src={right}
+                                  alt=""
+                                  className="shop-list-item-check"
+                                />
+                                And you know exactly where to serve your food!
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    <div
+                      className="feedback-painel-2-content"
+                      style={{
+                        backgroundImage: "url(" + blobLaranja + ")",
+                      }}
+                    >
+                      {state.timeUp ? (
+                        <div>0:00</div>
+                      ) : (
+                        <div>
+                          {zeroFill(
+                            Math.floor(
+                              (missionData.seconds - state.remainingTime) / 60
+                            ).toString(),
+                            2
+                          )}
+                          :
+                          {zeroFill(
+                            (
+                              (missionData.seconds - state.remainingTime) %
+                              60
+                            ).toString(),
+                            2
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
-                <button onClick={restart}>Tentar novamente</button>
-                <Link to={"/userspace"}>Sair do jogo</Link>
-              </div>
-            );
-          default:
-            return <div>Error</div>;
-        }
-      })()}
+                    <button onClick={restart}>Tentar novamente</button>
+                    <Link to={"/userspace"}>Sair do jogo</Link>
+                  </div>
+                );
+              default:
+                return <div>Error</div>;
+            }
+          })()}
+        </div>
+      ) : (
+        <div>Loading..</div>
+      )}
     </div>
   );
 };

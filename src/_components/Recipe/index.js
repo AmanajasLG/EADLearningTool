@@ -47,9 +47,6 @@ const Recipe = ({
           </div>
         ))}
       </div>
-      <button onClick={onClose ? onClose : () => {}}>
-        {closeText ? closeText : "Fechar"}
-      </button>
     </div>
   );
 };

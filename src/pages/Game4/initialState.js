@@ -15,19 +15,29 @@ const initialState = (checkedPlayed = false) => {
     showIngredients: true,
     selectedIngredient: null,
     tableIngredient: null,
-    wrongIngredientNotification: false,
-    wrongIngredientNameNotification: false,
 
     shuffledName: [],
     userLetterOrder: [],
-    result: "",
-    prepared: [],
 
     tablewareImagePick: true,
     shuffledTablewares: [],
     shuffledTablewaresNames: [],
     tablewareImageSelected: null,
     tableTablewares: [],
+
+    // USER ERRORS
+    wrongIngredientSelected: [],
+    wrongIngredientNameOrder: [],
+    wrongTablewarePairSelected: [],
+    // wrongTablewareSelected: [],
+
+    // NOTIFICATIONS
+    tutorialIngredientSelectionNotification: false,
+    tutorialIngredientNameSelectionNotification: false,
+    wrongIngredientNotification: false,
+    wrongIngredientNameNotification: false,
+    // wrongTablewareNotification: false,
+    wrongCombinationNotification: false,
   };
 };
 

@@ -5,9 +5,15 @@ import parse from "html-react-parser";
 
 import DialogCharacter from "../../../../_components/DialogCharacter";
 
-import { ingredientsListRotated, kitchen } from "../../../../img";
+import {
+  ingredientsListRotated,
+  kitchen,
+  hourglassFull,
+} from "../../../../img";
 
-const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
+import { zeroFill } from "../../../../_helpers";
+
+const Intro = ({ chef, recipe, ingredientsList, seconds, goToKitchen }) => {
   const [state, setState] = React.useState({ screen: 0 });
 
   return (
@@ -70,7 +76,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
             <button
               className="btn btn-center"
               id="btn-end-tutorial"
-              onClick={goToTutorial}
+              onClick={() => setState({ screen: 3 })}
             >
               Continuar
             </button>
@@ -87,6 +93,25 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
               ))}
             </div>
           </div>
+        </div>
+      )}
+
+      {state.screen === 3 && (
+        <div>
+          <img src={hourglassFull} alt="" />
+          <span>Você tem</span>
+          <span>
+            {zeroFill(Math.floor(seconds / 60).toString(), 2)}:
+            {zeroFill((seconds % 60).toString(), 2)}
+          </span>
+          <span>minutos</span>
+          <button
+            className="btn btn-center"
+            id="btn-end-tutorial"
+            onClick={goToKitchen}
+          >
+            Estou pronto!
+          </button>
         </div>
       )}
     </div>
