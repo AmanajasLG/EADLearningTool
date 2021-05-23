@@ -1,5 +1,6 @@
 import React from "react";
-import "./index.scss";
+import tutorialStyles from "./index.module.scss";
+import gameStyles from "../../index.module.scss";
 import DialogCharacter from "../../../../_components/DialogCharacter";
 import Aisle from "../../../../_components/Aisle";
 
@@ -71,61 +72,27 @@ const Tutorial = ({
       setState({ ...state, tutorialLine: 4, shopList: !state.shopList });
   };
 
+  const tutorialText = [
+    ["Clique em qualquer item para <strong>adicioná-lo</strong> ao carrinho.", "Click on any item to <strong>add it</strong> to your cart."],
+    ["Clique em qualquer item do seu carrinho para retirá-lo.", "Click on any item from your cart to remove it."],
+    ["Use as setas para navegar pelas prateleiras.", "Use the arrows to move through shelves."],
+    ["Passe o mouse sobre o bloco de notas para ver a lista de compras.", "Hover the mouse over the notepad to see the shopping list."],
+    ["Clique no ícone de dinheiro para finalizar sua compra.", "Click on the cash icon to checkout."]
+  ].map( (line, index) => {return {ptbr: line[0], preferred: line[1]} } )
+
+  const blobPosition = (state.tutorialLine === 2 || state.tutorialLine === 3) ? tutorialStyles.blobRight : tutorialStyles.blobLeft;
+
   return (
     <div id="room-itself" className="tutorial">
       {state.step === 0 && (
-        <div>
+        <div id={tutorialStyles.tutorialGrid}>
           <div
-            className={
-              "tutorial-blob " +
-              (state.tutorialLine === 2 || state.tutorialLine === 3
-                ? "blob-right"
-                : "blob-left")
-            }
+            className={tutorialStyles.tutorialBlob + " " + blobPosition}
           >
-            {state.tutorialLine === 0 && (
-              <div className="blob-left">
-                <span lang="pt-br">
-                  Clique em qualquer item para adicioná-lo ao carrinho.
-                </span>
-                <span lang="en">Click on any item to add it to your cart.</span>
-              </div>
-            )}
-            {state.tutorialLine === 1 && (
-              <div className="blob-left">
-                <span lang="pt-br">
-                  Clique em qualquer item do seu carrinho para retirá-lo.
-                </span>
-                <span lang="en">
-                  Click on any item from your cart to remove it.
-                </span>
-              </div>
-            )}
-            {state.tutorialLine === 2 && (
-              <div className="blob-right">
-                <span lang="pt-br">
-                  Use as setas para navegar pelas prateleiras.
-                </span>
-                <span lang="en">Use the arrows to move through shelves.</span>
-              </div>
-            )}
-            {state.tutorialLine === 3 && (
-              <div className="blob-right">
-                <span lang="pt-br">
-                  Passe o mouse sobre o bloco de notas para ver a lista de
-                  compras.
-                </span>
-                <span lang="en">
-                  Hover the mouse over the notepad to see the shopping list.
-                </span>
-              </div>
-            )}
-            {state.tutorialLine === 4 && (
-              <div className="blob-left">
-                <span lang="pt-br">
-                  Clique no icone de dinheiro para finalizar sua compra.
-                </span>
-                <span lang="en">Click on the cash icon to checkout.</span>
+            {(state.tutorialLine >= 0 && state.tutorialLine <= 4) && (
+              <div>
+                <span lang="pt-br" dangerouslySetInnerHTML={{__html: tutorialText[state.tutorialLine].ptbr}}></span>
+                <span lang="en" dangerouslySetInnerHTML={{__html: tutorialText[state.tutorialLine].preferred}}></span>
               </div>
             )}
             {hasPlayed && (
@@ -144,10 +111,10 @@ const Tutorial = ({
             toPreviousAisle={toPreviousAisleNextLine}
             toNextAisle={toNextAisleNextLine}
           />
-          <div className="cart">
-            <div className="cart-items">
+          <div className={gameStyles.cart}>
+            <div className={gameStyles.cartItems}>
               {shoppingCart.map((product, index) => (
-                <div className="cart-item">
+                <div className={gameStyles.cartItem} key={index}>
                   <img
                     src={
                       ingredientsList.find(
@@ -156,7 +123,7 @@ const Tutorial = ({
                     }
                     alt=""
                     onClick={removeProductNextLine(index)}
-                    className="cart-item-img"
+                    className={gameStyles.cartItemImg}
                   />
                   <span>{product.count}</span>
                 </div>
@@ -165,7 +132,6 @@ const Tutorial = ({
             <img
               src={cart}
               alt=""
-              style={{ marginTop: -50, position: "relative" }}
             />
           </div>
 
@@ -174,10 +140,10 @@ const Tutorial = ({
               onClick={shopListNextLine}
               src={listIcon}
               alt=""
-              className="list-icon"
+              className={gameStyles.listIcon}
             />
           )}
-          {state.tutorialLine === 4 && (
+          {state.tutorialLine === 4 && ( // Dinheiro
             <img
               onClick={() =>
                 setState({
@@ -192,7 +158,7 @@ const Tutorial = ({
 
           {state.shopList && (
             <div
-              className="shop-list"
+              className={gameStyles.shopList}
               style={{
                 backgroundImage: "url(" + ingredientsListBg + ")",
                 backgroundRepeat: "no-repeat",
@@ -204,13 +170,13 @@ const Tutorial = ({
                   <img
                     src={listCheck}
                     alt=""
-                    className="shop-list-item-check"
+                    className={gameStyles.shopListItemCheck}
                   />
 
                   <img
                     src={ingredient.image}
                     alt=""
-                    className="shop-list-item-img"
+                    className={gameStyles.shopListItemImg}
                   />
                   {ingredient.description}
                 </div>

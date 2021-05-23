@@ -1,0 +1,39 @@
+.tutorialBlob {
+  width: 40vw;
+  height: 40vh;
+  position: absolute;
+  background-color: #f9afa1;
+  border-radius: 50px;
+  z-index: 100;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  align-content: center;
+}
+
+.tutorialBlob > div {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  font-size: 2rem;
+  padding: 0px 20%;
+}
+
+#tutorialGrid {
+  display: grid;
+  grid-template-columns: 77.55% auto;
+  height: 100%;
+  position: relative;
+}
+
+.blobLeft {
+  left: 30px;
+}
+
+.blobRight {
+  right: 30px;
+}
