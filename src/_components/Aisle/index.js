@@ -1,103 +1,39 @@
 import React from "react";
-import "./index.scss";
+import styles from "./index.module.scss";
 
 import { shelf } from "../../img";
 
 const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
-  // const [state, setState] = React.useState({ seconds: seconds, timeout: null });
+	// const [state, setState] = React.useState({ seconds: seconds, timeout: null });
 
-  return (
-    <div className="aisle-div">
-      <div style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "stretch",
-        alignItems: "center",
-        height: "100vh",
-        position: "relative"
-      }}>
-        <button
-          className="Voltar"
-          onClick={toPreviousAisle}
-          style={{
-            border: "none",
-            width: "50px",
-            height: "50px",
-            fontSize: "3rem",
-            backgroundColor: "transparent",
-            pointerEvents: "all",
-            cursor: "pointer"
-          }}>{"❮"}</button>
-        <div style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          position: "relative",
-          minWidth: 0
-        }}>
-          <div>
-            <img src={shelf} alt="" style={{width:"100%"}}/>
-            <div name="items" style={{
-              position: "absolute",
-              top: "-33%",
-              right: 0,
-              bottom: 0,
-              left: 0,
-              display: "grid",
-              gridTemplateRows: "30.5% 3% 30.5% 3% 30% 3%",
-              alignItems: "flex-end"
-            }}>
-              {products.map((product, index) => (
-                [<div className="products" key={index*2} style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "flex-end",
-                    height: "calc(100% - 5px)",
-                    marginBottom: "5px"
-                  }}
-                >
-                  {[...Array(10)].map((element, index) => (
-                    <div
-                      key={index}
-                      onClick={addProduct(product.name)}
-                      className="tooltip"
-                      style={{
-                        backgroundImage: "url(" + product.shelfImage + ")",
-                        backgroundSize: "contain",
-                        // height: 110,
-                        // width: 110,
-                        flexGrow: 1,
-                        height: "inherit",
-                        backgroundRepeat: "no-repeat",
-                        backgroundPosition: "center bottom",
-                        overflow: "show",
-                      }}
-                    >
-                      <span className="tooltiptext">{product.tooltip}</span>
-                    </div>
-                  ))}
-                </div>,
-                <span key={index*2+1}>{product.tag}</span>]
-              ))}
-            </div>
-          </div>
-        </div>
-        <button
-          className="Avançar"
-          onClick={toNextAisle}
-          style={{
-            border: "none",
-            width: "50px",
-            height: "50px",
-            fontSize: "3rem",
-            backgroundColor: "transparent",
-            pointerEvents: "all",
-            cursor: "pointer"
-          }}>{"❯"}</button>
-      </div>
-    </div>
-  );
+	return (
+		<div id={styles.aisle}>
+			<button className={styles.btnChangeAisle} onClick={toPreviousAisle}>{"❮"}</button>
+			<div id={styles.shelves}>
+				<img src={shelf} alt="" style={{width:"100%"}}/>
+				<div className={styles.items}>
+					{products.map((product, index) => (
+						[<div className={styles.products} key={index*2}>
+							{[...Array(10)].map((element, index) => (
+								<div
+									key={index}
+									onClick={addProduct(product.name)}
+									className={styles.tooltip}
+									style={{
+										backgroundImage: "url(" + product.shelfImage + ")"
+									}}
+								>
+									<span className={styles.tooltiptext}>{product.tooltip}</span>
+								</div>
+							))}
+						</div>,
+						<span key={index*2+1}>{product.tag}</span>]
+					))}
+				</div>
+			</div>
+			<button className={styles.btnChangeAisle} onClick={toNextAisle}>{"❯"}</button>
+		</div>
+	);
 };
 
 export default Aisle;
