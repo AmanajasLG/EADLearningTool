@@ -464,13 +464,6 @@ const Game4 = (props) => {
 
   return (
     <div id="game2-wrapper">
-      <button
-        onClick={() => {
-          setState({ ...state, runTimer: false });
-        }}
-      >
-        PAUSE TIMER
-      </button>
       {mission ? (
         //verificar se é possível generalizar esses gameX-wrapper
         <div id="game2-content">
