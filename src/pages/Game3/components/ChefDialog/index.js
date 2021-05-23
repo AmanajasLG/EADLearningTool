@@ -21,8 +21,7 @@ const ChefDialog = ({onContinue, text, translation, chef}) => {
   return (
     <div style={{position: 'relative', width: '100%', height: '100%'}}>
       <DialogBox alternative>
-        <div style={{display:'flex', flexDirection: 'row', paddingTop: '2%'}}>
-          <div style={{width: '30%'}}/>
+        <div style={{paddingTop: '2%', paddingLeft: '30%'}}>
           <div>
             <div className='instructionText default' lang="pt-br">
               {text}
@@ -45,5 +44,6 @@ const ChefDialog = ({onContinue, text, translation, chef}) => {
     </div>
   )
 }
+
 
 export default ChefDialog
