@@ -107,7 +107,6 @@ const Game3 = (props) => {
     ) {
       missionData.seconds -= 30 * (timesPlayed > 2 ? 2 : timesPlayed);
       // safe copies
-      let tutorialRoom = missionData.tutorial;
 
       let recipe =
         missionData.recipes[
@@ -176,7 +175,6 @@ const Game3 = (props) => {
         return {
           ...state,
           recipe: resumeRecipe,
-          tutorialRoom,
           aisles,
           ingredientsList,
         };

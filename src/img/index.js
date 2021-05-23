@@ -36,8 +36,14 @@ import blobAzul from "./bg-forma-azul.svg";
 import blobVerde from "./bg-forma-verde.svg";
 import blobLowScore from "./Score Baixo_blob.svg";
 import blobLaranja from "./bg-forma-laranja.svg";
+import silverCloche from "./placeholders/CL32_ml.png";
+import error from "./placeholders/x.png";
+import right from "./placeholders/check.png";
 
 export {
+  error,
+  right,
+  silverCloche,
   avatar,
   home,
   notifications,

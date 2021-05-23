@@ -1,29 +1,44 @@
-const initialState = (runTimer = true) => {
+const initialState = (checkedPlayed = false) => {
   return {
-    scene: 'INIT',
-    runTimer: runTimer,
+    scene: "INIT",
+    runTimer: false,
     remainingTime: 0,
     timeUp: false,
     showRecipe: false,
+    ingredientsList: [],
+    recipe: {},
+    shuffledIngredients: [],
+    tablewares: [],
+    recipeContinue: false,
+    checkedPlayed: checkedPlayed,
 
-    selectItem: true,
-    selected: null,
+    showIngredients: true,
+    selectedIngredient: null,
+    tableIngredient: null,
 
-    cookPhase: true,
-    shuffled: [],
-    orderedLetters: [],
-    result: '',
-    prepared: [],
+    shuffledName: [],
+    userLetterOrder: [],
 
-    servePhase: false,
-    shuffledDishes: [],
-    shuffledDishesNames: [],
-    dishImageSelected: '',
-    dishNameSelected: '',
-    pairCheck: false,
-    tableDish: [],
-    allDishes: false
-  }
-}
+    tablewareImagePick: true,
+    shuffledTablewares: [],
+    shuffledTablewaresNames: [],
+    tablewareImageSelected: null,
+    tableTablewares: [],
 
-export default initialState
+    // USER ERRORS
+    wrongIngredientSelected: [],
+    wrongIngredientNameOrder: [],
+    wrongTablewarePairSelected: [],
+    // wrongTablewareSelected: [],
+
+    // NOTIFICATIONS
+    tutorialIngredientSelectionNotification: false,
+    tutorialIngredientNameSelectionNotification: false,
+    wrongIngredientNotification: false,
+    wrongIngredientNameNotification: false,
+    // wrongTablewareNotification: false,
+    wrongCombinationNotification: false,
+  };
+};
+
+export default initialState;
