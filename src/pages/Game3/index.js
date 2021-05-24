@@ -31,6 +31,7 @@ import Intro from "./components/Intro";
 import Tutorial from "./components/Tutorial";
 import DialogCharacter from "../../_components/DialogCharacter";
 import ChefDialog from './components/ChefDialog'
+import Payment from './components/Payment'
 
 import {
   cart,
@@ -249,15 +250,17 @@ const Game3 = (props) => {
 
   const moveToCheckout = () => {
     let haveAllValue = haveAll()
-
+    let price = state.cart
+      .reduce((acc, product) => acc + state.ingredientsList.find( ingredient => ingredient.name === product.name).price * product.count, 0)
+      .toFixed(2)
     setState({
       ...state,
       scene: "CASHIER",
       checkoutConfirm: false,
       cashierLines: haveAllValue ?
         {
-          text: `Maravilha! Sua compra deu ${numberToMoney(state.price)}. Agora você só precisa selecionar a quatidade correta de dinheiro. Fique atento ap limite de tempo.`,
-          translation:`Wonderful! That's ${numberToMoney(state.price)}. Now all you have to do is select the right amount of money. Mind the time limit.`
+          text: `Maravilha! Sua compra deu ${numberToMoney(price)}. Agora você só precisa selecionar a quatidade correta de dinheiro. Fique atento ao limite de tempo.`,
+          translation:`Wonderful! That's ${numberToMoney(price)}. Now all you have to do is select the right amount of money. Mind the time limit.`
         }
         :{
           text: `Você selecionou ${getWrongItemsInCart().length}ingrediente(s) incorretamente!`,
@@ -265,53 +268,14 @@ const Game3 = (props) => {
         },
       cashierContinue: haveAllValue ?
         () => setState({...state, runTimer: true, moneySelection: true})
-        :() => setState({ ...state, scene: "MARKET", runTimer: true}),
-      price: state.cart
-        .reduce((acc, product) => {
-          return (
-            acc +
-            state.ingredientsList.find(
-              (ingredient) => ingredient.name === product.name
-            ).price *
-              product.count
-          );
-        }, 0)
-        .toFixed(2),
+        :() => setState({ ...state, scene: "MARKET", runTimer: true, checkoutConfirm: false}),
+      price: price
     });
   };
 
-  const addToPayment = (money) => () => {
-    const index = state.payment.findIndex(
-      (moneyObj) => moneyObj.value === money
-    );
-    let paymentUpdate = [...state.payment];
-
-    if (index >= 0) paymentUpdate[index].count += 1;
-    else paymentUpdate.push({ value: money, count: 1 });
-    setState({
-      ...state,
-      payment: paymentUpdate,
-    });
-  };
-
-  const removeFromPayment = (index) => () => {
-    let paymentUpdate = [...state.payment];
-
-    if (paymentUpdate[index].count > 1) paymentUpdate[index].count -= 1;
-    else
-      paymentUpdate = [
-        ...state.payment.slice(0, index),
-        ...state.payment.slice(index + 1),
-      ];
-    setState({
-      ...state,
-      payment: paymentUpdate,
-    });
-  };
-
-  const doPayment = () => {
+  const doPayment = (value) => {
     let cashierLines
-    let change = state.payment.reduce((acc, money) => acc + money.value * money.count, 0).toFixed(2) - state.price
+    let change = value - state.price
     if(change < 0)
       cashierLines = {
         text:"Nossos patrocinadores vão ter que me pagar um extra para completar sua compra.",
@@ -499,7 +463,7 @@ const Game3 = (props) => {
                           }
                           src={checkout}
                           alt=""
-                          style={{position: "absolute"}}
+                          style={{position: "absolute", bottom: 0, right: 0}}
                         />
                         <div className={styles.cart}>
                           <div className={styles.cartItems}>
@@ -632,50 +596,6 @@ const Game3 = (props) => {
                       }}
                       onEnd={() => endGame(true)}
                     />
-                    {state.moneySelection && (
-                      <div>
-                        <div className="selected-money">
-                          {state.payment.map((money, index) => (
-                            <div className="payment-money">
-                              <img
-                                src={
-                                  missionData.money.find((moneyObj) => {
-                                    return moneyObj.value === money.value;
-                                  }).image.url
-                                }
-                                alt=""
-                                onClick={removeFromPayment(index)}
-                                className="payment-money-img"
-                              />
-                              <span>{money.count}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div>
-                          <div>
-                            {missionData.money.map((money, index) => (
-                              <Button onClick={addToPayment(money.value)}>
-                                <img
-                                  style={{ width: 50 }}
-                                  src={money.image.url}
-                                  alt="money"
-                                />
-                              </Button>
-                            ))}
-                          </div>
-                          <img src={wallet} alt="" />
-                          <button
-                            className="btn btn-center"
-                            id="btn-do-payment"
-                            onClick={doPayment}
-                          >
-                            Continuar
-                          </button>
-                        </div>
-                      </div>
-                    )}
-{/*****************************************************************************/}
                     <div id="dialog-interact">
                       <ChefDialog chef={missionData.character}
                         hideDialog={state.moneySelection}
@@ -686,6 +606,9 @@ const Game3 = (props) => {
                       />
                         <img style={{zIndex: 0, width: 500}} src={cashierTable} alt="" />
                     </div>
+                    {state.moneySelection &&
+                      <Payment moneyList={missionData.money} onConfirm={value => () => doPayment(value)}/>
+                    }
                   </div>
                 );
               case "END_GAME":
@@ -755,8 +678,21 @@ const Game3 = (props) => {
           <button style={{position: 'absolute', bottom: 0}} onClick={() => setState({...state, scene: 'MARKET'}) }>
             Pula tutorial
           </button>
-          <button style={{position: 'absolute', bottom: 0, left: 100}} onClick={moveToCheckout}>
-            Para o caixa
+          <button style={{position: 'absolute', bottom: 0, left: 100}} onClick={()=>{
+              setState({
+                ...state,
+                scene: "CASHIER",
+                checkoutConfirm: false,
+                cashierLines:
+                  {
+                    text: `Maravilha! Sua compra deu ${numberToMoney(48.05)}. Agora você só precisa selecionar a quatidade correta de dinheiro. Fique atento ao limite de tempo.`,
+                    translation:`Wonderful! That's ${numberToMoney(48.05)}. Now all you have to do is select the right amount of money. Mind the time limit.`
+                  },
+                cashierContinue: () => setState(s => ({...s, runTimer: true, moneySelection: true})),
+                price: 48.05
+              });
+          }}>
+            Para o caixa: Compras certas
           </button>
         </div>
       }
@@ -765,3 +701,49 @@ const Game3 = (props) => {
 };
 
 export default Game3;
+
+/*
+{state.moneySelection && (
+  <div>
+    <div className="selected-money">
+      {state.payment.map((money, index) => (
+        <div className="payment-money">
+          <img
+            src={
+              missionData.money.find((moneyObj) => {
+                return moneyObj.value === money.value;
+              }).image.url
+            }
+            alt=""
+            onClick={removeFromPayment(index)}
+            className="payment-money-img"
+          />
+          <span>{money.count}</span>
+        </div>
+      ))}
+    </div>
+
+    <div>
+      <div>
+        {missionData.money.map((money, index) => (
+          <Button onClick={addToPayment(money.value)}>
+            <img
+              style={{ width: 50 }}
+              src={money.image.url}
+              alt="money"
+            />
+          </Button>
+        ))}
+      </div>
+      <img src={wallet} alt="" />
+      <button
+        className="btn btn-center"
+        id="btn-do-payment"
+        onClick={doPayment}
+      >
+        Continuar
+      </button>
+    </div>
+  </div>
+)}
+*/
