@@ -2,6 +2,7 @@ import React from "react";
 import { Redirect, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./index.scss";
+import styles from "./index.module.scss";
 
 import {
   goRound,
@@ -469,14 +470,15 @@ const Game3 = (props) => {
                       onEnd={() => endGame(true)}
                     />
                     {!state.checkout && !state.checkoutConfirm && (
-                      <div>
+                      <div id={styles.gameGrid}>
                         <img
                           onClick={() =>
                             setState({ ...state, shopList: !state.shopList })
                           }
                           src={listIcon}
                           alt=""
-                          className="list-icon"
+                          className={styles.listIcon}
+                          style={{position: "absolute"}}
                         />
 
                         <Aisle
@@ -497,11 +499,12 @@ const Game3 = (props) => {
                           }
                           src={checkout}
                           alt=""
+                          style={{position: "absolute"}}
                         />
-                        <div className="cart">
-                          <div className="cart-items">
+                        <div className={styles.cart}>
+                          <div className={styles.cartItems}>
                             {state.cart.map((product, index) => (
-                              <div className="cart-item">
+                              <div className={styles.cartItem} key={index}>
                                 <img
                                   src={
                                     state.ingredientsList.find(
@@ -511,7 +514,7 @@ const Game3 = (props) => {
                                   }
                                   alt=""
                                   onClick={removeProduct(index)}
-                                  className="cart-item-img"
+                                  className={styles.cartItemImg}
                                 />
                                 <span>{product.count}</span>
                               </div>
@@ -520,7 +523,6 @@ const Game3 = (props) => {
                           <img
                             src={cart}
                             alt=""
-                            style={{ marginTop: -50, position: "relative" }}
                           />
                         </div>
                       </div>
@@ -553,9 +555,9 @@ const Game3 = (props) => {
                             Continuar
                           </button>
                         </div>
-                        <div className="cart-items">
+                        <div className={styles.cartItems}>
                           {state.cart.map((product, index) => (
-                            <div className="cart-item">
+                            <div className={styles.cartItem} key={index}>
                               <img
                                 src={
                                   state.ingredientsList.find(
@@ -565,7 +567,7 @@ const Game3 = (props) => {
                                 }
                                 alt=""
                                 onClick={removeProduct(index)}
-                                className="cart-item-img"
+                                className={styles.cartItemImg}
                               />
                               <span>{product.count}</span>
                             </div>
@@ -574,14 +576,13 @@ const Game3 = (props) => {
                         <img
                           src={cart}
                           alt=""
-                          style={{ marginTop: -90, position: "relative" }}
                         />
                       </div>
                     )}
 
                     {state.shopList && (
                       <div
-                        className="shop-list"
+                        className={styles.shopList}
                         style={{
                           backgroundImage: "url(" + ingredientsListBg + ")",
                           backgroundRepeat: "no-repeat",
@@ -594,7 +595,7 @@ const Game3 = (props) => {
                               <img
                                 src={listCheck}
                                 alt=""
-                                className="shop-list-item-check"
+                                className={styles.shopListItemCheck}
                               />
                             ) : (
                               <div
@@ -608,7 +609,7 @@ const Game3 = (props) => {
                             <img
                               src={ingredient.image}
                               alt=""
-                              className="shop-list-item-img"
+                              className={styles.shopListItemImg}
                             />
                             {ingredient.description}
                           </div>

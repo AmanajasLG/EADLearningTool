@@ -13,6 +13,8 @@ import {
   listIcon,
 } from "../../../../img";
 import { zeroFill } from "../../../../_helpers";
+import { parser } from "marked";
+import htmlparse from "html-react-parser";
 
 const Tutorial = ({
   chef,
@@ -91,8 +93,12 @@ const Tutorial = ({
           >
             {(state.tutorialLine >= 0 && state.tutorialLine <= 4) && (
               <div>
-                <span lang="pt-br" dangerouslySetInnerHTML={{__html: tutorialText[state.tutorialLine].ptbr}}></span>
-                <span lang="en" dangerouslySetInnerHTML={{__html: tutorialText[state.tutorialLine].preferred}}></span>
+                <span lang="pt-br">
+                  {htmlparse(tutorialText[state.tutorialLine].ptbr)}
+                </span>
+                <span lang="en">
+                  {htmlparse(tutorialText[state.tutorialLine].preferred)}
+                </span>
               </div>
             )}
             {hasPlayed && (
