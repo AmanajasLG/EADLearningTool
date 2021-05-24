@@ -29,6 +29,7 @@ import Aisle from "../../_components/Aisle";
 import Intro from "./components/Intro";
 import Tutorial from "./components/Tutorial";
 import DialogCharacter from "../../_components/DialogCharacter";
+import ChefDialog from './components/ChefDialog'
 
 import {
   cart,
@@ -246,10 +247,24 @@ const Game3 = (props) => {
   };
 
   const moveToCheckout = () => {
+    let haveAllValue = haveAll()
+
     setState({
       ...state,
-      checkout: true,
+      scene: "CASHIER",
       checkoutConfirm: false,
+      cashierLines: haveAllValue ?
+        {
+          text: `Maravilha! Sua compra deu ${numberToMoney(state.price)}. Agora você só precisa selecionar a quatidade correta de dinheiro. Fique atento ap limite de tempo.`,
+          translation:`Wonderful! That's ${numberToMoney(state.price)}. Now all you have to do is select the right amount of money. Mind the time limit.`
+        }
+        :{
+          text: `Você selecionou ${getWrongItemsInCart().length}ingrediente(s) incorretamente!`,
+          translation:`You selected ${getWrongItemsInCart().length}ingredient(s) incorrectly!`
+        },
+      cashierContinue: haveAllValue ?
+        () => setState({...state, runTimer: true, moneySelection: true})
+        :() => setState({ ...state, scene: "MARKET", runTimer: true}),
       price: state.cart
         .reduce((acc, product) => {
           return (
@@ -293,24 +308,30 @@ const Game3 = (props) => {
     });
   };
 
-  const moveToPayment = () => {
-    setState({
-      ...state,
-      scene: "CASHIER",
-      runTimer: true,
-      moneySelection: true,
-    });
-  };
-
   const doPayment = () => {
+    let cashierLines
+    let change = state.payment.reduce((acc, money) => acc + money.value * money.count, 0).toFixed(2) - state.price
+    if(change < 0)
+      cashierLines = {
+        text:"Nossos patrocinadores vão ter que me pagar um extra para completar sua compra.",
+        translation: "Our sponsors will need to give me an extra to pay for the rest of your purchase."
+      }
+    else if( change > 0)
+      cashierLines = {
+        text: "Bem... Obirgada pela gorgeta!",
+        translation: "Well... Thanks for the tip!"
+      }
+    else //if( value === 0)
+      cashierLines = {
+        text: "Você pagou exatamente o que devia para o caixa do supermercado! Mexer com dinheiro é contigo mesmo!",
+        translation: "You gave the exact amout to the supermarket's cashier! Dealing with money is clearly not a problem for you!"
+      }
+
     setState({
       ...state,
-      change:
-        state.payment
-          .reduce((acc, money) => {
-            return acc + money.value * money.count;
-          }, 0)
-          .toFixed(2) - state.price,
+      cashierContinue: () => endGame(false),
+      cashierLines: cashierLines,
+      change: change,
       moneySelection: false,
       runTimer: false,
     });
@@ -558,70 +579,6 @@ const Game3 = (props) => {
                       </div>
                     )}
 
-                    {state.checkout && (
-                      <div>
-                        <div id="dialog-interact">
-                          {haveAll() ? (
-                            <div id="dialogos">
-                              <div id="dialog-box">
-                                <span lang="pt-br">
-                                  Maravilha! Sua compra deu{" "}
-                                  {numberToMoney(state.price)}. Agora você só
-                                  precisa selecionar a quatidade correta de
-                                  dinheiro. Fique atento ap limite de tempo.
-                                </span>
-                                <span lang="en">
-                                  Wonderful! That's {numberToMoney(state.price)}
-                                  . Now all you have to do is select the right
-                                  amount of money. Mind the time limit.
-                                </span>
-                              </div>{" "}
-                              <button
-                                className="btn btn-center"
-                                id="btn-move-to-payment"
-                                onClick={moveToPayment}
-                              >
-                                Continuar
-                              </button>
-                            </div>
-                          ) : (
-                            <div id="dialogos">
-                              <div id="dialog-box">
-                                <span lang="pt-br">
-                                  Você selecionou {getWrongItemsInCart().length}{" "}
-                                  ingrediente(s) incorretamente!
-                                </span>
-                                <span lang="en">
-                                  You selected {getWrongItemsInCart().length}{" "}
-                                  ingredient(s) incorrectly!
-                                </span>
-                              </div>
-                              <button
-                                className="btn btn-center"
-                                id="btn-back-to-market"
-                                onClick={() =>
-                                  setState({
-                                    ...state,
-                                    checkout: false,
-                                    runTimer: true,
-                                  })
-                                }
-                              >
-                                Continuar
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                        <div>
-                          <DialogCharacter
-                            character={missionData.character}
-                            feeling={haveAll() ? "default" : "wrongPayment"}
-                          />
-                          <img src={cashierTable} alt="" />
-                        </div>
-                      </div>
-                    )}
-
                     {state.shopList && (
                       <div
                         className="shop-list"
@@ -662,7 +619,7 @@ const Game3 = (props) => {
                 );
               case "CASHIER":
                 return (
-                  <div>
+                  <div style={{position: 'relative', width:'100%', height: '100%'}}>
                     <Timer
                       run={state.runTimer}
                       seconds={state.remainingTime}
@@ -715,73 +672,19 @@ const Game3 = (props) => {
                             Continuar
                           </button>
                         </div>
-                        <div>
-                          <DialogCharacter
-                            character={missionData.character}
-                            feeling="default"
-                          />
-                          <img src={cashierTable} alt="" />
-                        </div>
                       </div>
                     )}
-
-                    {!state.moneySelection && (
-                      <div id="dialog-interact">
-                        <div id="dialogos">
-                          {state.change < 0 && (
-                            <div id="dialog-box">
-                              <span lang="pt-br">
-                                Nossos patrocinadores vão ter que me pagar um
-                                extra para completar sua compra.
-                              </span>
-                              <span lang="en">
-                                Our sponsors will need to give me an extra to
-                                pay for the rest of your purchase.
-                              </span>
-                            </div>
-                          )}
-                          {state.change > 0 && (
-                            <div id="dialog-box">
-                              <span lang="pt-br">
-                                Bem... Obirgada pela gorgeta!
-                              </span>
-                              <span lang="en">Well... Thanks for the tip!</span>
-                            </div>
-                          )}
-                          {state.change === 0 && (
-                            <div id="dialog-box">
-                              <span lang="pt-br">
-                                Você pagou exatamente o que devia para o caixa
-                                do supermercado! Mexer com dinheiro é contigo
-                                mesmo!
-                              </span>
-                              <span lang="en">
-                                You gave the exact amout to the supermarket's
-                                cashier! Dealing with money is clearly not a
-                                problem for you!
-                              </span>
-                            </div>
-                          )}
-                        </div>
-                        <button
-                          className="btn btn-center"
-                          id="btn-end-game"
-                          onClick={() => endGame(false)}
-                        >
-                          Continuar
-                        </button>
-
-                        <div>
-                          <DialogCharacter
-                            character={missionData.character}
-                            feeling={
-                              state.change < 0 ? "wrongPayment" : "default"
-                            }
-                          />
-                          <img src={cashierTable} alt="" />
-                        </div>
-                      </div>
-                    )}
+{/*****************************************************************************/}
+                    <div id="dialog-interact">
+                      <ChefDialog chef={missionData.character}
+                        hideDialog={state.moneySelection}
+                        chefFeeling={state.change < 0 ? "wrongPayment" : "default"}
+                        text={state.cashierLines.text}
+                        translation={state.cashierLines.translation}
+                        onContinue={state.cashierContinue}
+                      />
+                        <img style={{zIndex: 0, width: 500}} src={cashierTable} alt="" />
+                    </div>
                   </div>
                 );
               case "END_GAME":
@@ -846,6 +749,16 @@ const Game3 = (props) => {
       ) : (
         <div>Loading..</div>
       )}
+      {process.env.NODE_ENV === 'development' &&
+        <div>
+          <button style={{position: 'absolute', bottom: 0}} onClick={() => setState({...state, scene: 'MARKET'}) }>
+            Pula tutorial
+          </button>
+          <button style={{position: 'absolute', bottom: 0, left: 100}} onClick={moveToCheckout}>
+            Para o caixa
+          </button>
+        </div>
+      }
     </div>
   );
 };

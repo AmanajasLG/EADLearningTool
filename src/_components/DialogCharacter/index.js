@@ -1,7 +1,7 @@
 import React from 'react'
 import './index.scss'
 
-const DialogCharacter = ({character, feeling, style}) => {
+const DialogCharacter = ({character, feeling, ...props}) => {
   let characterImg = ""
 
   if( !(character == null) ) {
@@ -13,7 +13,7 @@ const DialogCharacter = ({character, feeling, style}) => {
   }
 
   return(
-    <div id='CharacterPortrait' style={style}>
+    <div id='CharacterPortrait' {...props}>
       {<img src={characterImg} alt="Character Portrait" />}
     </div>
   )

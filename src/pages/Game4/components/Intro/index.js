@@ -55,7 +55,7 @@ const Intro = ({ chef, recipe, ingredientsList, seconds, goToKitchen }) => {
           </div>
           <IngredientList>
             {ingredientsList.map((ingredient, index) => (
-              <div className="ingredient">
+              <div key={index} className="ingredient">
                 {ingredient.order}.{" "}
                 {parse(marked.parseInline(ingredient.description))};
               </div>

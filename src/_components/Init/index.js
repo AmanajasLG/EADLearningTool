@@ -1,5 +1,6 @@
 import React from "react";
 import "./index.scss";
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const Init = ({
   icon,
@@ -42,11 +43,17 @@ const Init = ({
               Voltar
             </button>
           )}
-          {ready && onStart && (
-            <button className="btn btn-center" id="btn-start" onClick={onStart}>
-              Iniciar
-            </button>
-          )}
+          {ready ?
+            (onStart &&
+              <button className="btn btn-center" id="btn-start" onClick={onStart}>
+                Iniciar
+              </button>
+            )
+            :
+            <span>
+              LOADING <CircularProgress />
+            </span>
+          }
         </div>
       </div>
     </div>
