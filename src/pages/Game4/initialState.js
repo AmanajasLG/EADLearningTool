@@ -40,6 +40,9 @@ const initialState = (checkedPlayed = false) => {
     wrongIngredientNameNotification: false,
     // wrongTablewareNotification: false,
     wrongCombinationNotification: false,
+
+    // FEEDBACK
+    feedbackMessages: [],
   };
 };
 

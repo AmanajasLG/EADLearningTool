@@ -161,4 +161,21 @@ function zeroFill(s, size) {
   return s;
 }
 
-export { numberToMoney, zeroFill, splitArrayIntoChunksOfLen, shuffle, goRound };
+function preventSingleWordBreak(sentence) {
+  let words = sentence.split(" ");
+
+  return (
+    words.slice(0, words.length - 3).join(" ") +
+    " " +
+    words.slice(words.length - 3).join("\u00a0")
+  );
+}
+
+export {
+  numberToMoney,
+  zeroFill,
+  splitArrayIntoChunksOfLen,
+  shuffle,
+  goRound,
+  preventSingleWordBreak,
+};

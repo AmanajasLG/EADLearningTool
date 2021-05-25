@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import {
   apiActions,
@@ -27,8 +27,10 @@ import {
   blobLaranja,
   right,
   error,
+  tomato,
 } from "../../img";
 import DialogCharacter from "../../_components/DialogCharacter";
+import FeedbackPanel from "./components/FeedbackPanel";
 
 const Game4 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -418,11 +420,49 @@ const Game4 = (props) => {
     dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
   };
 
-  const endGame = (timeUp) => {
+  const endGame = (timeUp, saveResult = true) => {
     setState({
       ...state,
       scene: "END_GAME",
       timeUp: timeUp,
+      feedbackMessages: [
+        {
+          image: tomato,
+          message: state.wrongIngredientSelected.length
+            ? "Você se atrapalhou um pouco, mas conseguiu pegar as quantidades certas de ingredientes no final!"
+            : "Você pegou os ingredientes certos de primeira!",
+          messageTranslate: state.wrongIngredientSelected.length
+            ? "You messed it up a bit but managed to get the right ingredientes!"
+            : "You picked the right ingredients on your first try!",
+        },
+        {
+          image: tomato,
+          message: state.wrongIngredientNameOrder.length
+            ? "Dar nomes aos ingredientes te deu algum trabalho!"
+            : "Acertar os nomes foi moleza para você!",
+          messageTranslate: state.wrongIngredientNameOrder.length
+            ? "Naming the ingredients gave you some trouble!"
+            : "Getting the names right was a piece of cake for you!",
+        },
+        {
+          image: tomato,
+          message: state.wrongTablewarePairSelected.length
+            ? "Você teve um pouco de dificuldade em ligar os utensílios aos seus nomes."
+            : "Ligar os utensílios aos seus nomes foi fácil para você!",
+          messageTranslate: state.wrongTablewarePairSelected.length
+            ? "Matching the kitchen utensils with their names was a bit tough for you."
+            : "Matching the kitchen utensils with their names was pretty easy for you!",
+        },
+        {
+          image: tomato,
+          message: state.wrongTablewareSelected.length
+            ? "E você tem alguns problemas sobre como servir sua comida..."
+            : "E você sabe exatamente onde servir sua comida!",
+          messageTranslate: state.wrongTablewareSelected.length
+            ? "And you've got some problems with how to serve your food..."
+            : "And you know exactly where to serve your food!",
+        },
+      ],
     });
 
     dispatch(
@@ -435,29 +475,30 @@ const Game4 = (props) => {
     );
     dispatch(headerActions.setState(headerConstants.STATES.OVERLAY));
 
-    dispatch(
-      gameActions.create("results", {
-        user: userId,
-        mission: mission.id,
-        secondsTaken: timeUp
-          ? state.initTime + 1
-          : state.initTime - state.remainingTime,
-        recipe: state.recipe.id,
-        won: !timeUp,
-        wrongIngredientSelected: state.wrongIngredientSelected.length
-          ? JSON.stringify(state.wrongIngredientSelected)
-          : null,
-        wrongIngredientNameOrder: state.wrongIngredientNameOrder.length
-          ? JSON.stringify(state.wrongIngredientNameOrder)
-          : null,
-        wrongTablewarePairSelected: state.wrongTablewarePairSelected.length
-          ? JSON.stringify(state.wrongTablewarePairSelected)
-          : null,
-        wrongTablewareSelected: state.wrongTablewareSelected.length
-          ? JSON.stringify(state.wrongTablewareSelected)
-          : null,
-      })
-    );
+    if (saveResult)
+      dispatch(
+        gameActions.create("results", {
+          user: userId,
+          mission: mission.id,
+          secondsTaken: timeUp
+            ? state.initTime + 1
+            : state.initTime - state.remainingTime,
+          recipe: state.recipe.id,
+          won: !timeUp,
+          wrongIngredientSelected: state.wrongIngredientSelected.length
+            ? JSON.stringify(state.wrongIngredientSelected)
+            : null,
+          wrongIngredientNameOrder: state.wrongIngredientNameOrder.length
+            ? JSON.stringify(state.wrongIngredientNameOrder)
+            : null,
+          wrongTablewarePairSelected: state.wrongTablewarePairSelected.length
+            ? JSON.stringify(state.wrongTablewarePairSelected)
+            : null,
+          wrongTablewareSelected: state.wrongTablewareSelected.length
+            ? JSON.stringify(state.wrongTablewareSelected)
+            : null,
+        })
+      );
   };
 
   return (
@@ -467,6 +508,7 @@ const Game4 = (props) => {
           <button onClick={() => setState({ ...state, runTimer: false })}>
             Stop timer
           </button>
+          <button onClick={() => endGame(false, false)}>End game</button>
         </div>
       )}
       {mission ? (
@@ -546,11 +588,13 @@ const Game4 = (props) => {
                           <div className="tutorial-notification-message">
                             <span lang="pt-br">
                               Clique no ingrediente que você deseja colocar na
-                              bancada e confirme.
+                              bancada para preparar a receita na ordem correta e
+                              confirme.
                             </span>
                             <span lang="en">
                               Click on the ingredient you want to put on the
-                              conter and confirm.
+                              conter to preper the recipe in the correct order
+                              and confirm.
                             </span>
                             <button
                               className="btn"
@@ -1043,259 +1087,85 @@ const Game4 = (props) => {
                 );
               case "END_GAME":
                 return (
-                  <div>
-                    {state.timeUp ? (
-                      <div>
-                        <img src={hourglassEmpty} alt="" />
-                        <span>O tempo acabou!</span>
-                        <p lang="pt-br">
-                          Cozinhar pode ser mais complicado do que parece.
-                        </p>
-                        <p lang="en">
-                          Time is up! Cooking might be harder than it looks.
-                        </p>
-                      </div>
-                    ) : (
-                      <div>
-                        <img src={hourglassFull} alt="" />
-                        <p lang="pt-br">Você finalizou em:</p>
-                        <div>
-                          {state.wrongIngredientSelected.length ? (
-                            <div>
-                              <p lang="pt-br">
-                                <img
-                                  src={error}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Você se confundiu um pouco, mas conseguiu
-                                preparar os ingredientes na ordem certa!
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p lang="pt-br">
-                                <img
-                                  src={right}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Você pegou os ingredientes certos de primeira!
-                              </p>
-                            </div>
-                          )}
-                          {state.wrongIngredientNameOrder.length ? (
-                            <div>
-                              <p lang="pt-br">
-                                <img
-                                  src={error}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Dar nomes aos ingredientes te deu algum
-                                trabalho!
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p lang="pt-br">
-                                <img
-                                  src={right}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Acertar os nomes foi moleza para você!
-                              </p>
-                            </div>
-                          )}
-                          {state.wrongTablewarePairSelected.length ? (
-                            <div>
-                              <p lang="pt-br">
-                                <img
-                                  src={error}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Você teve um pouco de dificuldade em ligar os
-                                utensílios aos seus nomes.
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p lang="pt-br">
-                                <img
-                                  src={right}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Ligar os utensílios aos seus nomes foi fácil
-                                para você!
-                              </p>
-                            </div>
-                          )}
-                          {state.wrongTablewareSelected.length ? (
-                            <div>
-                              <p lang="pt-br">
-                                <img
-                                  src={error}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                E você tem alguns problemas sobre como servir
-                                sua comida...
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p lang="pt-br">
-                                <img
-                                  src={right}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                E você sabe exatamente onde servir sua comida!
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                        <p lang="en">Finished in:</p>
-                        <div>
-                          {state.wrongIngredientSelected.length ? (
-                            <div>
-                              <p lang="en">
-                                <img
-                                  src={error}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                You messed it up a bit but managed to preper the
-                                ingredients in the right order!
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p lang="en">
-                                <img
-                                  src={right}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                You picked the right ingredients on your first
-                                try!
-                              </p>
-                            </div>
-                          )}
-                          {state.wrongIngredientNameOrder.length ? (
-                            <div>
-                              <p lang="en">
-                                <img
-                                  src={error}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Naming the ingredients gave you some trouble!
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p lang="en">
-                                <img
-                                  src={right}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Getting the names right was a piece of cake for
-                                you!
-                              </p>
-                            </div>
-                          )}
-                          {state.wrongTablewarePairSelected.length ? (
-                            <div>
-                              <p lang="en">
-                                <img
-                                  src={error}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Matching the kitchen utensils with their names
-                                was a bit tough for you.
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p lang="en">
-                                <img
-                                  src={right}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                Matching the kitchen utensils with their names
-                                was pretty easy for you!
-                              </p>
-                            </div>
-                          )}
-                          {state.wrongTablewareSelected.length ? (
-                            <div>
-                              <p lang="en">
-                                <img
-                                  src={error}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                And you've got some problems with how to serve
-                                your food...
-                              </p>
-                            </div>
-                          ) : (
-                            <div>
-                              <p lang="en">
-                                <img
-                                  src={right}
-                                  alt=""
-                                  className="shop-list-item-check"
-                                />
-                                And you know exactly where to serve your food!
-                              </p>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    <div
-                      className="feedback-painel-2-content"
-                      style={{
-                        backgroundImage: "url(" + blobLaranja + ")",
-                      }}
-                    >
+                  <div className="blue-background">
+                    <div className="game-4-feedback absolute-center">
                       {state.timeUp ? (
-                        <div>0:00</div>
-                      ) : (
                         <div>
-                          {zeroFill(
-                            Math.floor(
-                              (state.initTime - state.remainingTime) / 60
-                            ).toString(),
-                            2
-                          )}
-                          :
-                          {zeroFill(
-                            (
-                              (state.initTime - state.remainingTime) %
-                              60
-                            ).toString(),
-                            2
-                          )}
+                          <img src={hourglassEmpty} alt="hourglass-empty" />
+                          <span>O tempo acabou!</span>
+                          <p lang="pt-br">
+                            Cozinhar pode ser mais complicado do que parece.
+                          </p>
+                          <p lang="en">
+                            Time is up! Cooking might be harder than it looks.
+                          </p>
+                          <div
+                            style={{
+                              backgroundImage: "url(" + blobLaranja + ")",
+                            }}
+                          >
+                            <div>0:00</div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="game-4-feedback-win">
+                          <div className="game-4-feedback-left">
+                            <div className="game-4-finished-in">
+                              <img src={hourglassFull} alt="hourglass-full" />
+                              <div className="game-4-finished-in-text">
+                                <span lang="pt-br" className="abril-fatface">
+                                  Você finalizou em:
+                                </span>
+                                <span
+                                  lang="en"
+                                  className="salmon-line-before italic line-before-margin-top-5"
+                                >
+                                  Finished in:
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className="time-shower"
+                              style={{
+                                backgroundImage: "url(" + blobLaranja + ")",
+                                backgroundRepeat: "no-repeat",
+                                backgroundSize: "contain",
+                                backgroundPosition: "center",
+                              }}
+                            >
+                              <span className="absolute-center abril-fatface">
+                                {zeroFill(
+                                  Math.floor(
+                                    (state.initTime - state.remainingTime) / 60
+                                  ).toString(),
+                                  2
+                                )}
+                                :
+                                {zeroFill(
+                                  (
+                                    (state.initTime - state.remainingTime) %
+                                    60
+                                  ).toString(),
+                                  2
+                                )}
+                              </span>
+                            </div>
+                          </div>
+                          <FeedbackPanel
+                            feedback={state.feedbackMessages}
+                            restart={restart}
+                            leave={() => setState({ ...state, back: true })}
+                          />
                         </div>
                       )}
                     </div>
-                    <button onClick={restart}>Tentar novamente</button>
-                    <Link to={"/userspace"}>Sair do jogo</Link>
                   </div>
                 );
               default:
                 return <div>Error</div>;
             }
           })()}
+          {state.back && <Redirect to="/userspace" />}
         </div>
       ) : (
         <div>Loading..</div>

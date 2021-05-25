@@ -1,0 +1,47 @@
+.feedback-panel {
+  height: 50vh;
+  width: 50vw;
+  display: inline-block;
+  position: relative;
+  padding: 3vh 5vw;
+  display: flex;
+  align-items: center; /* Vertical */
+  justify-content: center; /* Horizontal */
+  background-color: #f9afa1;
+  border-radius: 2.75em;
+  box-shadow: #44444440 25px 25px;
+}
+
+.feedback-arrow {
+  font-size: 3vw;
+  color: purple;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.feedback-arrow-previous {
+  left: 0.5vw;
+}
+
+.feedback-arrow-next {
+  right: 0.5vw;
+}
+
+.feedback-panel-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* Vertical */
+  justify-content: center; /* Horizontal */
+}
+
+.feedback-panel-img {
+  width: 40%;
+}
+
+.feedback-panel-text span {
+  text-align: center;
+  display: block;
+  font-size: 1.9vw;
+}

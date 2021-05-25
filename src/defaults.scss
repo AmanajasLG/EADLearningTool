@@ -1,0 +1,47 @@
+.abril-fatface {
+  font-family: "Abril fatface";
+}
+
+.italic {
+  font-style: italic;
+}
+
+.white-line-before::before {
+  content: "";
+  display: block;
+  border-top: 2px solid white;
+  margin: 20px auto;
+  width: 40%;
+}
+
+.purple-line-before::before {
+  content: "";
+  display: block;
+  border: #59316d solid;
+  border-width: 2px 0 0 0;
+  width: 100px;
+}
+
+.salmon-line-before::before {
+  content: "";
+  display: block;
+  border: rgb(249, 175, 161) solid;
+  border-width: 2px 0 0 0;
+  width: 100px;
+}
+
+.line-before-margin-30-auto::before {
+  margin: 30px auto;
+}
+
+.line-before-margin-10-auto::before {
+  margin: 10px auto;
+}
+
+.line-before-margin-top-5::before {
+  margin-top: 5px;
+}
+
+.blue-background {
+  background-color: rgb(214, 227, 244);
+}

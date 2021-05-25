@@ -24,6 +24,7 @@ import cashierTable from "./Game3/chashier-table.svg";
 import cashierBg from "./Game3/cashier-bg.svg";
 import ingredientsListRotated from "./Game3/ingredients-list-rotated.svg";
 import kitchen from "./Game3/kitchen.svg";
+import tomato from "./Game3/Tomate_lista.svg";
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -41,6 +42,7 @@ import error from "./apagar.svg";
 import right from "./confirmar.svg";
 
 export {
+  tomato,
   error,
   right,
   silverCloche,

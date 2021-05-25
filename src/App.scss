@@ -1,6 +1,7 @@
 // @import '~bootstrap/scss/bootstrap'; // Isso sobrescreveu um monte de coisa nossa
-@import "./consts.scss";
+@import "./consts";
 @import "./colorPalettes";
+@import "./defaults";
 
 .App {
   display: flex;
