@@ -32,6 +32,21 @@
 .cartItem {
   display: inline-block;
   margin: 10px;
+  cursor: pointer;
+}
+
+.cartItem > span {
+  display: inline-block;
+  transform: translateX(-100%);
+  background-color: #F9AFA1;
+  border-radius: 100px;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.cartItem:hover .cartItemImg {
+  // box-shadow: 5px 5px #F9AFA1;
+  filter: drop-shadow(5px 5px #F9AFA1);
 }
 
 .cartItemImg {
