@@ -7,6 +7,7 @@
 
 .listIcon {
   width: 60px;
+  position: absolute;
 }
 
 .cart {
@@ -42,6 +43,7 @@
   border-radius: 100px;
   width: 1.5rem;
   text-align: center;
+  box-shadow: 2px 2px #AAA7;
 }
 
 .cartItem:hover .cartItemImg {
