@@ -7,6 +7,7 @@
 
 .listIcon {
   width: 60px;
+  position: absolute;
 }
 
 .cart {
@@ -32,6 +33,22 @@
 .cartItem {
   display: inline-block;
   margin: 10px;
+  cursor: pointer;
+}
+
+.cartItem > span {
+  display: inline-block;
+  transform: translateX(-100%);
+  background-color: #F9AFA1;
+  border-radius: 100px;
+  width: 1.5rem;
+  text-align: center;
+  box-shadow: 2px 2px #AAA7;
+}
+
+.cartItem:hover .cartItemImg {
+  // box-shadow: 5px 5px #F9AFA1;
+  filter: drop-shadow(5px 5px #F9AFA1);
 }
 
 .cartItemImg {
