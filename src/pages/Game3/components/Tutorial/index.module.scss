@@ -20,7 +20,27 @@
   align-content: center;
   text-align: center;
   font-size: 2rem;
-  padding: 0px 20%;
+  padding: 0px 15%;
+}
+
+.tutorialBlob span {
+  font-family: 'Barlow';
+}
+
+.tutorialBlob span[lang="pt-br"] {
+  font-weight: 600;
+}
+
+.tutorialBlob span[lang="en"] {
+  font-style: italic;
+}
+
+.tutorialBlob span[lang="en"]::before {
+  content: "";
+  display: block;
+  width: 40%;
+  border-bottom: 2px solid white;
+  margin: 25px auto 18px;
 }
 
 #tutorialGrid {
@@ -36,4 +56,28 @@
 
 .blobRight {
   right: 30px;
+}
+
+#btnTutorial {
+  padding: 20px 40px;
+  font-family: "Barlow";
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: 100ms linear;
+  color: #59316d;
+  display: block;
+  margin-top: 1.5em;
+  border-radius: 50px;
+  background-color: #ffcca9;
+  pointer-events: all;
+}
+
+#btnTutorial::after {
+  content: "❯";
+  margin-left: 1rem;
+}
+
+#btnTutorial:hover {
+  color: white;
+  background-color: #59316d;
 }

@@ -104,7 +104,7 @@ const Tutorial = ({
             {hasPlayed && (
               <button
                 className="btn btn-center"
-                id="btn-end-tutorial"
+                id={tutorialStyles.btnTutorial}
                 onClick={goToMarket}
               >
                 Skip tutorial
