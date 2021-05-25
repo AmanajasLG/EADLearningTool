@@ -141,28 +141,23 @@ const Tutorial = ({
               alt=""
             />
           </div>
-
-          {state.tutorialLine > 2 && (
-            <img
-              onClick={shopListNextLine}
-              src={listIcon}
-              alt=""
-              className={gameStyles.listIcon}
-            />
-          )}
-          {state.tutorialLine === 4 && ( // Dinheiro
-            <img
-              onClick={() =>
-                setState({
-                  ...state,
-                  step: 1,
-                })
-              }
-              src={checkout}
-              alt=""
-            />
-          )}
-
+          <img // Notepad
+            onClick={shopListNextLine}
+            src={listIcon}
+            alt=""
+            className={gameStyles.listIcon + " tutorial-list-icon"}
+          />
+          <img // Dinheiro
+            onClick={() =>
+              setState({
+                ...state,
+                step: 1,
+              })
+            }
+            src={checkout}
+            alt=""
+            className={gameStyles.moneyIcon + " tutorial-money-icon"}
+          />
           {state.shopList && (
             <div
               className={gameStyles.shopList}

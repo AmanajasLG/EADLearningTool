@@ -6,9 +6,16 @@
   width: 100vw;
 }
 
-.listIcon {
-  width: 60px;
+.listIcon,
+.moneyIcon {
+  width: 150px;
   position: absolute;
+  margin: 15px;
+}
+
+.moneyIcon {
+  bottom: 0;
+  cursor: pointer;
 }
 
 .cart {

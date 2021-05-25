@@ -1,4 +1,6 @@
 .tutorialStep0 {
+	.tutorial-list-icon,
+	.tutorial-money-icon,
 	.btn-change-aisle {
 		cursor: default;
 		pointer-events: none;
@@ -7,6 +9,8 @@
 }
 
 .tutorialStep1 {
+	.tutorial-list-icon,
+	.tutorial-money-icon,
 	.btn-change-aisle {
 		cursor: default;
 		pointer-events: none;
@@ -19,6 +23,12 @@
 }
 
 .tutorialStep2 {
+	.tutorial-list-icon,
+	.tutorial-money-icon {
+		cursor: default;
+		pointer-events: none;
+		opacity: 0;
+	}
 	.shelf-item {
 		cursor: default;
 		pointer-events: none;
@@ -26,6 +36,11 @@
 }
 
 .tutorialStep3 {
+	.tutorial-money-icon {
+		cursor: default;
+		pointer-events: none;
+		opacity: 0;
+	}
 	.btn-change-aisle {
 		cursor: default;
 		pointer-events: none;
@@ -37,6 +52,7 @@
 }
 
 .tutorialStep4 {
+	.tutorial-list-icon,
 	.btn-change-aisle {
 		cursor: default;
 		pointer-events: none;
