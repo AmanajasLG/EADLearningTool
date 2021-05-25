@@ -57,6 +57,14 @@
 	background-repeat: no-repeat;
 	background-position: center bottom;
 	overflow: visible;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+.tooltip img {
+	margin: 0 -50px;
+	pointer-events: none;
 }
 
 /* Tooltip text */

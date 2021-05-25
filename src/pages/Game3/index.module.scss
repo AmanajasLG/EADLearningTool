@@ -1,8 +1,9 @@
 #gameGrid {
   display: grid;
   grid-template-columns: 77.55% auto;
-  height: 100%;
-  position: relative;
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
 }
 
 .listIcon {
