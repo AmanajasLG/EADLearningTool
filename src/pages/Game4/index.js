@@ -31,6 +31,7 @@ import {
 } from "../../img";
 import DialogCharacter from "../../_components/DialogCharacter";
 import FeedbackPanel from "./components/FeedbackPanel";
+import { Button } from "@material-ui/core";
 
 const Game4 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -504,11 +505,25 @@ const Game4 = (props) => {
   return (
     <div id="game2-wrapper">
       {process.env.NODE_ENV === "development" && (
-        <div>
+        <div style={{ position: "absolute", zIndex: 100000000, top: 0 }}>
           <button onClick={() => setState({ ...state, runTimer: false })}>
             Stop timer
           </button>
-          <button onClick={() => endGame(false, false)}>End game</button>
+          <button onClick={restart}>Restart</button>
+          <button onClick={() => endGame(false, false)}>End game win</button>
+          <button onClick={() => endGame(true, false)}>End game lose</button>
+          <button
+            onClick={() =>
+              setState({
+                ...state,
+                scene: "COOK",
+                tutorialIngredientSelectionNotification: true,
+              })
+            }
+          >
+            Cooking
+          </button>
+          <button onClick={moveToServing}>Serving</button>
         </div>
       )}
       {mission ? (
@@ -1087,24 +1102,58 @@ const Game4 = (props) => {
                 );
               case "END_GAME":
                 return (
-                  <div className="blue-background">
+                  <div
+                    className={
+                      state.timeUp ? "salmon-background" : "blue-background"
+                    }
+                  >
                     <div className="game-4-feedback absolute-center">
                       {state.timeUp ? (
                         <div>
-                          <img src={hourglassEmpty} alt="hourglass-empty" />
-                          <span>O tempo acabou!</span>
-                          <p lang="pt-br">
-                            Cozinhar pode ser mais complicado do que parece.
-                          </p>
-                          <p lang="en">
-                            Time is up! Cooking might be harder than it looks.
-                          </p>
+                          <div className="game-4-feedback-lose">
+                            <div className="game-4-feedback-lose-content">
+                              <img src={hourglassEmpty} alt="hourglass-empty" />
+                              <span className="abril-fatface game-4-time-up-title">
+                                O tempo acabou!
+                              </span>
+                              <div className="game-4-time-up-text">
+                                <span lang="pt-br">
+                                  Preparar o prato perfeito não é uma tarefa
+                                  fácil!
+                                </span>
+                                <span
+                                  lang="en"
+                                  className="italic white-line-before"
+                                >
+                                  Time is up! Making the perfect dish is not an
+                                  easy task.
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className="big-time-shower"
+                              style={{
+                                backgroundImage: "url(" + blobLaranja + ")",
+                                backgroundRepeat: "no-repeat",
+                                backgroundSize: "contain",
+                                backgroundPosition: "center",
+                              }}
+                            >
+                              <span className="absolute-center abril-fatface">
+                                0:00
+                              </span>
+                            </div>
+                          </div>
                           <div
-                            style={{
-                              backgroundImage: "url(" + blobLaranja + ")",
-                            }}
+                            id="feedback-endGame-action-btns"
+                            style={{ marginTop: "5vh" }}
                           >
-                            <div>0:00</div>
+                            <Button onClick={restart}>Tentar novamente</Button>
+                            <Button
+                              onClick={() => setState({ ...state, back: true })}
+                            >
+                              Sair do jogo
+                            </Button>
                           </div>
                         </div>
                       ) : (
