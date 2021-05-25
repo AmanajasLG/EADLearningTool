@@ -76,9 +76,9 @@ const Tutorial = ({
 
   const tutorialText = [
     ["Clique em qualquer item para <strong>adicioná-lo</strong> ao carrinho.", "Click on any item to <strong>add it</strong> to your cart."],
-    ["Clique em qualquer item do seu carrinho para retirá-lo.", "Click on any item from your cart to remove it."],
+    ["Clique em qualquer item do seu carrinho para <strong>retirá-lo</strong>.", "Click on any item from your cart to <strong>remove it</strong>."],
     ["Use as setas para navegar pelas prateleiras.", "Use the arrows to move through shelves."],
-    ["Passe o mouse sobre o bloco de notas para ver a lista de compras.", "Hover the mouse over the notepad to see the shopping list."],
+    ["<strong>Passe o mouse</strong> sobre o bloco de notas para ver a lista de compras.", "<strong>Hover the mouse</strong> over the notepad to see the shopping list."],
     ["Clique no ícone de dinheiro para finalizar sua compra.", "Click on the cash icon to checkout."]
   ].map( (line, index) => {return {ptbr: line[0], preferred: line[1]} } )
 
@@ -104,7 +104,7 @@ const Tutorial = ({
             {hasPlayed && (
               <button
                 className="btn btn-center"
-                id="btn-end-tutorial"
+                id={tutorialStyles.btnTutorial}
                 onClick={goToMarket}
               >
                 Skip tutorial

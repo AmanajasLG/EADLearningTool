@@ -278,10 +278,10 @@ const Game3 = (props) => {
         : {
             text: `Você selecionou ${
               getWrongItemsInCart().length
-            }ingrediente(s) incorretamente!`,
+            } ingrediente(s) incorretamente!`,
             translation: `You selected ${
               getWrongItemsInCart().length
-            }ingredient(s) incorrectly!`,
+            } ingredient(s) incorrectly!`,
           },
       cashierContinue: haveAllValue
         ? () => setState({ ...state, runTimer: true, moneySelection: true })
