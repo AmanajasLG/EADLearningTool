@@ -8,7 +8,7 @@ const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
 
 	return (
 		<div id={styles.aisle}>
-			<button className={styles.btnChangeAisle} onClick={toPreviousAisle}>{"❮"}</button>
+			<button className={styles.btnChangeAisle + " btn-change-aisle"} onClick={toPreviousAisle}>{"❮"}</button>
 			<div id={styles.shelves}>
 				<img src={shelf} alt=""/>
 				<div className={styles.items}>
@@ -18,7 +18,7 @@ const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
 								<div
 									key={index}
 									onClick={addProduct(product.name)}
-									className={styles.tooltip}
+									className={styles.tooltip + " shelf-item"}
 								>
 									<img src={product.shelfImage}/>
 									<span className={styles.tooltiptext}>{product.tooltip}</span>
@@ -29,7 +29,7 @@ const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
 					))}
 				</div>
 			</div>
-			<button className={styles.btnChangeAisle} onClick={toNextAisle}>{"❯"}</button>
+			<button className={styles.btnChangeAisle + " btn-change-aisle"} onClick={toNextAisle}>{"❯"}</button>
 		</div>
 	);
 };

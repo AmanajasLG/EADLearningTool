@@ -1,6 +1,7 @@
 import React from "react";
 import tutorialStyles from "./index.module.scss";
 import gameStyles from "../../index.module.scss";
+import "./index.scss";
 import ChefDialog from "../ChefDialog";
 import Aisle from "../../../../_components/Aisle";
 import Button from '../../../../_components/Button'
@@ -85,7 +86,7 @@ const Tutorial = ({
   const blobPosition = (state.tutorialLine === 2 || state.tutorialLine === 3) ? tutorialStyles.blobRight : tutorialStyles.blobLeft;
 
   return (
-    <div id="room-itself" className="tutorial">
+    <div id="room-itself" className={"tutorial " + "tutorialStep" + state.tutorialLine}>
       {state.step === 0 && (
         <div id={tutorialStyles.tutorialGrid}>
           <div
