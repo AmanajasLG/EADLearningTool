@@ -30,8 +30,8 @@ import Aisle from "../../_components/Aisle";
 import Intro from "./components/Intro";
 import Tutorial from "./components/Tutorial";
 import DialogCharacter from "../../_components/DialogCharacter";
-import ChefDialog from './components/ChefDialog'
-import Payment from './components/Payment'
+import ChefDialog from "./components/ChefDialog";
+import Payment from "./components/Payment";
 
 import {
   cart,
@@ -47,6 +47,7 @@ import {
   cashierTable,
   cashierBg,
 } from "../../img";
+import Recipe from "../../_components/Recipe";
 
 const Game3 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -249,48 +250,75 @@ const Game3 = (props) => {
   };
 
   const moveToCheckout = () => {
-    let haveAllValue = haveAll()
+    let haveAllValue = haveAll();
     let price = state.cart
-      .reduce((acc, product) => acc + state.ingredientsList.find( ingredient => ingredient.name === product.name).price * product.count, 0)
-      .toFixed(2)
+      .reduce(
+        (acc, product) =>
+          acc +
+          state.ingredientsList.find(
+            (ingredient) => ingredient.name === product.name
+          ).price *
+            product.count,
+        0
+      )
+      .toFixed(2);
     setState({
       ...state,
       scene: "CASHIER",
       checkoutConfirm: false,
-      cashierLines: haveAllValue ?
-        {
-          text: `Maravilha! Sua compra deu ${numberToMoney(price)}. Agora você só precisa selecionar a quatidade correta de dinheiro. Fique atento ao limite de tempo.`,
-          translation:`Wonderful! That's ${numberToMoney(price)}. Now all you have to do is select the right amount of money. Mind the time limit.`
-        }
-        :{
-          text: `Você selecionou ${getWrongItemsInCart().length}ingrediente(s) incorretamente!`,
-          translation:`You selected ${getWrongItemsInCart().length}ingredient(s) incorrectly!`
-        },
-      cashierContinue: haveAllValue ?
-        () => setState({...state, runTimer: true, moneySelection: true})
-        :() => setState({ ...state, scene: "MARKET", runTimer: true, checkoutConfirm: false}),
-      price: price
+      cashierLines: haveAllValue
+        ? {
+            text: `Maravilha! Sua compra deu ${numberToMoney(
+              price
+            )}. Agora você só precisa selecionar a quatidade correta de dinheiro. Fique atento ao limite de tempo.`,
+            translation: `Wonderful! That's ${numberToMoney(
+              price
+            )}. Now all you have to do is select the right amount of money. Mind the time limit.`,
+          }
+        : {
+            text: `Você selecionou ${
+              getWrongItemsInCart().length
+            }ingrediente(s) incorretamente!`,
+            translation: `You selected ${
+              getWrongItemsInCart().length
+            }ingredient(s) incorrectly!`,
+          },
+      cashierContinue: haveAllValue
+        ? () => setState({ ...state, runTimer: true, moneySelection: true })
+        : () =>
+            setState({
+              ...state,
+              scene: "MARKET",
+              runTimer: true,
+              checkoutConfirm: false,
+            }),
+      price: price,
     });
   };
 
   const doPayment = (value) => {
-    let cashierLines
-    let change = value - state.price
-    if(change < 0)
+    let cashierLines;
+    let change = value - state.price;
+    if (change < 0)
       cashierLines = {
-        text:"Nossos patrocinadores vão ter que me pagar um extra para completar sua compra.",
-        translation: "Our sponsors will need to give me an extra to pay for the rest of your purchase."
-      }
-    else if( change > 0)
+        text:
+          "Nossos patrocinadores vão ter que me pagar um extra para completar sua compra.",
+        translation:
+          "Our sponsors will need to give me an extra to pay for the rest of your purchase.",
+      };
+    else if (change > 0)
       cashierLines = {
         text: "Bem... Obirgada pela gorgeta!",
-        translation: "Well... Thanks for the tip!"
-      }
-    else //if( value === 0)
+        translation: "Well... Thanks for the tip!",
+      };
+    //if( value === 0)
+    else
       cashierLines = {
-        text: "Você pagou exatamente o que devia para o caixa do supermercado! Mexer com dinheiro é contigo mesmo!",
-        translation: "You gave the exact amout to the supermarket's cashier! Dealing with money is clearly not a problem for you!"
-      }
+        text:
+          "Você pagou exatamente o que devia para o caixa do supermercado! Mexer com dinheiro é contigo mesmo!",
+        translation:
+          "You gave the exact amout to the supermarket's cashier! Dealing with money is clearly not a problem for you!",
+      };
 
     setState({
       ...state,
@@ -433,18 +461,15 @@ const Game3 = (props) => {
                       }}
                       onEnd={() => endGame(true)}
                     />
+                    <Recipe
+                      ingredientsList={state.ingredientsList}
+                      hasImage={true}
+                      showCheck={(ingredient) => checkShoppingList(ingredient)}
+                      iconShouldShow={!state.checkout && !state.checkoutConfirm}
+                    />
+
                     {!state.checkout && !state.checkoutConfirm && (
                       <div id={styles.gameGrid}>
-                        <img
-                          onClick={() =>
-                            setState({ ...state, shopList: !state.shopList })
-                          }
-                          src={listIcon}
-                          alt=""
-                          className={styles.listIcon}
-                          style={{position: "absolute"}}
-                        />
-
                         <Aisle
                           products={state.aisles[state.currentAisle]}
                           addProduct={addProduct}
@@ -463,7 +488,7 @@ const Game3 = (props) => {
                           }
                           src={checkout}
                           alt=""
-                          style={{position: "absolute", bottom: 0, right: 0}}
+                          style={{ position: "absolute", bottom: 0, right: 0 }}
                         />
                         <div className={styles.cart}>
                           <div className={styles.cartItems}>
@@ -484,10 +509,7 @@ const Game3 = (props) => {
                               </div>
                             ))}
                           </div>
-                          <img
-                            src={cart}
-                            alt=""
-                          />
+                          <img src={cart} alt="" />
                         </div>
                       </div>
                     )}
@@ -537,54 +559,20 @@ const Game3 = (props) => {
                             </div>
                           ))}
                         </div>
-                        <img
-                          src={cart}
-                          alt=""
-                        />
-                      </div>
-                    )}
-
-                    {state.shopList && (
-                      <div
-                        className={styles.shopList}
-                        style={{
-                          backgroundImage: "url(" + ingredientsListBg + ")",
-                          backgroundRepeat: "no-repeat",
-                          backgroundSize: "contain",
-                        }}
-                      >
-                        {state.ingredientsList.map((ingredient, index) => (
-                          <div>
-                            {checkShoppingList(ingredient) ? (
-                              <img
-                                src={listCheck}
-                                alt=""
-                                className={styles.shopListItemCheck}
-                              />
-                            ) : (
-                              <div
-                                style={{
-                                  width: 20,
-                                  height: 20,
-                                  display: "inline-block",
-                                }}
-                              ></div>
-                            )}{" "}
-                            <img
-                              src={ingredient.image}
-                              alt=""
-                              className={styles.shopListItemImg}
-                            />
-                            {ingredient.description}
-                          </div>
-                        ))}
+                        <img src={cart} alt="" />
                       </div>
                     )}
                   </div>
                 );
               case "CASHIER":
                 return (
-                  <div style={{position: 'relative', width:'100%', height: '100%'}}>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  >
                     <Timer
                       run={state.runTimer}
                       seconds={state.remainingTime}
@@ -597,18 +585,28 @@ const Game3 = (props) => {
                       onEnd={() => endGame(true)}
                     />
                     <div id="dialog-interact">
-                      <ChefDialog chef={missionData.character}
+                      <ChefDialog
+                        chef={missionData.character}
                         hideDialog={state.moneySelection}
-                        chefFeeling={state.change < 0 ? "wrongPayment" : "default"}
+                        chefFeeling={
+                          state.change < 0 ? "wrongPayment" : "default"
+                        }
                         text={state.cashierLines.text}
                         translation={state.cashierLines.translation}
                         onContinue={state.cashierContinue}
                       />
-                        <img style={{zIndex: 0, width: 500}} src={cashierTable} alt="" />
+                      <img
+                        style={{ zIndex: 0, width: 500 }}
+                        src={cashierTable}
+                        alt=""
+                      />
                     </div>
-                    {state.moneySelection &&
-                      <Payment moneyList={missionData.money} onConfirm={value => () => doPayment(value)}/>
-                    }
+                    {state.moneySelection && (
+                      <Payment
+                        moneyList={missionData.money}
+                        onConfirm={(value) => () => doPayment(value)}
+                      />
+                    )}
                   </div>
                 );
               case "END_GAME":
@@ -673,29 +671,43 @@ const Game3 = (props) => {
       ) : (
         <div>Loading..</div>
       )}
-      {process.env.NODE_ENV === 'development' &&
+      {process.env.NODE_ENV === "development" && (
         <div>
-          <button style={{position: 'absolute', bottom: 0}} onClick={() => setState({...state, scene: 'MARKET'}) }>
+          <button
+            style={{ position: "absolute", bottom: 0 }}
+            onClick={() => setState({ ...state, scene: "MARKET" })}
+          >
             Pula tutorial
           </button>
-          <button style={{position: 'absolute', bottom: 0, left: 100}} onClick={()=>{
+          <button
+            style={{ position: "absolute", bottom: 0, left: 100 }}
+            onClick={() => {
               setState({
                 ...state,
                 scene: "CASHIER",
                 checkoutConfirm: false,
-                cashierLines:
-                  {
-                    text: `Maravilha! Sua compra deu ${numberToMoney(48.05)}. Agora você só precisa selecionar a quatidade correta de dinheiro. Fique atento ao limite de tempo.`,
-                    translation:`Wonderful! That's ${numberToMoney(48.05)}. Now all you have to do is select the right amount of money. Mind the time limit.`
-                  },
-                cashierContinue: () => setState(s => ({...s, runTimer: true, moneySelection: true})),
-                price: 48.05
+                cashierLines: {
+                  text: `Maravilha! Sua compra deu ${numberToMoney(
+                    48.05
+                  )}. Agora você só precisa selecionar a quatidade correta de dinheiro. Fique atento ao limite de tempo.`,
+                  translation: `Wonderful! That's ${numberToMoney(
+                    48.05
+                  )}. Now all you have to do is select the right amount of money. Mind the time limit.`,
+                },
+                cashierContinue: () =>
+                  setState((s) => ({
+                    ...s,
+                    runTimer: true,
+                    moneySelection: true,
+                  })),
+                price: 48.05,
               });
-          }}>
+            }}
+          >
             Para o caixa: Compras certas
           </button>
         </div>
-      }
+      )}
     </div>
   );
 };

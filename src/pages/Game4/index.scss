@@ -26,8 +26,8 @@
   position: absolute;
   right: 4vw;
   top: -10vh;
-  width: 30vw;
-  height: 40vh;
+  width: 25vw;
+  height: 30vh;
 }
 
 .tutorial-notification-blob {
@@ -41,12 +41,13 @@
 .smaller-tutorial-notification-message {
   position: absolute;
   right: 4vw;
-  padding: 6vh 5vw 8vh 8vw;
+  top: 0;
+  padding: 3vh 3vw 0 4vw;
 }
 
 .tutorial-notification-message {
   position: absolute;
-  right: 4vw;
+  right: 11vw;
   padding: 6vh 5vw 8vh 8vw;
 }
 
@@ -59,8 +60,8 @@
 
 .tutorial-notification-message span {
   display: block;
-  font-size: 1.8rem;
-  width: 40vw;
+  font-size: 1.5rem;
+  width: 25vw;
   text-align: center;
 }
 
@@ -79,7 +80,7 @@
 
 .tutorial-notification-message button {
   margin: auto;
-  margin-top: 50px;
+  margin-top: 2vh;
   display: block;
 }
 
@@ -131,14 +132,20 @@
   display: block;
 }
 
+.ingredients-div {
+  margin-top: 20vh;
+}
+
 .suffled-ingredients {
   background-color: rgb(187, 214, 255);
   padding: 2vh 5vw;
+  text-align: center;
 }
 
 .ingredient-selection-img {
   display: inline-block;
   cursor: pointer;
+  max-width: 180px;
 }
 
 .ingredient-selection-img-even {
@@ -152,8 +159,10 @@
 .conter {
   position: absolute;
   bottom: 10px;
-  height: 40vh;
-  width: 100vw;
+  height: 30vh;
+  width: 80vw;
+  left: 50vw;
+  transform: translateX(-50%);
   background-color: saddlebrown;
   text-align: center;
 }
@@ -163,7 +172,7 @@
 }
 
 .conter-ingredient-even {
-  margin-top: 15vh;
+  margin-top: 10vh;
 }
 
 .conter-ingredient-odd {
@@ -171,7 +180,7 @@
 }
 
 .conter-ingredient-solo {
-  margin-top: -5vh;
+  margin-top: 28vh;
   height: 35vh;
   z-index: 10000;
 }
@@ -179,24 +188,26 @@
 .name-order-div {
   display: flex;
   flex-direction: row;
-  background-color: rgb(166, 226, 174);
+  background-color: rgb(203, 231, 222);
   width: 90vw;
   height: 60vh;
   z-index: 1000;
   border-radius: 40px;
-  margin-top: -5vh;
 }
 
 .shuffled-letters {
+  text-align: center;
   width: 50vw;
   padding: 10vh 5vw;
 }
 
 .shuffled-letters span {
-  font-size: 4rem;
+  font-size: 6vw;
   display: inline-block;
-  margin: 2vh 3vw;
+  margin: 0 2vw;
   cursor: pointer;
+  font-weight: 900;
+  color: rgb(89, 49, 109);
 }
 
 .shuffled-letters span:hover {
@@ -206,21 +217,25 @@
 
 .ordered-letters-div {
   display: flex;
-  padding: 25vh 1vw;
+  align-items: center; /* Vertical */
+  justify-content: center; /* Horizontal */
 }
 
 .ordered-letters {
+  font-weight: 900;
+  color: rgb(89, 49, 109);
   min-height: 90px;
   padding: 1vh 2vw;
   width: 40vw;
-  background-color: rgb(197, 255, 197);
+  background-color: rgb(221, 239, 234);
   border-radius: 5px;
   font-size: 2.5rem;
   letter-spacing: 2rem;
 }
+
 .ordered-letters-buttons {
-  transform: translate(0, 12%);
 }
+
 .ordered-letters-buttons img {
   width: 30px;
   margin: 5px 0;
@@ -267,16 +282,20 @@
 }
 
 .table-tableware-space {
-  margin: 6vh 2vw;
+  margin: 0 2vw;
   padding: 2vh 3vw;
   background-color: rgba(255, 255, 255, 0.685);
   border-radius: 20px;
   display: inline-block;
   vertical-align: middle;
+  width: 15vw;
+  height: 15vw;
 }
 
 .serve-button {
   position: absolute;
   width: 200px;
   cursor: pointer;
+  top: 0;
+  margin: 2vh 0 0 2vh;
 }

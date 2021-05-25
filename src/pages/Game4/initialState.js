@@ -2,6 +2,7 @@ const initialState = (checkedPlayed = false) => {
   return {
     scene: "INIT",
     runTimer: false,
+    initTime: 0,
     remainingTime: 0,
     timeUp: false,
     showRecipe: false,

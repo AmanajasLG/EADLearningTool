@@ -37,8 +37,8 @@ import blobVerde from "./bg-forma-verde.svg";
 import blobLowScore from "./Score Baixo_blob.svg";
 import blobLaranja from "./bg-forma-laranja.svg";
 import silverCloche from "./placeholders/CL32_ml.png";
-import error from "./placeholders/x.png";
-import right from "./placeholders/check.png";
+import error from "./apagar.svg";
+import right from "./confirmar.svg";
 
 export {
   error,

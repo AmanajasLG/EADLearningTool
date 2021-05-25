@@ -1,0 +1,14 @@
+/* VARIABLES */
+:root {
+  // Fonts
+  --font-title: "abril fatface", serif;
+  --font-text: "assistant", sans-serif;
+  --font-text-alt: "barlow", sans-serif;
+
+  // Overlay z-index
+  --full-overlay: 1000;
+  --behind-all: -1;
+  --first-layer: 0;
+  --second-layer: 1;
+  --third-layer: 2;
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import { zeroFill } from "../../_helpers";
+import "./index.scss";
 
 const Timer = ({ seconds, onEnd, onStop, run = true }) => {
   const [state, setState] = React.useState({
@@ -38,7 +39,7 @@ const Timer = ({ seconds, onEnd, onStop, run = true }) => {
   }, [state, onEnd, onStop, run, seconds]);
 
   return (
-    <div>
+    <div id="timer">
       {zeroFill(Math.floor(state.seconds / 60).toString(), 2)}:
       {zeroFill((state.seconds % 60).toString(), 2)}
     </div>

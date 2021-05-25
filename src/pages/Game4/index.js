@@ -86,8 +86,10 @@ const Game4 = (props) => {
       state.ingredientsList.length === 0 &&
       timesPlayed !== undefined
     ) {
-      let remainingTime =
+      let initTime =
         missionData.seconds - 60 * (timesPlayed > 2 ? 2 : timesPlayed);
+      let remainingTime = initTime;
+
       // safe copies
 
       let recipe =
@@ -151,6 +153,7 @@ const Game4 = (props) => {
           shuffledIngredients,
           tablewares,
           remainingTime,
+          initTime,
         };
       });
     }
@@ -377,11 +380,6 @@ const Game4 = (props) => {
   };
 
   const checkTableware = () => {
-    console.log(
-      state.tableTablewares
-        .filter((tableware) => !tableware.correct)
-        .map((tableware) => tableware.name)
-    );
     setState({
       ...state,
       wrongTablewareSelected: state.tableTablewares
@@ -442,8 +440,8 @@ const Game4 = (props) => {
         user: userId,
         mission: mission.id,
         secondsTaken: timeUp
-          ? missionData.seconds + 1
-          : missionData.seconds - state.remainingTime,
+          ? state.initTime + 1
+          : state.initTime - state.remainingTime,
         recipe: state.recipe.id,
         won: !timeUp,
         wrongIngredientSelected: state.wrongIngredientSelected.length
@@ -464,6 +462,13 @@ const Game4 = (props) => {
 
   return (
     <div id="game2-wrapper">
+      {process.env.NODE_ENV === "development" && (
+        <div>
+          <button onClick={() => setState({ ...state, runTimer: false })}>
+            Stop timer
+          </button>
+        </div>
+      )}
       {mission ? (
         //verificar se é possível generalizar esses gameX-wrapper
         <div id="game2-content">
@@ -520,6 +525,15 @@ const Game4 = (props) => {
                       }}
                       onEnd={() => endGame(true)}
                     />
+
+                    {!state.doneCooking && state.showIngredients && (
+                      <Recipe
+                        ingredientsList={state.ingredientsList}
+                        hasImage={false}
+                        showCheck={(ingredient) => ingredient.done}
+                        iconShouldShow={!state.recipeContinue}
+                      />
+                    )}
 
                     {state.tutorialIngredientSelectionNotification && (
                       <div className="overlay-tutorial-notification">
@@ -591,41 +605,12 @@ const Game4 = (props) => {
 
                     {!state.doneCooking &&
                       (state.showIngredients ? (
-                        <div>
-                          {!state.recipeContinue && (
-                            <img
-                              onClick={() =>
-                                setState({
-                                  ...state,
-                                  showRecipe: !state.showRecipe,
-                                })
-                              }
-                              src={listIcon}
-                              alt=""
-                              className="list-icon"
-                            />
-                          )}
-                          {state.showRecipe && (
-                            <Recipe
-                              ingredientsList={state.ingredientsList}
-                              closeText={
-                                state.recipeContinue ? "Continuar" : "Fechar"
-                              }
-                              onClose={(e) =>
-                                setState({
-                                  ...state,
-                                  showRecipe: false,
-                                  recipeContinue: false,
-                                })
-                              }
-                              hasImage={false}
-                              showCheck={(ingredient) => ingredient.done}
-                            />
-                          )}
+                        <div className="ingredients-div">
                           <div className="suffled-ingredients">
                             {state.shuffledIngredients.map(
                               (ingredient, index) => (
                                 <img
+                                  key={"suffled-ingredient-" + index}
                                   src={ingredient.image}
                                   alt=""
                                   onClick={() =>
@@ -640,8 +625,9 @@ const Game4 = (props) => {
                                       ? "none"
                                       : "auto",
                                     width:
-                                      (window.innerWidth * 0.9) /
-                                      state.shuffledIngredients.length,
+                                      (
+                                        90 / state.shuffledIngredients.length
+                                      ).toString() + "vw",
                                   }}
                                   className={
                                     (state.selectedIngredient
@@ -766,58 +752,62 @@ const Game4 = (props) => {
                       </div>
                     )}
 
-                    {!state.doneCooking && (
-                      <div className="conter">
-                        {state.showIngredients ? (
-                          <div>
-                            {state.tableIngredients.map((ingredient, index) => (
-                              <img
-                                src={ingredient.image}
-                                alt={ingredient.name}
-                                key={ingredient.name}
-                                className={
-                                  "conter-ingredient" +
-                                  (index % 2
-                                    ? " conter-ingredient-even"
-                                    : " conter-ingredient-odd")
-                                }
-                                style={{
-                                  width:
-                                    (window.innerWidth * 0.9) /
-                                    state.shuffledIngredients.length,
-                                }}
-                              />
-                            ))}
-                            {[
-                              ...Array(
-                                state.ingredientsList.length -
-                                  state.tableIngredients.length
-                              ),
-                            ].map((item, index) => (
-                              <div
-                                className={
-                                  "conter-ingredient" +
-                                  (index % 2
-                                    ? " conter-ingredient-even"
-                                    : " conter-ingredient-odd")
-                                }
-                                style={{
-                                  width:
-                                    (window.innerWidth * 0.9) /
-                                    state.shuffledIngredients.length,
-                                }}
-                              ></div>
-                            ))}
-                          </div>
-                        ) : (
+                    {!state.doneCooking &&
+                      (state.showIngredients ? (
+                        <div className="conter">
+                          {state.tableIngredients.map((ingredient, index) => (
+                            <img
+                              src={ingredient.image}
+                              alt={ingredient.name}
+                              key={ingredient.name}
+                              className={
+                                "conter-ingredient" +
+                                (index % 2
+                                  ? " conter-ingredient-even"
+                                  : " conter-ingredient-odd")
+                              }
+                              style={{
+                                width:
+                                  (
+                                    70 / state.shuffledIngredients.length
+                                  ).toString() + "vw",
+                              }}
+                            />
+                          ))}
+                          {[
+                            ...Array(
+                              state.ingredientsList.length -
+                                state.tableIngredients.length
+                            ),
+                          ].map((item, index) => (
+                            <div
+                              key={index}
+                              className={
+                                "conter-ingredient" +
+                                (index % 2
+                                  ? " conter-ingredient-even"
+                                  : " conter-ingredient-odd")
+                              }
+                              style={{
+                                width:
+                                  (
+                                    70 / state.shuffledIngredients.length
+                                  ).toString() + "vw",
+                                height: "4vh",
+                              }}
+                            ></div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="conter"></div>
                           <img
                             src={state.sortNameIngredient.image}
                             alt=""
                             className="conter-ingredient-solo absolute-center"
                           />
-                        )}
-                      </div>
-                    )}
+                        </div>
+                      ))}
 
                     {state.doneCooking && (
                       <div>
@@ -859,6 +849,17 @@ const Game4 = (props) => {
               case "SERVE":
                 return (
                   <div>
+                    <Timer
+                      run={state.runTimer}
+                      seconds={state.remainingTime}
+                      onStop={(remaining) => {
+                        setState({
+                          ...state,
+                          remainingTime: remaining,
+                        });
+                      }}
+                      onEnd={() => endGame(true)}
+                    />
                     {!state.endConfirmation && (
                       <div>
                         {state.wrongCombiantionNotification && (
@@ -910,17 +911,7 @@ const Game4 = (props) => {
                             className="serve-button"
                           />
                         )}
-                        <Timer
-                          run={state.runTimer}
-                          seconds={state.remainingTime}
-                          onStop={(remaining) => {
-                            setState({
-                              ...state,
-                              remainingTime: remaining,
-                            });
-                          }}
-                          onEnd={() => endGame(true)}
-                        />
+
                         <div className="tableware-selection-div">
                           <div className="shuffled-tablewares">
                             {state.shuffledTablewares.map(
@@ -940,8 +931,9 @@ const Game4 = (props) => {
                                       ? "none"
                                       : "auto",
                                     width:
-                                      (window.innerWidth * 0.6) /
-                                      state.shuffledTablewares.length,
+                                      (
+                                        60 / state.shuffledTablewares.length
+                                      ).toString() + "vw",
                                   }}
                                   onClick={() =>
                                     setState({
@@ -981,8 +973,9 @@ const Game4 = (props) => {
                                       ? "none"
                                       : "auto",
                                     width:
-                                      (window.innerWidth * 0.6) /
-                                      state.shuffledTablewares.length,
+                                      (
+                                        60 / state.shuffledTablewares.length
+                                      ).toString() + "vw",
                                   }}
                                   onClick={addTableware(tableware)}
                                 >
@@ -999,23 +992,13 @@ const Game4 = (props) => {
                               key={index}
                               src={tableware.image}
                               alt=""
-                              style={{
-                                width: (window.innerWidth * 0.6) / 3,
-                                height: (window.innerWidth * 0.6) / 3,
-                              }}
                               className="table-tableware-space"
                             />
                           ))}
                           {console.log(Array(3 - state.tableTablewares.length))}
                           {[...Array(3 - state.tableTablewares.length)].map(
                             (item, index) => (
-                              <div
-                                style={{
-                                  width: (window.innerWidth * 0.6) / 3,
-                                  height: (window.innerWidth * 0.6) / 3,
-                                }}
-                                className="table-tableware-space"
-                              ></div>
+                              <div className="table-tableware-space"></div>
                             )
                           )}
                         </div>
@@ -1290,14 +1273,14 @@ const Game4 = (props) => {
                         <div>
                           {zeroFill(
                             Math.floor(
-                              (missionData.seconds - state.remainingTime) / 60
+                              (state.initTime - state.remainingTime) / 60
                             ).toString(),
                             2
                           )}
                           :
                           {zeroFill(
                             (
-                              (missionData.seconds - state.remainingTime) %
+                              (state.initTime - state.remainingTime) %
                               60
                             ).toString(),
                             2

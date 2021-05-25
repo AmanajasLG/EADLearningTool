@@ -1,0 +1,10 @@
+#timer {
+  font-family: "Abril fatface";
+  color: rgb(89, 49, 109);
+  font-size: 4.5rem;
+  position: absolute;
+  left: 50vw;
+  transform: translateX(-50%);
+  top: 3vh;
+  z-index: var(--first-layer);
+}
