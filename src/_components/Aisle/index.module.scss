@@ -5,6 +5,7 @@
 	align-items: center;
 	position: relative;
 	align-self: center;
+	margin-top: 100px;
 }
 
 #aisle > * {
@@ -35,6 +36,17 @@
 .shelfPrice {
 	margin-left: auto;
 	margin-right: auto;
+	background-color: #FFF;
+	padding: 10px;
+	border: 2px solid #59316D;
+	border-radius: 15px;
+	z-index: 1;
+	min-width: 150px;
+	text-align: center;
+	align-self: center;
+	font-family: 'Barlow';
+	font-weight: 600;
+	font-size: 1.2rem;
 }
 
 .products {
@@ -63,7 +75,7 @@
 }
 
 .tooltip img {
-	margin: 0 -50px;
+	margin: 0 -40%;
 	pointer-events: none;
 }
 
@@ -80,7 +92,7 @@
 	/* Position the tooltip text - see examples below! */
 	position: absolute;
 	top: 105%;
-	z-index: 1;
+	z-index: 2;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
