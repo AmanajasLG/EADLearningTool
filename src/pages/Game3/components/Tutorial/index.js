@@ -172,7 +172,7 @@ const Tutorial = ({
               }}
             >
               {ingredientsList.map((ingredient, index) => (
-                <div>
+                <div key={index}>
                   <img
                     src={listCheck}
                     alt=""
