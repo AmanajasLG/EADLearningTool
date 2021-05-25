@@ -9,7 +9,8 @@ import TimerAnounce from '../../../../_components/TimerAnounce'
 import Button from '../../../../_components/Button'
 import {
   ingredientsListRotated,
-  kitchen
+  kitchen,
+  recipeBg
 } from "../../../../img";
 
 import { zeroFill } from "../../../../_helpers";
@@ -30,7 +31,10 @@ const Intro = ({ chef, recipe, ingredientsList, seconds, goToKitchen }) => {
 
       {state.screen === 1 && (
         <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%'}}>
-          <img style={{position: 'absolute', right: '30%', width: '30%'}}  src={recipe.image} alt="" />
+          <div style={{position: 'relative', overflow: 'visible'}}>
+            <img style={{position: 'absolute', width: '60%', left: '25%', top: '-130px'}} src={recipeBg} />
+            <img style={{position: 'absolute', right: '30%', width: '30%'}} src={recipe.image} alt="" />
+          </div>
           <ChefDialog chef={chef} onContinue={() => setState({ screen: 2 })}
             text={recipe.description}
             translation={recipe.descriptionTranslate}/>

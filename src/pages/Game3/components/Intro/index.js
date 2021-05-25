@@ -36,7 +36,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
       {state.screen === 1 && (
         <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%'}}>
           <div style={{position: 'relative', overflow: 'visible'}}>
-            <img style={{position: 'absolute', width: '60%', left: '60%', top: '-30%'}} src={recipeBg} />
+            <img style={{position: 'absolute', width: '60%', left: '25%', top: '-130px'}} src={recipeBg} />
             <img style={{position: 'absolute', right: '30%', width: '30%'}} src={recipe.image} alt="" />
           </div>
           <ChefDialog chef={chef} onContinue={() => setState({ screen: 2 })} text={recipe.description} translation={recipe.descriptionTranslate}/>

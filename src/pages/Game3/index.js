@@ -32,6 +32,7 @@ import Tutorial from "./components/Tutorial";
 import DialogCharacter from "../../_components/DialogCharacter";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
+import ShopCart from './components/ShopCart'
 
 import {
   cart,
@@ -48,6 +49,17 @@ import {
   cashierBg,
 } from "../../img";
 import Recipe from "../../_components/Recipe";
+
+const endGameLines = [
+  {
+    text:"Fazer compras pode ser mais complicado do que parece.",
+    translation: "Time is up! Doing the groceries might be harder than it looks."
+  },
+  {
+    text:"Você finalizou em:",
+    translation: "Finished in:"
+  },
+]
 
 const Game3 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -488,29 +500,11 @@ const Game3 = (props) => {
                           }
                           src={checkout}
                           alt=""
-                          style={{ position: "absolute", bottom: 0, right: 0 }}
+                          style={{ position: "absolute", top: 0, right: 0 }}
                         />
-                        <div className={styles.cart}>
-                          <div className={styles.cartItems}>
-                            {state.cart.map((product, index) => (
-                              <div className={styles.cartItem} key={index}>
-                                <img
-                                  src={
-                                    state.ingredientsList.find(
-                                      (ingredient) =>
-                                        ingredient.name === product.name
-                                    ).image
-                                  }
-                                  alt=""
-                                  onClick={removeProduct(index)}
-                                  className={styles.cartItemImg}
-                                />
-                                <span>{product.count}</span>
-                              </div>
-                            ))}
-                          </div>
-                          <img src={cart} alt="" />
-                        </div>
+
+                        <ShopCart cart={state.cart} ingredientList={state.ingredientsList} onItemClick={removeProduct}/>
+
                       </div>
                     )}
 
@@ -611,56 +605,62 @@ const Game3 = (props) => {
                 );
               case "END_GAME":
                 return (
-                  <div>
-                    {state.timeUp ? (
-                      <div>
-                        <img src={hourglassEmpty} alt="" />
-                        <span>O tempo acabou!</span>
-                        <p lang="pt-br">
-                          Fazer compras pode ser mais complicado do que parece.
-                        </p>
-                        <p lang="en">
-                          Time is up! Doing the groceries might be harder than
-                          it looks.
-                        </p>
-                      </div>
-                    ) : (
-                      <div>
-                        <img src={hourglassFull} alt="" />
-                        <p lang="pt-br">Você finalizou em:</p>
-                        <p lang="en">Finished in:</p>
-                      </div>
-                    )}
+                  <div style={{display: 'flex', flexDirection: 'column', padding: '12% 20%', backgroundColor: state.timeUp? ' #F9AFA1' : '#D6E3F4'}}>
+                  <div style={{display: 'flex', width: '100%', height: '70%', flexDirection: 'row', justifyContent: 'space-around'}}>
+
+                    <div style={{position: 'relative'}}>
+                      <img style={{display: 'block', height: 100, margin: '0 auto'}} src={state.timeUp? hourglassEmpty : hourglassFull} alt="" />
+                      {state.timeUp && <div style={{textAlign: 'center', fontSize: 36,
+                      fontFamily: "Abril fatface",
+                      color: 'rgb(89, 49, 109)'}}>O tempo acabou!</div> }
+                      <p lang="pt-br" style={{textAlign: 'center', fontFamily: "Barlow", fontSize: 24, color: 'rgb(89, 49, 109)'}}>
+                        {endGameLines[state.timeUp? 0 : 1].text}
+                      </p>
+                      <hr style={{display: 'block', margin: '5% auto', width: '30%'}}/>
+                      <p lang="en" style={{textAlign: 'center', fontFamily: "Barlow", color: 'rgb(89, 49, 109)', fontStyle: 'italic'}}>
+                        {endGameLines[state.timeUp? 0 : 1].translation}
+                      </p>
+                    </div>
+
                     <div
-                      className="feedback-painel-2-content"
                       style={{
+                        position: 'relative', height: 300, width: '100%',
+                        paddingTop: 70,
+
                         backgroundImage: "url(" + blobLaranja + ")",
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center center',
+                        textAlign: 'center',
+                        fontSize: 92,
+                        fontFamily: "Abril fatface",
+                        color: 'rgb(89, 49, 109)'
                       }}
                     >
-                      {state.timeUp ? (
-                        <div> 0:00</div>
-                      ) : (
-                        <div>
-                          {zeroFill(
+                      {state.timeUp ? "0:00" :
+                        `${zeroFill(
                             Math.floor(
                               (missionData.seconds - state.remainingTime) / 60
                             ).toString(),
                             2
                           )}
                           :
-                          {zeroFill(
+                          ${zeroFill(
                             (
                               (missionData.seconds - state.remainingTime) %
                               60
                             ).toString(),
                             2
-                          )}
-                        </div>
-                      )}
+                          )}`
+                      }
+
                     </div>
+                  </div>
+
+                  <div style={{display: 'block', margin: '0 auto', marginTop: '10%'}}>
                     <button onClick={restart}>Tentar novamente</button>
                     <Link to={"/userspace"}>Sair do jogo</Link>
                   </div>
+                </div>
                 );
               default:
                 return <div>Erro</div>;
@@ -713,49 +713,3 @@ const Game3 = (props) => {
 };
 
 export default Game3;
-
-/*
-{state.moneySelection && (
-  <div>
-    <div className="selected-money">
-      {state.payment.map((money, index) => (
-        <div className="payment-money">
-          <img
-            src={
-              missionData.money.find((moneyObj) => {
-                return moneyObj.value === money.value;
-              }).image.url
-            }
-            alt=""
-            onClick={removeFromPayment(index)}
-            className="payment-money-img"
-          />
-          <span>{money.count}</span>
-        </div>
-      ))}
-    </div>
-
-    <div>
-      <div>
-        {missionData.money.map((money, index) => (
-          <Button onClick={addToPayment(money.value)}>
-            <img
-              style={{ width: 50 }}
-              src={money.image.url}
-              alt="money"
-            />
-          </Button>
-        ))}
-      </div>
-      <img src={wallet} alt="" />
-      <button
-        className="btn btn-center"
-        id="btn-do-payment"
-        onClick={doPayment}
-      >
-        Continuar
-      </button>
-    </div>
-  </div>
-)}
-*/
