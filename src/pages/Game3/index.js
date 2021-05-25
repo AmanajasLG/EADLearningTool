@@ -605,7 +605,7 @@ const Game3 = (props) => {
                 );
               case "END_GAME":
                 return (
-                  <div style={{display: 'flex', flexDirection: 'column', padding: '12% 20%'}}>
+                  <div style={{display: 'flex', flexDirection: 'column', padding: '12% 20%', backgroundColor: state.timeUp? ' #F9AFA1' : '#D6E3F4'}}>
                   <div style={{display: 'flex', width: '100%', height: '70%', flexDirection: 'row', justifyContent: 'space-around'}}>
 
                     <div style={{position: 'relative'}}>
@@ -616,8 +616,8 @@ const Game3 = (props) => {
                       <p lang="pt-br" style={{textAlign: 'center', fontFamily: "Barlow", fontSize: 24, color: 'rgb(89, 49, 109)'}}>
                         {endGameLines[state.timeUp? 0 : 1].text}
                       </p>
-                      <hr style={{display: 'block', margin: '0 auto', width: '30%'}}/>
-                      <p lang="en" style={{textAlign: 'center', fontFamily: "Barlow", color: '#BCACC4', fontStyle: 'italic'}}>
+                      <hr style={{display: 'block', margin: '5% auto', width: '30%'}}/>
+                      <p lang="en" style={{textAlign: 'center', fontFamily: "Barlow", color: 'rgb(89, 49, 109)', fontStyle: 'italic'}}>
                         {endGameLines[state.timeUp? 0 : 1].translation}
                       </p>
                     </div>
