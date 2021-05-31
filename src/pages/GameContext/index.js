@@ -9,6 +9,8 @@ import { settings } from "../../img";
 import "./index.scss";
 import { headerConstants } from "../../_constants";
 
+const dimensions = { width: 16, height: 9}
+
 const GameContext = (props) => {
   const [state, setState] = React.useState({
     volume: 15,
@@ -18,11 +20,12 @@ const GameContext = (props) => {
     gameConfig: false,
     back: false,
     config: false,
+    screenConstraint: window.innerWidth / window.innerHeight > dimensions.width / dimensions.height ? 'HEIGHT' : 'WIDTH'
   });
 
   const dispatch = useDispatch();
-  const music = useSelector((state) => state.music);
-  let headerInfo = useSelector((state) => state.header);
+  const music = useSelector( state  => state.music)
+  let headerInfo = useSelector( state  => state.header)
 
   let { children } = props;
   children = { ...children, props: { ...props } };
@@ -35,8 +38,28 @@ const GameContext = (props) => {
     };
   }, [dispatch]);
 
+  React.useEffect(() => {
+    //console.log('addResize check')
+    const checkResize = () => {
+      //console.log(`w,h ${window.innerWidth},${window.innerHeight} ratio: ${16/9}` )
+      if( window.innerWidth / window.innerHeight > dimensions.width / dimensions.height && state.screenConstraint === 'WIDTH')
+        setState(s => ({...s, screenConstraint: 'HEIGHT'}))
+      else if(window.innerWidth / window.innerHeight < dimensions.width / dimensions.height && state.screenConstraint === 'HEIGHT')
+        setState(s => ({...s, screenConstraint: 'WIDTH'}))
+    }
+
+    const removeResize = () => {
+      //console.log('Remove resizeCheck')
+      window.removeEventListener('resize', checkResize)
+      return checkResize
+    }
+
+    window.addEventListener('resize', checkResize)
+    return removeResize
+  })
+
   return (
-    <div id="game-context">
+    <React.Fragment>
       {headerInfo.state === headerConstants.STATES.HIDDEN && (
         <div
           id="floating-config-btn"
@@ -45,12 +68,6 @@ const GameContext = (props) => {
           <img src={settings} alt="config" />
         </div>
       )}
-      <ReactAudioPlayer
-        src={music.url}
-        autoPlay
-        volume={state.volume / 100}
-        loop={true}
-      />
       {state.config && (
         <ConfigWindow
           onConfig={() =>
@@ -83,9 +100,18 @@ const GameContext = (props) => {
           onClose={() => setState({ ...state, gameConfig: false })}
         />
       )}
-      {children}
+      <ReactAudioPlayer
+        src={music.url}
+        autoPlay
+        volume={state.volume / 100}
+        loop={true}
+      />
+      <div id="game-screen" className={ `${state.screenConstraint === 'WIDTH'? 'maxWidth' : 'maxHeight' } debug`}  >
+        {children}
+      </div>
       {state.back && <Redirect to="/userspace" />}
-    </div>
+    </React.Fragment>
   );
 };
+//${window.innerWidth / window.innerHeight > 16 / 9 ? 'maxHeight' : 'maxWidth'}
 export default GameContext;

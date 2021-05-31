@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { Button } from './Button';
+import Button from '../_components/Button';
 
 const buttonTemplate = {
   title: 'Example/Button',
   component: Button,
   argTypes: {
+    onClick: { action: 'clicked' },
     backgroundColor: { control: 'color' },
   },
 };
@@ -17,7 +18,9 @@ const Template = (args) => <Button {...args} />;
 export const Primary = Template.bind({});
 Primary.args = {
   primary: true,
-  label: 'Button',
+  blink: true,
+  children: 'Button',
+  data: {value1: 1, value2: 2}
 };
 
 export const Secondary = Template.bind({});

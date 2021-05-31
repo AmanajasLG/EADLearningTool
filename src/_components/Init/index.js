@@ -1,6 +1,8 @@
 import React from "react";
 import "./index.scss";
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { useDispatch, useSelector } from 'react-redux'
+import Button from '../Button'
 
 const Init = ({
   icon,
@@ -39,15 +41,15 @@ const Init = ({
 
         <div id="btns">
           {onBack && (
-            <button className="btn btn-center" id="btn-back" onClick={onBack}>
+            <Button blink onClick={onBack}>
               Voltar
-            </button>
+            </Button>
           )}
           {ready ?
             (onStart &&
-              <button className="btn btn-center" id="btn-start" onClick={onStart}>
+              <Button blink onClick={onStart}>
                 Iniciar
-              </button>
+              </Button>
             )
             :
             <span>

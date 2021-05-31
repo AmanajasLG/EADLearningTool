@@ -398,10 +398,9 @@ const Game3 = (props) => {
   //const { mission } = state
   //console.log('mission:', mission)
   return (
-    <div id="game2-wrapper">
-      {mission ? (
-        //verificar se é possível generalizar esses gameX-wrapper
-        <div id="game2-content">
+    <React.Fragment>
+      {!mission ? <div>Loading..</div> :
+        <React.Fragment>
           {(function renderScene() {
             switch (state.scene) {
               case "INIT":
@@ -667,10 +666,8 @@ const Game3 = (props) => {
             }
           })()}
           {state.back && <Redirect to={"/userspace"} />}
-        </div>
-      ) : (
-        <div>Loading..</div>
-      )}
+        </React.Fragment>
+      }
       {process.env.NODE_ENV === "development" && (
         <div>
           <button
@@ -708,7 +705,7 @@ const Game3 = (props) => {
           </button>
         </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 
