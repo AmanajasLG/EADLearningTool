@@ -32,7 +32,7 @@ import Tutorial from "./components/Tutorial";
 import DialogCharacter from "../../_components/DialogCharacter";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
-import ShopCart from './components/ShopCart'
+import ShopCart from "./components/ShopCart";
 
 import {
   cart,
@@ -52,14 +52,15 @@ import Recipe from "../../_components/Recipe";
 
 const endGameLines = [
   {
-    text:"Fazer compras pode ser mais complicado do que parece.",
-    translation: "Time is up! Doing the groceries might be harder than it looks."
+    text: "Fazer compras pode ser mais complicado do que parece.",
+    translation:
+      "Time is up! Doing the groceries might be harder than it looks.",
   },
   {
-    text:"Você finalizou em:",
-    translation: "Finished in:"
+    text: "Você finalizou em:",
+    translation: "Finished in:",
   },
-]
+];
 
 const Game3 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -151,7 +152,7 @@ const Game3 = (props) => {
           description: ingredient.description,
           type: ingredient.type,
           image: ingredient.asset.image ? ingredient.asset.image.url : "",
-          shelfImage: ingredient.shelfImage ? ingredient.shelfImage.url : "",
+          shelfImage: ingredient.asset.image ? ingredient.asset.image.url : "",
           tag:
             ingredient.measure === "unidade"
               ? `R$ ${ingredient.price.toFixed(2)}`
@@ -502,8 +503,11 @@ const Game3 = (props) => {
                           style={{ position: "absolute", top: 0, right: 0 }}
                         />
 
-                        <ShopCart cart={state.cart} ingredientList={state.ingredientsList} onItemClick={removeProduct}/>
-
+                        <ShopCart
+                          cart={state.cart}
+                          ingredientList={state.ingredientsList}
+                          onItemClick={removeProduct}
+                        />
                       </div>
                     )}
 
@@ -604,44 +608,100 @@ const Game3 = (props) => {
                 );
               case "END_GAME":
                 return (
-                  <div style={{display: 'flex', flexDirection: 'column', padding: '12% 20%', backgroundColor: state.timeUp? ' #F9AFA1' : '#D6E3F4'}}>
-                  <div style={{display: 'flex', width: '100%', height: '70%', flexDirection: 'row', justifyContent: 'space-around'}}>
-
-                    <div style={{position: 'relative'}}>
-                      <img style={{display: 'block', height: 100, margin: '0 auto'}} src={state.timeUp? hourglassEmpty : hourglassFull} alt="" />
-                      {state.timeUp && <div style={{textAlign: 'center', fontSize: 36,
-                      fontFamily: "Abril fatface",
-                      color: 'rgb(89, 49, 109)'}}>O tempo acabou!</div> }
-                      <p lang="pt-br" style={{textAlign: 'center', fontFamily: "Barlow", fontSize: 24, color: 'rgb(89, 49, 109)'}}>
-                        {endGameLines[state.timeUp? 0 : 1].text}
-                      </p>
-                      <hr style={{display: 'block', margin: '5% auto', width: '30%'}}/>
-                      <p lang="en" style={{textAlign: 'center', fontFamily: "Barlow", color: 'rgb(89, 49, 109)', fontStyle: 'italic'}}>
-                        {endGameLines[state.timeUp? 0 : 1].translation}
-                      </p>
-                    </div>
-
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      padding: "12% 20%",
+                      backgroundColor: state.timeUp ? " #F9AFA1" : "#D6E3F4",
+                    }}
+                  >
                     <div
                       style={{
-                        position: 'relative', height: 300, width: '100%',
-                        paddingTop: 70,
-
-                        backgroundImage: "url(" + blobLaranja + ")",
-                        backgroundRepeat: 'no-repeat',
-                        backgroundPosition: 'center center',
-                        textAlign: 'center',
-                        fontSize: 92,
-                        fontFamily: "Abril fatface",
-                        color: 'rgb(89, 49, 109)'
+                        display: "flex",
+                        width: "100%",
+                        height: "70%",
+                        flexDirection: "row",
+                        justifyContent: "space-around",
                       }}
                     >
-                      {state.timeUp ? "0:00" :
-                        `${zeroFill(
-                            Math.floor(
-                              (missionData.seconds - state.remainingTime) / 60
-                            ).toString(),
-                            2
-                          )}
+                      <div style={{ position: "relative" }}>
+                        <img
+                          style={{
+                            display: "block",
+                            height: 100,
+                            margin: "0 auto",
+                          }}
+                          src={state.timeUp ? hourglassEmpty : hourglassFull}
+                          alt=""
+                        />
+                        {state.timeUp && (
+                          <div
+                            style={{
+                              textAlign: "center",
+                              fontSize: 36,
+                              fontFamily: "Abril fatface",
+                              color: "rgb(89, 49, 109)",
+                            }}
+                          >
+                            O tempo acabou!
+                          </div>
+                        )}
+                        <p
+                          lang="pt-br"
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "Barlow",
+                            fontSize: 24,
+                            color: "rgb(89, 49, 109)",
+                          }}
+                        >
+                          {endGameLines[state.timeUp ? 0 : 1].text}
+                        </p>
+                        <hr
+                          style={{
+                            display: "block",
+                            margin: "5% auto",
+                            width: "30%",
+                          }}
+                        />
+                        <p
+                          lang="en"
+                          style={{
+                            textAlign: "center",
+                            fontFamily: "Barlow",
+                            color: "rgb(89, 49, 109)",
+                            fontStyle: "italic",
+                          }}
+                        >
+                          {endGameLines[state.timeUp ? 0 : 1].translation}
+                        </p>
+                      </div>
+
+                      <div
+                        style={{
+                          position: "relative",
+                          height: 300,
+                          width: "100%",
+                          paddingTop: 70,
+
+                          backgroundImage: "url(" + blobLaranja + ")",
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center center",
+                          textAlign: "center",
+                          fontSize: 92,
+                          fontFamily: "Abril fatface",
+                          color: "rgb(89, 49, 109)",
+                        }}
+                      >
+                        {state.timeUp
+                          ? "0:00"
+                          : `${zeroFill(
+                              Math.floor(
+                                (missionData.seconds - state.remainingTime) / 60
+                              ).toString(),
+                              2
+                            )}
                           :
                           ${zeroFill(
                             (
@@ -649,17 +709,21 @@ const Game3 = (props) => {
                               60
                             ).toString(),
                             2
-                          )}`
-                      }
+                          )}`}
+                      </div>
+                    </div>
 
+                    <div
+                      style={{
+                        display: "block",
+                        margin: "0 auto",
+                        marginTop: "10%",
+                      }}
+                    >
+                      <button onClick={restart}>Tentar novamente</button>
+                      <Link to={"/userspace"}>Sair do jogo</Link>
                     </div>
                   </div>
-
-                  <div style={{display: 'block', margin: '0 auto', marginTop: '10%'}}>
-                    <button onClick={restart}>Tentar novamente</button>
-                    <Link to={"/userspace"}>Sair do jogo</Link>
-                  </div>
-                </div>
                 );
               default:
                 return <div>Erro</div>;
