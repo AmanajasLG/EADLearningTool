@@ -8,10 +8,22 @@
   background-color: #F9AFA1;
   border-radius: 50px 50px 50px 0px;
   cursor: pointer;
-  transition: 100ms linear
+}
+
+@keyframes inflate{
+  0% { transform: scale(1, 1); }
+  30% { transform: scale(1.2, 1.2); }
+  100% { transform: scale(1.1, 1.1); }
+}
+
+@keyframes jump{
+  0% { transform: translateY(-10%); }
+  30% { transform: translateY(-30%); }
+  100% { transform: translateY(-20%); }
 }
 
 .bttn.blink:hover {
   color: white;
   background-color: #59316d;
+  animation: inflate .1s;
 }
