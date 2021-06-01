@@ -34,6 +34,7 @@ import lamp_apagada from "./lampada_apagada.svg";
 import lamp_acesa from "./lampada_acesa.svg";
 import iconDicas from "./ícone_jogo1.svg";
 import blobAzul from "./bg-forma-azul.svg";
+import blobAzul2 from "./bg-forma-azul2.svg";
 import blobVerde from "./bg-forma-verde.svg";
 import blobLowScore from "./Score Baixo_blob.svg";
 import blobLaranja from "./bg-forma-laranja.svg";
