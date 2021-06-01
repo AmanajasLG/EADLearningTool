@@ -5,8 +5,9 @@ import styles from "./index.module.scss";
 
 import { ingredientsListBg, listCheck, listCheckbox, listIcon } from "../../img";
 
-const Recipe = ({ ingredientsList, hasImage, showCheck, iconShouldShow }) => {
+const Recipe = ({ ingredientsList, hasImage, showCheck, iconShouldShow, onMouseEnter, onMouseLeave }) => {
   const [state, setState] = React.useState(false);
+
   return (
     <div className={styles["shop-list-div"]}>
       {state &&
@@ -14,7 +15,7 @@ const Recipe = ({ ingredientsList, hasImage, showCheck, iconShouldShow }) => {
           <div>
             <img src={ingredientsListBg}/>
             <div className={styles["shop-list"]}>
-              { ingredientsList.map((ingredient, index) => (
+              { ingredientsList? ingredientsList.map((ingredient, index) => (
                 <div className={styles["shop-list-item-container"]} key={index}>
                   <div className={styles["shop-list-item"]}>
                     <img src={listCheckbox} alt=""/>
@@ -23,15 +24,21 @@ const Recipe = ({ ingredientsList, hasImage, showCheck, iconShouldShow }) => {
                     <span>{parse(marked.parseInline(ingredient.description))}</span>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className={styles["shop-list-item-container"]}>
+                  <div className={styles["shop-list-item"]}>
+                    <span>Nenhum ingrediente encontrado na lista :(</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
       }
       {iconShouldShow && (
         <img
-          onMouseEnter={() => setState(true)}
-          onMouseLeave={() => setState(false)}
+          onMouseEnter={() => {setState(true); onMouseEnter?.()}}
+          onMouseLeave={() => {setState(false); onMouseLeave?.()}}
           src={listIcon}
           alt=""
           className={styles["list-icon"]}

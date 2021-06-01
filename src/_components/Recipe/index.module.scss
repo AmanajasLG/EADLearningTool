@@ -10,6 +10,11 @@
   inset: 0 0 0 0;
   position: absolute;
   display: flex;
+  pointer-events: none;
+
+  * {
+    pointer-events: all;
+  }
 }
 
 .overlay-shop-list {

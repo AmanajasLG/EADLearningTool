@@ -16,6 +16,7 @@ import {
 import { zeroFill } from "../../../../_helpers";
 import { parser } from "marked";
 import htmlparse from "html-react-parser";
+import Recipe from "../../../../_components/Recipe";
 
 const Tutorial = ({
   chef,
@@ -141,11 +142,13 @@ const Tutorial = ({
               alt=""
             />
           </div>
-          <img // Notepad
-            onClick={shopListNextLine}
-            src={listIcon}
-            alt=""
-            className={gameStyles.listIcon + " tutorial-list-icon"}
+          <Recipe
+            ingredientsList={ingredientsList}
+            hasImage={true}
+            showCheck={(ingredient) => false}
+            iconShouldShow={state.tutorialLine === 3}
+            onMouseEnter={shopListNextLine}
+            onMouseLeave={shopListNextLine}
           />
           <img // Dinheiro
             onClick={() =>
@@ -158,33 +161,6 @@ const Tutorial = ({
             alt=""
             className={gameStyles.moneyIcon + " tutorial-money-icon"}
           />
-          {state.shopList && (
-            <div
-              className={gameStyles.shopList}
-              style={{
-                backgroundImage: "url(" + ingredientsListBg + ")",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "contain",
-              }}
-            >
-              {ingredientsList.map((ingredient, index) => (
-                <div key={index}>
-                  <img
-                    src={listCheck}
-                    alt=""
-                    className={gameStyles.shopListItemCheck}
-                  />
-
-                  <img
-                    src={ingredient.image}
-                    alt=""
-                    className={gameStyles.shopListItemImg}
-                  />
-                  {ingredient.description}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
       )}
 
