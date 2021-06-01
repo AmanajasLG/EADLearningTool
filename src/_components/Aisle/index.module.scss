@@ -1,96 +1,115 @@
 #aisle {
-  display: flex;
-  flex-direction: row;
-  justify-content: stretch;
-  align-items: center;
-  position: relative;
-  align-self: center;
-  margin-top: 30vh;
+	display: flex;
+	flex-direction: row;
+	justify-content: stretch;
+	align-items: center;
+	position: relative;
+	align-self: center;
+	margin-top: 100px;
 }
 
 #aisle > * {
-  margin: 0px 20px;
+	margin: 0px 20px;
 }
 
 #shelves {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  min-width: 0;
-  flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	position: relative;
+	min-width: 0;
+	flex-grow: 1;
 }
 
 #shelves > img {
-  width: 100%;
+	width: 100%;
 }
 
 .items {
-  position: absolute;
-  inset: -33% 0 0 0;
-  display: grid;
-  grid-template-rows: 30.5% 3% 30.5% 3% 30% 3%;
-  align-items: flex-end;
+	position: absolute;
+	inset: -33% 0 0 0;
+	display: grid;
+	grid-template-rows: 30.5% 3% 30.5% 3% 30% 3%;
+	align-items: flex-end;
 }
 
 .shelfPrice {
-  margin-left: auto;
-  margin-right: auto;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #FFF;
+	padding: 10px;
+	border: 2px solid #59316D;
+	border-radius: 15px;
+	z-index: 1;
+	min-width: 150px;
+	text-align: center;
+	align-self: center;
+	font-family: 'Barlow';
+	font-weight: 600;
+	font-size: 1.2rem;
 }
 
 .products {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-end;
-  height: calc(100% - 5px);
-  margin-block-end: 5px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-end;
+	height: calc(100% - 5px);
+	margin-block-end: 5px;
 }
 
 /* Tooltip container */
 .tooltip {
-  cursor: pointer;
-  position: relative;
-  display: inline-block;
-  background-size: contain;
-  flex-grow: 1;
-  height: inherit;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  overflow: visible;
+	cursor: pointer;
+	position: relative;
+	display: inline-block;
+	background-size: contain;
+	flex-grow: 1;
+	height: inherit;
+	background-repeat: no-repeat;
+	background-position: center bottom;
+	overflow: visible;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+.tooltip img {
+	// margin: 0 -40%;
+	pointer-events: none;
 }
 
 /* Tooltip text */
 .tooltip .tooltiptext {
-  visibility: hidden;
-  width: 100%;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
-
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  top: 105%;
-  z-index: 1;
+	visibility: hidden;
+	width: 100%;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+	
+	/* Position the tooltip text - see examples below! */
+	position: absolute;
+	top: 105%;
+	z-index: 2;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
-  visibility: visible;
+	visibility: visible;
 }
 
 .btnChangeAisle {
-  border: none;
-  padding: 15px;
-  font-size: 5rem;
-  background-color: transparent;
-  pointer-events: all;
-  cursor: pointer;
-  color: #59316d;
+	border: none;
+	padding: 15px;
+	font-size: 5rem;
+	background-color: transparent;
+	pointer-events: all;
+	cursor: pointer;
+	color: #59316d;
 }
 
 .btnChangeAisle:hover {
-  color: #f9afa1;
+	color: #f9afa1;
 }
