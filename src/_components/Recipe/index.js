@@ -1,68 +1,47 @@
 import React from "react";
 import marked from "marked";
 import parse from "html-react-parser";
-import "./index.scss";
+import styles from "./index.module.scss";
 
-import { ingredientsListBg, listCheck, listIcon } from "../../img";
+import { ingredientsListBg, listCheck, listCheckbox, listIcon } from "../../img";
 
-const Recipe = ({ ingredientsList, hasImage, showCheck, iconShouldShow }) => {
+const Recipe = ({ ingredientsList, hasImage, showCheck, iconShouldShow, onMouseEnter, onMouseLeave }) => {
   const [state, setState] = React.useState(false);
+
   return (
-    <div className="shop-list-div">
-      {state && (
-        <div className="overlay-shop-list">
-          {/* <img
-            src={ingredientsListBg}
-            alt="ingredients-list-bg"
-            className="shop-list shop-list-img"
-          /> */}
-          <div
-            className="shop-list shop-list-content"
-            style={{
-              backgroundImage: "url(" + ingredientsListBg + ")",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "contain",
-              backgroundPosition: "top center",
-            }}
-          >
-            {ingredientsList.map((ingredient, index) => (
-              <div className="shop-list-item">
-                {showCheck(ingredient) ? (
-                  <img
-                    src={listCheck}
-                    alt=""
-                    className="shop-list-item-check"
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: 20,
-                      height: 20,
-                      display: "inline-block",
-                    }}
-                  ></div>
-                )}{" "}
-                {hasImage ? (
-                  <img
-                    src={ingredient.image}
-                    alt=""
-                    className="shop-list-item-img"
-                  />
-                ) : (
-                  <span>{ingredient.order}. </span>
-                )}
-                {parse(marked.parseInline(ingredient.description))};
-              </div>
-            ))}
+    <div className={styles["shop-list-div"]}>
+      {state &&
+        <div className={styles["overlay-shop-list"]}>
+          <div>
+            <img src={ingredientsListBg}/>
+            <div className={styles["shop-list"]}>
+              { ingredientsList? ingredientsList.map((ingredient, index) => (
+                <div className={styles["shop-list-item-container"]} key={index}>
+                  <div className={styles["shop-list-item"]}>
+                    <img src={listCheckbox} alt=""/>
+                    {showCheck(ingredient) && (<img src={listCheck} className={styles["checkmark"]} alt="" />)}
+                    {hasImage && (<img src={ingredient.image} className={styles["shop-list-item-img"]} alt=""/>)}
+                    <span>{parse(marked.parseInline(ingredient.description))}</span>
+                  </div>
+                </div>
+              )) : (
+                <div className={styles["shop-list-item-container"]}>
+                  <div className={styles["shop-list-item"]}>
+                    <span>Nenhum ingrediente encontrado na lista :(</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      )}
+      }
       {iconShouldShow && (
         <img
-          onClick={() => setState(!state)}
+          onMouseEnter={() => {setState(true); onMouseEnter?.()}}
+          onMouseLeave={() => {setState(false); onMouseLeave?.()}}
           src={listIcon}
           alt=""
-          className="list-icon"
+          className={styles["list-icon"]}
         />
       )}
     </div>
