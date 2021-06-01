@@ -46,9 +46,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
       {state.screen === 2 && (
         <div className="intro-recipe">
           <div style={{width: 400, marginLeft: '10%'}}>
-            <div>
-              <img src={recipe.image} alt="" style={{width: 400}}/>
-            </div>
+            <img className="dishPresentation" src={recipe.image} alt=""/>
             <h1 className="margin-half-top type-l type-display type-center">
               {recipe.name}
             </h1>

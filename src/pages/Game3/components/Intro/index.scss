@@ -1,3 +1,19 @@
+.dishPresentation{
+  display: block;
+  width: 300px;
+  animation-name: seesaw;
+  animation-duration: 50s;
+  animation-iteration-count: infinity;
+}
+
+@keyframes seesaw{
+  0% { transform: rotate(0), scale(1,1); }
+  30% { transform: rotate(-10deg); }
+  50% { transform: scale(1.1 , 1.1);}
+  60% { transform: rotate(10deg); }
+  100% { transform: rotate(0), scale(1, 1); }
+}
+
 .intro-recipe {
   display: flex;
   flex-direction: row;

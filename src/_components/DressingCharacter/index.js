@@ -1,8 +1,8 @@
 import React from 'react'
 
-const DressingCharacter = ({clothesTypes, clothes, onRemoveClick}) => {
+const DressingCharacter = ({clothesTypes, clothes, onRemoveClick, ...props}) => {
   return(
-    <div>
+    <div {...props}>
       <img src="" alt="character"/>
       <div>
         {clothesTypes.map((item, index) =>

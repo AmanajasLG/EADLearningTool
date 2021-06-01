@@ -12,9 +12,9 @@ const style = (alternative) => ({
   position: 'absolute',
   bottom: '0px',
   left: '15%',
-  width: '80%',
-
+  width: '80%'
 })
+
 const DialogBox = (props) => {
   return(
     <div style={style(props.alternative)}>

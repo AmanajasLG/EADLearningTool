@@ -4,16 +4,17 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Button from '@material-ui/core/Button'
 
-const Wardrobe = ({clothes, onClothesClick}) => {
+const Wardrobe = ({clothes, onClothesClick, ...props}) => {
   const [state, setState] = React.useState(0)
+  const labels = ["Head", "Top", "Bottom", "Shoes"]
+
   return(
-    <div>
-      <Tabs value={state} onChange={(e, value) => setState(value)}>
-        <Tab label="Head"></Tab>
-        <Tab label="Top"></Tab>
-        <Tab label="Bottom"></Tab>
-        <Tab label="Shoes"></Tab>
-      </Tabs>
+    <div {...props}>
+      <div>
+        {labels.map((label, index) =>
+          <button onClick={() => setState(index)}>{label}</button>
+        )}
+      </div>
       <div>
         {clothes.filter( item => item.type === state)
         .map((item, index) =>

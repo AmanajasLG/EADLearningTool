@@ -7,15 +7,7 @@ import './index.scss'
 
 const IngredientList = ({children}) => {
   return(
-    <div style={{
-      backgroundImage: `url(${ingredientsListBg})`,
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 570, width: 570,
-      paddingTop: 76, paddingLeft: 108,
-      transformOrigin: 'center center',
-      transform: `rotate(${21}deg)`,
-      marginTop: 10
-    }}>
+    <div className="ingredientList">
       <div style={{position: 'absolute', width: 400}}>
         {children}
       </div>
