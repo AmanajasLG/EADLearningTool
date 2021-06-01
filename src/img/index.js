@@ -15,6 +15,7 @@ import cart from "./Game3/cart.svg";
 import ingredientsListBg from "./Game3/ingredients-list.svg";
 import recipeBg from "./Game3/recipe-bg.svg";
 import listCheck from "./Game3/check.svg";
+import listCheckbox from "./Game3/checkbox.svg";
 import listIcon from "./Game3/list-icon.svg";
 import checkout from "./Game3/checkout.svg";
 import wallet from "./Game3/wallet.svg";
@@ -54,6 +55,7 @@ export {
   ingredientsListBg,
   recipeBg,
   listCheck,
+  listCheckbox,
   listIcon,
   checkout,
   wallet,
