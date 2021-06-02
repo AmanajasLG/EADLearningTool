@@ -20,7 +20,7 @@ import {
 } from "../../_actions";
 import { headerConstants } from "../../_constants";
 
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 
 import initialState from "./initialState";
 
@@ -29,24 +29,24 @@ import Timer from "../../_components/Timer";
 import Aisle from "../../_components/Aisle";
 import Intro from "./components/Intro";
 import Tutorial from "./components/Tutorial";
-import DialogCharacter from "../../_components/DialogCharacter";
+// import DialogCharacter from "../../_components/DialogCharacter";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
 import ShopCart from "./components/ShopCart";
 
 import {
   cart,
-  ingredientsListBg,
-  recipeBg,
-  listCheck,
-  listIcon,
+  // ingredientsListBg,
+  // recipeBg,
+  // listCheck,
+  // listIcon,
   checkout,
-  wallet,
+  // wallet,
   blobLaranja,
   hourglassFull,
   hourglassEmpty,
   cashierTable,
-  cashierBg,
+  // cashierBg,
 } from "../../img";
 import Recipe from "../../_components/Recipe";
 

@@ -142,7 +142,7 @@ const Game2 = (props) => {
     return () => {
       document.removeEventListener("mousedown", getClickedObject);
     };
-  }, [dispatch, play_sessionsActions, state.tracking, currentPlaySession]);
+  }, [dispatch, play_sessionsActions, state.tracking, currentPlaySession, mission]);
   /*//Testing tool
 	if(error){
 		error = null

@@ -13,7 +13,7 @@ const Recipe = ({ ingredientsList, hasImage, showCheck, iconShouldShow, onMouseE
       {state &&
         <div className={styles["overlay-shop-list"]}>
           <div>
-            <img src={ingredientsListBg}/>
+            <img src={ingredientsListBg} alt=""/>
             <div className={styles["shop-list"]}>
               { ingredientsList? ingredientsList.map((ingredient, index) => (
                 <div className={styles["shop-list-item-container"]} key={index}>

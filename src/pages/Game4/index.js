@@ -1,7 +1,8 @@
 import React from "react";
 import "./index.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Redirect } from "react-router-dom";
+// import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 import {
   apiActions,
@@ -20,7 +21,7 @@ import initialState from "./initialState";
 
 import { zeroFill, shuffle } from "../../_helpers";
 import {
-  listIcon,
+  // listIcon,
   silverCloche,
   hourglassEmpty,
   hourglassFull,
