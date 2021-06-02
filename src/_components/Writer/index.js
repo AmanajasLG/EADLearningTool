@@ -9,7 +9,7 @@ import React from 'react'
  * @param  {number} props.afterWrittenTime	Delay, em milissegundos, antes de avisar que terminou de escrever
  */
 const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) => {
-	const [state, setState] = React.useState({text: text, index: 0})
+	const [state, setState] = React.useState({text: text, index: 0, done: false})
 
 	React.useEffect( () => {
 	if( text !== state.text )
@@ -20,10 +20,19 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) =>
 		let timeoutID
 		if( state.index < state.text.length ) {
 			timeoutID = setTimeout( () => { setState({...state, index: state.index + 1}) }, characterTime)
-		} else {
-			timeoutID = setTimeout( onWritten, afterWrittenTime )
 		}
-		return () => {clearTimeout(timeoutID)}
+		else if(!state.done)
+		{
+			setState({...state, done: true})
+			if(onWritten){
+				if(afterWrittenTime && afterWrittenTime > 0)
+					timeoutID = setTimeout( onWritten, afterWrittenTime )
+				else
+					onWritten()
+			}
+		}
+
+		return () => clearTimeout(timeoutID)
 	})
 
 	return(

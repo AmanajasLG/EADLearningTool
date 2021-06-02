@@ -6,7 +6,7 @@ import Writer from '../../../../_components/Writer'
 import './index.scss'
 
 const msPerCharacter = 30;
-const waitAfterWritten = 3000;
+const waitAfterWritten = 1000;
 
 const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props}) => {
   const [state, setState] = React.useState({writerDone: false})
