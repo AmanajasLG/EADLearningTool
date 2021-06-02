@@ -36,7 +36,7 @@ const Payment = ({onConfirm, moneyList}) => {
   };
 
   return(
-    <div style={{position: 'absolute', right: 0, bottom: 100 }}>
+    <div style={{position: 'absolute', right: 0, bottom: 100, width: '60%' }}>
       <div style={{display: 'grid', gridTemplateRows: 'auto auto', gridTemplateColumns: 'auto auto auto', paddingRight: 300, marginBottom: 50}}className="selected-money">
         {state.payment.map((money, index) => (
           <div key={index} style={{position: 'relative'}}>

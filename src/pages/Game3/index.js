@@ -561,13 +561,7 @@ const Game3 = (props) => {
                 )
               case "CASHIER":
                 return (
-                  <div
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  >
+                  <React.Fragment>
                     <Timer
                       run={state.runTimer}
                       seconds={state.remainingTime}
@@ -579,30 +573,28 @@ const Game3 = (props) => {
                       }}
                       onEnd={() => endGame(true)}
                     />
-                    <div id="dialog-interact">
-                      <ChefDialog
-                        chef={missionData.character}
-                        hideDialog={state.moneySelection}
-                        chefFeeling={
-                          state.change < 0 ? "wrongPayment" : "default"
-                        }
-                        text={state.cashierLines.text}
-                        translation={state.cashierLines.translation}
-                        onContinue={state.cashierContinue}
-                      />
-                      <img
-                        style={{ zIndex: 0, width: 500 }}
-                        src={cashierTable}
-                        alt=""
-                      />
-                    </div>
+                    <ChefDialog
+                      chef={missionData.character}
+                      hideDialog={state.moneySelection}
+                      chefFeeling={
+                        state.change < 0 ? "wrongPayment" : "default"
+                      }
+                      text={state.cashierLines.text}
+                      translation={state.cashierLines.translation}
+                      onContinue={state.cashierContinue}
+                    />
+                    <img
+                      style={{ position: 'absolute', bottom: '-10%', zIndex: 3, width: '40%' }}
+                      src={cashierTable}
+                      alt=""
+                    />
                     {state.moneySelection && (
                       <Payment
                         moneyList={missionData.money}
                         onConfirm={(value) => () => doPayment(value)}
                       />
                     )}
-                  </div>
+                  </React.Fragment>
                 );
               case "END_GAME":
                 return (
