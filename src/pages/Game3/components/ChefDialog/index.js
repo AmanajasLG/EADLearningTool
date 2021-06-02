@@ -10,10 +10,7 @@ const waitAfterWritten = 1000;
 
 const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props}) => {
   const [state, setState] = React.useState({writerDone: false})
-  const onWriterDone = () => {
-    console.log('Finished')
-    setState({...state, writerDone: true})
-  }
+  const onWriterDone = () => setState({...state, writerDone: true})
 
   return (
     <React.Fragment>

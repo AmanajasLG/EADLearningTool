@@ -36,17 +36,23 @@
   background-color: #cbe7de;
   border-radius: 20px 0px 0px 20px;
   padding: 2vh 2vw;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: 25% 25% 25% 25%;
 }
 
 .cartItem {
   display: inline-block;
-  margin: 10px;
+  margin: auto;
   cursor: pointer;
+  padding: 5%;
+  position: relative;
 }
 
 .cartItem > span {
-  display: inline-block;
-  transform: translateX(-100%);
+  position: absolute;
+  left: 3%;
+  bottom: 3%;
   background-color: #F9AFA1;
   border-radius: 100px;
   width: 1.5rem;

@@ -2,7 +2,7 @@ import React from "react";
 import { zeroFill } from "../../_helpers";
 import "./index.scss";
 
-const Timer = ({ seconds, onEnd, onStop, run = true }) => {
+const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
   const [state, setState] = React.useState({
     seconds: seconds,
     timeout: null,
@@ -39,7 +39,7 @@ const Timer = ({ seconds, onEnd, onStop, run = true }) => {
   }, [state, onEnd, onStop, run, seconds]);
 
   return (
-    <div id="timer">
+    <div id="timer" {...props}>
       {zeroFill(Math.floor(state.seconds / 60).toString(), 2)}:
       {zeroFill((state.seconds % 60).toString(), 2)}
     </div>

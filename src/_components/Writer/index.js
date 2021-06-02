@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 /**
  * Componente para escrita de texto caracter a caracter
  *
@@ -13,6 +14,7 @@ import sound from '../../sounds/writerLetter3.flac'
 
 const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) => {
 	const [state, setState] = React.useState({text: text, index: 0})
+	const volume = useSelector( state => state.music.volume)
 
 	React.useEffect( () => {
 	if( text !== state.text )
@@ -24,7 +26,7 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) =>
 		if( state.index < state.text.length ) {
 			timeoutID = setTimeout( () => {
 				let audio = new Audio(sound)
-				audio.volume = .1
+				audio.volume = volume / 1000
 				audio.play()
 				setState({...state, index: state.index + 1})
 			}, characterTime)
@@ -39,10 +41,7 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) =>
 			}
 		}
 
-		return () => {
-			console.log('clear called')
-			clearTimeout(timeoutID)
-		}
+		return () => clearTimeout(timeoutID)
 	}, [state.index])
 
 	return(

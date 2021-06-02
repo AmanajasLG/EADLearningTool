@@ -461,19 +461,14 @@ const Game3 = (props) => {
                 );
               case "MARKET":
                 return (
-                  <div>
-                    <Timer
-                      run={state.runTimer}
+                  <React.Fragment>
+                    <Timer style={{position: 'absolute', top: '5%', left: '50%'}}
+                      run={false/*state.runTimer*/}
                       seconds={missionData.seconds}
-                      onStop={(remaining) => {
-                        setState({
-                          ...state,
-                          remainingTime: remaining,
-                        });
-                      }}
+                      onStop={(remaining) => setState({...state, remainingTime: remaining}) }
                       onEnd={() => endGame(true)}
                     />
-                    <Recipe
+                  <Recipe
                       ingredientsList={state.ingredientsList}
                       hasImage={true}
                       showCheck={(ingredient) => checkShoppingList(ingredient)}
@@ -500,7 +495,7 @@ const Game3 = (props) => {
                           }
                           src={checkout}
                           alt=""
-                          style={{ position: "absolute", top: "4vh", right: "8vw" }}
+                          style={{ position: "absolute", width: '10%', top: "4vh", right: "8vw" }}
                         />
 
                         <ShopCart
@@ -559,8 +554,8 @@ const Game3 = (props) => {
                         <img src={cart} alt="" />
                       </div>
                     )}
-                  </div>
-                );
+                  </React.Fragment>
+                )
               case "CASHIER":
                 return (
                   <div

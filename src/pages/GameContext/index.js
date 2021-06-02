@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { headerActions } from "../../_actions";
+import { headerActions, musicActions } from "../../_actions";
 import ConfigWindow from "../../_components/ConfigWindow";
 import GameConfig from "../../_components/GameConfig";
 import ReactAudioPlayer from "react-audio-player";
@@ -13,7 +13,6 @@ const dimensions = { width: 16, height: 9}
 
 const GameContext = (props) => {
   const [state, setState] = React.useState({
-    volume: 15,
     fontSize: 12,
     assistMode: false,
     accessibility: "NONE",
@@ -80,20 +79,14 @@ const GameContext = (props) => {
       )}
       {state.gameConfig && (
         <GameConfig
-          volume={state.volume}
-          onVolumeMute={() => setState({ ...state, volume: 0 })}
-          onVolumeUp={() => setState({ ...state, volume: 100 })}
-          onVolumeChange={(e, newValue) =>
-            setState({ ...state, volume: newValue })
-          }
+          volume={music.volume}
+          onVolumeMute={() => dispatch(musicActions.volume(0)) }
+          onVolumeUp={() => dispatch(musicActions.volume(100)) }
+          onVolumeChange={(e, newValue) => dispatch(musicActions.volume(newValue)) }
           fontSize={state.fontSize}
-          onFontSizeChange={(e, newValue) =>
-            setState({ ...state, fontSize: newValue })
-          }
+          onFontSizeChange={(e, newValue) => setState({ ...state, fontSize: newValue }) }
           assistMode={state.assistMode}
-          onAssistModeChange={(e) =>
-            setState({ ...state, assistMode: e.target.checked })
-          }
+          onAssistModeChange={(e) => setState({ ...state, assistMode: e.target.checked }) }
           onAccessibilityLeft={() => {}}
           onAccessibilityRight={() => {}}
           onBack={() => setState({ ...state, gameConfig: false, config: true })}
@@ -103,7 +96,7 @@ const GameContext = (props) => {
       <ReactAudioPlayer
         src={music.url}
         autoPlay
-        volume={state.volume / 100}
+        volume={music.volume / 100}
         loop={true}
       />
       <div id="game-screen" className={ `${state.screenConstraint === 'WIDTH'? 'maxWidth' : 'maxHeight' } debug`}  >

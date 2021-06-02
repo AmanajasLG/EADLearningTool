@@ -36,7 +36,7 @@ const Recipe = ({ ingredientsList, hasImage, showCheck, iconShouldShow, onMouseE
         </div>
       }
       {iconShouldShow && (
-        <img
+        <img style={{width: '10%'}}
           onMouseEnter={() => {setState(true); onMouseEnter?.()}}
           onMouseLeave={() => {setState(false); onMouseLeave?.()}}
           src={listIcon}

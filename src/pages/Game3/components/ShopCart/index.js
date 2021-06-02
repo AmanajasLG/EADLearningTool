@@ -8,7 +8,7 @@ const ShopCart = ({cart, ingredientList, onItemClick}) => {
         <div className={styles.cartItems}>
           {cart.map((product, index) => (
             <div className={styles.cartItem} key={index}>
-              <img
+              <img style={{width: '100%'}}
                 src={
                   ingredientList.find(
                     (ingredient) =>

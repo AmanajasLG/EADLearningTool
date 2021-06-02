@@ -1,3 +1,4 @@
 export const musicConstants = {
-	SET:	'SET'
+	SET:	'SET',
+	VOLUME: 'VOLUME'
 }
