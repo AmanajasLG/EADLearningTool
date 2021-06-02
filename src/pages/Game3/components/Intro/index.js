@@ -21,16 +21,12 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
   const instructions = instructionText(recipe.name, recipe.nameTranslate)
 
   return (
-    <div id="room-itself" className="intro" style={{width: '100%', height: '100%'}}>
+    <React.Fragment>
       {state.screen === 0 && (
-        <div id="dialog-interact"
-          style={{width: '100%', height: '100%',
-            backgroundImage: `url(${ kitchen })`,
-            backgroundSize: `100% 100%`
-          }}
-        >
-            <ChefDialog chef={chef} onContinue={() => setState({ screen: 1 })} text={instructions.ptbr} translation={instructions.en}/>
-        </div>
+        <React.Fragment>
+          <img id="dialog-interact" src={kitchen} style={{position:'absolute', zIndex: -1, width: '100%', height: '100%'}}/>
+          <ChefDialog chef={chef} onContinue={() => setState({ screen: 1 })} text={instructions.ptbr} translation={instructions.en}/>
+        </React.Fragment>
       )}
 
       {state.screen === 1 && (
@@ -68,7 +64,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
           </IngredientList>
         </div>
       )}
-    </div>
+    </React.Fragment>
   );
 };
 

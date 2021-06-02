@@ -1,14 +1,14 @@
 import React from 'react'
 /**
  * Componente para escrita de texto caracter a caracter
- * 
+ *
  * @param  {Object} props
  * @param  {string} props.text				Texto a ser escrito caracter por caracter
  * @param  {number} props.characterTime		Delay, em milissegundos, entre cada caracter
  * @param  {() => void} props.onWritten		Callback para quando terminou de escrever
  * @param  {number} props.afterWrittenTime	Delay, em milissegundos, antes de avisar que terminou de escrever
  */
-const Writer = ({text, characterTime, onWritten, afterWrittenTime}) => {
+const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) => {
 	const [state, setState] = React.useState({text: text, index: 0})
 
 	React.useEffect( () => {
@@ -27,7 +27,7 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime}) => {
 	})
 
 	return(
-		<div id="Writer">
+		<div id="Writer" {...props}>
 			{ state.text.substring(0, state.index) }
 		</div>
 	)

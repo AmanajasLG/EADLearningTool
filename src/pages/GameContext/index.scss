@@ -2,6 +2,7 @@
 	position: relative;
 	margin: auto;
 	aspect-ratio: 16 / 9; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+	overflow: hidden;
 }
 
 .debug{
