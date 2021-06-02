@@ -42,8 +42,8 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
 
       {state.screen === 2 && (
         <div className="intro-recipe">
-          <div style={{width: 400, marginLeft: '10%'}}>
-            <img className="dishPresentation" src={recipe.image} alt=""/>
+          <div style={{flex: '1 0 0px', width: 400, marginLeft: '10%'}}>
+            <img className="dishPresentation" style={{margin: '0 auto'}} src={recipe.image} alt=""/>
             <h1 className="margin-half-top type-l type-display type-center">
               {recipe.name}
             </h1>
@@ -54,7 +54,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
               Continuar
             </Button>
           </div>
-          <IngredientList>
+          <IngredientList style={{flex: '1 0 0px'}}>
             {ingredientsList.map((ingredient, index) =>
               <div className="ingredient" key={index}>
                 <img className="ingredientImg" src={ingredient.image} alt="" />

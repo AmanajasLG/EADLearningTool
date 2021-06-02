@@ -13,6 +13,7 @@ import blocoButton from "./Game2/blocoButton.svg";
 import shelf from "./Game3/shelf.svg";
 import cart from "./Game3/cart.svg";
 import ingredientsListBg from "./Game3/ingredients-list.svg";
+import ingredientsListBgFull from "./Game3/ingredients-list-full.svg";
 import recipeBg from "./Game3/recipe-bg.svg";
 import recipeBgRound from "./Game3/recipe-bg-round.svg";
 import listCheck from "./Game3/check.svg";
@@ -55,6 +56,7 @@ export {
   settings,
   cart,
   ingredientsListBg,
+  ingredientsListBgFull,
   recipeBg,
   recipeBgRound,
   listCheck,

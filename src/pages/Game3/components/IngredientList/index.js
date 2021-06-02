@@ -5,9 +5,9 @@ import marked from "marked";
 
 import './index.scss'
 
-const IngredientList = ({children}) => {
+const IngredientList = ({children, ...props}) => {
   return(
-    <div className="ingredientList">
+    <div className="ingredientList" {...props}>
       <div style={{position: 'absolute', width: 400}}>
         {children}
       </div>

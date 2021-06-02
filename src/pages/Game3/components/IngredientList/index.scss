@@ -1,11 +1,13 @@
 
 .ingredientList{
-  background-image: url('../../../../img/Game3/ingredients-list.svg');
+  background-image: url('../../../../img/Game3/ingredients-list-full.svg');
   background-repeat: no-repeat;
-  background-size: 570px;
-  width: 570px;
-  padding-top: 76px;
-  padding-left: 108;
+  background-size:contain;
+  background-position: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 8%;
+  padding-left: 8%;
   transform-origin: center center;
   transform: rotate(21deg);
   margin-top: 10px
@@ -19,5 +21,5 @@
 .ingredient {
   display: block;
   font-size: 1.3rem;
-  line-height: 3.7rem;
+  line-height: 3.3rem;
 }

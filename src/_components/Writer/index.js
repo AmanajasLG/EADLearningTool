@@ -31,17 +31,11 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) =>
 		}
 		else
 		{
-			console.log('will be done')
 			if(onWritten){
-				console.log('has onWritten')
-				if(afterWrittenTime > 0){
-					console.log('has done delay:', afterWrittenTime)
+				if(afterWrittenTime > 0)
 					timeoutID = setTimeout( onWritten, afterWrittenTime )
-				}
-				else{
-					console.log('call')
+				else
 					onWritten()
-				}
 			}
 		}
 
