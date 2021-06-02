@@ -1,19 +1,44 @@
 .dishPresentation{
   display: block;
   width: 300px;
-  animation-name: seesaw;
-  animation-duration: 50s;
-  animation-iteration-count: infinity;
+  animation: seesaw 4s linear alternate infinite;
 }
 
-@keyframes seesaw{
-  0% { transform: rotate(0), scale(1,1); }
-  30% { transform: rotate(-10deg); }
-  50% { transform: scale(1.1 , 1.1);}
-  60% { transform: rotate(10deg); }
-  100% { transform: rotate(0), scale(1, 1); }
+.rotate{
+  animation: rotator 20s linear infinite;
+  transform-origin: center;
 }
 
+.rotate.backwards{
+  animation-name: rotatorB;
+}
+
+@keyframes seesaw {
+  from {
+    transform: scale(1,1) rotate(-2deg);
+  }
+  to {
+    transform: scale(1.05, 1.05) rotate(2deg);
+  }
+}
+
+@keyframes rotator{
+  from{
+    transform: rotateZ(0deg);
+  }
+  to{
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes rotatorB{
+  to{
+    transform: rotateZ(0deg);
+  }
+  from{
+    transform: rotateZ(360deg);
+  }
+}
 .intro-recipe {
   display: flex;
   flex-direction: row;

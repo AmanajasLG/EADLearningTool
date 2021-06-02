@@ -9,6 +9,7 @@ import DressingCharacter from '../../_components/DressingCharacter'
 import Wardrobe from '../../_components/Wardrobe'
 import DialogHistory from '../../_components/DialogHistory'
 import Cellphone from './components/Cellphone'
+import Button from '../../_components/Button'
 
 const Game6 = () => {
   const [state, setState] = React.useState(initialState())
@@ -137,15 +138,27 @@ const Game6 = () => {
                 <div style={{display: 'flex', flexDirection: 'row'}}>
                   <div style={{flex: '1 0 0px', border: '1px solid red'}}>
                     <Cellphone style={{width: '30%', height: '90%', margin: '2% auto', backgroundColor: 'red', border: '1px solid red'}}>
-                      <DialogHistory dialogHistory={[{speaker: '', text: 'stuff'}, {speaker: '', text: 'stuff2'}, {speaker: 'player', text: 'stuff3'}]}
-                      />
-                      <div style={{display: 'flex', flexDirection: 'column', position: 'absolute', bottom: 0, width: '100%', backgroundColor: 'green'}}>
-                        <button>Que dia?</button>
-                        <button>Onde?</button>
-                        <button>Quando?</button>
+                      <DialogHistory dialogHistory={[{speaker: '', text: 'stuff'}, {speaker: '', text: 'stuff2'}, {speaker: 'player', text: 'stuff3'}]}/>
 
-                      </div>
-                      <button style={{width: '60%', marginLeft: '-30%', position: 'absolute', bottom: '-5%', left: '50%'}}>Prontinho!</button>
+                      {!state.ready ?
+                        <div>
+                          <div style={{display: 'flex', flexDirection: 'column', position: 'absolute', bottom: 0, width: '100%', backgroundColor: 'green'}}>
+                            <button >Que dia?</button>
+                            <button>Onde?</button>
+                            <button>Quando?</button>
+                          </div>
+
+                          <button onClick={() => setState({...state, ready: true})}
+                            style={{width: '60%', marginLeft: '-30%', position: 'absolute', bottom: '-5%', left: '50%'}}>
+                            Prontinho!
+                          </button>
+                        </div>
+                        :
+                        <div>
+                          <button onClick={() => setState({...state, lastConfirmation: true, namingClothesContext: false})}>Sim</button>
+                          <button>Não</button>
+                        </div>
+                      }
                     </Cellphone>
                   </div>
                   <div style={{flex: '1 0 0px', border: '1px solid red'}}>
@@ -155,6 +168,24 @@ const Game6 = () => {
                   </div>
                 </div>
               }
+              {state.lastConfirmation &&
+                <div>
+                  <Cellphone style={{width: '30%', height: '90%', margin: '2% auto', backgroundColor: 'red', border: '1px solid red'}}>
+                    <DressingCharacter clothesTypes={state.clothesTypes}
+                      clothes={state.clothes}
+                    />
+                  </Cellphone>
+                  <button onClick={()=>setState({...state, scene: 'END'})}>Next</button>
+                </div>
+              }
+              </div>
+            )
+          case 'END':
+            return(
+              <div>
+                <div>Tela de feedback</div>
+                <Button blink onClick={() => setState(initialState())}>Jogar novamente</Button>
+                <Button blink onClick={() => setState({...state, back: true})}>Sair do jogo</Button>
               </div>
             )
           default:

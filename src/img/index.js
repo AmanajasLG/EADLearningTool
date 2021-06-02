@@ -14,6 +14,7 @@ import shelf from "./Game3/shelf.svg";
 import cart from "./Game3/cart.svg";
 import ingredientsListBg from "./Game3/ingredients-list.svg";
 import recipeBg from "./Game3/recipe-bg.svg";
+import recipeBgRound from "./Game3/recipe-bg-round.svg";
 import listCheck from "./Game3/check.svg";
 import listCheckbox from "./Game3/checkbox.svg";
 import listIcon from "./Game3/list-icon.svg";
@@ -55,6 +56,7 @@ export {
   cart,
   ingredientsListBg,
   recipeBg,
+  recipeBgRound,
   listCheck,
   listCheckbox,
   listIcon,
