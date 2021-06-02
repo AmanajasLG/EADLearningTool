@@ -495,7 +495,7 @@ const Game3 = (props) => {
                           }
                           src={checkout}
                           alt=""
-                          style={{ position: "absolute", width: '10%', top: "4vh", right: "8vw" }}
+                          className={styles.moneyIcon}
                         />
 
                         <ShopCart
@@ -507,32 +507,7 @@ const Game3 = (props) => {
                     )}
 
                     {state.checkoutConfirm && (
-                      <div>
-                        <div className="confirm-blob">
-                          <p lang="pt-br">Tem certeza que isso é tudo?</p>
-                          <p lang="en">Are you sure that's all?</p>
-                          <button
-                            className="btn btn-center"
-                            id="btn-cancel-checkout"
-                            onClick={() =>
-                              setState({
-                                ...state,
-                                checkoutConfirm: false,
-                                runTimer: true,
-                              })
-                            }
-                          >
-                            Voltar
-                          </button>
-
-                          <button
-                            className="btn btn-center"
-                            id="btn-go-to-checkout"
-                            onClick={moveToCheckout}
-                          >
-                            Continuar
-                          </button>
-                        </div>
+                      <div className={styles.confirmScreen}>
                         <div className={styles.cartItems}>
                           {state.cart.map((product, index) => (
                             <div className={styles.cartItem} key={index}>
@@ -550,6 +525,34 @@ const Game3 = (props) => {
                               <span>{product.count}</span>
                             </div>
                           ))}
+                        </div>
+                        <div className={styles.confirmBlob}>
+                          <div className={styles.blobSpans}>
+                            <span lang="pt-br">Tem certeza que isso é tudo?</span>
+                            <span lang="en">Are you sure that's all?</span>
+                          </div>
+                          <div className={styles.btns}>
+                            <button
+                              className="btn btn-center"
+                              id="btn-back"
+                              onClick={() =>
+                                setState({
+                                  ...state,
+                                  checkoutConfirm: false,
+                                  runTimer: true,
+                                })
+                              }
+                            >
+                              Voltar
+                            </button>
+                            <button
+                              className="btn btn-center"
+                              id="btn-start"
+                              onClick={moveToCheckout}
+                            >
+                              Continuar
+                            </button>
+                          </div>
                         </div>
                         <img src={cart} alt="" />
                       </div>

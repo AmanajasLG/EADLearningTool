@@ -18,9 +18,9 @@ const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
 								<div
 									key={index}
 									onClick={addProduct(product.name)}
-									className={styles.tooltip + " shelf-item"}
+									className={styles.tooltip}
 								>
-									<img src={product.shelfImage}/>
+									<img src={product.shelfImage} className="inflate"/>
 									<span className={styles.tooltiptext}>{product.tooltip}</span>
 								</div>
 							))}

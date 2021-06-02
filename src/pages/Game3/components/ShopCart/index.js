@@ -17,7 +17,7 @@ const ShopCart = ({cart, ingredientList, onItemClick}) => {
                 }
                 alt=""
                 onClick={onItemClick(index)}
-                className={styles.cartItemImg}
+                className={styles.cartItemImg + ' inflate'}
               />
               <span>{product.count}</span>
             </div>

@@ -88,7 +88,7 @@
 	text-align: center;
 	padding: 5px 0;
 	border-radius: 6px;
-	
+
 	/* Position the tooltip text - see examples below! */
 	position: absolute;
 	top: 105%;
@@ -98,6 +98,10 @@
 /* Show the tooltip text when you mouse over the tooltip container */
 .tooltip:hover .tooltiptext {
 	visibility: visible;
+}
+
+.tooltip:hover > img{
+  animation: inflate .5s ease-out forwards;
 }
 
 .btnChangeAisle {
@@ -112,4 +116,9 @@
 
 .btnChangeAisle:hover {
 	color: #f9afa1;
+}
+
+@keyframes inflate{
+  from { transform: scale(1) rotate(0); }
+  to {transform: scale(1.3) rotate(10deg);}
 }
