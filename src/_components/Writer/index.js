@@ -8,8 +8,11 @@ import React from 'react'
  * @param  {() => void} props.onWritten		Callback para quando terminou de escrever
  * @param  {number} props.afterWrittenTime	Delay, em milissegundos, antes de avisar que terminou de escrever
  */
+
+import sound from '../../sounds/writerLetter3.flac'
+
 const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) => {
-	const [state, setState] = React.useState({text: text, index: 0, done: false})
+	const [state, setState] = React.useState({text: text, index: 0})
 
 	React.useEffect( () => {
 	if( text !== state.text )
@@ -19,21 +22,34 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) =>
 	React.useEffect( () => {
 		let timeoutID
 		if( state.index < state.text.length ) {
-			timeoutID = setTimeout( () => { setState({...state, index: state.index + 1}) }, characterTime)
+			timeoutID = setTimeout( () => {
+				let audio = new Audio(sound)
+				audio.volume = .1
+				audio.play()
+				setState({...state, index: state.index + 1})
+			}, characterTime)
 		}
-		else if(!state.done)
+		else
 		{
-			setState({...state, done: true})
+			console.log('will be done')
 			if(onWritten){
-				if(afterWrittenTime && afterWrittenTime > 0)
+				console.log('has onWritten')
+				if(afterWrittenTime > 0){
+					console.log('has done delay:', afterWrittenTime)
 					timeoutID = setTimeout( onWritten, afterWrittenTime )
-				else
+				}
+				else{
+					console.log('call')
 					onWritten()
+				}
 			}
 		}
 
-		return () => clearTimeout(timeoutID)
-	})
+		return () => {
+			console.log('clear called')
+			clearTimeout(timeoutID)
+		}
+	}, [state.index])
 
 	return(
 		<div id="Writer" {...props}>

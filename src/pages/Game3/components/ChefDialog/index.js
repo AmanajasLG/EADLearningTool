@@ -10,7 +10,7 @@ const waitAfterWritten = 1000;
 
 const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props}) => {
   const [state, setState] = React.useState({writerDone: false})
-  const afterWriter = () => {
+  const onWriterDone = () => {
     console.log('Finished')
     setState({...state, writerDone: true})
   }
@@ -22,7 +22,7 @@ const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props})
           <div style={{paddingTop: '2%', paddingLeft: '30%'}}>
             <div>
               <Writer text={text} style={{fontSize: '1em', paddingLeft: 0}}
-								onWritten={afterWriter}
+								onWritten={onWriterDone}
 								afterWrittenTime={waitAfterWritten}
 								characterTime={msPerCharacter}
 							/>
