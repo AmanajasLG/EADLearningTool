@@ -4,7 +4,7 @@ import Button from '../../../../_components/Button'
 import DialogCharacter from '../../../../_components/DialogCharacter'
 import './index.scss'
 
-const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props}) => {
+const ChefDialog = ({hideDialog, onContinue, text, chefFeeling, translation, chef, ...props}) => {
   return (
     <div style={{position: 'relative', width: '100%', height: '100%'}} {...props}>
       {!hideDialog &&

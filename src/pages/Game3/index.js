@@ -275,8 +275,7 @@ const Game3 = (props) => {
         0
       )
       .toFixed(2);
-    setState({
-      ...state,
+    var updateState = {
       scene: "CASHIER",
       checkoutConfirm: false,
       cashierLines: haveAllValue
@@ -296,17 +295,19 @@ const Game3 = (props) => {
               getWrongItemsInCart().length
             } ingredient(s) incorrectly!`,
           },
-      cashierContinue: haveAllValue
-        ? () => setState({ ...state, runTimer: true, moneySelection: true })
-        : () =>
-            setState({
-              ...state,
-              scene: "MARKET",
-              runTimer: true,
-              checkoutConfirm: false,
-            }),
-      price: price,
-    });
+      price: price
+    }
+    updateState.cashierContinue = haveAllValue
+    ? () => setState({ ...state, ...updateState, runTimer: true, moneySelection: true })
+    : () =>
+        setState({
+          ...state,
+          ...updateState,
+          scene: "MARKET",
+          runTimer: true,
+          checkoutConfirm: false,
+        })
+    setState({...state, ...updateState});
   };
 
   const doPayment = (value) => {
@@ -321,7 +322,7 @@ const Game3 = (props) => {
       };
     else if (change > 0)
       cashierLines = {
-        text: "Bem... Obirgada pela gorgeta!",
+        text: "Bem... Obrigada pela gorgeta!",
         translation: "Well... Thanks for the tip!",
       };
     //if( value === 0)
