@@ -500,7 +500,7 @@ const Game3 = (props) => {
                           }
                           src={checkout}
                           alt=""
-                          style={{ position: "absolute", top: 0, right: 0 }}
+                          style={{ position: "absolute", top: "4vh", right: "8vw" }}
                         />
 
                         <ShopCart

@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from '../../index.module.scss'
-import { cart } from '../../../../img'
+import { cart as cartImg } from '../../../../img'
 
 const ShopCart = ({cart, ingredientList, onItemClick}) => {
   return(
@@ -23,7 +23,7 @@ const ShopCart = ({cart, ingredientList, onItemClick}) => {
             </div>
           ))}
         </div>
-        <img src={cart} alt="" />
+        <img src={cartImg} alt="" />
       </div>
   )
 }
