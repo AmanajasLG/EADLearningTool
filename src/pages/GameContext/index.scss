@@ -3,6 +3,15 @@
 	margin: auto;
 	aspect-ratio: 16 / 9; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
 	overflow: hidden;
+
+/*prevent ugly highlight selection while clicking*/
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
 
 .debug{
