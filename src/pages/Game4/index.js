@@ -577,7 +577,7 @@ const Game4 = (props) => {
                     <img id="dialog-interact" src={kitchen} style={{position:'absolute', zIndex: -1, width: '100%', height: '100%'}}/>
                     <Tutorial />
 
-                    <Timer
+                    <Timer style={{ position: "absolute", top: "5%", left: "50%" }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
@@ -805,7 +805,7 @@ const Game4 = (props) => {
               case "SERVE":
                 return (
                   <React.Fragment>
-                    <Timer
+                    <Timer style={{ position: "absolute", top: "5%", left: "50%" }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => setState( s => ({...s, remainingTime: remaining})) }
