@@ -13,7 +13,8 @@ const initialState = (checkedPlayed) => {
     win: false,
     change: null,
     runTimer: true,
-    reaminingTime: 0,
+    remainingTime: 0,
+    initTime: 0,
     checkedPlayed: checkedPlayed,
     moneySelection: false,
   };

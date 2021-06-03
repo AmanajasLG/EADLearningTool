@@ -47,7 +47,7 @@ import {
   hourglassEmpty,
   cashierTable,
   cashierBg,
-  bigBlob
+  bigBlob,
 } from "../../img";
 import Recipe from "../../_components/Recipe";
 
@@ -123,8 +123,9 @@ const Game3 = (props) => {
       state.ingredientsList.length === 0 &&
       timesPlayed !== undefined
     ) {
-      missionData.seconds -= 30 * (timesPlayed > 2 ? 2 : timesPlayed);
-      // safe copies
+      let initTime =
+        missionData.seconds - 30 * (timesPlayed > 2 ? 2 : timesPlayed);
+      let remainingTime = initTime;
 
       let recipe =
         missionData.recipes[
@@ -195,6 +196,8 @@ const Game3 = (props) => {
           recipe: resumeRecipe,
           aisles,
           ingredientsList,
+          remainingTime,
+          initTime,
         };
       });
     }
@@ -296,19 +299,25 @@ const Game3 = (props) => {
               getWrongItemsInCart().length
             } ingredient(s) incorrectly!`,
           },
-      price: price
-    }
+      price: price,
+    };
     updateState.cashierContinue = haveAllValue
-    ? () => setState({ ...state, ...updateState, runTimer: true, moneySelection: true })
-    : () =>
-        setState({
-          ...state,
-          ...updateState,
-          scene: "MARKET",
-          runTimer: true,
-          checkoutConfirm: false,
-        })
-    setState({...state, ...updateState});
+      ? () =>
+          setState({
+            ...state,
+            ...updateState,
+            runTimer: true,
+            moneySelection: true,
+          })
+      : () =>
+          setState({
+            ...state,
+            ...updateState,
+            scene: "MARKET",
+            runTimer: true,
+            checkoutConfirm: false,
+          });
+    setState({ ...state, ...updateState });
   };
 
   const doPayment = (value) => {
@@ -335,14 +344,14 @@ const Game3 = (props) => {
           "You gave the exact amout to the supermarket's cashier! Dealing with money is clearly not a problem for you!",
       };
 
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       cashierContinue: () => endGame(false),
       cashierLines: cashierLines,
       change: change,
       moneySelection: false,
       runTimer: false,
-    });
+    }));
   };
 
   const getWrongItemsInCart = () =>
@@ -364,11 +373,11 @@ const Game3 = (props) => {
   };
 
   const endGame = (timeUp) => {
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       scene: "END_GAME",
       timeUp: timeUp,
-    });
+    }));
 
     dispatch(
       headerActions.setAll(
@@ -387,8 +396,8 @@ const Game3 = (props) => {
         user: userId,
         mission: mission.id,
         secondsTaken: timeUp
-          ? missionData.seconds + 1
-          : missionData.seconds - state.remainingTime,
+          ? state.initTime + 1
+          : state.initTime - state.remainingTime,
         recipe: state.recipe.id,
         rightPayment: state.change === 0,
         won: state.change === 0 && !timeUp && wrongIngredients.length === 0,
@@ -399,10 +408,12 @@ const Game3 = (props) => {
   };
 
   //const { mission } = state
-  //console.log('mission:', mission)
+  //
   return (
     <React.Fragment>
-      {!mission ? <div>Loading..</div> :
+      {!mission ? (
+        <div>Loading..</div>
+      ) : (
         <React.Fragment>
           {(function renderScene() {
             switch (state.scene) {
@@ -442,7 +453,7 @@ const Game3 = (props) => {
                 return (
                   <Tutorial
                     chef={missionData.character}
-                    seconds={missionData.seconds}
+                    seconds={state.initTime}
                     hasPlayed={timesPlayed > 0}
                     aisle={state.aisles[state.currentAisle]}
                     shoppingCart={state.cart}
@@ -464,13 +475,16 @@ const Game3 = (props) => {
               case "MARKET":
                 return (
                   <React.Fragment>
-                    <Timer style={{position: 'absolute', top: '5%', left: '50%'}}
-                      run={false/*state.runTimer*/}
-                      seconds={missionData.seconds}
-                      onStop={(remaining) => setState({...state, remainingTime: remaining}) }
+                    <Timer
+                      style={{ position: "absolute", top: "5%", left: "50%" }}
+                      run={state.runTimer}
+                      seconds={state.remainingTime}
+                      onStop={(remaining) =>
+                        setState({ ...state, remainingTime: remaining })
+                      }
                       onEnd={() => endGame(true)}
                     />
-                  <Recipe
+                    <Recipe
                       ingredientsList={state.ingredientsList}
                       hasImage={true}
                       showCheck={(ingredient) => checkShoppingList(ingredient)}
@@ -530,7 +544,9 @@ const Game3 = (props) => {
                         </div>
                         <div className={styles.confirmBlob}>
                           <div className={styles.blobSpans}>
-                            <span lang="pt-br">Tem certeza que isso é tudo?</span>
+                            <span lang="pt-br">
+                              Tem certeza que isso é tudo?
+                            </span>
                             <span lang="en">Are you sure that's all?</span>
                           </div>
                           <div className={styles.btns}>
@@ -560,24 +576,50 @@ const Game3 = (props) => {
                       </div>
                     )}
                   </React.Fragment>
-                )
+                );
               case "CASHIER":
                 return (
                   <React.Fragment>
-                    <img style={{display: 'block', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -4}} src={bigBlob} alt='bigBlob' />
-                    <img style={{display: 'block', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -3}} src={cashierBg} />
-                    <Timer style={{position: 'absolute', top: '5%', left: '50%'}}
+                    <img
+                      style={{
+                        display: "block",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        zIndex: -4,
+                      }}
+                      src={bigBlob}
+                      alt="bigBlob"
+                    />
+                    <img
+                      style={{
+                        display: "block",
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        zIndex: -3,
+                      }}
+                      src={cashierBg}
+                      alt=""
+                    />
+                    <Timer
+                      style={{ position: "absolute", top: "5%", left: "50%" }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
-                        setState({
-                          ...state,
+                        setState((s) => ({
+                          ...s,
                           remainingTime: remaining,
-                        });
+                        }));
                       }}
                       onEnd={() => endGame(true)}
                     />
-                  <ChefDialog chefStyles={ {width: '35%'}}
+                    <ChefDialog
+                      chefStyles={{ width: "35%" }}
                       chef={missionData.character}
                       hideDialog={state.moneySelection}
                       chefFeeling={
@@ -588,7 +630,12 @@ const Game3 = (props) => {
                       onContinue={state.cashierContinue}
                     />
                     <img
-                      style={{ position: 'absolute', bottom: '-10%', zIndex: 3, width: '35%' }}
+                      style={{
+                        position: "absolute",
+                        bottom: "-10%",
+                        zIndex: 3,
+                        width: "35%",
+                      }}
                       src={cashierTable}
                       alt=""
                     />
@@ -692,14 +739,14 @@ const Game3 = (props) => {
                           ? "0:00"
                           : `${zeroFill(
                               Math.floor(
-                                (missionData.seconds - state.remainingTime) / 60
+                                (state.initTime - state.remainingTime) / 60
                               ).toString(),
                               2
                             )}
                           :
                           ${zeroFill(
                             (
-                              (missionData.seconds - state.remainingTime) %
+                              (state.initTime - state.remainingTime) %
                               60
                             ).toString(),
                             2
@@ -725,7 +772,7 @@ const Game3 = (props) => {
           })()}
           {state.back && <Redirect to={"/userspace"} />}
         </React.Fragment>
-      }
+      )}
       {process.env.NODE_ENV === "development" && (
         <div>
           <button
