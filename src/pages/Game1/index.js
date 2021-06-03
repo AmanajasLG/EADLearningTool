@@ -100,7 +100,7 @@ const Game1 = (props) => {
     return () => {
       document.removeEventListener("mousedown", getClickedObject);
     };
-  }, [dispatch, currentPlaySession, play_sessionsActions, state.tracking]);
+  }, [dispatch, currentPlaySession, play_sessionsActions, state.tracking, mission]);
 
   React.useEffect(() => {
     if (id && !missionData)

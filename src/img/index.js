@@ -25,6 +25,7 @@ import hourglassFull from "./Game3/hourglass-full.svg";
 import hourglassEmpty from "./Game3/hourglass-empty.svg";
 import cashierTable from "./Game3/chashier-table.svg";
 import cashierBg from "./Game3/cashier-bg.svg";
+import bigBlob from "./Game3/bigBlob.svg";
 import ingredientsListRotated from "./Game3/ingredients-list-rotated.svg";
 import kitchen from "./Game3/kitchen.svg";
 import tomato from "./Game3/Tomate_lista.svg";
@@ -69,6 +70,7 @@ export {
   hourglassEmpty,
   hourglassFull,
   cashierBg,
+  bigBlob,
   cashierTable,
   bigPhone,
   smallPhone,

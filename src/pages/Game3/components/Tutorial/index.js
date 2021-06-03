@@ -4,17 +4,17 @@ import gameStyles from "../../index.module.scss";
 import "./index.scss";
 import ChefDialog from "../ChefDialog";
 import Aisle from "../../../../_components/Aisle";
-import Button from '../../../../_components/Button'
+// import Button from '../../../../_components/Button'
 import TimerAnounce from '../../../../_components/TimerAnounce'
 import {
   cart,
   checkout,
-  ingredientsListBg,
-  listCheck,
-  listIcon,
+  // ingredientsListBg,
+  // listCheck,
+  // listIcon,
 } from "../../../../img";
-import { zeroFill } from "../../../../_helpers";
-import { parser } from "marked";
+// import { zeroFill } from "../../../../_helpers";
+// import { parser } from "marked";
 import htmlparse from "html-react-parser";
 import Recipe from "../../../../_components/Recipe";
 
@@ -87,7 +87,7 @@ const Tutorial = ({
   const blobPosition = (state.tutorialLine === 2 || state.tutorialLine === 3) ? tutorialStyles.blobRight : tutorialStyles.blobLeft;
 
   return (
-    <div id="room-itself" className={"tutorial " + "tutorialStep" + state.tutorialLine}>
+    <div id="room-itself" className={"tutorial tutorialStep" + state.tutorialLine}>
       {state.step === 0 && (
         <div id={tutorialStyles.tutorialGrid}>
           <div
