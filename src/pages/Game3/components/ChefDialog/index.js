@@ -11,6 +11,11 @@ const waitAfterWritten = 1000;
 const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props}) => {
   const [state, setState] = React.useState({writerDone: false})
   const onWriterDone = () => setState({...state, writerDone: true})
+  let chefStyles =  {position: 'absolute', left:0, bottom: 0, zIndex: 2, width: '43%'}
+
+  console.log('props:', props)
+  if(props.chefStyles)
+    chefStyles = {...chefStyles, ...props.chefStyles }
 
   return (
     <React.Fragment>
@@ -42,7 +47,7 @@ const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props})
           }
         </DialogBox>
       }
-      <DialogCharacter character={chef} feeling="init" style={{position: 'absolute', left:0, bottom: 0, zIndex: 2, width: '43%'}}/>
+      <DialogCharacter character={chef} feeling="init" style={chefStyles}/>
     </React.Fragment>
   )
 }

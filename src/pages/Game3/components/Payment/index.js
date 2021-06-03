@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button'
 import ButtonConfirm from '../../../../_components/Button'
 import { wallet } from '../../../../img'
 
+
 const Payment = ({onConfirm, moneyList}) => {
   const [state, setState] = React.useState({payment:[]})
 
@@ -20,15 +21,17 @@ const Payment = ({onConfirm, moneyList}) => {
     });
   };
 
-  const removeFromPayment = (index) => () => {
+  const removeFromPayment = (value) => () => {
     let paymentUpdate = [...state.payment];
-
-    if (paymentUpdate[index].count > 1) paymentUpdate[index].count -= 1;
-    else
+    let money = paymentUpdate.find( m => m.value === value)
+    if (money.count > 1) money.count -= 1;
+    else{
+      let index = paymentUpdate.indexOf(money)
       paymentUpdate = [
         ...state.payment.slice(0, index),
         ...state.payment.slice(index + 1),
       ];
+    }
     setState({
       ...state,
       payment: paymentUpdate,
@@ -36,18 +39,34 @@ const Payment = ({onConfirm, moneyList}) => {
   };
 
   return(
-    <div style={{position: 'absolute', right: 0, bottom: 100, width: '60%' }}>
-      <div style={{display: 'grid', gridTemplateRows: 'auto auto', gridTemplateColumns: 'auto auto auto', paddingRight: 300, marginBottom: 50}}className="selected-money">
-        {state.payment.map((money, index) => (
+    <React.Fragment>
+      <div style={{position: 'absolute', height: '20%', top: '25%', width: '60%', right: 0,
+        display: 'grid', gridTemplateRows: '33% 33% 33%', gridTemplateColumns: '20% 20% 20% 20% 20%', gridRowGap: '10%'}}className="selected-money">
+        {state.payment.filter(m => m.value > 1).map((money, index) => (
           <div key={index} style={{position: 'relative'}}>
             <img
-              style={{width: 110}}
+              style={{height: '100%'}}
               src={moneyList.find((moneyObj) => moneyObj.value === money.value).image.url}
               alt=""
-              onClick={removeFromPayment(index)}
+              onClick={removeFromPayment(money.value)}
             />
             <div style={{position: 'absolute', left: -10, top: -10,
-              backgroundColor: 'red', width: 20, height: 20, borderRadius: 10, textAlign: 'center'}}
+              backgroundColor: '#F9AFA1', width: 20, height: 20, borderRadius: 10, textAlign: 'center'}}
+            >
+              {money.count}
+            </div>
+          </div>
+        ))}
+        {state.payment.filter(m => m.value <= 1).map((money, index) => (
+          <div key={index} style={{position: 'relative', gridColumnStart: (index + 1) % 5 }}>
+            <img
+              style={{height: '100%'}}
+              src={moneyList.find((moneyObj) => moneyObj.value === money.value).image.url}
+              alt=""
+              onClick={removeFromPayment(money.value)}
+            />
+            <div style={{position: 'absolute', left: -10, top: -10,
+              backgroundColor: '#F9AFA1', width: 20, height: 20, borderRadius: 10, textAlign: 'center'}}
             >
               {money.count}
             </div>
@@ -55,9 +74,9 @@ const Payment = ({onConfirm, moneyList}) => {
         ))}
       </div>
 
-      <div>
+      <div style={{position: 'absolute', right: 0, bottom: '10%', width: '60%'}}>
         <div style={{position: 'relative', backgroundColor:'#cbe7de', borderRadius: 50}}>
-          <div style={{display: 'grid', gridTemplateColumns: 'auto auto auto auto', padding: '50px 300px 50px 50px'}}>
+          <div style={{display: 'grid', gridTemplateColumns: '25% 25% 25% 25%', padding: '5% 25% 5% 5%'}}>
             {moneyList.filter(money => money.value > 1).map((money, index) => (
               <Button key={index} onClick={addToPayment(money.value)}>
                 <img
@@ -67,7 +86,7 @@ const Payment = ({onConfirm, moneyList}) => {
                 />
               </Button>
             ))}
-            <div style={{display: 'grid', gridTemplateRows: 'auto auto', gridTemplateColumns: 'auto auto auto'}}>
+            <div style={{display: 'grid', gridTemplateRows: '50% 50%', gridTemplateColumns: '33% 33% 33%'}}>
               {moneyList.filter(money => money.value <= 1).map((money, index) => (
                 <Button key={index} onClick={addToPayment(money.value)}>
                   <img
@@ -79,7 +98,7 @@ const Payment = ({onConfirm, moneyList}) => {
               ))}
             </div>
           </div>
-          <img style={{position: 'absolute', top: -100, right: -95, width: 300}}src={wallet} alt="" />
+          <img style={{position: 'absolute', top: '-25%', right: '-10%', width: '35%'}}src={wallet} alt="" />
         </div>
 
         <ButtonConfirm blink
@@ -89,7 +108,7 @@ const Payment = ({onConfirm, moneyList}) => {
           Continuar
         </ButtonConfirm>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 

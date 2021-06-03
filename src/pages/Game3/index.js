@@ -562,7 +562,8 @@ const Game3 = (props) => {
               case "CASHIER":
                 return (
                   <React.Fragment>
-                    <Timer
+                    <img style={{display: 'block', position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -3}} src={cashierBg} />
+                    <Timer style={{position: 'absolute', top: '5%', left: '50%'}}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
@@ -573,7 +574,7 @@ const Game3 = (props) => {
                       }}
                       onEnd={() => endGame(true)}
                     />
-                    <ChefDialog
+                  <ChefDialog chefStyles={ {width: '35%'}}
                       chef={missionData.character}
                       hideDialog={state.moneySelection}
                       chefFeeling={
@@ -584,7 +585,7 @@ const Game3 = (props) => {
                       onContinue={state.cashierContinue}
                     />
                     <img
-                      style={{ position: 'absolute', bottom: '-10%', zIndex: 3, width: '40%' }}
+                      style={{ position: 'absolute', bottom: '-10%', zIndex: 3, width: '35%' }}
                       src={cashierTable}
                       alt=""
                     />
