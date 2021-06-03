@@ -9,10 +9,21 @@
 #game-screen {
 	position: absolute;
 	overflow: hidden;
+
+/* Faz com que esteja sempre de acordo com a razão de aspecto somente com css*/
 	--aspectRatio: 1;
 	--ratio: min( calc( 100vw / var(--aspectRatio) ), 100vh );
 	width: calc( var(--aspectRatio) * var(--ratio) );
 	height: calc( var(--ratio) );
+
+/* Deals with responsive font sizes for the games.
+Not sure how does this affect accessibility, though. Might need tweaks for that. */
+	font-size: var(--fixed-font-size);
+	font-size: var(--responsive-size);
+	font-size: calc(
+		calc( var(--responsive-size) * var(--responsiveness) )
+	  + calc( var(--fixed-font-size) * (1 - var(--responsiveness)) )
+	);
 
 /*prevent ugly highlight selection while clicking*/
 	-webkit-touch-callout: none; /* iOS Safari */

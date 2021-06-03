@@ -4,6 +4,9 @@
 /* RESETS */
 html {
   box-sizing: border-box;
+  --fixed-font-size: 16px; // Valor fixo nativo
+  --responsive-size: min( 0.835vw, 1.485vh ); // Valor 100% responsivo
+  --responsiveness: 1; // 1 = 100% responsivo, 0 = 100% fixo
 }
 
 *,
