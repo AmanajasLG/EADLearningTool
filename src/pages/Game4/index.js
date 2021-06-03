@@ -14,6 +14,7 @@ import { headerConstants } from "../../_constants";
 
 import Init from "../../_components/Init";
 import Intro from "../Game3/components/Intro";
+import ChefDialog from "../Game3/components/ChefDialog";
 import Timer from "../../_components/Timer";
 import Recipe from "../../_components/Recipe";
 
@@ -29,6 +30,7 @@ import {
   blobLaranja,
   error,
   tomato,
+  kitchen,
 } from "../../img";
 import DialogCharacter from "../../_components/DialogCharacter";
 import FeedbackPanel from "./components/FeedbackPanel";
@@ -572,6 +574,7 @@ const Game4 = (props) => {
               case "COOK":
                 return (
                   <React.Fragment>
+                    <img id="dialog-interact" src={kitchen} style={{position:'absolute', zIndex: -1, width: '100%', height: '100%'}}/>
                     <Tutorial />
 
                     <Timer
@@ -598,17 +601,11 @@ const Game4 = (props) => {
                     {!state.doneCooking &&
                       (state.showIngredients ? (
                         <React.Fragment>
-                          <div className="suffled-ingredients">
+                          <div className="shuffled-ingredients">
                             {state.shuffledIngredients.map(
                               (ingredient, index) => (
-                                <img
-                                  key={"suffled-ingredient-" + index}
-                                  src={ingredient.image}
-                                  alt=""
-                                  onClick={() => setState({...state,
-                                      selectedIngredient: { ...ingredient },
-                                    })
-                                  }
+                                <img   key={"suffled-ingredient-" + index} src={ingredient.image} alt=""
+                                  onClick={() => setState({...state, selectedIngredient: { ...ingredient }})}
                                   style={{
                                     opacity: ingredient.done ? 0 : 1,
                                     pointerEvents: ingredient.done
@@ -784,6 +781,7 @@ const Game4 = (props) => {
                               }}
                             ></div>
                           ))}
+
                         </div>
                       ) : (
                         <div>
@@ -797,58 +795,24 @@ const Game4 = (props) => {
                       ))}
 
                     {state.doneCooking && (
-                      <div>
-                        <div id="dialog-interact">
-                          <div id="dialogos">
-                            <div id="dialog-box">
-                              <span lang="pt-br">
-                                Parabéns! Parece bom, mas você não vai me servir
-                                na panela, né? Escolha <strong>três</strong>{" "}
-                                utensílios adequados para servir seu prato! Nem
-                                mais, nem menos.
-                              </span>
-                              <span lang="en">
-                                Congratulations! It looks good, but you're not
-                                going to serv me in the pan, are you? Choose{" "}
-                                <strong>three</strong> approppriate utensils to
-                                serve your dish! No more, no less.
-                              </span>
-                            </div>
-                            <button
-                              className="btn btn-center"
-                              id="btn-move-to-payment"
-                              onClick={moveToServing}
-                            >
-                              Continuar
-                            </button>
-                          </div>
-                        </div>
-                        <div>
-                          <DialogCharacter
-                            character={missionData.character}
-                            feeling={"default"}
-                          />
-                        </div>
-                      </div>
+                      <ChefDialog chef={missionData.character} onContinue={moveToServing}
+                        text={"Parabéns! Parece bom, mas você não vai me servir na panela, né? Escolha <strong>três</strong> utensílios adequados para servir seu prato! Nem mais, nem menos."}
+                        translation={"Congratulations! It looks good, but you're not going to serv me in the pan, are you? Choose <strong>three</strong> approppriate utensils to serve your dish! No more, no less."}
+                      />
                     )}
                   </React.Fragment>
                 );
               case "SERVE":
                 return (
-                  <div>
+                  <React.Fragment>
                     <Timer
                       run={state.runTimer}
                       seconds={state.remainingTime}
-                      onStop={(remaining) => {
-                        setState({
-                          ...state,
-                          remainingTime: remaining,
-                        });
-                      }}
+                      onStop={(remaining) => setState( s => ({...s, remainingTime: remaining})) }
                       onEnd={() => endGame(true)}
                     />
                     {!state.endConfirmation && (
-                      <div>
+                      <React.Fragment>
                         {state.wrongCombiantionNotification && (
                           <div className="overlay-error-notification">
                             <div className="overlay-error-notification-content">
@@ -878,15 +842,8 @@ const Game4 = (props) => {
                         )}
 
                         {state.tutorialTablewareSelectionNotification && (
-                          <div>
-                            <img
-                              src={blobLaranja}
-                              alt=""
-                              className="smaller-tutorial-notification-blob"
-                            />
-                            <div className="smaller-tutorial-notification-message">
-                              <span>Quais 3 utensilios você vai escolher?</span>
-                            </div>
+                          <div className="smaller-tutorial-notification-message">
+                            <div style={{position: 'relative', display: 'block', bottom: 0, margin: '20% auto', width: '30%', textAlign: 'center'}}>Quais 3 utensilios você vai escolher?</div>
                           </div>
                         )}
 
@@ -899,78 +856,70 @@ const Game4 = (props) => {
                           />
                         )}
 
-                        <div className="tableware-selection-div">
-                          <div className="shuffled-tablewares">
-                            {state.shuffledTablewares.map(
-                              (tableware, index) => (
-                                <img
-                                  key={index}
-                                  src={tableware.image}
-                                  style={{
-                                    opacity: tableware.choosen
-                                      ? 0
-                                      : !state.tablewareImagePick
-                                      ? 0.4
-                                      : 1,
-                                    pointerEvents: tableware.choosen
-                                      ? "none"
-                                      : !state.tablewareImagePick
-                                      ? "none"
-                                      : "auto",
-                                    width:
-                                      (
-                                        60 / state.shuffledTablewares.length
-                                      ).toString() + "vw",
-                                  }}
-                                  onClick={() =>
-                                    setState({
-                                      ...state,
-                                      tutorialTablewareSelectionNotification: false,
-                                      tablewareImagePick: false,
-                                      tablewareImageSelected: tableware,
-                                    })
-                                  }
-                                  className={
-                                    (state.tablewareImageSelected
-                                      ? tableware.name ===
-                                        state.tablewareImageSelected.name
-                                        ? "selected-tableware"
-                                        : ""
-                                      : "") + " ingredient-selection-img"
-                                  }
-                                  alt=""
-                                />
-                              )
-                            )}
-                          </div>
-                          <div className="shuffled-tableware-names">
-                            {state.shuffledTablewaresNames.map(
-                              (tableware, index) => (
-                                <span
-                                  key={index}
-                                  style={{
-                                    opacity: tableware.choosen
-                                      ? 0
-                                      : state.tablewareImagePick
-                                      ? 0.4
-                                      : 1,
-                                    pointerEvents: tableware.choosen
-                                      ? "none"
-                                      : state.tablewareImagePick
-                                      ? "none"
-                                      : "auto",
-                                    width:
-                                      (
-                                        60 / state.shuffledTablewares.length
-                                      ).toString() + "vw",
-                                  }}
-                                  onClick={addTableware(tableware)}
-                                >
-                                  {tableware.name}
-                                </span>
-                              )
-                            )}
-                          </div>
+                        <div className="shuffled-tablewares">
+                          {state.shuffledTablewares.map(
+                            (tableware, index) => (
+                              <img key={index} src={tableware.image}
+                                style={{opacity: tableware.choosen
+                                        ? 0
+                                        : !state.tablewareImagePick
+                                        ? 0.4
+                                        : 1,
+                                      pointerEvents: tableware.choosen
+                                        ? "none"
+                                        : !state.tablewareImagePick
+                                        ? "none"
+                                        : "auto",
+                                      width: '10%',
+                                }}
+                                onClick={() =>
+                                  setState(s => ({
+                                    ...s,
+                                    tutorialTablewareSelectionNotification: false,
+                                    tablewareImagePick: false,
+                                    tablewareImageSelected: tableware,
+                                  }))
+                                }
+                                className={
+                                  (state.tablewareImageSelected
+                                    ? tableware.name ===
+                                      state.tablewareImageSelected.name
+                                      ? "selected-tableware"
+                                      : ""
+                                    : "") + " ingredient-selection-img"
+                                }
+                                alt=""
+                              />
+                            )
+                          )}
+                        </div>
+                        <div className="shuffled-tableware-names">
+                          {state.shuffledTablewaresNames.map(
+                            (tableware, index) => (
+                              <span
+                                key={index}
+                                style={{
+                                  opacity: tableware.choosen
+                                    ? 0
+                                    : state.tablewareImagePick
+                                    ? 0.4
+                                    : 1,
+                                  pointerEvents: tableware.choosen
+                                    ? "none"
+                                    : state.tablewareImagePick
+                                    ? "none"
+                                    : "auto",
+                                  width:
+                                    (
+                                      60 / state.shuffledTablewares.length
+                                    ).toString() + "vw",
+                                }}
+                                onClick={addTableware(tableware)}
+                              >
+                                {tableware.name}
+                              </span>
+                            )
+                          )}
                         </div>
 
                         <div className="conter">
@@ -989,44 +938,17 @@ const Game4 = (props) => {
                             )
                           )}
                         </div>
-                      </div>
+                      </React.Fragment>
                     )}
 
-                    {state.endConfirmation && (
-                      <div>
-                        <div id="dialog-interact">
-                          <div id="dialogos">
-                            <div id="dialog-box">
-                              <span lang="pt-br">
-                                Parabéns! Você é o mais novo finalista do
-                                MestreCuca! Agora, aguarde a deliberação dos
-                                jurados.{" "}
-                              </span>
-                              <span lang="en">
-                                Congrats! You are the brand new finalist of
-                                MestreCuca! Now, wait while the judges decide.{" "}
-                              </span>
-                            </div>{" "}
-                            <button
-                              className="btn btn-center"
-                              id="btn-move-to-payment"
-                              onClick={() => {
-                                endGame(false);
-                              }}
-                            >
-                              Continuar
-                            </button>
-                          </div>
-                        </div>
-                        <div>
-                          <DialogCharacter
-                            character={missionData.character}
-                            feeling={"default"}
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                    {state.endConfirmation &&
+                      <ChefDialog chef={missionData.character}
+                        onContinue={() => endGame(false) }
+                        text={"Parabéns! Você é o mais novo finalista do MestreCuca! Agora, aguarde a deliberação dos jurados."}
+                        translation={"Congrats! You are the brand new finalist of MestreCuca! Now, wait while the judges decide."}
+                      />
+                    }
+                  </React.Fragment>
                 );
               case "END_GAME":
                 return (
