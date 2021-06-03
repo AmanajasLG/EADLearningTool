@@ -1,8 +1,18 @@
+#game-screen-wrapper {
+	position: absolute;
+	inset: 0 0 0 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 #game-screen {
-	position: relative;
-	margin: auto;
-	aspect-ratio: 16 / 9; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+	position: absolute;
 	overflow: hidden;
+	--aspectRatio: 1;
+	--ratio: min( calc( 100vw / var(--aspectRatio) ), 100vh );
+	width: calc( var(--aspectRatio) * var(--ratio) );
+	height: calc( var(--ratio) );
 
 /*prevent ugly highlight selection while clicking*/
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -15,13 +25,5 @@
 }
 
 .debug{
-	border: 3px solid red
-}
-
-.maxHeight{
-	height: 100%
-}
-
-.maxWidth{
-	width: 100%
+	border: 3px solid red;
 }
