@@ -25,7 +25,8 @@ Primary.args = {
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  label: 'Button',
+  primary: false,
+  children: 'HAHA',
 };
 
 export const Large = Template.bind({});
