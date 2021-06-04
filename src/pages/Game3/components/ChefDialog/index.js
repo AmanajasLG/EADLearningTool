@@ -23,7 +23,7 @@ const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props})
       {!hideDialog &&
         <DialogBox alternative>
           <div style={{paddingTop: '2%', paddingLeft: '30%'}}>
-            <div style={{fontSize: "1.6em"}}>
+            <div style={{fontSize: "3.2em"}}>
               <Writer text={text} style={{fontSize: '1em', paddingLeft: 0}}
 								onWritten={onWriterDone}
 								afterWrittenTime={waitAfterWritten}
@@ -42,7 +42,7 @@ const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props})
           {state.writerDone &&
             <Button onClick={onContinue} blink
             id="btn-start"
-              style={{fontSize: '1.75em', position: 'absolute', right: '30px', bottom: '-20px', fontWeight: 800, padding: "0.72em 1.43em"}}
+              style={{fontSize: '2.5em', position: 'absolute', right: '30px', bottom: '-20px', fontWeight: 800, padding: "0.72em 1.43em"}}
             >
               Continuar
             </Button>

@@ -40,6 +40,7 @@
   display: grid;
   grid-template-columns: auto auto auto;
   grid-template-rows: 25% 25% 25% 25%;
+  font-size: 1.6em;
 }
 
 .cartItem {
@@ -149,7 +150,7 @@
     bottom: 0;
     right: 0;
     transform: translate(5%, 5%);
-    height: 20em;
+    height: 40em;
   }
 }
 
@@ -168,6 +169,7 @@
   align-items: center;
   justify-content: flex-end;
   box-shadow: 20px 20px #4444;
+  font-size: 2em;
 
   .blobSpans {
     flex-grow: 1;

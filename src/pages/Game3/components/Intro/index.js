@@ -42,13 +42,13 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
 
       {state.screen === 2 && (
         <div className="intro-recipe">
-          <div style={{flex: '1 0 0px', width: 400, marginLeft: '10%'}}>
+          <div style={{flex: '1 0 0px', width: 400, marginLeft: '10%', fontSize: '2em'}}>
             <img className="dishPresentation" style={{margin: '0 auto'}} src={recipe.image} alt=""/>
-            <h1 className="margin-half-top type-l type-display type-center">
+            <h1 className="margin-half-top type-l type-display type-center" style={{padding: '0 1.5em'}}>
               {recipe.name}
             </h1>
             <Button blink
-              style={{display: 'block', margin: '30px auto 0 auto'}}
+              style={{display: 'block', margin: '1.25em auto 0 auto', fontSize: '1.2em'}}
               onClick={goToTutorial}
               id="btn-start"
             >

@@ -31,7 +31,7 @@ const Init = ({
             {nameTranslate}
           </h1>
 
-          <h2 className="margin-half-top type-s type-center description">
+          <h2 className="margin-top type-s type-center description">
             {description}
           </h2>
           <h2 className="type-s type-center subdescription">

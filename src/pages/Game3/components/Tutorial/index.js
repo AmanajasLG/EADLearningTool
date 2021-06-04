@@ -165,7 +165,7 @@ const Tutorial = ({
       )}
 
       {state.step === 1 && (
-        <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%'}}>
+        <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%', fontSize: '0.75em'}}>
           <ChefDialog chef={chef} onContinue={() => setState({...state, step: 2 }) }
             text="Agora você está pronto para começar as compras! Coloque tudo que está na lista no carrinho antes que o tempo acabe!"
             translation={"Now you're ready to start shopping! Put everything on the list in the cart before time runs out!"}/>
