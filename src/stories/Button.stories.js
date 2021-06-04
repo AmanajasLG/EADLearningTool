@@ -1,25 +1,43 @@
 import React from 'react';
 
-import Button from '../_components/Button';
+import {Button, BUTTON_DIRECTIONS} from '../_components/Button';
 
 const buttonTemplate = {
-  title: 'Example/Button',
+  title: 'Game/Button',
   component: Button,
+  parameters:{docs:{description:{component: 'Botão ~~de~~ **uso** _geral_'}}},
   argTypes: {
     onClick: { action: 'clicked' },
-    backgroundColor: { control: 'color' },
+    direction: {
+      defaultValue: 'center',
+      control: {
+        type: 'select',
+        // options: opts,
+        options: Object.entries(BUTTON_DIRECTIONS).map(opt => opt[1]),
+      },
+      type: {name: 'enum', required: false},
+      description: 'Para qual direção o botão deve apontar',
+      table: {
+        type: {summary: 'enum'},
+        defaultValue: {summary: 'center'},
+      },
+    },
   },
 };
 
-export default buttonTemplate
+export default buttonTemplate;
 
-const Template = (args) => <Button {...args} />;
+const Template = ({label, ...otherArgs}) => {return(
+  <Button {...otherArgs} >
+    {label}
+  </Button>
+)};
 
 export const Primary = Template.bind({});
 Primary.args = {
   primary: true,
   blink: true,
-  children: 'Button',
+  label: 'Button',
   data: {value1: 1, value2: 2}
 };
 
