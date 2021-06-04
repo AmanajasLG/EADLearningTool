@@ -4,6 +4,7 @@ import Button from '../../../../_components/Button'
 import DialogCharacter from '../DialogCharacter'
 import Writer from '../../../../_components/Writer'
 import './index.scss'
+import { LineWeight } from '@material-ui/icons'
 
 const msPerCharacter = 30;
 const waitAfterWritten = 1000;
@@ -22,7 +23,7 @@ const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props})
       {!hideDialog &&
         <DialogBox alternative>
           <div style={{paddingTop: '2%', paddingLeft: '30%'}}>
-            <div>
+            <div style={{fontSize: "1.6em"}}>
               <Writer text={text} style={{fontSize: '1em', paddingLeft: 0}}
 								onWritten={onWriterDone}
 								afterWrittenTime={waitAfterWritten}
@@ -40,9 +41,10 @@ const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props})
           </div>
           {state.writerDone &&
             <Button onClick={onContinue} blink
-              style={{position: 'absolute', right: '30px', bottom: '-20px'}}
+            id="btn-start"
+              style={{fontSize: '1.75em', position: 'absolute', right: '30px', bottom: '-20px', fontWeight: 800, padding: "0.72em 1.43em"}}
             >
-              Continuar >
+              Continuar
             </Button>
           }
         </DialogBox>

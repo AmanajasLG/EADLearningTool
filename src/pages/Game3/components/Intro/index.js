@@ -50,6 +50,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
             <Button blink
               style={{display: 'block', margin: '30px auto 0 auto'}}
               onClick={goToTutorial}
+              id="btn-start"
             >
               Continuar
             </Button>

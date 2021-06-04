@@ -78,6 +78,19 @@ h6 {
   font-size: 0.8rem;
 }
 
+.App.game-mode .type-l {
+  font-size: 4em;
+}
+.App.game-mode .type-m {
+  font-size: 2.2em;
+}
+.App.game-mode .type-s {
+  font-size: 1.4em;
+}
+.App.game-mode .type-xs {
+  font-size: 0.8em;
+}
+
 .type-display {
   font-family: var(--font-title);
 }
@@ -103,6 +116,10 @@ h6 {
   transition: linear 0.2s;
   border: none;
   cursor: pointer;
+}
+
+.App.game-mode .btn {
+  font-size: 1.1em;
 }
 
 .btn.btn-center {

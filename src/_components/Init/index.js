@@ -41,13 +41,13 @@ const Init = ({
 
         <div id="btns">
           {onBack && (
-            <Button blink onClick={onBack}>
+            <Button blink onClick={onBack} id="btn-back">
               Voltar
             </Button>
           )}
           {ready ?
             (onStart &&
-              <Button blink onClick={onStart}>
+              <Button blink onClick={onStart} id="btn-start">
                 Iniciar
               </Button>
             )
