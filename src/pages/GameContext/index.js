@@ -10,6 +10,13 @@ import "./index.scss";
 import { headerConstants } from "../../_constants";
 
 const dimensions = { width: 16, height: 9}
+const ALIGNMENTS = {
+  TOP: "flex-start",
+  LEFT: "flex-start",
+  CENTER: "center",
+  RIGHT: "flex-end",
+  BOTTOM: "flex-end"
+}
 
 const GameContext = (props) => {
   const [state, setState] = React.useState({
@@ -19,7 +26,8 @@ const GameContext = (props) => {
     gameConfig: false,
     back: false,
     config: false,
-    screenConstraint: window.innerWidth / window.innerHeight > dimensions.width / dimensions.height ? 'HEIGHT' : 'WIDTH'
+    debug: true,
+    alignment: {vertical: ALIGNMENTS.CENTER, horizontal: ALIGNMENTS.CENTER}
   });
 
   const dispatch = useDispatch();
@@ -36,26 +44,6 @@ const GameContext = (props) => {
       dispatch(headerActions.setState(headerConstants.STATES.NORMAL));
     };
   }, [dispatch]);
-
-  React.useEffect(() => {
-    //console.log('addResize check')
-    const checkResize = () => {
-      //console.log(`w,h ${window.innerWidth},${window.innerHeight} ratio: ${16/9}` )
-      if( window.innerWidth / window.innerHeight > dimensions.width / dimensions.height && state.screenConstraint === 'WIDTH')
-        setState(s => ({...s, screenConstraint: 'HEIGHT'}))
-      else if(window.innerWidth / window.innerHeight < dimensions.width / dimensions.height && state.screenConstraint === 'HEIGHT')
-        setState(s => ({...s, screenConstraint: 'WIDTH'}))
-    }
-
-    const removeResize = () => {
-      //console.log('Remove resizeCheck')
-      window.removeEventListener('resize', checkResize)
-      return checkResize
-    }
-
-    window.addEventListener('resize', checkResize)
-    return removeResize
-  })
 
   return (
     <React.Fragment>
@@ -99,12 +87,14 @@ const GameContext = (props) => {
         volume={music.volume / 100}
         loop={true}
       />
-      <div id="game-screen" className={ `${state.screenConstraint === 'WIDTH'? 'maxWidth' : 'maxHeight' } debug`}  >
-        {children}
+      <div id="game-screen-wrapper" style={{alignItems: state.alignment.vertical, justifyContent: state.alignment.horizontal}}>
+        <div id="game-screen" className={state.debug && "debug"} style={{"--aspectRatio": dimensions.width / dimensions.height}}>
+          {children}
+        </div>
       </div>
       {state.back && <Redirect to="/userspace" />}
     </React.Fragment>
   );
 };
-//${window.innerWidth / window.innerHeight > 16 / 9 ? 'maxHeight' : 'maxWidth'}
+
 export default GameContext;

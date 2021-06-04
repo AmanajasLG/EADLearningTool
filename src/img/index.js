@@ -85,6 +85,7 @@ export {
   iconVitoriaPers,
   iconVitoriaPrim,
   blobAzul,
+  blobAzul2,
   blobVerde,
   lamp_apagada,
   lamp_acesa,

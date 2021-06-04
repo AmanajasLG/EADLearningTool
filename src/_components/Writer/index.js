@@ -42,6 +42,7 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) =>
 		}
 
 		return () => clearTimeout(timeoutID)
+	// eslint-disable-next-line
 	}, [state.index])
 
 	return(

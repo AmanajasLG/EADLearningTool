@@ -1,5 +1,5 @@
 import React from 'react'
-import DialogHistory from '../../../../_components/DialogHistory'
+// import DialogHistory from '../../../../_components/DialogHistory'
 
 
 const Cellphone = ({children, style, ...props}) => {

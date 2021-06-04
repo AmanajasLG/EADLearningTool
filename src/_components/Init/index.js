@@ -1,7 +1,7 @@
 import React from "react";
 import "./index.scss";
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { useDispatch, useSelector } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button'
 
 const Init = ({
