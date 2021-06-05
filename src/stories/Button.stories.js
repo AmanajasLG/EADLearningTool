@@ -15,12 +15,12 @@ const buttonTemplate = {
         type: {summary: 'enum'},
         defaultValue: {summary: Object.keys(ButtonConfigs.COLOR_SCHEMES)[0]},
       },
-      type: {name: 'enum', required: true},
+      type: {name: 'enum', required: false},
       control: {
         type: 'select',
-        options: Object.keys(ButtonConfigs.COLOR_SCHEMES),
+        options: ButtonConfigs.COLOR_SCHEMES,
       },
-      defaultValue: Object.keys(ButtonConfigs.COLOR_SCHEMES)[0],
+      defaultValue: ButtonConfigs.COLOR_SCHEMES.COR_1,
     },
     direction: {
       description: 'Para qual direção o botão deve apontar',
@@ -46,43 +46,31 @@ const Template = ({label, ...otherArgs}) => {return(
   </Button>
 )};
 
-export const Next = Template.bind({});
-Next.args = {
-  primary: true,
+export const Iniciar = Template.bind({});
+Iniciar.args = {
   blink: true,
-  label: 'Start',
+  showArrow: true,
+  stayAsPill: false,
+  label: 'Iniciar',
   direction: ButtonConfigs.BUTTON_DIRECTIONS.RIGHT,
 };
 
-export const Previous = Template.bind({});
-Previous.args = {
-  primary: false,
+export const Voltar = Template.bind({});
+Voltar.args = {
   blink: true,
-  label: 'Back',
+  showArrow: true,
+  stayAsPill: false,
+  label: 'Voltar',
   direction: ButtonConfigs.BUTTON_DIRECTIONS.LEFT,
+  colorScheme: ButtonConfigs.COLOR_SCHEMES.COR_2,
 };
 
-export const Primary = Template.bind({});
-Primary.args = {
-  primary: true,
+export const PularTutorial = Template.bind({});
+PularTutorial.args = {
   blink: true,
-  label: 'Button',
-  data: {value1: 1, value2: 2}
-};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  label: 'Button',
-};
-
-export const Large = Template.bind({});
-Large.args = {
-  size: 'large',
-  label: 'Button',
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: 'small',
-  label: 'Button',
+  showArrow: true,
+  stayAsPill: true,
+  label: 'Pular Tutorial',
+  direction: ButtonConfigs.BUTTON_DIRECTIONS.RIGHT,
+  colorScheme: ButtonConfigs.COLOR_SCHEMES.COR_2,
 };

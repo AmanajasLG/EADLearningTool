@@ -1,21 +1,20 @@
 .btn{
   font-family: 'Barlow';
-  font-weight: bold;
+  font-weight: 800;
   color: #59316D;
   border: none;
-  // width: 100px;
-  // height: 40px;
   background-color: #F9AFA1;
-  border-radius: 50px 50px 50px 50px;
+  border-radius: 1000px;
   cursor: pointer;
   font-size: inherit;
-  padding: 10px 30px;
+  padding: 0.8em 2em;
+  transition: 100ms linear;
 }
 
 @keyframes inflate{
   0% { transform: scale(1, 1); }
-  30% { transform: scale(1.2, 1.2); }
-  100% { transform: scale(1.1, 1.1); }
+  30% { transform: scale(1.15, 1.15); }
+  100% { transform: scale(1, 1); }
 }
 
 @keyframes jump{
@@ -30,37 +29,41 @@
 }
 
 .blink:hover {
-  animation: inflate .1s;
+  animation: inflate 200ms;
 }
 
-.left {
+.left:not(.stayAsPill) {
   border-bottom-right-radius: 0px;
 }
 
-.right {
+.left.showArrow:before {
+  content: "❮";
+  display: inline;
+  margin-right: 1em;
+}
+
+.right:not(.stayAsPill) {
   border-bottom-left-radius: 0px;
 }
 
-.main {
+.right.showArrow::after {
+  content: "❯";
+  display: inline;
+  margin-left: 1em;
+}
+
+.cor1 {
   background-color: var(--color-main);
 }
 
-.accent {
-  background-color: var(--color-accent);
-}
-
-.second {
+.cor2 {
   background-color: var(--color-second);
 }
 
-.third {
-  background-color: var(--color-third);
-}
-
-.fourth {
+.cor3 {
   background-color: var(--color-fourth);
 }
 
-.fifth {
+.cor4 {
   background-color: var(--color-fifth);
 }
