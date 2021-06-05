@@ -11,7 +11,7 @@ const TimerAnounce = ({seconds, onReady}) => {
       backgroundPosition: 'center',
       backgroundSize: '100% 100%'
     }}>
-      <div style={{width: 400, margin: '0 auto', paddingTop: '2%', paddinBottom: '2%'}}>
+      <div style={{width: 400, margin: '0 auto', paddingTop: '2%', paddinBottom: '2%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         <img style={{display: 'block', width: '20%', margin: '0 auto', marginBottom: '10%'}} src={hourglassFull} alt="hourglass" />
         <h1 className="type-m type-display type-center subtitle">
           Você tem

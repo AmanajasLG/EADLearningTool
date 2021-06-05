@@ -2,11 +2,13 @@
   height: 100%;
   width: 100%;
   margin: 0;
-  padding: 10px 0;
+  // padding: 10px 0;
+  padding-bottom: 1em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 2em;
 }
 
 .main-init-wrapper::after {
@@ -33,7 +35,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 700px;
+  max-width: 50%;
   flex: 1 1 0px;
   min-height: 0px;
 }
@@ -47,11 +49,17 @@
 
 .inner-content > div:first-child > img {
   flex: 1 1 0px;
-  min-height: 60px;
+  // min-height: 60px;
+  min-height: 3em;
 }
 
 .main-init-wrapper .margin-half-top {
-  margin-top: MAX(0.5rem, MIN(2.5rem, calc(50vh - 300px)));
+  // margin-top: MAX(0.5rem, MIN(2.5rem, calc(50vh - 300px)));
+  margin-top: 0.5em;
+}
+
+.main-init-wrapper .margin-top {
+  margin-top: 2em;
 }
 
 #input-tracker {
@@ -85,8 +93,8 @@
 
 h2.type-s {
   font-size: 1.2em;
-  padding-left: 60px;
-  padding-right: 60px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
 }
 
 .subdescription::before {
@@ -94,10 +102,11 @@ h2.type-s {
   border-top: 2px solid #f9afa1;
   display: block;
   width: 33%;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 15px;
-  margin-bottom: 10px;
+  // margin-left: auto;
+  // margin-right: auto;
+  // margin-top: 15px;
+  // margin-bottom: 10px;
+  margin: 0.56em auto 0.41em;
 }
 
 .subdescription {
@@ -108,6 +117,11 @@ h2.type-s {
 
 #btns {
   margin-top: 40px;
+  margin-top: 3em;
+}
+
+#btns :nth-child(n+2) {
+  margin-left: 2em;
 }
 
 #btn-back::before {
@@ -121,9 +135,9 @@ h2.type-s {
 #btn-back,
 #btn-start,
 #btn-tutorial {
-  padding: 10px 30px;
+  padding: 1em 3em;
   font-family: "Barlow";
-  font-weight: 600;
+  font-weight: 800;
   transition: 100ms linear;
   color: #59316d;
 }

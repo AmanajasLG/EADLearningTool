@@ -13,8 +13,10 @@
 /* Faz com que esteja sempre de acordo com a razão de aspecto somente com css*/
 	--aspectRatio: 1;
 	--ratio: min( calc( 100vw / var(--aspectRatio) ), 100vh );
-	width: calc( var(--aspectRatio) * var(--ratio) );
-	height: calc( var(--ratio) );
+	--gameWidth: calc( var(--aspectRatio) * var(--ratio) );
+	--gameHeight: var(--ratio);
+	width: var(--gameWidth);
+	height: var(--gameHeight);
 
 /* Deals with responsive font sizes for the games.
 Not sure how does this affect accessibility, though. Might need tweaks for that. */

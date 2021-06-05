@@ -332,7 +332,7 @@ const Game3 = (props) => {
       };
     else if (change > 0)
       cashierLines = {
-        text: "Bem... Obrigada pela gorgeta!",
+        text: "Bem... Obrigada pela gorjeta!",
         translation: "Well... Thanks for the tip!",
       };
     //if( value === 0)
