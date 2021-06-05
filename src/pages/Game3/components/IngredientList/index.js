@@ -8,7 +8,7 @@ import './index.scss'
 const IngredientList = ({children, ...props}) => {
   return(
     <div className="ingredientList" {...props}>
-      <div style={{position: 'absolute', width: 400}}>
+      <div style={{position: 'absolute', fontSize: '1.2em'}}>
         {children}
       </div>
     </div>
