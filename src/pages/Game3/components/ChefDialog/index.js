@@ -4,7 +4,7 @@ import Button from '../../../../_components/Button'
 import DialogCharacter from '../DialogCharacter'
 import Writer from '../../../../_components/Writer'
 import './index.scss'
-import { LineWeight } from '@material-ui/icons'
+// import { LineWeight } from '@material-ui/icons'
 
 const msPerCharacter = 30;
 const waitAfterWritten = 1000;

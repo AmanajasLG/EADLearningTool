@@ -1,7 +1,7 @@
 import React from 'react'
 // import { ingredientsListBg } from '../../../../img'
-// import parse from "html-react-parser";
-// import marked from "marked";
+// import parse from "html-react-parser"
+// import marked from "marked"
 
 import './index.scss'
 
