@@ -45,33 +45,39 @@ const Button = ({children, blink, direction, colorScheme, onClick, stayAsPill, s
 
 export default Button;
 
-const Iniciar = ({label, onClick}) => <Button
+// Purposefully hiding children because it makes no sense in this context
+// It makes more obvious that setting label is through a prop and should be text
+
+const Iniciar = ({label, onClick, children, ...props}) => <Button
   blink
   colorScheme={COLOR_SCHEMES.COR_1}
   direction={BUTTON_DIRECTIONS.RIGHT}
   onClick={onClick}
   showArrow
+  {...props}
 >
   {label??"Iniciar"}
 </Button>;
 
-const Voltar = ({label, onClick}) => <Button
+const Voltar = ({label, onClick, children, ...props}) => <Button
   blink
   colorScheme={COLOR_SCHEMES.COR_2}
   direction={BUTTON_DIRECTIONS.LEFT}
   onClick={onClick}
   showArrow
+  {...props}
 >
   {label??"Voltar"}
 </Button>;
 
-const PularTutorial = ({label, onClick}) => <Button
+const PularTutorial = ({label, onClick, children, ...props}) => <Button
   blink
   colorScheme={COLOR_SCHEMES.COR_2}
   direction={BUTTON_DIRECTIONS.RIGHT}
   onClick={onClick}
   showArrow
   stayAsPill
+  {...props}
 >
   {label??"Pular Tutorial"}
 </Button>;
