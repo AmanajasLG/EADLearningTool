@@ -75,22 +75,30 @@ const Game5 = () => {
                 }
                 {state.dressingContext &&
                   <div>
-                    <DressingCharacter clothesTypes={state.clothesTypes} clothes={state.clothes}
-                      onRemoveClick={ index => () => {
-                        let clothes = [...state.clothes]
-                        clothes[index] = null
-                        setState({...state, clothes:clothes})
-                      }}
-                    />
-                    <Wardrobe clothes={mission.clothes}
-                      onClothesClick={ item => () =>
-                        {
-                          var clothes = [...state.clothes]
-                          clothes[item.type] = item
-                          setState({...state, clothes: clothes})
-                        }
-                      }
-                    />
+                    <div style={{marginTop: '15%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
+                      <div style={{flex: '1 0 0px', border: '1px solid red'}}>
+                        <DressingCharacter clothesTypes={state.clothesTypes}
+                          clothes={state.clothes}
+                          showRemove
+                          onRemoveClick={ index => () => {
+                            let clothes = [...state.clothes]
+                            clothes[index] = null
+                            setState({...state, clothes:clothes})
+                          }}
+                        />
+                      </div>
+                      <div style={{flex: '1 0 0px', border: '1px solid red'}}>
+                        <Wardrobe style={{border: '1px solid red'}} clothes={mission.clothes}
+                            onClothesClick={ item => () =>
+                            {
+                              var clothes = [...state.clothes]
+                              clothes[item.type] = item
+                              setState({...state, clothes: clothes})
+                            }
+                          }
+                        />
+                      </div>
+                    </div>
                     <button onClick={() =>{
                         let clotheCount = state.clothes.reduce((acc, item)=> (item === null ? acc: acc + 1), 0)
                         setState({...state, ready: clotheCount >= 2, readyAlert: clotheCount < 2})
