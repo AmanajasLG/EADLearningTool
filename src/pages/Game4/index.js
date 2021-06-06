@@ -504,7 +504,7 @@ const Game4 = (props) => {
   };
 
   return (
-    <div id="game2-wrapper">
+    <React.Fragment>
       {process.env.NODE_ENV === "development" && (
         <div style={{ position: "absolute", zIndex: 100000000, top: 0 }}>
           <button onClick={() => setState({ ...state, runTimer: false })}>
@@ -527,9 +527,9 @@ const Game4 = (props) => {
           <button onClick={moveToServing}>Serving</button>
         </div>
       )}
-      {mission ? (
+      {mission ?
         //verificar se é possível generalizar esses gameX-wrapper
-        <div id="game2-content">
+        <React.Fragment>
           {(function renderScene() {
             switch (state.scene) {
               case "INIT":
@@ -1215,12 +1215,12 @@ const Game4 = (props) => {
                 return <div>Error</div>;
             }
           })()}
-          {state.back && <Redirect to="/userspace" />}
-        </div>
-      ) : (
+        </React.Fragment>
+       : (
         <div>Loading..</div>
       )}
-    </div>
+      {state.back && <Redirect to="/userspace" />}
+    </React.Fragment>
   );
 };
 
