@@ -10,7 +10,7 @@ import Button from '../../../../_components/Button'
 import {
   // ingredientsListRotated,
   // kitchen,
-  recipeBg
+  recipeBgRound
 } from "../../../../img";
 
 // import { zeroFill } from "../../../../_helpers";
@@ -19,7 +19,7 @@ const Intro = ({ chef, recipe, ingredientsList, seconds, goToKitchen }) => {
   const [state, setState] = React.useState({ screen: 0 });
 
   return (
-    <div id="room-itself" className="intro">
+    <React.Fragment>
       {state.screen === 0 && (
         <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%'}}>
           <ChefDialog chef={chef} onContinue={() => setState({ screen: 1 })}
@@ -32,8 +32,9 @@ const Intro = ({ chef, recipe, ingredientsList, seconds, goToKitchen }) => {
       {state.screen === 1 && (
         <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%'}}>
           <div style={{position: 'relative', overflow: 'visible'}}>
-            <img style={{position: 'absolute', width: '60%', left: '25%', top: '-130px'}} src={recipeBg} alt=""/>
-            <img style={{position: 'absolute', right: '30%', width: '30%'}} src={recipe.image} alt="" />
+            <img className="rotate backwards" style={{position: 'absolute', width: '60%', left: '25%', top: '-130px', opacity: '60%'}} src={recipeBgRound} alt=""/>
+            <img className="rotate" style={{position: 'absolute', width: '60%', left: '25%', top: '-130px'}} src={recipeBgRound} alt=""/>
+            <img className="dishPresentation" style={{position: 'absolute', right: '30%', width: '30%'}} src={recipe.image} alt=""/>
           </div>
           <ChefDialog chef={chef} onContinue={() => setState({ screen: 2 })}
             text={recipe.description}
@@ -71,7 +72,7 @@ const Intro = ({ chef, recipe, ingredientsList, seconds, goToKitchen }) => {
       {state.screen === 3 &&
         <TimerAnounce seconds={seconds} onReady={goToKitchen} />
       }
-    </div>
+    </React.Fragment>
   );
 };
 
