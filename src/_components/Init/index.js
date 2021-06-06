@@ -3,6 +3,7 @@ import "./index.scss";
 import CircularProgress from '@material-ui/core/CircularProgress'
 // import { useDispatch, useSelector } from 'react-redux'
 import {Iniciar, Voltar} from '../Button'
+import Blob from '../Blob'
 
 const Init = ({
   icon,
@@ -53,6 +54,10 @@ const Init = ({
             </span>
           }
         </div>
+      </div>
+      <div style={{position: 'absolute', width: '100%', height: '100%', pointerEvents: 'none'}}>
+        <Blob style={{position: 'relative', width: '100%', top: 0, left: 0, zIndex: -10}}/>
+        <Blob fill="none" duration="12s" stroke="#59316d" strokeWidth={4} style={{position: 'relative', width: '100%', top: 0, left: 0, zIndex: -9}}/>
       </div>
     </div>
   );

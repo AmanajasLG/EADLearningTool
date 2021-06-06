@@ -29,6 +29,7 @@ import bigBlob from "./Game3/bigBlob.svg";
 import ingredientsListRotated from "./Game3/ingredients-list-rotated.svg";
 import kitchen from "./Game3/kitchen.svg";
 import tomato from "./Game3/Tomate_lista.svg";
+import table from "./Game4/table.svg";
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -67,6 +68,7 @@ export {
   wallet,
   ingredientsListRotated,
   kitchen,
+  table,
   hourglassEmpty,
   hourglassFull,
   cashierBg,

@@ -1,7 +1,7 @@
 const initialState = (checkedPlayed = false) => {
   return {
     scene: "INIT",
-    runTimer: false,
+    runTimer: true,
     initTime: 0,
     remainingTime: 0,
     timeUp: false,

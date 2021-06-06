@@ -7,6 +7,7 @@ import Button from '../../../../_components/Button'
 import { kitchen, recipeBgRound } from "../../../../img";
 import ChefDialog from '../ChefDialog'
 import IngredientList from '../IngredientList'
+import ListedIngredient from '../ListedIngredient'
 
 const instructionText=(recipeName, recipeNameTranslate)=> ({
   en: `Shop for the items in the list before the time is up! In today's
@@ -57,10 +58,7 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
           </div>
           <IngredientList style={{flex: '1 0 0px'}}>
             {ingredientsList.map((ingredient, index) =>
-              <div className="ingredient" key={index}>
-                <img className="ingredientImg" src={ingredient.image} alt="" />
-                <span>{ingredient.description}</span>
-              </div>
+              <ListedIngredient key={index} richText={ingredient.order !== null} ingredient={ingredient} />
             )}
           </IngredientList>
         </div>
@@ -68,5 +66,8 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
     </React.Fragment>
   );
 };
+
+//{ingredient.order}.{" "}
+//{parse(marked.parseInline(ingredient.description))};
 
 export default Intro;

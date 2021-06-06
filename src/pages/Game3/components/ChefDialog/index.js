@@ -22,7 +22,7 @@ const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props})
     <React.Fragment>
       {!hideDialog &&
         <DialogBox alternative>
-          <div style={{paddingTop: '2%', paddingLeft: '30%'}}>
+          <div style={{paddingLeft: '30%'}}>
             <div style={{fontSize: "3.2em"}}>
               <Writer text={text} style={{fontSize: '1em', paddingLeft: 0}}
 								onWritten={onWriterDone}
