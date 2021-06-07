@@ -322,64 +322,20 @@
   outline: none;
 }
 
-// #add-contato {
-//   background-color: #d6e3f455;
-//   border-radius: 30px;
-//   padding: 10px;
-// }
-
-// #btn-add-contato {
-//   margin-top: 20px;
-//   margin-left: 10px;
-//   margin-right: 10px;
-//   padding: 8px 20px;
-//   border-radius: 2em;
-//   text-align: center;
-//   font-family: "Barlow";
-//   font-weight: 500;
-//   transition: 100ms linear;
-// }
-
-// #btn-add-contato.enabled {
-//   background-color: #d6e3f4;
-//   color: #59316d;
-//   cursor: pointer;
-// }
-
-// #btn-add-contato.disabled {
-//   background-color: #aaaaaa;
-//   color: #eeeeee;
-//   cursor: default;
-//   pointer-events: none;
-// }
-
-// #btn-add-contato:hover.enabled {
-//   background-color: #59316d;
-//   color: #ffffff;
-// }
-
 #btn-terminei-wrapper {
   position: absolute;
   bottom: 0px;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  transform: translateY(55%);
+
+  button {
+    font-size: 2em;
+    transition: 100ms linear;
+  }
 }
 
-#btn-terminei {
-  background-color: #ede6f0;
-  border-radius: 2em 2em 0 2em;
-  color: #59316d;
-  text-align: center;
-  font-family: "Barlow";
-  font-weight: Bold;
-  font-size: 1.3rem;
-  cursor: pointer;
-  padding: 20px 40px;
-  min-width: max-content;
-  width: fit-content;
-  margin: 0 auto;
-  transform: translateY(55%);
-  transition: 100ms linear;
-}
 
 #btn-terminei:hover {
   background-color: #59316d;
