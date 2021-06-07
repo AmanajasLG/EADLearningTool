@@ -16,6 +16,7 @@ import AcusationLamp from "../../_components/AcusationLamp";
 import Conversa from "../../_components/Conversa";
 import DialogCharacter from "../../_components/DialogCharacter";
 import FullscreenOverlay from "../../_components/FullscreenOverlay";
+import { Iniciar, PularTutorial } from "../../_components/Button";
 
 import { Redirect } from "react-router";
 import initialState from "./initialState";
@@ -523,15 +524,18 @@ const Game2 = (props) => {
                 Select someone to talk and help you find your guide.
               </span>
               {hasPlayed ? (
-                <button
-                  className="btn btn-center"
-                  id="btn-tutorial"
-                  onClick={() => {
-                    setState({ ...state, scene: "ROOM" });
-                  }}
-                >
-                  Skip tutorial
-                </button>
+                <div>
+                  <PularTutorial label="Skip tutorial" onClick={() => setState( s => s.scene="ROOM" )} />
+                </div>
+                // <button
+                //   className="btn btn-center"
+                //   id="btn-tutorial"
+                //   onClick={() => {
+                //     setState({ ...state, scene: "ROOM" });
+                //   }}
+                // >
+                //   Skip tutorial
+                // </button>
               ) : null}
             </div>
           </div>
@@ -573,13 +577,14 @@ const Game2 = (props) => {
                 so be sure not to waste their times with question that are out
                 of yout context!
               </span>
-              <button
+              <Iniciar label="Continuar" onClick={endTutorial}/>
+              {/* <button
                 className="btn btn-center"
                 id="btn-end-tutorial"
                 onClick={endTutorial}
               >
                 Continuar
-              </button>
+              </button> */}
             </div>
           </div>
         )}
