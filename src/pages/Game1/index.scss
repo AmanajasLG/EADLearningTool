@@ -17,59 +17,67 @@
 }
 
 .popup-content {
-  width: 700px;
-  height: 550px;
+  width: 70em;
+  // height: 550px;
   background-color: #f9afa1;
-  border-radius: 3rem;
-  padding: 50px;
+  border-radius: 5em;
+  padding: 5em;
   // position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+
+  > :not(:last-child) {
+    margin-bottom: 0.5em;
+  }
+
+  .popup-texts {
+    font-size: 2.8em;
+    line-height: 1.15em;
+  }
+
+  > span {
+    font-family: "Abril Fatface";
+    font-size: 4.8em;
+    color: #59316d;
+    display: block;
+    text-align: center;
+  }
+
+  > p {
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 2rem;
+    text-align: center;
+    flex-grow: 1;
+  }
 }
 
-.popup-content > span {
-  font-family: "Abril Fatface";
-  font-size: 3rem;
-  color: #59316d;
-  display: block;
+.next-room-text {
+  color: #614641;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Barlow";
+  // font-size: 1.75rem;
+  // line-height: 2rem;
   text-align: center;
 }
 
-.popup-content > p {
-  margin-top: 3rem;
-  font-style: italic;
-  font-size: 2rem;
-  text-align: center;
-  flex-grow: 1;
-}
 
 #popup-btns {
-  // position: absolute;
-  // bottom: 0;
-  // left: 0;
-  // right: 0;
-  // margin-bottom: 50px;
-  flex-grow: 1;
-  justify-self: flex-end;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 
-#popup-btns button {
-  font-family: "Barlow";
-  font-weight: 700;
-  font-size: 1.3rem;
-  color: #59316d;
-  margin: 20px;
-  padding: 15px;
-  border: none;
-  border-radius: 2rem;
-  position: relative;
-  cursor: pointer;
-  transition: 150ms linear;
+#popup-btns {
+  font-size: 2.1em;
+  
+  button {
+    margin: 1em;
+  }
 }
 
 button:disabled,
@@ -167,24 +175,6 @@ button#go::after {
 
 // MUDANCAS
 
-.popup-content > p {
-  margin: 2rem 0;
-  font-style: italic;
-  font-size: 2rem;
-  text-align: center;
-  flex-grow: 1;
-}
-
-.next-room-text {
-  color: #614641;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: "Barlow";
-  font-size: 1.75rem;
-  line-height: 2rem;
-  text-align: center;
-}
 
 .next-room-text span[lang="pt-br"] {
   font-weight: 600;

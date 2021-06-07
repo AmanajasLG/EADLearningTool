@@ -26,6 +26,7 @@ import { bigPhone, dedao, palma, blobLowScore, blobLaranja } from "../../img";
 import "./index.scss";
 import "./feedback-screen.scss";
 import { Button } from "@material-ui/core";
+import { ButtonConfigs, Iniciar, Voltar } from "../../_components/Button";
 
 const Game1 = (props) => {
   const [state, setState] = React.useState(initialState());
@@ -650,7 +651,7 @@ const Game1 = (props) => {
                           <div className="popup-wrapper">
                             <div className="popup-content">
                               <span>Are you sure?</span>
-                              <div>
+                              <div className="popup-texts">
                                 {state.wrongContacts > 0 ? (
                                   <div className="next-room-text">
                                     <span lang="pt-br">
@@ -688,24 +689,16 @@ const Game1 = (props) => {
                                 )}
                               </div>
                               <div id="popup-btns">
-                                <button
-                                  id="no-go"
-                                  onClick={() =>
-                                    setState({
-                                      ...state,
-                                      shouldCloseDialog: true,
-                                    })
-                                  }
-                                >
-                                  {state.wrongContacts > 0
-                                    ? "Keep trying"
-                                    : "Not yet"}
-                                </button>
-                                <button id="go" onClick={onGoNextRoom}>
-                                  {state.wrongContacts > 0
-                                    ? "Continue anyway"
-                                    : "Let's go"}
-                                </button>
+                                <Voltar
+                                  label={state.wrongContacts > 0 ? "Keep trying" : "Not yet"}
+                                  onClick={() => setState( (s) => {return {...s, shouldCloseDialog: true}} )}
+                                  colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                                  />
+                                <Iniciar
+                                  label={state.wrongContacts > 0 ? "Continue anyway" : "Let's go"}
+                                  onClick={onGoNextRoom}
+                                  colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_2}
+                                />
                               </div>
                             </div>
                           </div>
