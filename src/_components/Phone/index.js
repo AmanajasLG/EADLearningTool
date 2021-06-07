@@ -179,7 +179,7 @@ const Phone = ({
                         contact.job === "" ||
                         contact.country === "" ||
                         contact.name === ""
-                    ).length == 0 &&
+                    ).length === 0 &&
                 <Button
                   blink
                   onClick={_terminou}

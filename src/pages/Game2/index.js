@@ -652,40 +652,30 @@ const Game2 = (props) => {
                           onClickClose={() =>
                             setState({ ...state, showTips: false })
                           }
+                          bgRGBA={{ r: 249, g: 175, b: 161, a: 0.69 }}
                         >
-                          <div>
-                            <div id="big-phone-wrapper">
-                              <div id="big-phone-imgs">
-                                <img src={palma} alt="hand" />
-                                <img
-                                  style={{ marginLeft: "22.5%" }}
-                                  src={bloco}
-                                  alt="note"
+                          <div id="big-note-wrapper">
+                            <div id="big-note-imgs">
+                              <img
+                                src={palma}
+                                style={{ marginLeft: "-11.25%" }}
+                                alt="hand" />
+                              <img
+                                src={bloco}
+                                alt="note"
+                                style={{ marginLeft: "11.25%" }}
                                 />
-                                <img src={dedao} alt="thumb" />
-                              </div>
-                              <div id="big-phone-screen-wrapper">
-                                <div
-                                  id="big-phone-screen-content"
-                                  className="section-title"
-                                >
-                                  <span lang="pt-br">Dicas:</span>
-                                  <div>
-                                    {state.tips.map((tip, index) => (
-                                      <div
-                                        key={index}
-                                        style={{
-                                          position: "absolute",
-                                          padding: "10%",
-                                          width: "100%",
-                                        }}
-                                      >
-                                        <div>{tip}</div>
-                                        <hr />
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
+                              <img
+                                src={dedao}
+                                style={{ marginLeft: "-11.25%" }}
+                                alt="thumb" />
+                            </div>
+                            <div id="big-note-writings-wrapper">
+                              <div id="big-note-writings-content">
+                                <span id="note-dicas">Dicas:</span>
+                                {state.tips.map((tip, index) => (
+                                  <span key={index} className="dica">{tip}</span>
+                                ))}
                               </div>
                             </div>
                           </div>

@@ -64,59 +64,30 @@
   text-align: center;
 }
 
+.next-room-text span[lang="pt-br"] {
+  font-weight: 600;
+  // padding: 0 30px;
+  margin-bottom: 10px;
+}
+
+.next-room-text span[lang="en"]::before {
+  content: "";
+  display: block;
+  border-top: 2px solid white;
+  margin: 20px auto;
+  width: 40%;
+}
 
 #popup-btns {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-}
-
-#popup-btns {
   font-size: 2.1em;
   
   button {
     margin: 1em;
   }
-}
-
-button:disabled,
-button[disabled] {
-  border: 1px solid #545d89 !important;
-  background-color: #3f4875 !important;
-  color: #545d89 !important;
-}
-
-button#no-go:hover,
-button#go:hover {
-  background-color: #59316d;
-  color: #ffffff;
-}
-
-button#no-go::before {
-  content: "❮";
-  display: inline-block;
-  margin-left: 15px;
-  margin-right: 15px;
-}
-
-button#no-go {
-  padding-right: 40px;
-  border-bottom-right-radius: 0;
-  background-color: #ffcca9;
-}
-
-button#go {
-  padding-left: 40px;
-  border-bottom-left-radius: 0;
-  background-color: #d6e3f4;
-}
-
-button#go::after {
-  content: "❯";
-  display: inline-block;
-  margin-left: 15px;
-  margin-right: 15px;
 }
 
 #question-counter {
@@ -171,21 +142,4 @@ button#go::after {
   100% {
     transform: translateX(0%);
   }
-}
-
-// MUDANCAS
-
-
-.next-room-text span[lang="pt-br"] {
-  font-weight: 600;
-  // padding: 0 30px;
-  margin-bottom: 10px;
-}
-
-.next-room-text span[lang="en"]::before {
-  content: "";
-  display: block;
-  border-top: 2px solid white;
-  margin: 20px auto;
-  width: 40%;
 }
