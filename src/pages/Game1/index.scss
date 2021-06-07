@@ -118,24 +118,22 @@ button#go::after {
   left: -3%;
   background-color: #cbe7de;
   color: #59316d;
-  max-width: 370px;
-  width: 40vw;
-  max-height: 330px;
-  height: 32vh;
+  width: 9em;
+  height: 8em;
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Assistant";
-  font-size: 2.5rem;
+  font-size: 4em;
   font-weight: 300;
-  border-radius: 0px 85px 200px 125px;
+  border-radius: 0em 2.125em 5em 3.125em;
   transform: translateX(-100%);
   animation: slideAmountFromLeft 550ms 50ms cubic-bezier(0.3, 0.84, 0.37, 1)
     forwards;
 }
 
 #question-counter-info {
-  margin-top: -50px;
+  margin-top: -1.25em;
   max-height: 100%;
   max-width: 100%;
 }
