@@ -13,6 +13,7 @@ const COLOR_SCHEMES = Object.freeze({
   COR_2: "cor2",
   COR_3: "cor3",
   COR_4: "cor4",
+  COR_5: "cor5",
 });
 
 const ButtonConfigs = Object.freeze({
