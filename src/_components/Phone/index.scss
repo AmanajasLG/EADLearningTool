@@ -17,9 +17,11 @@
   position: absolute;
   bottom: 0;
   right: 0;
-  margin-right: 10vw;
-  width: 15vw;
-  max-width: 200px;
+  // margin-right: 10vw;
+  margin-right: calc( var(--gameWidth) * 0.1 );
+  // width: 15vw;
+  width: 20em;
+  // max-width: 200px;
   // margin-bottom: 2vh;
 }
 
@@ -64,16 +66,16 @@
   flex-direction: column;
   align-items: center;
   color: #59316d;
-  font-size: 1.4rem;
-  line-height: 1.7rem;
+  font-size: 2.24em;
+  line-height: 1.025em;
   text-align: center;
-  padding: 0 10px 10px 10px;
+  padding: 0.2em 0.4em 0.4em 0.4em;
   transition: 100ms ease-in-out;
   opacity: 0;
-  min-width: 200px;
+  // min-width: 200px;
   position: absolute;
   transform: translateY(-100%);
-  border-radius: 1rem;
+  border-radius: 0.715em;
 }
 
 #small-phone-content:hover #small-phone-floating-text {
@@ -91,8 +93,8 @@
   display: block;
   position: relative;
   width: 50%;
-  margin: 10px auto;
-  border-top: 2px solid #f9afa1;
+  margin: 0.42em auto;
+  border-top: 0.1em solid #f9afa1;
 }
 
 #small-phone-floating-text span[lang="default"] {
