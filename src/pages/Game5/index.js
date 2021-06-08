@@ -17,7 +17,7 @@ const Game5 = () => {
   const [state, setState] = React.useState(initialState())
   const mission = stub
 
-  const onStartGame = () => setState({...state, scene: 'GAME'})
+  const onStartGame = () => setState(s => ({...state, scene: 'GAME'}) )
 
   return(
     <React.Fragment>
@@ -39,7 +39,7 @@ const Game5 = () => {
                 //}).description
               }
               onStart={onStartGame}
-              onBack={() => setState({ ...state, back: true })}
+              onBack={() => setState(s => ({ ...s, back: true })) }
               ready={mission.id}
             />
           )
@@ -83,10 +83,10 @@ const Game5 = () => {
                       <div>Tem certeza?</div>
                       <div>você terá apenas UMA chance de rever cada informação do convite</div>
                       <div>Deseja continuar?</div>
-                      <button onClick={() => setState(s => ({...state, proceedToDressingConfirmation: false, showInvitation: true}) )}>
+                      <button onClick={() => setState(s => ({...s, proceedToDressingConfirmation: false, showInvitation: true}) )}>
                         Ver o convite
                       </button>
-                      <button onClick={() => setState(s => ({...state, proceedToDressingConfirmation: false, dressingContext: true}) )}>
+                      <button onClick={() => setState(s => ({...s, proceedToDressingConfirmation: false, dressingContext: true}) )}>
                         Estou pronto(a)!
                       </button>
                     </div>
@@ -103,7 +103,7 @@ const Game5 = () => {
                           onRemoveClick={ index => () => {
                             let clothes = [...state.clothes]
                             clothes[index] = null
-                            setState({...state, clothes:clothes})
+                            setState( s => ({...s, clothes:clothes}) )
                           }}
                         />
                       </div>
@@ -113,7 +113,7 @@ const Game5 = () => {
                             {
                               var clothes = [...state.clothes]
                               clothes[item.type] = item
-                              setState({...state, clothes: clothes})
+                              setState(s => ({...s, clothes: clothes}) )
                             }
                           }
                         />
@@ -121,7 +121,7 @@ const Game5 = () => {
                     </div>
                     <button onClick={() =>{
                         let clotheCount = state.clothes.reduce((acc, item)=> (item === null ? acc: acc + 1), 0)
-                        setState({...state, ready: clotheCount >= 2, readyAlert: clotheCount < 2})
+                        setState(s => ({...s, ready: clotheCount >= 2, readyAlert: clotheCount < 2}) )
                       }}
                     >
                       Estou pronto!
@@ -129,14 +129,14 @@ const Game5 = () => {
                     {state.readyAlert &&
                       <div>
                         Não pode sair vestido tão pouco!
-                        <button onClick={()=>setState({...state, readyAlert: false})}>Voltar a vestir</button>
+                        <button onClick={() => setState(s => ({...s, readyAlert: false}))}>Voltar a vestir</button>
                       </div>
                     }
                     {state.ready &&
                       <div>
                         Esse é seu look ideal?
-                        <button onClick={()=>setState({...state, ready: false, scene: "END"})}>Sim</button>
-                        <button onClick={()=>setState({...state, ready: false})}>Não</button>
+                        <button onClick={()=>setState(s =>({...s, ready: false, scene: "END"}) )}>Sim</button>
+                        <button onClick={()=>setState(s =>({...s, ready: false}) )}>Não</button>
                       </div>
                     }
                   </div>
@@ -148,7 +148,7 @@ const Game5 = () => {
               <div>
                 Fim de jogo! altos feedbacks.
                 <button onClick={() => setState(initialState())}>Jogar novamente</button>
-                <button onClick={() => setState({...state, back: true})}>Sair</button>
+                <button onClick={() => setState(s => ({...s, back: true}) )}>Sair</button>
               </div>
             )
           default:
