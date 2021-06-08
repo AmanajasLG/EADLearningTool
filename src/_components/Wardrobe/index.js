@@ -10,15 +10,22 @@ const Wardrobe = ({clothes, onClothesClick, ...props}) => {
 
   return(
     <div {...props}>
-      <div>
+      <div style={{display: 'flex', flexDirection: 'row', backgroundColor: '#ffcca9', justifyContent: 'space-around'}}>
         {labels.map((label, index) =>
-          <button onClick={() => setState(index)}>{label}</button>
+          <Button key={index} onClick={() => setState(index)}
+            style={{flex: '1 0 0px', backgroundColor: (state === index ? '#ffcca9' : 'white') }}
+          >
+            {label}
+          </Button>
         )}
       </div>
-      <div>
+      <div style={{display: 'grid', gridTemplateColumns: '25% 25% 25% 25%', gridTemplateRows: '20% 20% 20%', rowGap: '10%', padding: '5%', backgroundColor: '#ffcca9'}}>
         {clothes.filter( item => item.type === state)
         .map((item, index) =>
-            <Button key={index} onClick={onClothesClick(item)}>{item.name}</Button>
+          <div style={{width: '100%', height: '100%', backgroundColor: 'white'}}>
+            <img key={index} style={{cursor: 'pointer', height: '100%', margin: '0 auto', display: 'block'}} onClick={onClothesClick(item)}
+              src={item.image} alt={item.name}/>
+          </div>
         )}
       </div>
     </div>
