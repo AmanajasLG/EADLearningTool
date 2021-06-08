@@ -700,11 +700,11 @@ const Game4 = (props) => {
                     {state.wrongIngredientNameNotification && (
                       <div className="overlay-error-notification">
                         <div className="overlay-error-notification-content">
-                          <img
+                          {/* <img
                             src={blobLaranja}
                             alt=""
                             className="error-notification-blob absolute-center"
-                          />
+                          /> */}
                           <div className="error-notification-message absolute-center">
                             <span>
                               {state.userLetterOrder.reduce(
@@ -713,12 +713,10 @@ const Game4 = (props) => {
                               )}{" "}
                               não serve para sua receita.
                             </span>
-                            <button
-                              className="btn"
-                              onClick={() => clearIngredientName()}
-                            >
-                              Continuar
-                            </button>
+                            <Iniciar
+                              label="Continuar"
+                              onClick={clearIngredientName}
+                            />
                           </div>
                         </div>
                       </div>
