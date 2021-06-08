@@ -9,11 +9,11 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: transparent;
-  z-index: 100000;
+  background-color: #fffb;
+  z-index: 10000;
   width: 100%;
   height: 100%;
-  pointer-events: none;
+  // pointer-events: none;
 }
 
 /* Position the content inside the overlay */
@@ -63,6 +63,7 @@
   font-size: 2.5em;
   background-color: #F9AFA1;
   border-radius: 8em 12em 18em 20em;
+  // pointer-events: visible;
 }
 
 .smaller-tutorial-notification-message span {
@@ -154,7 +155,7 @@
   filter: drop-shadow(6px 3px 0px rgb(248, 122, 122));
 }
 
-.btn-add-to-conter {
+.btn-add-to-counter {
   margin: auto;
   transform: translate(0, -50%);
   display: block;
@@ -206,38 +207,45 @@
   transform: scale(1.2) rotate(5deg);
 }
 
-.conter {
+.counter {
   position: absolute;
-  padding-left: 10%;
-  padding-right: 10%;
-  bottom: 2%;
   height: 30%;
   width: 90%;
+  bottom: 0;
   left: 5%;
-  z-index: 3;
-  text-align: center;
+  padding: 0 12% 2.4% 8%;
   background-image: url('../../img/Game4/table.svg');
   background-repeat: no-repeat;
   background-size: contain;
+
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  :nth-child(2n) {
+    // margin-top: 7%;
+    align-self: flex-end;
+  }
+  
+  :nth-child(2n+1) {
+    // margin-bottom: 7%;
+  }
 }
 
-.conter-ingredient {
-  display: inline-block;
-  vertical-align: top;
-}
 
-.conter-ingredient-even {
+.counter-ingredient-even {
   margin-top: -5%;
 }
 
-.conter-ingredient-odd {
+.counter-ingredient-odd {
   margin-top: -2%;
 }
 
-.conter-ingredient-solo {
+.counter-ingredient-solo {
   margin-top: 28vh;
   height: 35vh;
-  z-index: 10000;
+  z-index: 1000;
 }
 
 .name-order-div {

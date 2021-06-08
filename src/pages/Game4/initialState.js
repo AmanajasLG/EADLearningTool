@@ -43,6 +43,10 @@ const initialState = (checkedPlayed = false) => {
 
     // FEEDBACK
     feedbackMessages: [],
+
+    // TUTORIAL
+    blobToShow: 0,
+    showBlob: true,
   };
 };
 
