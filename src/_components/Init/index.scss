@@ -118,53 +118,12 @@ h2.type-s {
 #btns {
   margin-top: 40px;
   margin-top: 3em;
+
+  * {
+    display: inline-block;
+  }
 }
 
-#btns :nth-child(n+2) {
+#btns :not(:first-child) {
   margin-left: 2em;
-}
-
-#btn-back::before {
-  content: "< ";
-}
-
-#btn-start::after {
-  content: " >";
-}
-
-#btn-back,
-#btn-start,
-#btn-tutorial {
-  padding: 1em 3em;
-  font-family: "Barlow";
-  font-weight: 800;
-  transition: 100ms linear;
-  color: #59316d;
-}
-
-#btn-back {
-  background-color: #d6e3f4;
-  margin-right: 1em;
-  border-radius: 50px 50px 0px 50px;
-}
-
-#btn-start {
-  background-color: #f9afa1;
-  margin-left: 1em;
-  border-radius: 50px 50px 50px 0px;
-}
-
-#btn-tutorial {
-  display: block;
-  margin-top: 1.5em;
-  border-radius: 50px;
-  background-color: #ffcca9;
-  pointer-events: all;
-}
-
-#btn-start:hover,
-#btn-back:hover,
-#btn-tutorial:hover {
-  color: white;
-  background-color: #59316d;
 }

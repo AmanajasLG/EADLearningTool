@@ -17,6 +17,7 @@ import Intro from "../Game3/components/Intro";
 import ChefDialog from "../Game3/components/ChefDialog";
 import Timer from "../../_components/Timer";
 import Recipe from "../../_components/Recipe";
+import {Button, ButtonConfigs, Iniciar} from "../../_components/Button";
 
 import initialState from "./initialState";
 
@@ -35,7 +36,6 @@ import {
 import DialogCharacter from "../../_components/DialogCharacter";
 import FeedbackPanel from "./components/FeedbackPanel";
 import Tutorial from "./components/Tutorial";
-import { Button } from "@material-ui/core";
 
 const Game4 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -600,44 +600,33 @@ const Game4 = (props) => {
 
                     {!state.doneCooking &&
                       (state.showIngredients ? (
-                        <React.Fragment>
-                          <div className="shuffled-ingredients">
-                            {state.shuffledIngredients.map(
-                              (ingredient, index) => (
-                                <img   key={"suffled-ingredient-" + index} src={ingredient.image} alt=""
-                                  onClick={() => setState({...state, selectedIngredient: { ...ingredient }})}
-                                  style={{
-                                    opacity: ingredient.done ? 0 : 1,
-                                    pointerEvents: ingredient.done
-                                      ? "none"
-                                      : "auto",
-                                    width: '12%',
-                                  }}
-                                  className={
-                                    (state.selectedIngredient
-                                      ? ingredient.name ===
-                                        state.selectedIngredient.name
-                                        ? "selected"
-                                        : ""
-                                      : "") +
-                                    (index % 2
-                                      ? " ingredient-selection-img-even"
-                                      : " ingredient-selection-img-odd") +
-                                    " ingredient-selection-img"
-                                  }
-                                />
-                              )
-                            )}
-                          </div>
-                          {state.selectedIngredient && (
-                            <button
-                              className="btn btn-add-to-conter"
-                              onClick={checkRightIngredient}
-                            >
-                              Adicionar à bancada
-                            </button>
+                        <div className="shuffled-ingredients">
+                          {state.shuffledIngredients.map(
+                            (ingredient, index) => (
+                              <img   key={"suffled-ingredient-" + index} src={ingredient.image} alt=""
+                                onClick={() => setState({...state, selectedIngredient: { ...ingredient }})}
+                                style={{
+                                  opacity: ingredient.done ? 0 : 1,
+                                  pointerEvents: ingredient.done
+                                    ? "none"
+                                    : "auto",
+                                  width: '12%',
+                                }}
+                                className={
+                                  (state.selectedIngredient
+                                    ? ingredient.name ===
+                                      state.selectedIngredient.name
+                                      ? "selected"
+                                      : ""
+                                    : "") + " ingredient-selection-img"
+                                }
+                              />
+                            )
                           )}
-                        </React.Fragment>
+                          {state.selectedIngredient &&
+                            <Button id="btn-add-bancada" blink onClick={checkRightIngredient}>Adicionar à bancada</Button>
+                          }
+                        </div>
                       ) : (
                         <div className="name-order-div absolute-center">
                           <div className="shuffled-letters">
@@ -682,29 +671,22 @@ const Game4 = (props) => {
 
                     {state.wrongIngredientNotification && (
                       <div className="overlay-error-notification">
-                        <div className="overlay-error-notification-content">
-                          <img
-                            src={blobLaranja}
-                            alt=""
-                            className="error-notification-blob absolute-center"
-                          />
-                          <div className="error-notification-message absolute-center">
-                            <span>
-                              Esse item não é o que você precisa agora.
-                            </span>
-                            <button
-                              className="btn"
-                              onClick={() =>
-                                setState({
-                                  ...state,
-                                  selectedIngredient: null,
-                                  wrongIngredientNotification: false,
-                                })
-                              }
-                            >
-                              Continuar
-                            </button>
-                          </div>
+                        {/* <img
+                          src={blobLaranja}
+                          alt=""
+                          className="error-notification-blob absolute-center"
+                        /> */}
+                        <div className="error-notification-message absolute-center">
+                          <span>
+                            Esse item não é o que você precisa agora.
+                          </span>
+                          <Iniciar
+                            label="Continuar"
+                            onClick={() => setState({
+                              ...state,
+                              selectedIngredient: null,
+                              wrongIngredientNotification: false,
+                          })} />
                         </div>
                       </div>
                     )}
