@@ -2,6 +2,7 @@ import React from "react";
 import Dropdown from "../Dropdown";
 
 import { smallPhone, bigPhone, dedao, palma } from "../../img";
+import { Button, ButtonConfigs } from "../../_components/Button";
 
 import "./index.scss";
 import FullscreenOverlay from "../FullscreenOverlay";
@@ -169,62 +170,25 @@ const Phone = ({
                   {contacts?.map((contact, index) => {
                     return _contatoTemplate(contact, index);
                   })}
-                  {/* <div id="add-contato" className="contato">
-										<div className="contact-profile-pic">
-											<div></div>
-											<span><strong>+</strong></span>
-										</div>
-										<div className="Nome">
-											<p>Nome</p>
-											<input
-												type="text"
-												name="nome"
-												placeholder="Nome do contato"
-												value={newContact.name}
-												onChange={(event)=>setNewContact({...newContact, name: event.target.value})}/>
-										</div>
-										<Dropdown
-											label={"Profissão"}
-											optionList={jobs}
-											value={newContact.job}
-											onChange={(event)=>setNewContact({...newContact, job: event.target.value})}
-										/>
-										<Dropdown
-											label={"País"}
-											optionList={countries}
-											value={newContact.country}
-											onChange={(event)=>setNewContact({...newContact, country: event.target.value})}
-										/>
-										<div
-											id="btn-add-contato"
-											className={!(newContact.name && newContact.job && newContact.country) ? "disabled" : "enabled"}
-											onClick={addContato}
-										>
-											Adicionar contato
-										</div>
-									</div> */}
                 </div>
               </div>
             </div>
-            {/* <div id="btn-terminei" onClick={() => setState({...state, changeRoomPopUp: true})}> */}
             <div id="btn-terminei-wrapper">
-              <div
-                id="btn-terminei"
-                onClick={_terminou}
-                style={{
-                  display:
-                    contacts.filter(
+              { contacts.filter(
                       (contact) =>
                         contact.job === "" ||
                         contact.country === "" ||
                         contact.name === ""
-                    ).length > 0
-                      ? "none"
-                      : "block",
-                }}
-              >
-                Terminei!
-              </div>
+                    ).length === 0 &&
+                <Button
+                  blink
+                  onClick={_terminou}
+                  direction={ButtonConfigs.BUTTON_DIRECTIONS.LEFT}
+                  colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_5}
+                >
+                  Terminei!
+                </Button>
+              }
             </div>
           </div>
         </FullscreenOverlay>

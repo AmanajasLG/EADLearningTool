@@ -16,6 +16,7 @@ import AcusationLamp from "../../_components/AcusationLamp";
 import Conversa from "../../_components/Conversa";
 import DialogCharacter from "../../_components/DialogCharacter";
 import FullscreenOverlay from "../../_components/FullscreenOverlay";
+import { Iniciar, PularTutorial } from "../../_components/Button";
 
 import { Redirect } from "react-router";
 import initialState from "./initialState";
@@ -523,15 +524,18 @@ const Game2 = (props) => {
                 Select someone to talk and help you find your guide.
               </span>
               {hasPlayed ? (
-                <button
-                  className="btn btn-center"
-                  id="btn-tutorial"
-                  onClick={() => {
-                    setState({ ...state, scene: "ROOM" });
-                  }}
-                >
-                  Skip tutorial
-                </button>
+                <div>
+                  <PularTutorial label="Skip tutorial" onClick={() => setState( s => s.scene="ROOM" )} />
+                </div>
+                // <button
+                //   className="btn btn-center"
+                //   id="btn-tutorial"
+                //   onClick={() => {
+                //     setState({ ...state, scene: "ROOM" });
+                //   }}
+                // >
+                //   Skip tutorial
+                // </button>
               ) : null}
             </div>
           </div>
@@ -573,13 +577,14 @@ const Game2 = (props) => {
                 so be sure not to waste their times with question that are out
                 of yout context!
               </span>
-              <button
+              <Iniciar label="Continuar" onClick={endTutorial}/>
+              {/* <button
                 className="btn btn-center"
                 id="btn-end-tutorial"
                 onClick={endTutorial}
               >
                 Continuar
-              </button>
+              </button> */}
             </div>
           </div>
         )}
@@ -647,40 +652,30 @@ const Game2 = (props) => {
                           onClickClose={() =>
                             setState({ ...state, showTips: false })
                           }
+                          bgRGBA={{ r: 249, g: 175, b: 161, a: 0.69 }}
                         >
-                          <div>
-                            <div id="big-phone-wrapper">
-                              <div id="big-phone-imgs">
-                                <img src={palma} alt="hand" />
-                                <img
-                                  style={{ marginLeft: "22.5%" }}
-                                  src={bloco}
-                                  alt="note"
+                          <div id="big-note-wrapper">
+                            <div id="big-note-imgs">
+                              <img
+                                src={palma}
+                                style={{ marginLeft: "-11.25%" }}
+                                alt="hand" />
+                              <img
+                                src={bloco}
+                                alt="note"
+                                style={{ marginLeft: "11.25%" }}
                                 />
-                                <img src={dedao} alt="thumb" />
-                              </div>
-                              <div id="big-phone-screen-wrapper">
-                                <div
-                                  id="big-phone-screen-content"
-                                  className="section-title"
-                                >
-                                  <span lang="pt-br">Dicas:</span>
-                                  <div>
-                                    {state.tips.map((tip, index) => (
-                                      <div
-                                        key={index}
-                                        style={{
-                                          position: "absolute",
-                                          padding: "10%",
-                                          width: "100%",
-                                        }}
-                                      >
-                                        <div>{tip}</div>
-                                        <hr />
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
+                              <img
+                                src={dedao}
+                                style={{ marginLeft: "-11.25%" }}
+                                alt="thumb" />
+                            </div>
+                            <div id="big-note-writings-wrapper">
+                              <div id="big-note-writings-content">
+                                <span id="note-dicas">Dicas:</span>
+                                {state.tips.map((tip, index) => (
+                                  <span key={index} className="dica">{tip}</span>
+                                ))}
                               </div>
                             </div>
                           </div>
