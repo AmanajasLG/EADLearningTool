@@ -3,6 +3,9 @@ import { Redirect } from 'react-router-dom'
 import Init from '../../_components/Init'
 import DressingCharacter from '../../_components/DressingCharacter'
 import Wardrobe from '../../_components/Wardrobe'
+import Button from '../../_components/Button'
+import { BlobBg } from '../../_components/Blob'
+import { renderToStaticMarkup } from 'react-dom/server'
 
 
 
@@ -17,7 +20,7 @@ const Game5 = () => {
   const onStartGame = () => setState({...state, scene: 'GAME'})
 
   return(
-    <div>
+    <React.Fragment>
       {(function scene(){
         switch(state.scene){
           case 'INIT':
@@ -43,36 +46,53 @@ const Game5 = () => {
 
           case 'GAME':
             return(
-              <div>
+              <React.Fragment>
+
                 {state.chooseCharacterScreen &&
-                  <div>
-                    Escolha quem vestir
-                    <div>
-                      <button onClick={()=> setState({...state, choosenCharacter: 1, showInvitation: true, chooseCharacterScreen: false})}>Personagem 1</button>
-                      <button onClick={()=> setState({...state, choosenCharacter: 2, showInvitation: true, chooseCharacterScreen: false})}>Personagem 2</button>
-                    </div>
+                  <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', width: '100%', height: '100%'}}>
+                    <img src={mission.char1} style={{height: '50%', cursor: 'pointer'}}
+                      onClick={() => setState(s => ({...s, choosenCharacter: 1, showInvitation: true, chooseCharacterScreen: false}) )} alt="Personagem 1"
+                    />
+                    <img src={mission.char2} style={{height: '50%', cursor: 'pointer'}}
+                      onClick={() => setState(s => ({...s, choosenCharacter: 2, showInvitation: true, chooseCharacterScreen: false}) )} alt="Personagem 2"
+                    />
                   </div>
                 }
+
                 {state.showInvitation &&
-                  <div>
-                    <div>{mission.invitation.text}</div>
-                    <div>{mission.invitation.season}</div>
-                    <div>{mission.invitation.date}</div>
-                    <div>{mission.invitation.time}</div>
-                    <div>
-                      <button onClick={()=>setState({...state, proceedToDressingConfirmation: true, showInvitation: false})}>Estou pronto!</button>
+                  <div style={{position: 'absolute', bottom: 0, width: '50%', height: '50%', left: '25%',
+                    backgroundColor: 'var(--color-second)',  textAlign: 'center'}}>
+
+                    <div style={{position: 'absolute', backgroundColor: 'white', width: '50%', left: '25%', fontSize: '3em'}}>
+                      <div>{mission.invitation.text}</div>
+                      <div>{mission.invitation.season}</div>
+                      <div>{mission.invitation.date}</div>
+                      <div>{mission.invitation.time}</div>
                     </div>
+
+                    <Button style={{position: 'relative', bottom: '10%', margin: '50% auto 0% auto'}}
+                      onClick={() => setState(s => ({...s, proceedToDressingConfirmation: true, showInvitation: false}) )}>
+                      Estou pronto!
+                    </Button>
                   </div>
                 }
+
                 {state.proceedToDressingConfirmation &&
-                  <div>
-                    <div>Tem certeza?</div>
-                    <div>ocê terá apenas uma (1) chance de rever cada informação do convite</div>
-                    <div>Deseja continuar?</div>
-                    <button onClick={()=>setState({...state, proceedToDressingConfirmation: false, showInvitation: true})}>Ver o convite novamente</button>
-                    <button onClick={()=>setState({...state, proceedToDressingConfirmation: false, dressingContext: true})}>Estou pronto(a)!</button>
-                  </div>
+                  <BlobBg style={{postion: 'relative', width: '50%', height: '50%', margin: '0 auto', paddingTop: '7%', textAlign: 'center', fontSize: '3em', zIndex: 1}}>
+                    <div style={{width: '50%', height: '50%', margin: '0 auto'}}>
+                      <div>Tem certeza?</div>
+                      <div>você terá apenas UMA chance de rever cada informação do convite</div>
+                      <div>Deseja continuar?</div>
+                      <button onClick={() => setState(s => ({...state, proceedToDressingConfirmation: false, showInvitation: true}) )}>
+                        Ver o convite
+                      </button>
+                      <button onClick={() => setState(s => ({...state, proceedToDressingConfirmation: false, dressingContext: true}) )}>
+                        Estou pronto(a)!
+                      </button>
+                    </div>
+                  </BlobBg>
                 }
+
                 {state.dressingContext &&
                   <div>
                     <div style={{marginTop: '15%', display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
@@ -121,7 +141,7 @@ const Game5 = () => {
                     }
                   </div>
                 }
-              </div>
+              </React.Fragment>
             )
           case "END":
             return(
@@ -137,7 +157,7 @@ const Game5 = () => {
       })()}
 
       {state.back && <Redirect to='/userspace' />}
-    </div>
+    </React.Fragment>
   )
 }
 

@@ -1,8 +1,10 @@
 import React from 'react'
 import { blobAzul } from '../../img'
+import { renderToStaticMarkup } from 'react-dom/server'
+
 const Blob = ({duration, fill, stroke, strokeWidth, animation, ...props}) => {
   return(
-  <svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" width="auto" preserveAspectRatio viewBox="-200 0 1800 1080" {...props}>
       <path id="Path_5521" data-name="Path 5521" fill={fill ? fill: "#d6e3f4"}
         stroke={ stroke }
         strokeWidth={strokeWidth}
@@ -60,3 +62,13 @@ const Blob = ({duration, fill, stroke, strokeWidth, animation, ...props}) => {
 }
 
 export default Blob
+
+const BlobBg = ({children, style, ...props}) => (
+  <div style={{background: `url("data:image/svg+xml,${encodeURIComponent(renderToStaticMarkup(<Blob {...props.blob} />))}")`,
+    brackgroundRepeat: 'no-repeat', backgroundPosition: 'center', ...style}}
+  {...props}>
+    {children}
+  </div>
+)
+
+export { BlobBg }

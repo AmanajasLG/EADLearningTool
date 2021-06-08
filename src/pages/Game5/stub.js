@@ -4,6 +4,8 @@ const stub = {
   nameTranslate: 'Titulo só que em inglês',
   description: 'O jogo 5 é de vestir roupinha. Simbora.',
   descriptionTranslate: 'Descrição em inglês',
+  char1: "https://res.cloudinary.com/learning-tool/image/upload/v1620584767/Italo_sala_7179e83de6.svg",
+  char2: "https://res.cloudinary.com/learning-tool/image/upload/v1620584719/Georg_sala_9ecd88f631.svg",
   invitation:{
     text: "Você foi convidado para um rolê!",
     date: "01/04",
