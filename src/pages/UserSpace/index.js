@@ -71,6 +71,11 @@ const UserSpace = () => {
                 <Link to='/game4/0'>Game4 Stub</Link><br/>
                 <Link to='/game5/0'>Game5 Stub</Link><br/>
                 <Link to='/game6/0'>Game6 Stub</Link><br/>
+                <Link to='/game7/0'>Game7 Stub</Link><br/>
+                <Link to='/game8/0'>Game8 Stub</Link><br/>
+                <Link to='/game9/0'>Game9 Stub</Link><br/>
+                <Link to='/game10/0'>Game10 Stub</Link><br/>
+
               </div>
             </div>
           }

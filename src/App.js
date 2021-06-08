@@ -7,6 +7,10 @@ import Game3 from './pages/Game3'
 import Game4 from './pages/Game4'
 import Game5 from './pages/Game5'
 import Game6 from './pages/Game6'
+import Game7 from './pages/Game7'
+import Game8 from './pages/Game8'
+import Game9 from './pages/Game9'
+import Game10 from './pages/Game10'
 
 import {
   BrowserRouter as Router,
@@ -58,6 +62,10 @@ const App = () => {
           <PrivateRoute exact path={`/game4/:id`} render={(props) => <GameContext {...props}><Game4 /></GameContext>} />
           <PrivateRoute exact path={`/game5/:id`} render={(props) => <GameContext {...props}><Game5 /></GameContext>} />
           <PrivateRoute exact path={`/game6/:id`} render={(props) => <GameContext {...props}><Game6 /></GameContext>} />
+          <PrivateRoute exact path={`/game7/:id`} render={(props) => <GameContext {...props}><Game7 /></GameContext>} />
+          <PrivateRoute exact path={`/game8/:id`} render={(props) => <GameContext {...props}><Game8 /></GameContext>} />
+          <PrivateRoute exact path={`/game9/:id`} render={(props) => <GameContext {...props}><Game9 /></GameContext>} />
+          <PrivateRoute exact path={`/game10/:id`} render={(props) => <GameContext {...props}><Game10 /></GameContext>} />
           <PrivateRoute exact path={`/test`} component={TestPage} />
           <PrivateRoute exact path={`/userspace`} component={UserSpace} />
           <PrivateRoute exact path={`/missions`} component={Missions} />
