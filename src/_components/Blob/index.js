@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 
 const Blob = ({duration, fill, stroke, strokeWidth, animation, ...props}) => {
   return(
-  <svg xmlns="http://www.w3.org/2000/svg" width="auto" preserveAspectRatio viewBox="-200 0 1800 1080" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" width="auto" preserveAspectRatio="true" viewBox="-200 0 1800 1080" {...props}>
       <path id="Path_5521" data-name="Path 5521" fill={fill ? fill: "#d6e3f4"}
         stroke={ stroke }
         strokeWidth={strokeWidth}

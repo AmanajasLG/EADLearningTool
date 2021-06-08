@@ -15,35 +15,93 @@ const stub = {
   clothes:[
     {
       type: 0,
-      name: "chapeu de couro"
+      name: "chapeu de couro",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
     },
     {
       type: 0,
-      name: "chapeu do kiko"
+      name: "chapeu do kiko",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 1",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 2",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 3",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 4",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapelão",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 5",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 6",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 7",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 8",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+    },
+    {
+      type: 0,
+      name: "chapeu 9",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
     },
     {
       type: 1,
-      name: "blusa normal"
+      name: "blusa normal",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
     },
     {
       type: 1,
-      name: "blusa de frio"
+      name: "blusa de frio",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
     },
     {
       type: 2,
-      name: "bermuda"
+      name: "bermuda",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
     },
     {
       type: 2,
-      name: "calça jeans"
+      name: "calça jeans",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
     },
     {
       type: 3,
-      name: "tenis"
+      name: "tenis",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
     },
     {
       type: 3,
-      name: "chinelo"
+      name: "chinelo",
+      image: "https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
     },
   ]
 }
