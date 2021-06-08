@@ -17,6 +17,7 @@ import Intro from "../Game3/components/Intro";
 import ChefDialog from "../Game3/components/ChefDialog";
 import Timer from "../../_components/Timer";
 import Recipe from "../../_components/Recipe";
+import {Button, ButtonConfigs, Iniciar} from "../../_components/Button";
 
 import initialState from "./initialState";
 
@@ -35,7 +36,6 @@ import {
 import DialogCharacter from "../../_components/DialogCharacter";
 import FeedbackPanel from "./components/FeedbackPanel";
 import Tutorial from "./components/Tutorial";
-import { Button } from "@material-ui/core";
 
 const Game4 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -212,8 +212,10 @@ const Game4 = (props) => {
         ) === 0
       ) {
         updatedState.tutorialIngredientNameSelectionNotification = true;
-        updatedState.runTimer = false;
+        // updatedState.runTimer = false;
       }
+
+      if(state.blobToShow < 2) updatedState.showBlob = true;
 
       setState({
         ...state,
@@ -510,8 +512,8 @@ const Game4 = (props) => {
     <React.Fragment>
       {process.env.NODE_ENV === "development" && (
         <div style={{ position: "absolute", zIndex: 100000000, top: 0 }}>
-          <button onClick={() => setState({ ...state, runTimer: false })}>
-            Stop timer
+          <button onClick={() => setState({ ...state, runTimer: !state.runTimer })}>
+            {state.runTimer ? "Stop timer" : "Continue timer"}
           </button>
           <button onClick={restart}>Restart</button>
           <button onClick={() => endGame(false, false)}>End game win</button>
@@ -575,10 +577,14 @@ const Game4 = (props) => {
                 return (
                   <React.Fragment>
                     <img id="dialog-interact" src={kitchen} style={{position:'absolute', zIndex: -1, width: '100%', height: '100%'}}/>
-                    <Tutorial />
-
+                    {state.showBlob &&
+                      <Tutorial
+                        blobToShow={state.blobToShow}
+                        onClickToEnd={ () => setState( s => ({...s, blobToShow: s.blobToShow+1, showBlob: false}) )}
+                      />
+                    }
                     <Timer style={{ position: "absolute", top: "5%", left: "50%" }}
-                      run={state.runTimer}
+                      run={state.runTimer && !state.showBlob}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
                         setState({
@@ -600,44 +606,33 @@ const Game4 = (props) => {
 
                     {!state.doneCooking &&
                       (state.showIngredients ? (
-                        <React.Fragment>
-                          <div className="shuffled-ingredients">
-                            {state.shuffledIngredients.map(
-                              (ingredient, index) => (
-                                <img   key={"suffled-ingredient-" + index} src={ingredient.image} alt=""
-                                  onClick={() => setState({...state, selectedIngredient: { ...ingredient }})}
-                                  style={{
-                                    opacity: ingredient.done ? 0 : 1,
-                                    pointerEvents: ingredient.done
-                                      ? "none"
-                                      : "auto",
-                                    width: '12%',
-                                  }}
-                                  className={
-                                    (state.selectedIngredient
-                                      ? ingredient.name ===
-                                        state.selectedIngredient.name
-                                        ? "selected"
-                                        : ""
-                                      : "") +
-                                    (index % 2
-                                      ? " ingredient-selection-img-even"
-                                      : " ingredient-selection-img-odd") +
-                                    " ingredient-selection-img"
-                                  }
-                                />
-                              )
-                            )}
-                          </div>
-                          {state.selectedIngredient && (
-                            <button
-                              className="btn btn-add-to-conter"
-                              onClick={checkRightIngredient}
-                            >
-                              Adicionar à bancada
-                            </button>
+                        <div className="shuffled-ingredients">
+                          {state.shuffledIngredients.map(
+                            (ingredient, index) => (
+                              <img   key={"suffled-ingredient-" + index} src={ingredient.image} alt=""
+                                onClick={() => setState({...state, selectedIngredient: { ...ingredient }})}
+                                style={{
+                                  opacity: ingredient.done ? 0 : 1,
+                                  pointerEvents: ingredient.done
+                                    ? "none"
+                                    : "auto",
+                                  width: '12%',
+                                }}
+                                className={
+                                  (state.selectedIngredient
+                                    ? ingredient.name ===
+                                      state.selectedIngredient.name
+                                      ? "selected"
+                                      : ""
+                                    : "") + " ingredient-selection-img"
+                                }
+                              />
+                            )
                           )}
-                        </React.Fragment>
+                          {state.selectedIngredient &&
+                            <Button id="btn-add-bancada" blink onClick={checkRightIngredient}>Adicionar à bancada</Button>
+                          }
+                        </div>
                       ) : (
                         <div className="name-order-div absolute-center">
                           <div className="shuffled-letters">
@@ -682,29 +677,22 @@ const Game4 = (props) => {
 
                     {state.wrongIngredientNotification && (
                       <div className="overlay-error-notification">
-                        <div className="overlay-error-notification-content">
-                          <img
-                            src={blobLaranja}
-                            alt=""
-                            className="error-notification-blob absolute-center"
-                          />
-                          <div className="error-notification-message absolute-center">
-                            <span>
-                              Esse item não é o que você precisa agora.
-                            </span>
-                            <button
-                              className="btn"
-                              onClick={() =>
-                                setState({
-                                  ...state,
-                                  selectedIngredient: null,
-                                  wrongIngredientNotification: false,
-                                })
-                              }
-                            >
-                              Continuar
-                            </button>
-                          </div>
+                        {/* <img
+                          src={blobLaranja}
+                          alt=""
+                          className="error-notification-blob absolute-center"
+                        /> */}
+                        <div className="error-notification-message absolute-center">
+                          <span>
+                            Esse item não é o que você precisa agora.
+                          </span>
+                          <Iniciar
+                            label="Continuar"
+                            onClick={() => setState({
+                              ...state,
+                              selectedIngredient: null,
+                              wrongIngredientNotification: false,
+                          })} />
                         </div>
                       </div>
                     )}
@@ -738,58 +726,29 @@ const Game4 = (props) => {
 
                     {!state.doneCooking &&
                       (state.showIngredients ? (
-                        <div className="conter">
+                        <div className="counter">
                           {state.tableIngredients.map((ingredient, index) => (
                             <img
                               src={ingredient.image}
                               alt={ingredient.name}
                               key={ingredient.name}
-                              className={
-                                "conter-ingredient" +
-                                (index % 2
-                                  ? " conter-ingredient-even"
-                                  : " conter-ingredient-odd")
-                              }
+                              className="counter-ingredient"
                               style={{
                                 width:
                                   (
-                                    70 / state.shuffledIngredients.length
-                                  ).toString() + "vw",
+                                    100 / state.shuffledIngredients.length
+                                  ).toString() + "%",
                               }}
                             />
                           ))}
-                          {[
-                            ...Array(
-                              state.ingredientsList.length -
-                                state.tableIngredients.length
-                            ),
-                          ].map((item, index) => (
-                            <div
-                              key={index}
-                              className={
-                                "conter-ingredient" +
-                                (index % 2
-                                  ? " conter-ingredient-even"
-                                  : " conter-ingredient-odd")
-                              }
-                              style={{
-                                width:
-                                  (
-                                    70 / state.shuffledIngredients.length
-                                  ).toString() + "vw",
-                                height: "4vh",
-                              }}
-                            ></div>
-                          ))}
-
                         </div>
                       ) : (
                         <div>
-                          <div className="conter"></div>
+                          <div className="counter"></div>
                           <img
                             src={state.sortNameIngredient.image}
                             alt=""
-                            className="conter-ingredient-solo absolute-center"
+                            className="counter-ingredient-solo absolute-center"
                           />
                         </div>
                       ))}
@@ -922,7 +881,7 @@ const Game4 = (props) => {
                           )}
                         </div>
 
-                        <div className="conter">
+                        <div className="counter">
                           {state.tableTablewares.map((tableware, index) => (
                             <img
                               key={index}
