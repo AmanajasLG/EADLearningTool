@@ -1,7 +1,8 @@
 import React from 'react'
-import Blob from '../_components/Blob'
+import Blob, { BlobBg } from '../_components/Blob'
 
 const Template = args => <Blob {...args} />
+
 
 const blobTemplate = {
   title: 'Example/Blob',

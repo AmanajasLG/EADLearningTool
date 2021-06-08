@@ -213,7 +213,7 @@
   width: 90%;
   bottom: 0;
   left: 5%;
-  padding: 0 12% 2.4% 8%;
+  padding: 0.2% 12.5% 2.6% 7.8%;
   background-image: url('../../img/Game4/table.svg');
   background-repeat: no-repeat;
   background-size: contain;
@@ -224,22 +224,8 @@
   justify-content: flex-start;
 
   :nth-child(2n) {
-    // margin-top: 7%;
     align-self: flex-end;
   }
-  
-  :nth-child(2n+1) {
-    // margin-bottom: 7%;
-  }
-}
-
-
-.counter-ingredient-even {
-  margin-top: -5%;
-}
-
-.counter-ingredient-odd {
-  margin-top: -2%;
 }
 
 .counter-ingredient-solo {
