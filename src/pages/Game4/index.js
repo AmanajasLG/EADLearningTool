@@ -583,7 +583,7 @@ const Game4 = (props) => {
                         onClickToEnd={ () => setState( s => ({...s, blobToShow: s.blobToShow+1, showBlob: false}) )}
                       />
                     }
-                    <Timer style={{ position: "absolute", top: "5%", left: "50%" }}
+                    <Timer style={{ position: "absolute", top: "5%", left: "50%", transform: "translateX(-50%)" }}
                       run={state.runTimer && !state.showBlob}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
