@@ -21,11 +21,34 @@ const Core = ({exitGame, mission}) => {
           }
           {state.window === 'SCHEDULE' &&
             <ScheduleTicket onConfirm={() => setState(s => ({...s, window: 'NONE'}))}
-              dateSelected={ num =>  setState(s => ({...s, date: num}))}
+              date={state.date} flight={state.flight} tickets={state.tickets}
+              flights={mission.flights}
+              dateSelected={ num =>  setState(s => ({...s, date: num}) )}
+              flightSelected={ index => setState(s => ({...s, flight: index}) )}
+              counterChange={ value => setState(s => ({...s, tickets: value}) )}
+              onConfirm={() => setState(s => ({...s, window: 'NONE', confirmWindow: true}) )}
             />
           }
         </WindowScreen>
       }
+
+      {state.confirmWindow &&
+        <div style={{position: 'absolute', left: '50%', marginTop: '20%'}}>
+          <div style={{fontSize: '3em', position: 'relative', left: '-50%', backgroundColor: '#eeeeff'}}>
+            Terminou? Revise a seleção:
+            <div>Destino: {mission.places[state.selectedPlace].name}</div>
+            <div>Mês: </div>
+            <div>Dia: {state.date}</div>
+            <div>Horário: {mission.flights[state.flight].takeOff} - {mission.flights[state.flight].land}</div>
+
+            <button onClick={() => setState(s => ({...s, confirmWindow: false}))}>Voltar</button>
+            <button onClick={() => setState(s => ({...s, confirmWindow: false}))}>Avançar</button>
+          </div>
+        </div>
+      }
+
+
+
       <div style={{display: 'flex', flexDirection: 'column', width: '10%', position: 'absolute', top: '20%', right: 0}}>
         <div style={{backgroundColor: '#aaaaff', borderRadius: '50%'}}>
           <img style={{cursor: 'pointer'}} onClick={() => setState(s => ({...s, window: 'EMAIL'}))} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"/>
@@ -37,15 +60,17 @@ const Core = ({exitGame, mission}) => {
           <img style={{cursor: 'pointer'}}  onClick={() => setState(s => ({...s, window: 'SCHEDULE'}))} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"/>
         </div>
       </div>
+
       <div style={{position: 'absolute', bottom: 0, left: 0, backgroundColor: '#aaaaff', borderRadius: '50%', width: '10%'}}>
         <img style={{cursor: 'pointer'}} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"/>
       </div>
 
 
-
-      <div style={{position: 'absolute', bottom: 0, left: 0, zIndex: 1000}}>
-        <button onClick={exitGame}>Exit</button>
-      </div>
+      { process.env.NODE_ENV === "development" &&
+        <div style={{position: 'absolute', bottom: 0, left: 0, zIndex: 1000}}>
+          <button onClick={exitGame}>Exit</button>
+        </div>
+      }
     </React.Fragment>
   )
 }

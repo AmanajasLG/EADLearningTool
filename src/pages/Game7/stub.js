@@ -23,6 +23,28 @@ const stub = {
         name: 'São Paulo',
         img: 'https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg'
       },
+    ],
+    flights:[
+      {
+        takeOff: '09:00',
+        land:'12:00'
+      },
+      {
+        takeOff: '15:00',
+        land:'19:00'
+      },
+      {
+        takeOff: '18:00',
+        land:'21:00'
+      },
+      {
+        takeOff: '20:00',
+        land:'23:00'
+      },
+      {
+        takeOff: '02:00',
+        land:'05:00'
+      },
     ]
   }
 }
