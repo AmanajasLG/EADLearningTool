@@ -1,6 +1,6 @@
 const initialState = () => ({
   window: 'EMAIL',
-
+  date: null,
 
   selectedPlace: null
 })
