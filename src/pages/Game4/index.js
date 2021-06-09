@@ -164,7 +164,7 @@ const Game4 = (props) => {
         };
       });
     }
-  }, [missionData, state.ingredientsList, timesPlayed, lang]);
+  }, [missionData, state.ingredientsList, state.tablewares, timesPlayed, lang]);
 
   const onStartGame = () => setState({ ...state, scene: "INTRO" });
 
@@ -754,7 +754,7 @@ const Game4 = (props) => {
                     {state.doneCooking && (
                       <ChefDialog chef={missionData.character} onContinue={moveToServing}
                         text={"Parabéns! Parece bom, mas você não vai me servir na panela, né? Escolha <strong>três</strong> utensílios adequados para servir seu prato! Nem mais, nem menos."}
-                        translation={"Congratulations! It looks good, but you're not going to serv me in the pan, are you? Choose <strong>three</strong> approppriate utensils to serve your dish! No more, no less."}
+                        translation={"Congratulations! It looks good, but you're not going to serve me in the pan, are you? Choose <strong>three</strong> approppriate utensils to serve your dish! No more, no less."}
                       />
                     )}
                   </React.Fragment>
@@ -762,7 +762,7 @@ const Game4 = (props) => {
               case "SERVE":
                 return (
                   <React.Fragment>
-                    <Timer style={{ position: "absolute", top: "5%", left: "50%" }}
+                    <Timer style={{ position: "absolute", top: "5%", left: "50%", transform: "translateX(-50%)" }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => setState( s => ({...s, remainingTime: remaining})) }
@@ -800,7 +800,7 @@ const Game4 = (props) => {
 
                         {state.tutorialTablewareSelectionNotification && (
                           <div className="smaller-tutorial-notification-message">
-                            <div style={{position: 'relative', display: 'block', bottom: 0, margin: '20% auto', width: '30%', textAlign: 'center'}}>Quais 3 utensilios você vai escolher?</div>
+                            Quais 3 utensilios você vai escolher?
                           </div>
                         )}
 
@@ -812,74 +812,80 @@ const Game4 = (props) => {
                             className="serve-button"
                           />
                         )}
-
-                        <div className="shuffled-tablewares">
-                          {state.shuffledTablewares.map(
-                            (tableware, index) => (
-                              <img key={index} src={tableware.image}
-                                style={{opacity: tableware.choosen
-                                        ? 0
-                                        : !state.tablewareImagePick
-                                        ? 0.4
-                                        : 1,
-                                      pointerEvents: tableware.choosen
-                                        ? "none"
-                                        : !state.tablewareImagePick
-                                        ? "none"
-                                        : "auto",
-                                      width: '10%',
-                                }}
-                                onClick={() =>
-                                  setState(s => ({
-                                    ...s,
-                                    tutorialTablewareSelectionNotification: false,
-                                    tablewareImagePick: false,
-                                    tablewareImageSelected: tableware,
-                                  }))
-                                }
-                                className={
-                                  (state.tablewareImageSelected
-                                    ? tableware.name ===
-                                      state.tablewareImageSelected.name
-                                      ? "selected-tableware"
-                                      : ""
-                                    : "") + " ingredient-selection-img"
-                                }
-                                alt=""
-                              />
-                            )
-                          )}
+                        <div id="shuffled-stuff">
+                          <div className="shuffled-tablewares">
+                            {state.shuffledTablewares.map(
+                              (tableware, index) => (
+                                <img key={index} src={tableware.image}
+                                  style={{opacity: tableware.choosen
+                                          ? 0
+                                          : !state.tablewareImagePick
+                                          ? 0.4
+                                          : 1,
+                                        pointerEvents: tableware.choosen
+                                          ? "none"
+                                          : !state.tablewareImagePick
+                                          ? "none"
+                                          : state.tableTablewares.length > 2
+                                          ? "none"
+                                          : "auto",
+                                          width:
+                                            (
+                                              100 / (state.shuffledTablewares.length+1)
+                                            ).toString() + "%",
+                                  }}
+                                  onClick={() =>
+                                    setState(s => ({
+                                      ...s,
+                                      tutorialTablewareSelectionNotification: false,
+                                      tablewareImagePick: false,
+                                      tablewareImageSelected: tableware,
+                                    }))
+                                  }
+                                  className={
+                                    (state.tablewareImageSelected
+                                      ? tableware.name ===
+                                        state.tablewareImageSelected.name
+                                        ? "selected-tableware"
+                                        : ""
+                                      : "") + " ingredient-selection-img"
+                                  }
+                                  alt=""
+                                />
+                              )
+                            )}
+                          </div>
+                          <div className="shuffled-tableware-names">
+                            {state.shuffledTablewaresNames.map(
+                              (tableware, index) => (
+                                <span
+                                  key={index}
+                                  style={{
+                                    opacity: tableware.choosen
+                                      ? 0
+                                      : state.tablewareImagePick
+                                      ? 0.2
+                                      : 1,
+                                    pointerEvents: tableware.choosen
+                                      ? "none"
+                                      : state.tablewareImagePick
+                                      ? "none"
+                                      : "auto",
+                                    // width:
+                                    //   (
+                                    //     100 / state.shuffledTablewares.length
+                                    //   ).toString() + "%",
+                                  }}
+                                  onClick={addTableware(tableware)}
+                                >
+                                  {tableware.name}
+                                </span>
+                              )
+                            )}
+                          </div>
                         </div>
-                        <div className="shuffled-tableware-names">
-                          {state.shuffledTablewaresNames.map(
-                            (tableware, index) => (
-                              <span
-                                key={index}
-                                style={{
-                                  opacity: tableware.choosen
-                                    ? 0
-                                    : state.tablewareImagePick
-                                    ? 0.4
-                                    : 1,
-                                  pointerEvents: tableware.choosen
-                                    ? "none"
-                                    : state.tablewareImagePick
-                                    ? "none"
-                                    : "auto",
-                                  width:
-                                    (
-                                      60 / state.shuffledTablewares.length
-                                    ).toString() + "vw",
-                                }}
-                                onClick={addTableware(tableware)}
-                              >
-                                {tableware.name}
-                              </span>
-                            )
-                          )}
-                        </div>
 
-                        <div className="counter">
+                        <div className="counter" style={{justifyContent:"space-evenly"}}>
                           {state.tableTablewares.map((tableware, index) => (
                             <img
                               key={index}
@@ -891,7 +897,7 @@ const Game4 = (props) => {
                           {console.log(Array(3 - state.tableTablewares.length))}
                           {[...Array(3 - state.tableTablewares.length)].map(
                             (item, index) => (
-                              <div className="table-tableware-space"></div>
+                              <div key={index} className="table-tableware-space"></div>
                             )
                           )}
                         </div>

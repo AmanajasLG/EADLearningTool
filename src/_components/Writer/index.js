@@ -34,7 +34,6 @@ const JSXindexer = (jsx, index) => {
 	}
 }
 
-
 const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) => {
 	const [state, setState] = React.useState({text: text, index: 0})
 	const volume = useSelector( state => state.music.volume)

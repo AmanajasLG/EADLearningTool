@@ -35,16 +35,27 @@
 }
 
 .smaller-tutorial-notification-message {
+  font-family: 'Barlow';
+  font-weight: 600;
+  font-size: 3.5em;
+  line-height: 1.2em;
+
   position: absolute;
+  top: calc( var(--gameHeight) * -0.05);
+  right: calc( var(--gameWidth) * 0.08);
+  height: calc( var(--gameHeight) * 0.35);
+  width: calc( var(--gameWidth) * 0.25);
+
+  padding: 2.5em 2em 2.8em;
+  background-color: #F9AFA1;
+  border-radius: 8em 12em 18em 20em;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
   text-align: center;
-  height: 35%;
-  width: 25%;
-  top: -5%;
-  right: 5%;
-  background-image: url('../../img/bg-forma-laranja.svg');
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 .tutorial-notification-message {
@@ -54,13 +65,6 @@
   font-size: 2.5em;
   background-color: #F9AFA1;
   border-radius: 8em 12em 18em 20em;
-}
-
-.smaller-tutorial-notification-message span {
-  display: block;
-  font-size: 1.4rem;
-  width: 20vw;
-  text-align: center;
 }
 
 .tutorial-notification-message span {
@@ -301,35 +305,40 @@
 
 // SERVIR
 
-.tableware-selection-div {
-  margin-top: 15vh;
-}
+#shuffled-stuff {
+  position: relative;
+  width: 100%;
+  height: 40%;
+  top: 23%;
 
-.selected-tableware {
-  opacity: 1 !important;
-  -webkit-filter: drop-shadow(6px 3px 0px #f9afa1);
-  filter: drop-shadow(6px 3px 0px #f9afa1);
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-evenly;
+  padding: 0 20%;
 }
 
 .shuffled-tablewares,
 .shuffled-tableware-names {
-  padding: 2vh 10vw;
-  text-align: center;
-}
-
-.shuffled-tableware-names {
-  margin-top: 2vh;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-evenly;
 }
 
 .shuffled-tablewares img {
-  margin: 0 2vw;
+  max-width: unset;
+  padding: 5em;
 }
 
 .shuffled-tableware-names span {
-  margin: 3vh 2vw;
-  font-size: 1.3rem;
   cursor: pointer;
-  padding: 5px 10px;
+  text-align: center;
+  font-size: 4em;
+  font-family: 'Barlow';
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0em 0.4em;
 }
 
 .shuffled-tableware-names span:hover {
@@ -339,10 +348,10 @@
 }
 
 .table-tableware-space {
-  margin: 1% 2vw;
-  padding: 2vh 3vw;
+  margin: 1.4em 3.8em;
+  padding: 2.2em 5.8em;
   background-color: rgba(255, 255, 255, 0.685);
-  border-radius: 20px;
+  border-radius: 2em;
   display: inline-block;
   vertical-align: middle;
   width: 20%;
@@ -351,10 +360,16 @@
 
 .serve-button {
   position: absolute;
-  width: 200px;
+  width: 20em;
   cursor: pointer;
   top: 0;
-  margin: 2vh 0 0 2vh;
+  margin: 2em 0 0 2em;
+}
+
+.selected-tableware {
+  opacity: 1 !important;
+  -webkit-filter: drop-shadow(6px 3px 0px #f9afa1);
+  filter: drop-shadow(6px 3px 0px #f9afa1);
 }
 
 // FEEDBACK
