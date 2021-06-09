@@ -1,4 +1,7 @@
 const initialState = () => ({
-  scene: 'INIT'
+  window: 'EMAIL',
+
+
+  selectedPlace: null
 })
 export default initialState

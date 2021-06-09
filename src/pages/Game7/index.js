@@ -2,13 +2,16 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 import Init from '../../_components/Init'
 
+import Core from './core'
+
 import initialState from './initialState'
 import stub from './stub'
 
 const Game7 = () => {
-  const [state, setState] = React.useState(initialState())
+  const [state, setState] = React.useState({scene: 'GAME', back: false})
   const mission = stub;
   const onStartGame = () => setState( s => ({...s, scene: 'GAME'}) )
+  const onBack = () => setState(s => ({ ...s, back: true }))
 
   return(
     <React.Fragment>
@@ -24,7 +27,7 @@ const Game7 = () => {
                 nameTranslate={ mission.nameTranslate }
                 descriptionTranslate={ mission.descriptionTranslate }
                 onStart={onStartGame}
-                onBack={() => setState(s => ({ ...s, back: true })) }
+                onBack={ onBack }
                 ready={mission.id}
               />
             )
@@ -32,12 +35,7 @@ const Game7 = () => {
           case 'GAME':
             return(
               <React.Fragment>
-                Game 7
-              </React.Fragment>
-            )
-          case 'END':
-            return(
-              <React.Fragment>
+                <Core exitGame={onBack} mission={mission.missionData}/>
               </React.Fragment>
             )
           default:
