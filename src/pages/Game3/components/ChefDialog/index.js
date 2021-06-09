@@ -4,6 +4,8 @@ import Button from '../../../../_components/Button'
 import DialogCharacter from '../DialogCharacter'
 import Writer from '../../../../_components/Writer'
 import './index.scss'
+import parser from 'html-react-parser'
+
 // import { LineWeight } from '@material-ui/icons'
 
 const msPerCharacter = 30;
@@ -12,7 +14,7 @@ const waitAfterWritten = 1000;
 const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props}) => {
   const [state, setState] = React.useState({writerDone: false})
   const onWriterDone = () => setState({...state, writerDone: true})
-  let chefStyles =  {position: 'absolute', left:0, bottom: 0, zIndex: 2, width: '43%'}
+  let chefStyles = {position: 'absolute', left:0, bottom: 0, zIndex: 2, width: '43%'}
 
   console.log('props:', props)
   if(props.chefStyles)
@@ -34,7 +36,7 @@ const ChefDialog = ({hideDialog, onContinue, text, translation, chef, ...props})
               }
               {state.writerDone &&
                 <div className='instructionText translation' lang="en">
-                  {translation}
+                  {parser(translation)}
                 </div>
               }
             </div>

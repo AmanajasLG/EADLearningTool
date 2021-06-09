@@ -11,6 +11,29 @@ import { useSelector } from 'react-redux'
  */
 
 import sound from '../../sounds/writerLetter3.flac'
+import parser from 'html-react-parser';
+import {parse as mkd_parser} from 'marked';
+
+const JSXindexer = (jsx, index) => {
+	if( typeof(jsx) === 'string' ) {
+		let result = jsx.substring(0, index);
+		return [result, result.length];
+	} else if(typeof(jsx) === 'object' && jsx.length > 1) {
+		let used = 0;
+		let result = "";
+		for( let i = 0; i < jsx.length && used < index; i++) {
+			let [tempResult, tempUsed] = JSXindexer(jsx[i], index-used);
+			result += tempResult;
+			used += tempUsed;
+		}
+		return [result, used];
+	} else if(typeof(jsx) === 'object') {
+		let children = jsx.props.children;
+		let [result, used] = JSXindexer(children, index);
+		return [ `<${jsx.type}>${result}</${jsx.type}>`, used];
+	}
+}
+
 
 const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) => {
 	const [state, setState] = React.useState({text: text, index: 0})
@@ -47,7 +70,8 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) =>
 
 	return(
 		<div id="Writer" {...props}>
-			{ state.text.substring(0, state.index) }
+			{/* { state.text.substring(0, state.index) } */}
+			{ parser(JSXindexer(parser(mkd_parser(state.text)), state.index)[0]) }
 		</div>
 	)
 }
