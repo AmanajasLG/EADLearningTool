@@ -17,7 +17,7 @@ import Intro from "../Game3/components/Intro";
 import ChefDialog from "../Game3/components/ChefDialog";
 import Timer from "../../_components/Timer";
 import Recipe from "../../_components/Recipe";
-import {Button, ButtonConfigs, Iniciar} from "../../_components/Button";
+import {Button, ButtonConfigs, Iniciar, Voltar} from "../../_components/Button";
 
 import initialState from "./initialState";
 
@@ -401,27 +401,6 @@ const Game4 = (props) => {
     });
   };
 
-  // const clearTableTableware = () => {
-  //   setState({
-  //     ...state,
-  //     wrongTablewareNotification: false,
-  //     shuffledTablewaresNames: state.shuffledTablewaresNames.map(
-  //       (tableware) => {
-  //         return {
-  //           ...tableware,
-  //           choosen: false,
-  //         };
-  //       }
-  //     ),
-  //     shuffledTablewares: state.shuffledTablewares.map((tableware) => {
-  //       return {
-  //         ...tableware,
-  //         choosen: false,
-  //       };
-  //     }),
-  //   });
-  // };
-
   const restart = () => {
     setState({ ...initialState(false) });
     dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
@@ -629,9 +608,6 @@ const Game4 = (props) => {
                               />
                             )
                           )}
-                          {state.selectedIngredient &&
-                            <Button id="btn-add-bancada" blink onClick={checkRightIngredient}>Adicionar à bancada</Button>
-                          }
                         </div>
                       ) : (
                         <div className="name-order-div absolute-center">
@@ -683,8 +659,11 @@ const Game4 = (props) => {
                           className="error-notification-blob absolute-center"
                         /> */}
                         <div className="error-notification-message absolute-center">
-                          <span>
+                          <span lang="pt-br">
                             Esse item não é o que você precisa agora.
+                          </span>
+                          <span lang="en">
+                            This is not the item that you need now.
                           </span>
                           <Iniciar
                             label="Continuar"
@@ -700,18 +679,18 @@ const Game4 = (props) => {
                     {state.wrongIngredientNameNotification && (
                       <div className="overlay-error-notification">
                         <div className="overlay-error-notification-content">
-                          {/* <img
-                            src={blobLaranja}
-                            alt=""
-                            className="error-notification-blob absolute-center"
-                          /> */}
                           <div className="error-notification-message absolute-center">
-                            <span>
+                            <span lang="pt-br">
                               {state.userLetterOrder.reduce(
                                 (acc, letter) => acc + letter.letter,
                                 ""
-                              )}{" "}
-                              não serve para sua receita.
+                              )}{" não serve para sua receita."}
+                            </span>
+                            <span lang="en">
+                              {state.userLetterOrder.reduce(
+                                (acc, letter) => acc + letter.letter,
+                                ""
+                              )}{" doesn't work for your recipe."}
                             </span>
                             <Iniciar
                               label="Continuar"
@@ -739,6 +718,9 @@ const Game4 = (props) => {
                               }}
                             />
                           ))}
+                          {state.selectedIngredient &&
+                            <Button id="btn-add-bancada" blink onClick={checkRightIngredient}>Adicionar à bancada</Button>
+                          }
                         </div>
                       ) : (
                         <div>
@@ -779,20 +761,17 @@ const Game4 = (props) => {
                                 className="error-notification-blob absolute-center"
                               />
                               <div className="error-notification-message absolute-center">
-                                <span>Esse não é o nome desse item.</span>
-                                <button
-                                  className="btn"
-                                  onClick={() =>
-                                    setState({
-                                      ...state,
-                                      tablewareImagePick: true,
-                                      tablewareImageSelected: null,
-                                      wrongCombiantionNotification: false,
-                                    })
-                                  }
-                                >
-                                  Continuar
-                                </button>
+                                <span lang="pt-br">Esse não é o nome desse item.</span>
+                                <span lang="en">That isn't the name of this item.</span>
+                                <Iniciar
+                                  label={"Continuar"}
+                                  onClick={() => setState( s => ({
+                                    ...s,
+                                    tablewareImagePick: true,
+                                    tablewareImageSelected: null,
+                                    wrongCombiantionNotification: false,
+                                  }) )}
+                                />
                               </div>
                             </div>
                           </div>
@@ -814,73 +793,47 @@ const Game4 = (props) => {
                         )}
                         <div id="shuffled-stuff">
                           <div className="shuffled-tablewares">
-                            {state.shuffledTablewares.map(
-                              (tableware, index) => (
+                            {state.shuffledTablewares.map( (tableware, index) => {
+                              let tablewarePicked = state.tablewareImageSelected;
+                              let amountChoosen = state.tableTablewares.length;
+                              
+                              let wasThisPicked = tablewarePicked === tableware;
+                              let canBePicked = wasThisPicked || (amountChoosen < 3 && !tablewarePicked && !tableware.choosen);
+                              let shouldDim = tablewarePicked && !wasThisPicked;
+
+                              let width = 100 / (state.shuffledTablewares.length+1);
+                              let classes = "tableware-selection-img";
+                              if (canBePicked) classes += " pickable-tableware";
+                              if (shouldDim) classes += " dim-tableware";
+                              if (tableware.choosen) classes += " choosen-tableware";
+                              if (wasThisPicked) classes += " selected-tableware";
+
+                              return (
                                 <img key={index} src={tableware.image}
-                                  style={{opacity: tableware.choosen
-                                          ? 0
-                                          : !state.tablewareImagePick
-                                          ? 0.4
-                                          : 1,
-                                        pointerEvents: tableware.choosen
-                                          ? "none"
-                                          : !state.tablewareImagePick
-                                          ? "none"
-                                          : state.tableTablewares.length > 2
-                                          ? "none"
-                                          : "auto",
-                                          width:
-                                            (
-                                              100 / (state.shuffledTablewares.length+1)
-                                            ).toString() + "%",
-                                  }}
-                                  onClick={() =>
-                                    setState(s => ({
-                                      ...s,
-                                      tutorialTablewareSelectionNotification: false,
-                                      tablewareImagePick: false,
-                                      tablewareImageSelected: tableware,
-                                    }))
-                                  }
-                                  className={
-                                    (state.tablewareImageSelected
-                                      ? tableware.name ===
-                                        state.tablewareImageSelected.name
-                                        ? "selected-tableware"
-                                        : ""
-                                      : "") + " ingredient-selection-img"
-                                  }
+                                  style={{width: width + "%"}}
+                                  onClick={() => setState(s => ({
+                                    ...s,
+                                    tutorialTablewareSelectionNotification: false,
+                                    tablewareImageSelected: tablewarePicked ? null : tableware,
+                                    tablewareImagePick: !!tablewarePicked,
+                                  }) )}
+                                  className={classes}
                                   alt=""
                                 />
                               )
-                            )}
+                            })}
                           </div>
                           <div className="shuffled-tableware-names">
-                            {state.shuffledTablewaresNames.map(
-                              (tableware, index) => (
-                                <span
-                                  key={index}
-                                  style={{
-                                    opacity: tableware.choosen
-                                      ? 0
-                                      : state.tablewareImagePick
-                                      ? 0.2
-                                      : 1,
-                                    pointerEvents: tableware.choosen
-                                      ? "none"
-                                      : state.tablewareImagePick
-                                      ? "none"
-                                      : "auto",
-                                    // width:
-                                    //   (
-                                    //     100 / state.shuffledTablewares.length
-                                    //   ).toString() + "%",
-                                  }}
-                                  onClick={addTableware(tableware)}
-                                >
+                            {state.shuffledTablewaresNames.map( (tableware, index) => {
+                              let classes = "tableware-selection-name";
+                              if (!!state.tablewareImageSelected) classes += " pickable-tableware-name";
+                              if (tableware.choosen) classes += " choosen-tableware";
+
+                              return (
+                                <span key={index} className={classes} onClick={addTableware(tableware)}>
                                   {tableware.name}
                                 </span>
-                              )
+                              )}
                             )}
                           </div>
                         </div>
@@ -894,7 +847,6 @@ const Game4 = (props) => {
                               className="table-tableware-space"
                             />
                           ))}
-                          {console.log(Array(3 - state.tableTablewares.length))}
                           {[...Array(3 - state.tableTablewares.length)].map(
                             (item, index) => (
                               <div key={index} className="table-tableware-space"></div>
@@ -922,7 +874,7 @@ const Game4 = (props) => {
                   >
                     <div className="game-4-feedback absolute-center">
                       {state.timeUp ? (
-                        <div>
+                        <div className="game-4-feedback-lose-wrapper">
                           <div className="game-4-feedback-lose">
                             <div className="game-4-feedback-lose-content">
                               <img src={hourglassEmpty} alt="hourglass-empty" />
@@ -957,16 +909,9 @@ const Game4 = (props) => {
                               </span>
                             </div>
                           </div>
-                          <div
-                            id="feedback-endGame-action-btns"
-                            style={{ marginTop: "5vh" }}
-                          >
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
-                              onClick={() => setState({ ...state, back: true })}
-                            >
-                              Sair do jogo
-                            </Button>
+                          <div className="jogo4-end-no-time-btns">
+                            <Voltar label={"Tentar novamente"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6} onClick={restart} />
+                            <Iniciar label={"Sair do jogo"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3} onClick={() => setState({ ...state, back: true })} />
                           </div>
                         </div>
                       ) : (

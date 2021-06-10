@@ -126,13 +126,28 @@
     display: block;
     font-family: 'barlow';
     font-size: 1.8em;
-    font-weight: 600;
     text-align: center;
   }
 
+  span[lang="pt-br"] {
+    font-weight: 600;
+  }
+
+  span[lang="en"]::before {
+    content: "";
+    display: block;
+    width: 40%;
+    margin: 0.5em auto 0.25em;
+    border-bottom: 0.05em solid #F9AFA1;
+  }
+
+  span[lang="en"] {
+    font-style: italic;
+  }
+
   button {
-    margin-top: 4em;
-    margin-bottom: -4em;
+    margin-top: 2em;
+    margin-bottom: -2em;
     display: block;
   }
 }
@@ -143,12 +158,6 @@
   // text-shadow: 0 0 0 10px red;
   -webkit-filter: drop-shadow(6px 3px 0px #f9afa1);
   filter: drop-shadow(6px 3px 0px #f9afa1);
-}
-
-.btn-add-to-counter {
-  margin: auto;
-  transform: translate(0, -50%);
-  display: block;
 }
 
 .shuffled-ingredients {
@@ -172,16 +181,10 @@
   :nth-child(2n+1) {
     margin-bottom: 7%;
   }
-
-  #btn-add-bancada {
-    position: absolute;
-    top: 100%;
-    margin: -1.5em auto;
-    font-size: 2em;
-  }
 }
 
-.ingredient-selection-img {
+.ingredient-selection-img,
+.tableware-selection-img {
   display: inline-block;
   cursor: pointer;
   max-width: 180px;
@@ -189,7 +192,8 @@
   transition: 100ms ease-in-out;
 }
 
-.ingredient-selection-img:hover {
+.ingredient-selection-img:hover,
+.tableware-selection-img:hover {
   transform: scale(1.2) rotate(5deg);
 }
 
@@ -211,6 +215,14 @@
 
   :nth-child(2n) {
     align-self: flex-end;
+  }
+
+  #btn-add-bancada {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin: -1.45em -6.5em;
+    font-size: 2em;
   }
 }
 
@@ -332,13 +344,13 @@
 }
 
 .shuffled-tableware-names span {
-  cursor: pointer;
   text-align: center;
   font-size: 4em;
   font-family: 'Barlow';
   font-weight: 700;
   text-transform: uppercase;
   padding: 0em 0.4em;
+  transition: 100ms ease-in-out;
 }
 
 .shuffled-tableware-names span:hover {
@@ -364,6 +376,53 @@
   cursor: pointer;
   top: 0;
   margin: 2em 0 0 2em;
+  animation: scaleDown 250ms cubic-bezier(0, 0.5, 0.5, 1),
+             fadeIn 250ms linear,
+             attention 3s 250ms cubic-bezier(0.61, 0, 0.41, 1) alternate infinite;
+}
+
+@keyframes scaleDown {
+  0% { transform: scale(2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes attention {
+  0% {transform: scale(1);}
+  85% {transform: scale(1);}
+  100% {transform: scale(1.25) rotate(-5deg);}
+}
+
+.tableware-selection-img {
+  pointer-events: none;
+  opacity: 1;
+}
+
+.tableware-selection-name {
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.pickable-tableware {
+  pointer-events: auto;
+}
+
+.pickable-tableware-name {
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.dim-tableware {
+  opacity: 0.4;
+}
+
+.choosen-tableware {
+  opacity: 0;
 }
 
 .selected-tableware {
@@ -375,21 +434,27 @@
 // FEEDBACK
 
 .game-4-feedback {
-  width: 90vw;
+  width: calc( var(--gameWidth) * 0.9);
 }
 
 .game-4-feedback-win {
   display: flex;
   align-items: center; /* Vertical */
   justify-content: center; /* Horizontal */
-  margin-top: 10vh;
+  margin-top: calc( var(--gameHeight) * 0.1);
+}
+
+.game-4-feedback-lose-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 85em;
 }
 
 .game-4-feedback-lose {
   display: flex;
   align-items: center; /* Vertical */
   justify-content: center; /* Horizontal */
-  margin-top: 10vh;
 }
 
 .game-4-feedback-lose-content {
@@ -398,21 +463,26 @@
   justify-content: center; /* Horizontal */
   text-align: center;
   color: #59316d;
-  font-size: 2vw;
-  width: 40vw;
+  font-size: 3.8em;
+  width: calc( var(--gameWidth) * 0.4);
 }
 
 .game-4-time-up-title {
-  font-size: 4vw;
-  margin-bottom: 5vh;
+  font-size: 2em;
+  margin-bottom: 0.7em;
 }
 
 .game-4-time-up-text {
   padding: 0 15%;
+  font-family: 'Barlow';
+
+  span[lang="pt-br"] {
+    font-weight: 600;
+  }
 }
 
 .game-4-feedback-lose-content img {
-  max-height: 18vh;
+  max-height: calc( var(--gameHeight) * 0.18);
 }
 
 .game-4-feedback-left {
@@ -430,42 +500,34 @@
 }
 
 .game-4-finished-in img {
-  max-height: 15vh;
-  padding: 0 2vw;
+  max-height: 16em;
+  padding: 0 3.8em;
 }
 
 .game-4-finished-in-text {
-  font-size: 2vw;
+  font-size: 3.8em;
   color: #59316d;
-  line-height: 1;
-}
-
-.game-4-finished-in-text span[lang="pt-br"] {
-  font-size: 2vw;
-}
-
-.game-4-finished-in-text span[lang="en"] {
-  font-size: 1.8vw;
+  font-family: 'Barlow';
 }
 
 .time-shower {
   position: relative;
-  height: 35vh;
-  width: 20vw;
+  height: 38em;
+  width: 38em;
 }
 
 .big-time-shower {
   position: relative;
-  height: 50vh;
-  width: 40vw;
+  height: 54em;
+  width: 77em;
 }
 
 .time-shower span {
   color: #59316d;
-  font-size: 5rem;
+  font-size: 8em;
 }
 
 .big-time-shower span {
   color: #59316d;
-  font-size: 10rem;
+  font-size: 16em;
 }

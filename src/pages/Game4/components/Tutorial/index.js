@@ -26,7 +26,7 @@ const Tutorial = ({blobToShow, onClickToEnd}) => {
                 and then confirm.
               </span>
               <Button blink colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3} onClick={onClickToEnd}>
-                Got it!
+                Entendi! / Got it!
               </Button>
             </div>
           </div>
@@ -47,7 +47,7 @@ const Tutorial = ({blobToShow, onClickToEnd}) => {
               the name of the ingredient.
             </span>
             <Button blink colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3} onClick={onClickToEnd}>
-              Got it!
+              Entendi! / Got it!
             </Button>
           </div>
         </div>
