@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { ButtonConfigs, Iniciar, Voltar } from "../../../../_components/Button";
 import React from "react";
 import { preventSingleWordBreak } from "../../../../_helpers";
 import "./index.scss";
@@ -7,14 +7,14 @@ const FeedbackPanel = ({ feedback, restart, leave }) => {
   const [state, setState] = React.useState(0);
 
   return (
-    <div>
+    <div style={{position:"relative"}}>
       <div className="feedback-panel" id="feedback-panel">
         {state > 0 && (
           <span
             className="feedback-arrow feedback-arrow-previous"
             onClick={() => setState(state - 1)}
           >
-            {"<"}
+            {"❮"}
           </span>
         )}
         <div className="feedback-panel-content">
@@ -40,13 +40,13 @@ const FeedbackPanel = ({ feedback, restart, leave }) => {
             className="feedback-arrow feedback-arrow-next"
             onClick={() => setState(state + 1)}
           >
-            {">"}
+            {"❯"}
           </span>
         )}
       </div>
-      <div id="feedback-endGame-action-btns">
-        <Button onClick={restart}>Tentar novamente</Button>
-        <Button onClick={leave}>Sair do jogo</Button>
+      <div className="jogo4-end-btns">
+        <Voltar label={"Tentar novamente"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6} onClick={restart} />
+        <Iniciar label={"Sair do jogo"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3} onClick={leave} />
       </div>
     </div>
   );
