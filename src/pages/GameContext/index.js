@@ -88,7 +88,7 @@ const GameContext = (props) => {
         loop={true}
       />
       <div id="game-screen-wrapper" style={{alignItems: state.alignment.vertical, justifyContent: state.alignment.horizontal}}>
-        <div id="game-screen" className={state.debug && "debug"} style={{"--aspectRatio": dimensions.width / dimensions.height}}>
+        <div id="game-screen" style={{"--aspectRatio": dimensions.width / dimensions.height}}>
           {children}
         </div>
       </div>
@@ -96,5 +96,5 @@ const GameContext = (props) => {
     </React.Fragment>
   );
 };
-
+//className={state.debug && "debug"}
 export default GameContext;

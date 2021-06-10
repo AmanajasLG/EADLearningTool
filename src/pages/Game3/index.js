@@ -33,6 +33,7 @@ import Tutorial from "./components/Tutorial";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
 import ShopCart from "./components/ShopCart";
+import Button from '@material-ui/core/Button'
 
 import {
   cart,
@@ -713,6 +714,7 @@ const Game3 = (props) => {
                             fontFamily: "Barlow",
                             color: "rgb(89, 49, 109)",
                             fontStyle: "italic",
+                            fontSize: '3em'
                           }}
                         >
                           {endGameLines[state.timeUp ? 0 : 1].translation}
@@ -761,8 +763,10 @@ const Game3 = (props) => {
                         marginTop: "10%",
                       }}
                     >
-                      <button onClick={restart}>Tentar novamente</button>
-                      <Link to={"/userspace"}>Sair do jogo</Link>
+                      <div id="feedback-endGame-action-btns">
+                        <Button onClick={restart}>Tentar novamente</Button>
+                        <Button onClick={()=>setState(s => ({...s, back: true})) }>Sair do jogo</Button>
+                      </div>
                     </div>
                   </div>
                 );
