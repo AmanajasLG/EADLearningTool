@@ -683,8 +683,11 @@ const Game4 = (props) => {
                           className="error-notification-blob absolute-center"
                         /> */}
                         <div className="error-notification-message absolute-center">
-                          <span>
+                          <span lang="pt-br">
                             Esse item não é o que você precisa agora.
+                          </span>
+                          <span lang="en">
+                            This is not the item that you need now.
                           </span>
                           <Iniciar
                             label="Continuar"
@@ -700,18 +703,18 @@ const Game4 = (props) => {
                     {state.wrongIngredientNameNotification && (
                       <div className="overlay-error-notification">
                         <div className="overlay-error-notification-content">
-                          {/* <img
-                            src={blobLaranja}
-                            alt=""
-                            className="error-notification-blob absolute-center"
-                          /> */}
                           <div className="error-notification-message absolute-center">
-                            <span>
+                            <span lang="pt-br">
                               {state.userLetterOrder.reduce(
                                 (acc, letter) => acc + letter.letter,
                                 ""
-                              )}{" "}
-                              não serve para sua receita.
+                              )}{" não serve para sua receita."}
+                            </span>
+                            <span lang="en">
+                              {state.userLetterOrder.reduce(
+                                (acc, letter) => acc + letter.letter,
+                                ""
+                              )}{" doesn't work for your recipe."}
                             </span>
                             <Iniciar
                               label="Continuar"
@@ -779,20 +782,17 @@ const Game4 = (props) => {
                                 className="error-notification-blob absolute-center"
                               />
                               <div className="error-notification-message absolute-center">
-                                <span>Esse não é o nome desse item.</span>
-                                <button
-                                  className="btn"
-                                  onClick={() =>
-                                    setState({
-                                      ...state,
-                                      tablewareImagePick: true,
-                                      tablewareImageSelected: null,
-                                      wrongCombiantionNotification: false,
-                                    })
-                                  }
-                                >
-                                  Continuar
-                                </button>
+                                <span lang="pt-br">Esse não é o nome desse item.</span>
+                                <span lang="en">That isn't the name of this item.</span>
+                                <Iniciar
+                                  label={"Continuar"}
+                                  onClick={() => setState( s => ({
+                                    ...s,
+                                    tablewareImagePick: true,
+                                    tablewareImageSelected: null,
+                                    wrongCombiantionNotification: false,
+                                  }) )}
+                                />
                               </div>
                             </div>
                           </div>
