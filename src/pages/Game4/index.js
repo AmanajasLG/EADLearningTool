@@ -17,7 +17,7 @@ import Intro from "../Game3/components/Intro";
 import ChefDialog from "../Game3/components/ChefDialog";
 import Timer from "../../_components/Timer";
 import Recipe from "../../_components/Recipe";
-import {Button, ButtonConfigs, Iniciar} from "../../_components/Button";
+import {Button, ButtonConfigs, Iniciar, Voltar} from "../../_components/Button";
 
 import initialState from "./initialState";
 
@@ -400,27 +400,6 @@ const Game4 = (props) => {
       runTimer: false,
     });
   };
-
-  // const clearTableTableware = () => {
-  //   setState({
-  //     ...state,
-  //     wrongTablewareNotification: false,
-  //     shuffledTablewaresNames: state.shuffledTablewaresNames.map(
-  //       (tableware) => {
-  //         return {
-  //           ...tableware,
-  //           choosen: false,
-  //         };
-  //       }
-  //     ),
-  //     shuffledTablewares: state.shuffledTablewares.map((tableware) => {
-  //       return {
-  //         ...tableware,
-  //         choosen: false,
-  //       };
-  //     }),
-  //   });
-  // };
 
   const restart = () => {
     setState({ ...initialState(false) });
@@ -895,7 +874,7 @@ const Game4 = (props) => {
                   >
                     <div className="game-4-feedback absolute-center">
                       {state.timeUp ? (
-                        <div>
+                        <div className="game-4-feedback-lose-wrapper">
                           <div className="game-4-feedback-lose">
                             <div className="game-4-feedback-lose-content">
                               <img src={hourglassEmpty} alt="hourglass-empty" />
@@ -930,16 +909,9 @@ const Game4 = (props) => {
                               </span>
                             </div>
                           </div>
-                          <div
-                            id="feedback-endGame-action-btns"
-                            style={{ marginTop: "5vh" }}
-                          >
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
-                              onClick={() => setState({ ...state, back: true })}
-                            >
-                              Sair do jogo
-                            </Button>
+                          <div className="jogo4-end-no-time-btns">
+                            <Voltar label={"Tentar novamente"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6} onClick={restart} />
+                            <Iniciar label={"Sair do jogo"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3} onClick={() => setState({ ...state, back: true })} />
                           </div>
                         </div>
                       ) : (

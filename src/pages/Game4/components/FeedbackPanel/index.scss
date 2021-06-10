@@ -19,7 +19,7 @@
 
 .feedback-arrow {
   position: absolute;
-  font-size: 3vw;
+  font-size: 1.9em;
   color: #59316D;
   top: 50%;
   transform: translateY(-50%);
@@ -75,6 +75,18 @@
   justify-content: center;
   font-size: 2.5em;
   transform: translateY(-50%);
+
+  * {
+    margin: 0em 1em;
+  }
+}
+
+.jogo4-end-no-time-btns {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 2.5em;
 
   * {
     margin: 0em 1em;
