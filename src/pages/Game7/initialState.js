@@ -1,9 +1,12 @@
 const initialState = () => ({
+  scene: 'ENDGAME',
+  
   window: 'EMAIL',
-  date: null,
+  day: null,
+  month: 0,
   flight: null,
-  tickets: 1,
-  confirmWindow: false, 
+  tickets: 0,
+  confirmWindow: false,
   selectedPlace: null
 })
 export default initialState

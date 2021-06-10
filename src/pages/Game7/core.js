@@ -5,10 +5,11 @@ import Email from './Email'
 import Places from './Places'
 import ScheduleTicket from './ScheduleTicket'
 import SendEmail from './SendEmail'
+import { months } from '../../_helpers'
 
 import initialState from './initialState'
 
-const Core = ({exitGame, mission}) => {
+const Core = ({exitGame, mission, onEndGame}) => {
   const [state, setState] = React.useState(initialState())
   return(
     <React.Fragment>
@@ -22,17 +23,24 @@ const Core = ({exitGame, mission}) => {
           }
           {state.window === 'SCHEDULE' &&
             <ScheduleTicket onConfirm={() => setState(s => ({...s, window: 'NONE'}))}
-              date={state.date} flight={state.flight} tickets={state.tickets}
+              day={state.day} month={state.month} flight={state.flight} tickets={state.tickets}
               flights={mission.flights}
-              dateSelected={ num =>  setState(s => ({...s, date: num}) )}
-              flightSelected={ index => setState(s => ({...s, flight: index}) )}
+              dateSelected={ value =>  setState(s => ({...s, day: value}) )}
+              monthChange={ value => setState(s => ({...s, month: value}))}
+              flightSelected={ value => setState(s => ({...s, flight: value}) )}
               counterChange={ value => setState(s => ({...s, tickets: value}) )}
+
               onConfirm={() => setState(s => ({...s, window: 'NONE', confirmWindow: true}) )}
             />
           }
           {state.window === 'SEND_EMAIL' &&
             <SendEmail places={mission.places} place={mission.places[state.selectedPlace].name}
-              date={state.date} flight={mission.flights[state.flight]} tickets={state.tickets}
+              day={state.day} month={months[state.month]} flight={mission.flights[state.flight]} tickets={state.tickets + 1}
+              onConfirm={sentences => onEndGame({
+                day: state.day, month: state.month, place: state.place,
+                flight: {...mission.flights[state.flight]},
+                sentences
+              })}
             />
           }
         </WindowScreen>
@@ -42,9 +50,10 @@ const Core = ({exitGame, mission}) => {
         <div style={{position: 'absolute', left: '50%', marginTop: '20%'}}>
           <div style={{fontSize: '3em', position: 'relative', left: '-50%', backgroundColor: '#eeeeff'}}>
             Terminou? Revise a seleção:
+            <div>{state.tickets + 1} passage{state.tickets === 0? 'm' : 'ns'}.</div>
             <div>Destino: {mission.places[state.selectedPlace].name}</div>
-            <div>Mês: </div>
-            <div>Dia: {state.date}</div>
+            <div>Mês: {months[state.month]}</div>
+            <div>Dia: {state.day}</div>
             <div>Horário: {mission.flights[state.flight].takeOff} - {mission.flights[state.flight].land}</div>
 
             <button onClick={() => setState(s => ({...s, confirmWindow: false}))}>Voltar</button>

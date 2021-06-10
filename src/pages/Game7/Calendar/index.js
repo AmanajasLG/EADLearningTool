@@ -1,20 +1,24 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
+import Counter from '../Counter'
+import { months } from '../../../_helpers'
 
-const Calendar = ({selected, onClick}) => {
-  const [state, setState] = React.useState(selected)
+const Calendar = ({day, month, onDaySelected, onMonthChange}) => {
   return(
-    <div style={{display: 'grid', width: '100%', height: '75%',
-      gridTemplateColumns: `${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}%`,
-      gridTemplateRows: `20% 20% 20% 20% 20%`}}
-    >
-    {Array.from({length: 31}, (_, i) => i + 1).map((num, index) =>
-      <Button key={index}
-        style={{backgroundColor: selected === num? '#ffdddd' : null}}
-        onClick={onClick? () => onClick(num) : null}>
-        {num}
-      </Button>
-    )}
+    <div>
+      <Counter value={month} list={months} onChange={ value => onMonthChange(value)}/>
+      <div style={{display: 'grid', width: '100%', height: '75%',
+        gridTemplateColumns: `${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}%`,
+        gridTemplateRows: `20% 20% 20% 20% 20%`}}
+      >
+        {Array.from({length: 31}, (_, i) => i + 1).map((num, index) =>
+          <Button key={index}
+            style={{backgroundColor: day === num? '#ffdddd' : null}}
+            onClick={onDaySelected? () => onDaySelected(num) : null}>
+            {num}
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

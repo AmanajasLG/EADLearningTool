@@ -119,6 +119,8 @@ function numberToMoney(n) {
   return words.join(" ");
 }
 
+const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+
 function goRound(value, max) {
   return value >= 0 ? value % max : max - (Math.abs(value) % max);
 }
@@ -172,6 +174,7 @@ function preventSingleWordBreak(sentence) {
 }
 
 export {
+  months,
   numberToMoney,
   zeroFill,
   splitArrayIntoChunksOfLen,

@@ -1,14 +1,20 @@
 import React from 'react'
 
-const Counter = ({value, onChange}) => {
-  const [state, setState] = React.useState(value && value > 1 ? value : 1)
+const Counter = ({value, list, onChange}) => {
+  const [state, setState] = React.useState(value)
 
-  const decrement = () => { if(state > 1){ setState(state - 1); if(onChange) onChange(state - 1)} }
-  const increment = () => { if(state < 9){ setState(state + 1); if(onChange) onChange(state + 1)} }
+  const move = direction => () => {
+    let next = state + direction
+    if(next < 0) next = list.length - 1
+    if(next >= list.length) next = 0
+
+    setState(next);
+    if(onChange) onChange(next)
+  }
 
   return(
     <div>
-      <button onClick={decrement}>{"<"}</button>{state}<button onClick={increment}>{">"}</button>
+      <button onClick={move(-1)}>{"<"}</button>{list[state]}<button onClick={move(1)}>{">"}</button>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom'
 import Init from '../../_components/Init'
 
 import Core from './core'
+import Feedback from './feedback'
 
 import initialState from './initialState'
 import stub from './stub'
@@ -12,6 +13,7 @@ const Game7 = () => {
   const mission = stub;
   const onStartGame = () => setState( s => ({...s, scene: 'GAME'}) )
   const onBack = () => setState(s => ({ ...s, back: true }))
+  const onEndGame = data => setState(s => ({...s, scene: 'ENDGAME', gameplayData: data}))
 
   return(
     <React.Fragment>
@@ -35,7 +37,13 @@ const Game7 = () => {
           case 'GAME':
             return(
               <React.Fragment>
-                <Core exitGame={onBack} mission={mission.missionData}/>
+                <Core exitGame={onBack} mission={mission.missionData} onEndGame={onEndGame}/>
+              </React.Fragment>
+            )
+          case 'ENDGAME':
+            return(
+              <React.Fragment>
+                <Feedback data={state.gameplayData}/>
               </React.Fragment>
             )
           default:
