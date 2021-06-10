@@ -814,73 +814,47 @@ const Game4 = (props) => {
                         )}
                         <div id="shuffled-stuff">
                           <div className="shuffled-tablewares">
-                            {state.shuffledTablewares.map(
-                              (tableware, index) => (
+                            {state.shuffledTablewares.map( (tableware, index) => {
+                              let tablewarePicked = state.tablewareImageSelected;
+                              let amountChoosen = state.tableTablewares.length;
+                              
+                              let wasThisPicked = tablewarePicked === tableware;
+                              let canBePicked = wasThisPicked || (amountChoosen < 3 && !tablewarePicked && !tableware.choosen);
+                              let shouldDim = tablewarePicked && !wasThisPicked;
+
+                              let width = 100 / (state.shuffledTablewares.length+1);
+                              let classes = "tableware-selection-img";
+                              if (canBePicked) classes += " pickable-tableware";
+                              if (shouldDim) classes += " dim-tableware";
+                              if (tableware.choosen) classes += " choosen-tableware";
+                              if (wasThisPicked) classes += " selected-tableware";
+
+                              return (
                                 <img key={index} src={tableware.image}
-                                  style={{opacity: tableware.choosen
-                                          ? 0
-                                          : !state.tablewareImagePick
-                                          ? 0.4
-                                          : 1,
-                                        pointerEvents: tableware.choosen
-                                          ? "none"
-                                          : !state.tablewareImagePick
-                                          ? "none"
-                                          : state.tableTablewares.length > 2
-                                          ? "none"
-                                          : "auto",
-                                          width:
-                                            (
-                                              100 / (state.shuffledTablewares.length+1)
-                                            ).toString() + "%",
-                                  }}
-                                  onClick={() =>
-                                    setState(s => ({
-                                      ...s,
-                                      tutorialTablewareSelectionNotification: false,
-                                      tablewareImagePick: false,
-                                      tablewareImageSelected: tableware,
-                                    }))
-                                  }
-                                  className={
-                                    (state.tablewareImageSelected
-                                      ? tableware.name ===
-                                        state.tablewareImageSelected.name
-                                        ? "selected-tableware"
-                                        : ""
-                                      : "") + " ingredient-selection-img"
-                                  }
+                                  style={{width: width + "%"}}
+                                  onClick={() => setState(s => ({
+                                    ...s,
+                                    tutorialTablewareSelectionNotification: false,
+                                    tablewareImageSelected: tablewarePicked ? null : tableware,
+                                    tablewareImagePick: !!tablewarePicked,
+                                  }) )}
+                                  className={classes}
                                   alt=""
                                 />
                               )
-                            )}
+                            })}
                           </div>
                           <div className="shuffled-tableware-names">
-                            {state.shuffledTablewaresNames.map(
-                              (tableware, index) => (
-                                <span
-                                  key={index}
-                                  style={{
-                                    opacity: tableware.choosen
-                                      ? 0
-                                      : state.tablewareImagePick
-                                      ? 0.2
-                                      : 1,
-                                    pointerEvents: tableware.choosen
-                                      ? "none"
-                                      : state.tablewareImagePick
-                                      ? "none"
-                                      : "auto",
-                                    // width:
-                                    //   (
-                                    //     100 / state.shuffledTablewares.length
-                                    //   ).toString() + "%",
-                                  }}
-                                  onClick={addTableware(tableware)}
-                                >
+                            {state.shuffledTablewaresNames.map( (tableware, index) => {
+                              let classes = "tableware-selection-name";
+                              if (!!state.tablewareImageSelected) classes += " pickable-tableware-name";
+                              if (tableware.choosen) classes += " choosen-tableware";
+
+                              return (
+                                <span key={index} className={classes} onClick={addTableware(tableware)}>
                                   {tableware.name}
                                 </span>
-                              )
+                              )}
                             )}
                           </div>
                         </div>
