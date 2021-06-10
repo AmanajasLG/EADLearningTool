@@ -5,6 +5,10 @@ import "./index.scss";
 
 const FeedbackPanel = ({ feedback, restart, leave }) => {
   const [state, setState] = React.useState(0);
+  const [showBtns, setShowBtns] = React.useState(false);
+  React.useEffect( () => {
+    if( state === 3) setShowBtns(true);
+  } );
 
   return (
     <div style={{position:"relative"}}>
@@ -44,10 +48,12 @@ const FeedbackPanel = ({ feedback, restart, leave }) => {
           </span>
         )}
       </div>
-      <div className="jogo4-end-btns">
-        <Voltar label={"Tentar novamente"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6} onClick={restart} />
-        <Iniciar label={"Sair do jogo"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3} onClick={leave} />
-      </div>
+      {showBtns &&
+        <div className="jogo4-end-btns">
+          <Voltar label={"Tentar novamente"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6} onClick={restart} />
+          <Iniciar label={"Sair do jogo"} colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3} onClick={leave} />
+        </div>
+      }
     </div>
   );
 };
