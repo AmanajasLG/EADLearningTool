@@ -629,9 +629,6 @@ const Game4 = (props) => {
                               />
                             )
                           )}
-                          {state.selectedIngredient &&
-                            <Button id="btn-add-bancada" blink onClick={checkRightIngredient}>Adicionar à bancada</Button>
-                          }
                         </div>
                       ) : (
                         <div className="name-order-div absolute-center">
@@ -742,6 +739,9 @@ const Game4 = (props) => {
                               }}
                             />
                           ))}
+                          {state.selectedIngredient &&
+                            <Button id="btn-add-bancada" blink onClick={checkRightIngredient}>Adicionar à bancada</Button>
+                          }
                         </div>
                       ) : (
                         <div>

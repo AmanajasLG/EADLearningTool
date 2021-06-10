@@ -160,12 +160,6 @@
   filter: drop-shadow(6px 3px 0px #f9afa1);
 }
 
-.btn-add-to-counter {
-  margin: auto;
-  transform: translate(0, -50%);
-  display: block;
-}
-
 .shuffled-ingredients {
   background-color: #D6E3F4DD;
   padding: 2em 9.6em;
@@ -186,13 +180,6 @@
   
   :nth-child(2n+1) {
     margin-bottom: 7%;
-  }
-
-  #btn-add-bancada {
-    position: absolute;
-    top: 100%;
-    margin: -1.5em auto;
-    font-size: 2em;
   }
 }
 
@@ -228,6 +215,14 @@
 
   :nth-child(2n) {
     align-self: flex-end;
+  }
+
+  #btn-add-bancada {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    margin: -1.45em -6.5em;
+    font-size: 2em;
   }
 }
 
