@@ -868,7 +868,6 @@ const Game4 = (props) => {
                               className="table-tableware-space"
                             />
                           ))}
-                          {console.log(Array(3 - state.tableTablewares.length))}
                           {[...Array(3 - state.tableTablewares.length)].map(
                             (item, index) => (
                               <div key={index} className="table-tableware-space"></div>
