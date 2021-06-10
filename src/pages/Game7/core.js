@@ -4,6 +4,7 @@ import WindowScreen from './WindowScreen'
 import Email from './Email'
 import Places from './Places'
 import ScheduleTicket from './ScheduleTicket'
+import SendEmail from './SendEmail'
 
 import initialState from './initialState'
 
@@ -29,6 +30,11 @@ const Core = ({exitGame, mission}) => {
               onConfirm={() => setState(s => ({...s, window: 'NONE', confirmWindow: true}) )}
             />
           }
+          {state.window === 'SEND_EMAIL' &&
+            <SendEmail places={mission.places} place={mission.places[state.selectedPlace].name}
+              date={state.date} flight={mission.flights[state.flight]} tickets={state.tickets}
+            />
+          }
         </WindowScreen>
       }
 
@@ -42,7 +48,7 @@ const Core = ({exitGame, mission}) => {
             <div>Horário: {mission.flights[state.flight].takeOff} - {mission.flights[state.flight].land}</div>
 
             <button onClick={() => setState(s => ({...s, confirmWindow: false}))}>Voltar</button>
-            <button onClick={() => setState(s => ({...s, confirmWindow: false}))}>Avançar</button>
+            <button onClick={() => setState(s => ({...s, confirmWindow: false, window: 'SEND_EMAIL'}))}>Avançar</button>
           </div>
         </div>
       }
