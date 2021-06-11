@@ -30,10 +30,9 @@ const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
       if (onEnd) onEnd(state.seconds);
     } else if (state.seconds > 0) {
       previousRef.current = state;
-      let timeout = setTimeout(() => {
-        setState({ seconds: state.seconds - 1, timeout: timeout });
+      state.timeout = setTimeout(() => {
+        setState( s => ({ ...s, seconds: s.seconds - 1, timeout: null }));
       }, 1000);
-
       return () => clearTimeout(state.timeout);
     }
   }, [state, onEnd, onStop, run, seconds]);
