@@ -1,4 +1,5 @@
 const initialState = () => ({
-  scene: 'INIT'
+  window: 'BUY_TICKETS',
+  tickets: null
 })
 export default initialState

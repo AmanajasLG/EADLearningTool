@@ -25,12 +25,11 @@ const Core = ({exitGame, mission, onEndGame}) => {
       }
 
       {state.window === 'SEND_EMAIL' &&
-        <WindowScreen style={{position: 'absolute', left: '10%', width: '70%', height: '70%',  margin: '10% auto 0 auto', fontSize: '3em'}}>
-          <SendEmail
-            texts={createTexts()} places={mission.places} place={mission.places[state.tickets.place].name}
-            onConfirm={sentences => onEndGame({ tickets: state.tickets, sentences})}
-          />
-        </WindowScreen>
+       <WindowScreen style={{position: 'absolute', left: '10%', width: '70%', height: '70%',  margin: '10% auto 0 auto', fontSize: '3em'}}>
+         {createTexts().map( (text, index) =>
+           <div key={index}>{text}</div>
+         )}
+       </WindowScreen>
       }
 
     </React.Fragment>

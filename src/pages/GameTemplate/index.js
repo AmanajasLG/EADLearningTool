@@ -2,15 +2,13 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 import Init from '../../_components/Init'
 
+const GameTemplate = ({Core, Feedback, mission}) => {
+  const [state, setState] = React.useState({scene: 'INIT', back: false})
 
-import initialState from './initialState'
-import stub from './stub'
-
-const GameTemplate = () => {
-  const [state, setState] = React.useState(initialState())
-  const mission = stub;
   const onStartGame = () => setState( s => ({...s, scene: 'GAME'}) )
   const onBack = () => setState(s => ({ ...s, back: true }))
+  const onEndGame = data => setState(s => ({...s, scene: 'ENDGAME', gameplayData: data}))
+
   return(
     <React.Fragment>
       {!mission.id ? <div>Loading...</div>
@@ -25,15 +23,21 @@ const GameTemplate = () => {
                 nameTranslate={ mission.nameTranslate }
                 descriptionTranslate={ mission.descriptionTranslate }
                 onStart={onStartGame}
-                onBack={onBack}
+                onBack={ onBack }
                 ready={mission.id}
               />
-          )
+            )
+
           case 'GAME':
             return(
               <React.Fragment>
-                Game
-                <button onClick={onBack}>Return</button>
+                {React.createElement(Core, { exitGame: onBack, mission: mission.missionData, onEndGame: onEndGame})}
+              </React.Fragment>
+            )
+          case 'ENDGAME':
+            return(
+              <React.Fragment>
+                {React.createElement(Feedback, {data: state.gameplayData})}
               </React.Fragment>
             )
           default:

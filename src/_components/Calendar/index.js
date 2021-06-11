@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import Counter from '../Counter'
-import { months } from '../../../_helpers'
+import { months } from '../../_helpers'
 
 const Calendar = ({day, month, onDaySelected, onMonthChange}) => {
   return(

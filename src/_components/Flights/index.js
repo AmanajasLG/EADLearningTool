@@ -6,7 +6,7 @@ import Airplane from '@material-ui/icons/AirplanemodeActive'
 import TakeoffIcon from '@material-ui/icons/FlightTakeoff'
 import LandIcon from '@material-ui/icons/FlightLand'
 
-import { zeroFill } from '../../../_helpers'
+import { zeroFill } from '../../_helpers'
 
 const Flights = ({selected, flights, onClick}) => {
   return(

@@ -2,15 +2,9 @@ import React from 'react'
 
 import Button from '@material-ui/core/Button'
 
-import { shuffle } from '../../../_helpers'
+import { shuffle } from '../../_helpers'
 
-const SendEmail = ({places, place, day, month, flight, tickets, onConfirm}) => {
-  const texts = [
-    `Seu voo é para ${place}`,
-    `Seu voo é dia ${day} de ${month}`,
-    `Seu voo é parte as ${flight.takeOff} e com chegada as ${flight.land}`,
-    `Seus ${tickets} tickets foram comprados`
-  ]
+const SendEmail = ({texts, places, place, onConfirm}) => {
 
   const setOptions = index =>
     shuffle([...places.filter(p => p.name !== place).map(p => p.name), ...texts[index].split(' ')]).map( o =>({text: o, show: true}))
@@ -77,7 +71,7 @@ const SendEmail = ({places, place, day, month, flight, tickets, onConfirm}) => {
               </Button>
           )}
 
-          <spam>{state.selected.length}/{state.totalTexts}</spam>
+          <span>{state.selected.length}/{state.totalTexts}</span>
 
           <Button style={{display: 'block'}} onClick={nextSentence} disabled={state.selected.length !== state.totalTexts}>
             Escrever
