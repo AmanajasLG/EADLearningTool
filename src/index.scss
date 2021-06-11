@@ -214,11 +214,11 @@ button:focus {
   background: #c0c0ec;
 }
 
-.stretchIn{
-  animation: stretchIn 1s;
+.stretchIn:hover{
+  animation: stretchIn 1s forwards;
 }
 
 @keyframes stretchIn{
-  from { transform: scaleX(0);}
-  to { transform: scaleX(1);}
+  from { transform: scale(1);}
+  to { transform: scale(1.5);}
 }

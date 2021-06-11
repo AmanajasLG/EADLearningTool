@@ -4,6 +4,9 @@ import WindowScreen from '../../_components/WindowScreen'
 import BuyTicketsLoop from '../../_components/BuyTicketsLoop'
 import SendEmail from '../../_components/SendEmail'
 
+import Button from '@material-ui/core/Button'
+import Map from '../../_components/Map'
+
 import { months } from '../../_helpers'
 
 import initialState from './initialState'
@@ -29,9 +32,29 @@ const Core = ({exitGame, mission, onEndGame}) => {
          {createTexts().map( (text, index) =>
            <div key={index}>{text}</div>
          )}
+         <Button onClick={() => setState(s => ({...s, window: 'MAP'}))}>
+           Fechar
+         </Button>
        </WindowScreen>
       }
 
+      {state.window === 'MAP' &&
+        <Map />
+      }
+
+      {process.env.NODE_ENV === 'development' &&
+        <div>
+          <button onClick={() => setState(s => ({...s, window: 'SEND_EMAIL',
+            tickets: {
+              day: 1,
+              month: 1,
+              place: 1,
+              tickets: 1,
+              flight: { takeOff: '09:00', land:'12:00' }
+            }
+          }))}>Pula loop ticket</button>
+        </div>
+      }
     </React.Fragment>
   )
 }

@@ -16,6 +16,7 @@ const BuyTicketsLoop = ({mission, onDone}) => {
     day: state.day,
     month: state.month,
     place: state.place,
+    tickets: state.tickets + 1,
     flight: {...mission.flights[state.flight]}
   })
 
@@ -27,7 +28,10 @@ const BuyTicketsLoop = ({mission, onDone}) => {
             <Email message={mission.message} onReady={() => setState(s => ({...s, window: 'NONE' })) }/>
           }
           {state.window === 'PLACES' &&
-            <Places value={state.place} places={mission.places} onPlaceClick={(index) => setState(s => ({...s, place: index}))} onConfirm={() => setState(s => ({...s, window: 'NONE'}))}/>
+            <Places value={state.place} places={mission.places}
+              onPlaceClick={(index) => setState(s => ({...s, place: index}))}
+              onConfirm={() => setState(s => ({...s, window: 'NONE'}))}
+            />
           }
           {state.window === 'SCHEDULE' &&
             <ScheduleTicket onConfirm={() => setState(s => ({...s, window: 'NONE'}))}
