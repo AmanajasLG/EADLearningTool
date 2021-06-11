@@ -379,6 +379,33 @@
   animation: scaleDown 250ms cubic-bezier(0, 0.5, 0.5, 1),
              fadeIn 250ms linear,
              attention 3s 250ms cubic-bezier(0.61, 0, 0.41, 1) alternate infinite;
+
+  img {
+    width: 100%;
+  }
+
+  > span {
+    display: block;
+    width: fit-content;
+    text-align: center;
+    font-size: 2em;
+    margin: -0.25em auto;
+    padding: 0.3em 0.6em;
+    border-radius: 0.5em;
+    font-family: 'barlow';
+    font-weight: 600;
+    transition: 150ms linear;
+    color: #59316d;
+    background-color: #fff;
+    opacity: 0.5;
+  }
+  
+}
+
+.serve-button:hover > span {
+  opacity: 1;
+  color: #fff;
+  background-color: #59316d;
 }
 
 @keyframes scaleDown {

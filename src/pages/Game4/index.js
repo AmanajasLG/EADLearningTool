@@ -784,12 +784,14 @@ const Game4 = (props) => {
                         )}
 
                         {state.tableTablewares.length === 3 && (
-                          <img
-                            onClick={() => checkTableware()}
-                            src={silverCloche}
-                            alt=""
-                            className="serve-button"
-                          />
+                          <div className="serve-button">
+                            <img
+                              onClick={() => checkTableware()}
+                              src={silverCloche}
+                              alt=""
+                            />
+                            <span>Servir! / Serve!</span>
+                          </div>
                         )}
                         <div id="shuffled-stuff">
                           <div className="shuffled-tablewares">
