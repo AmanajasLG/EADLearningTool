@@ -5,37 +5,48 @@ import "./index.scss";
 const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
   const [state, setState] = React.useState({
     seconds: seconds,
-    timeout: null,
-    sentRemaning: false,
+    interval: null,
   });
-  const previousRef = React.useRef();
 
-  React.useEffect(() => {
-    if (state === previousRef.current && state.seconds !== seconds) {
-      //console.log('external side effect update')***
-      return;
+  React.useEffect( () => {
+    return () => clearInterval(state.interval);
+  }, [] );
+
+  React.useEffect( () => {
+    if( state.seconds !== seconds ) setState( s => ({...s, seconds: seconds}));
+  // eslint-disable-next-line
+  }, [seconds] )
+  
+  React.useEffect( () => {
+    if( run ) {
+      if( state.seconds > 0 ) _startInterval();
+      else console.log("Timer has already run out.");
+    } else {
+      _stopInterval();
+      onStop( state.seconds );
     }
+  // eslint-disable-next-line
+  }, [run]);
 
-    if (!run && !state.sentRemaning) {
-      onStop(state.seconds);
-      setState({ ...state, sentRemaning: true });
-    } else if (run && state.sentRemaning)
-      setState({ ...state, sentRemaning: false });
+  const _startInterval = () => {
+    let interval = state.interval;
+    if( !interval ) {
+      interval = setInterval( () => {
+        if( state.seconds <= 1 ) {
+          _stopInterval();
+          onEnd();
+        } else {
+          setState( s => ({...s, seconds: s.seconds-1}) );
+        }
+      }, 1000 );
+      setState( s => ({...s, interval: interval}) );
+    } else console.log("Timer is already running.");
+  }
 
-    if (!run) {
-      return state.timeout ? () => clearTimeout(state.timeout) : null;
-    }
-
-    if (state.seconds === 0) {
-      if (onEnd) onEnd(state.seconds);
-    } else if (state.seconds > 0) {
-      previousRef.current = state;
-      state.timeout = setTimeout(() => {
-        setState( s => ({ ...s, seconds: s.seconds - 1, timeout: null }));
-      }, 1000);
-      return () => clearTimeout(state.timeout);
-    }
-  }, [state, onEnd, onStop, run, seconds]);
+  const _stopInterval = () => {
+    clearInterval( state.interval );
+    setState( s => ({...s, interval: null}) );
+  }
 
   return (
     <div id="timer" {...props}>

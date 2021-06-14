@@ -33,7 +33,7 @@ import Tutorial from "./components/Tutorial";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
 import ShopCart from "./components/ShopCart";
-import Button from '@material-ui/core/Button'
+import { Button, Iniciar, Voltar } from "../../_components/Button"
 
 import {
   cart,
@@ -477,7 +477,7 @@ const Game3 = (props) => {
                 return (
                   <React.Fragment>
                     <Timer
-                      style={{ position: "absolute", top: "5%", left: "50%" }}
+                      style={{ position: "absolute", top: "5%", left: "50%", transform: "translateX(-50%)" }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) =>
@@ -551,26 +551,12 @@ const Game3 = (props) => {
                             <span lang="en">Are you sure that's all?</span>
                           </div>
                           <div className={styles.btns}>
-                            <button
-                              className="btn btn-center"
-                              id="btn-back"
-                              onClick={() =>
-                                setState({
-                                  ...state,
-                                  checkoutConfirm: false,
-                                  runTimer: true,
-                                })
-                              }
-                            >
-                              Voltar
-                            </button>
-                            <button
-                              className="btn btn-center"
-                              id="btn-start"
-                              onClick={moveToCheckout}
-                            >
-                              Continuar
-                            </button>
+                            <Voltar onClick={() => setState({
+                              ...state,
+                              checkoutConfirm: false,
+                              runTimer: true,
+                            })}/>
+                            <Iniciar label={"Continuar"} onClick={moveToCheckout} />
                           </div>
                         </div>
                         <img src={cart} alt="" />
@@ -608,7 +594,7 @@ const Game3 = (props) => {
                       alt=""
                     />
                     <Timer
-                      style={{ position: "absolute", top: "5%", left: "50%" }}
+                      style={{ position: "absolute", top: "5%", left: "50%", transform: "translateX(-50%)" }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
