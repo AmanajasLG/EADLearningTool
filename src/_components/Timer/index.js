@@ -10,6 +10,7 @@ const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
 
   React.useEffect( () => {
     return () => clearInterval(state.interval);
+  // eslint-disable-next-line
   }, [] );
 
   React.useEffect( () => {
