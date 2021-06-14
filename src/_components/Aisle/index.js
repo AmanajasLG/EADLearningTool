@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./index.module.scss";
+import InlineSVG from './../../_components/InlineSVG'
 
 import { shelf } from "../../img";
 
@@ -21,6 +22,7 @@ const Aisle = ({ products, addProduct, toPreviousAisle, toNextAisle }) => {
 									className={styles.tooltip + " shelf-item"}
 								>
 									<img src={product.shelfImage} alt=""/>
+									{/* <InlineSVG src={product.shelfImage} alt=""/> */}
 									<span className={styles.tooltiptext}>{product.tooltip}</span>
 								</div>
 							))}
