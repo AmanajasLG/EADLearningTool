@@ -12,7 +12,7 @@ import Init from "../../_components/Init";
 import RoomSelect from "../../_components/RoomSelect";
 import Sala from "../../_components/Sala";
 import Character from "../../_components/Character";
-import AcusationLamp from "../../_components/AcusationLamp";
+import Lamp from "../../_components/Lamp";
 import Conversa from "../../_components/Conversa";
 import DialogCharacter from "../../_components/DialogCharacter";
 import FullscreenOverlay from "../../_components/FullscreenOverlay";
@@ -78,7 +78,12 @@ const Game2 = (props) => {
   };
 
   React.useEffect(() => {
-    if (mission) dispatch(musicActions.set(mission.backgroundAudio.url));
+    if (mission)
+      dispatch(
+        musicActions.set(
+          mission.backgroundAudio ? mission.backgroundAudio.url : ""
+        )
+      );
     return () => dispatch(musicActions.set(""));
   }, [dispatch, mission]);
 
@@ -111,27 +116,26 @@ const Game2 = (props) => {
 
     const getClickedObject = (e) => {
       dispatch(
-        play_sessionsActions.update(
-          { id: currentPlaySession.id,
-            data: {
-              actions:
-              [...currentPlaySession.data.actions,
-                {
-                  tag: e.target.nodeName,
-                  src: e.target.src,
-                  alt: e.target.alt,
-                  className: e.target.className,
-                  class: e.target.class,
-                  id: e.target.id,
-                  innerHTML: e.target.innerHTML.includes("<div")
-                    ? null
-                    : e.target.innerHTML,
-                  clickTime: new Date(),
-                }
-              ]
-            }
-          }
-        )
+        play_sessionsActions.update({
+          id: currentPlaySession.id,
+          data: {
+            actions: [
+              ...currentPlaySession.data.actions,
+              {
+                tag: e.target.nodeName,
+                src: e.target.src,
+                alt: e.target.alt,
+                className: e.target.className,
+                class: e.target.class,
+                id: e.target.id,
+                innerHTML: e.target.innerHTML.includes("<div")
+                  ? null
+                  : e.target.innerHTML,
+                clickTime: new Date(),
+              },
+            ],
+          },
+        })
       );
     };
 
@@ -143,7 +147,13 @@ const Game2 = (props) => {
     return () => {
       document.removeEventListener("mousedown", getClickedObject);
     };
-  }, [dispatch, play_sessionsActions, state.tracking, currentPlaySession, mission]);
+  }, [
+    dispatch,
+    play_sessionsActions,
+    state.tracking,
+    currentPlaySession,
+    mission,
+  ]);
   /*//Testing tool
 	if(error){
 		error = null
@@ -278,7 +288,7 @@ const Game2 = (props) => {
         play_sessionsActions.create({
           user: userId,
           mission: mission.id,
-          data:{actions:[]}
+          data: { actions: [] },
         })
       );
     }
@@ -525,18 +535,21 @@ const Game2 = (props) => {
               </span>
               {hasPlayed ? (
                 <div>
-                  <PularTutorial label="Skip tutorial" onClick={() => setState( s => s.scene="ROOM" )} />
+                  <PularTutorial
+                    label="Skip tutorial"
+                    onClick={() => setState((s) => (s.scene = "ROOM"))}
+                  />
                 </div>
-                // <button
-                //   className="btn btn-center"
-                //   id="btn-tutorial"
-                //   onClick={() => {
-                //     setState({ ...state, scene: "ROOM" });
-                //   }}
-                // >
-                //   Skip tutorial
-                // </button>
-              ) : null}
+              ) : // <button
+              //   className="btn btn-center"
+              //   id="btn-tutorial"
+              //   onClick={() => {
+              //     setState({ ...state, scene: "ROOM" });
+              //   }}
+              // >
+              //   Skip tutorial
+              // </button>
+              null}
             </div>
           </div>
         </Sala>
@@ -577,7 +590,7 @@ const Game2 = (props) => {
                 so be sure not to waste their times with question that are out
                 of yout context!
               </span>
-              <Iniciar label="Continuar" onClick={endTutorial}/>
+              <Iniciar label="Continuar" onClick={endTutorial} />
               {/* <button
                 className="btn btn-center"
                 id="btn-end-tutorial"
@@ -659,22 +672,26 @@ const Game2 = (props) => {
                               <img
                                 src={palma}
                                 style={{ marginLeft: "-11.25%" }}
-                                alt="hand" />
+                                alt="hand"
+                              />
                               <img
                                 src={bloco}
                                 alt="note"
                                 style={{ marginLeft: "11.25%" }}
-                                />
+                              />
                               <img
                                 src={dedao}
                                 style={{ marginLeft: "-11.25%" }}
-                                alt="thumb" />
+                                alt="thumb"
+                              />
                             </div>
                             <div id="big-note-writings-wrapper">
                               <div id="big-note-writings-content">
                                 <span id="note-dicas">Dicas:</span>
                                 {state.tips.map((tip, index) => (
-                                  <span key={index} className="dica">{tip}</span>
+                                  <span key={index} className="dica">
+                                    {tip}
+                                  </span>
                                 ))}
                               </div>
                             </div>
@@ -732,10 +749,11 @@ const Game2 = (props) => {
                           onExited={closeDialog}
                           onConvoChoiceMade={onMenuButtonClick}
                         >
-                          <AcusationLamp
+                          <Lamp
                             onClick={() =>
                               setState({ ...state, acusation: true })
                             }
+                            message="É você!"
                           />
                         </Conversa>
                       )}

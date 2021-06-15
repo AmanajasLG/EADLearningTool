@@ -33,7 +33,7 @@ import Tutorial from "./components/Tutorial";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
 import ShopCart from "./components/ShopCart";
-import Button from '@material-ui/core/Button'
+import Button from "@material-ui/core/Button";
 
 import {
   cart,
@@ -94,7 +94,12 @@ const Game3 = (props) => {
   };
 
   React.useEffect(() => {
-    if (mission) dispatch(musicActions.set(mission.backgroundAudio.url));
+    if (mission)
+      dispatch(
+        musicActions.set(
+          mission.backgroundAudio ? mission.backgroundAudio.url : ""
+        )
+      );
     return () => dispatch(musicActions.set(""));
   }, [dispatch, mission]);
 
@@ -714,7 +719,7 @@ const Game3 = (props) => {
                             fontFamily: "Barlow",
                             color: "rgb(89, 49, 109)",
                             fontStyle: "italic",
-                            fontSize: '3em'
+                            fontSize: "3em",
                           }}
                         >
                           {endGameLines[state.timeUp ? 0 : 1].translation}
@@ -765,7 +770,13 @@ const Game3 = (props) => {
                     >
                       <div id="feedback-endGame-action-btns">
                         <Button onClick={restart}>Tentar novamente</Button>
-                        <Button onClick={()=>setState(s => ({...s, back: true})) }>Sair do jogo</Button>
+                        <Button
+                          onClick={() =>
+                            setState((s) => ({ ...s, back: true }))
+                          }
+                        >
+                          Sair do jogo
+                        </Button>
                       </div>
                     </div>
                   </div>

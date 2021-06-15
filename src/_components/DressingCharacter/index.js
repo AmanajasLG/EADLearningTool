@@ -1,21 +1,22 @@
-import React from 'react'
+import React from "react";
 
-const DressingCharacter = ({clothesTypes, clothes, onRemoveClick, ...props}) => {
-  return(
+const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
+  return (
     <div {...props}>
-      <img src="" alt="character"/>
-      <div>
-        {clothesTypes.map((item, index) =>
-          <div key={index}>{item}: {clothes[index]? clothes[index].name : "none"}
-            {onRemoveClick && clothes[index] &&
+      <img src={character.image} alt="character" style={{ height: "100%" }} />
 
-              <button onClick={onRemoveClick(index)}>Remove</button>
-            }
-          </div>
-        )}
-      </div>
+      {Object.keys(clothes).map((label) =>
+        clothes[label].map((clothing, index) => (
+          <img
+            key={clothing.id}
+            src={clothing.image}
+            alt={clothing.name}
+            onClick={onRemoveClick(clothing)}
+          />
+        ))
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default DressingCharacter
+export default DressingCharacter;
