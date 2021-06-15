@@ -28,6 +28,7 @@ import Lamp from "../../_components/Lamp";
 import { Iniciar, Voltar } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
 import { ContactSupportOutlined } from "@material-ui/icons";
+import TutorialWardrobe from "./components/TutorialWardrobe";
 
 const Game5 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -361,9 +362,9 @@ const Game5 = (props) => {
         {
           image: tomato,
           message:
-            "Parabéns! Você montou um look perfeito para a ocasião. Certamente fará um sucesso no evento!!",
+            "Ei, até que não ficou tão mal, mas acho que algumas pessoas podem estranhar seu look para esse evento...",
           messageTranslate:
-            "Well done! You came up with the perfect outfit for the occasion. You'll surely be a blast in the event!!",
+            "Hey, it's not that bad, but people might think your outfit is a bit weird for the event...",
         },
         {
           image: tomato,
@@ -600,6 +601,7 @@ const Game5 = (props) => {
                             proceedToDressingConfirmation: false,
                             dressingContext: true,
                             showInvitation: false,
+                            showBlob: true,
                           }))
                         }
                         backButtonLabel="Ver o convite/See the invite"
@@ -617,6 +619,28 @@ const Game5 = (props) => {
               case "DRESS":
                 return (
                   <React.Fragment>
+                    {state.showBlob && (
+                      <TutorialWardrobe
+                        blobMessage={state.tutorialBlobsText[state.blobToShow]}
+                        onClickToEnd={() => {
+                          if (
+                            state.blobToShow <
+                            state.tutorialBlobsText.length - 1
+                          )
+                            setState((s) => ({
+                              ...s,
+                              blobToShow: s.blobToShow + 1,
+                            }));
+                          else
+                            setState((s) => ({
+                              ...s,
+                              showBlob: false,
+                            }));
+                        }}
+                        index={state.blobToShow}
+                      />
+                    )}
+
                     {state.dressingContext && (
                       <div>
                         <div
@@ -636,14 +660,22 @@ const Game5 = (props) => {
                               clothes={state.clothes}
                               showRemove
                               onRemoveClick={removeClothesFromBody}
-                              style={{ height: "80em" }}
+                              style={{
+                                height: "80em",
+                                zIndex: state.blobToShow === 2 ? 1000000 : 0,
+                                position: "relative",
+                              }}
                             />
                           </div>
                           <div
                             style={{ flex: "1 0 0px", border: "1px solid red" }}
                           >
                             <Wardrobe
-                              style={{ border: "1px solid red" }}
+                              style={{
+                                border: "1px solid red",
+                                zIndex: state.blobToShow === 1 ? 1000000 : 0,
+                                position: "relative",
+                              }}
                               wardrobe={state.wardrobe}
                               onClothesClick={addClothesToBody}
                             />
@@ -658,6 +690,10 @@ const Game5 = (props) => {
                                     showInviteQuestions: true,
                                   }))
                                 }
+                                style={{
+                                  zIndex: state.blobToShow === 3 ? 1000000 : 0,
+                                  position: "relative",
+                                }}
                               />
                             )}
                           </div>
@@ -677,6 +713,9 @@ const Game5 = (props) => {
                             }));
                           }}
                           message="Estou pronto!"
+                          style={{
+                            zIndex: state.blobToShow === 4 ? 1000000 : 0,
+                          }}
                         />
                       </div>
                     )}
