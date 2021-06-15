@@ -327,7 +327,7 @@ const Game5 = (props) => {
     dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
   };
 
-  const endGame = (saveResult = false) => {
+  const endGame = (saveResult = true) => {
     let wrongClothes = getWrongClothes();
     console.log(wrongClothes);
     let clothesCount = Object.keys(state.clothes).reduce((acc, key) => {
@@ -441,7 +441,17 @@ const Game5 = (props) => {
         gameActions.create("results", {
           user: userId,
           mission: mission.id,
-          invite: state.invite.id,
+          invite: state.invitation.id,
+          won: wrongClothes.length === 0 && checkFullOutfit(),
+          sawInviteAgain: sawInvite,
+          wrongClothesCount: wrongClothes.length,
+          outfit: Object.keys(state.clothes).reduce((acc, key) => {
+            return [
+              ...acc,
+              ...state.clothes[key].map((clothing) => clothing.id),
+            ];
+          }, []),
+          character: state.choosenCharacter.id,
         })
       );
   };
