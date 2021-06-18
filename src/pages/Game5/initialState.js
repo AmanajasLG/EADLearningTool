@@ -1,14 +1,57 @@
 const initialState = () => ({
-  clothesTypes: ["HEAD", "TOP", "BOTTOM", "SHOES"],
-  scene: 'INIT',
+  scene: "INIT",
   chooseCharacterScreen: true,
   choosenCharacter: null,
   showInvitation: false,
   proceedToDressingConfirmation: false,
   dressingContext: false,
   dressingTabIndex: 0,
-  clothes: [null, null, null, null],
-  readyAlert: false
-})
+  rightTags: [],
+  invitation: {},
+  wardrobe: {},
+  characters: [],
+  clothes: {
+    Tronco: [],
+    Pernas: [],
+    Pés: [],
+    Acessórios: [],
+  },
+  readyAlert: false,
 
-export default initialState
+  tutorialBlobsText: [
+    {
+      text: "Clique no personagem que você deseja vestir.",
+      textTranslate: "Click on the character you wish to dress up.",
+    },
+    {
+      text: "Clique em um item para vesti-lo.",
+      textTranslate: "Click on any item to use it.",
+    },
+    {
+      text: "Clique novamente no item para coloca-lo no armário.",
+      textTranslate: "Click again to put it back in the closet.",
+    },
+    {
+      text: "Clique no convite para perguntar detalhes do evento.",
+      textTranslate: "Click on the envelope to ask questions about the event.",
+    },
+    {
+      text: 'Clique em "Estou pronto" para ir para o evento!',
+      textTranslate: 'Click on "Estou pronto" to go to the event!',
+    },
+  ],
+
+  // INVITE
+  inviteQuestions: [],
+  showInviteAnswer: false,
+  showInviteQuestions: false,
+  inviteAnswer: "",
+
+  // NOTIFICATIONS
+  showBlob: true,
+  blobToShow: 0,
+  chooseCharacterScreenNotification: true,
+  showClothingSpaceTakenErrorNotification: false,
+});
+
+export default initialState;
