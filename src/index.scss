@@ -6,8 +6,8 @@ html {
   box-sizing: border-box;
   // --fixed-font-size: 16px; // Valor fixo nativo
   --fixed-font-size: 10px; // Valor fixo nativo
-  --responsive-size: min( 0.835vw, 1.485vh ); // Valor 100% responsivo
-  --responsive-size: min( 0.520834vw, 0.925926vh ); // Valor 100% responsivo
+  --responsive-size: min(0.835vw, 1.485vh); // Valor 100% responsivo
+  --responsive-size: min(0.520834vw, 0.925926vh); // Valor 100% responsivo
   --responsiveness: 1; // 1 = 100% responsivo, 0 = 100% fixo
 }
 
@@ -168,7 +168,7 @@ h6 {
   padding: 2rem;
   height: 7rem;
   box-sizing: border-box;
-  background: url("img/capa-top.svg");
+  // background: url("img/capa-top.svg");
   background-size: cover;
   background-position: bottom;
   text-align: center;
@@ -214,11 +214,15 @@ button:focus {
   background: #c0c0ec;
 }
 
-.stretchIn{
+.stretchIn {
   animation: stretchIn 1s;
 }
 
-@keyframes stretchIn{
-  from { transform: scaleX(0);}
-  to { transform: scaleX(1);}
+@keyframes stretchIn {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
