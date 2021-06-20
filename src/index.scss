@@ -22,6 +22,7 @@ html {
 img,
 svg {
   vertical-align: middle;
+  transform-box: fill-box
 }
 
 /* TYPE */
@@ -212,6 +213,10 @@ button:focus {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #c0c0ec;
+}
+
+.stretchIn{
+  transform-origin: center;
 }
 
 .stretchIn:hover{

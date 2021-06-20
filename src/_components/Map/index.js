@@ -36,12 +36,9 @@ const Map = () => {
             <path id="Polygon 1" d="M333.5 310.62L406.679 393.93H260.321L333.5 310.62Z" fill="#C4C4C4"/>
             <line x1="0" y1="0" x2="330" y2="417" style={{stroke:'rgb(255,0,0)', strokeWidth:2}}/>
         </g>
-        <g  >
-          <svg className="House stretchIn" style={{transformOrigin: '960px 165px'}}>
+        <g  className="House stretchIn">
           <path id="Vector 19_3" d="M898.249 151.103V238.38H1029.16V151.103H898.249Z" fill="#C4C4C4" stroke="black"/>
           <path id="Polygon 1_2" d="M964.5 67L1037.68 150.31H891.321L964.5 67Z" fill="#C4C4C4"/>
-          <line x1="0" y1="0" x2="960" y2="165" style={{stroke:'rgb(255,0,0)', strokeWidth:2}}/>
-          </svg>
         </g>
         <g  className="House stretchIn"  style={{transformOrigin: '0px 0px'}}>
             <path id="Vector 19_4" d="M1298.25 395.103V482.38H1429.16V395.103H1298.25Z" fill="#C4C4C4" stroke="black"/>
