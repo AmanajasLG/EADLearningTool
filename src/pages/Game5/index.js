@@ -851,8 +851,6 @@ const Game5 = (props) => {
                       <DressingCharacter
                         character={state.choosenCharacter}
                         clothes={state.clothes}
-                        showRemove
-                        onRemoveClick={removeClothesFromBody}
                         className="feedback-dressing-character"
                       />
                       <FeedbackPanel

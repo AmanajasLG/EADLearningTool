@@ -50,7 +50,7 @@ const FeedbackPanel = ({ feedback, won, restart, leave }) => {
               </span>
             </div>
           </div>
-          {!won && (
+          {feedback.length > 2 && (
             <div
               className="feedback-panel-column"
               style={{ width: 100 / feedback.length + "%" }}

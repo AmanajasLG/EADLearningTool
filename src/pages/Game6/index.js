@@ -81,7 +81,7 @@ const Game6 = (props) => {
             mission: mission.id,
           })
         );
-        setState({ ...state, checkedPlayed: true });
+        setState((s) => ({ ...s, checkedPlayed: true }));
       }
     }
     // eslint-disable-next-line
@@ -250,7 +250,7 @@ const Game6 = (props) => {
     }
   }, [missionData, state.wardrobe, timesPlayed, lang]);
 
-  const onStartGame = () => setState({ ...state, scene: "INTRO" });
+  const onStartGame = () => setState((s) => ({ ...s, scene: "INTRO" }));
 
   // INTRO
   const showIntroDialog = () => {
@@ -284,69 +284,6 @@ const Game6 = (props) => {
   };
 
   // WARDROBE
-  const addAnswerToDialogSend = (item) => () => {
-    if (state.showPhoneClothes) {
-      const wardrobeBody = ["Tronco", "Pernas", "Pés"];
-      let phoneWardrobe = { ...state.phoneWardrobe };
-      let phoneClothes = [...state.phoneClothes];
-      let sendDialogShow = [...state.sendDialogShow];
-
-      phoneClothes.push(item);
-      sendDialogShow.push(
-        { speaker: "player", text: item.name },
-        { speaker: "", text: "De qual cor?" }
-      );
-
-      if (wardrobeBody.includes(item.category)) {
-        phoneWardrobe = {
-          ...phoneWardrobe,
-          [item.category]: phoneWardrobe[item.category].map((clothing) => {
-            if (clothing.id === item.id) return { ...clothing, picked: true };
-            return clothing;
-          }),
-        };
-      } else {
-        phoneWardrobe = {
-          ...phoneWardrobe,
-          Acessórios: phoneWardrobe["Acessórios"].map((clothing) => {
-            if (clothing.id === item.id) return { ...clothing, picked: true };
-            return clothing;
-          }),
-        };
-      }
-
-      setState((s) => ({
-        ...s,
-        phoneWardrobe,
-        phoneClothes,
-        sendDialogShow,
-        showPhoneClothes: false,
-      }));
-    } else {
-      let phoneClothes = [...state.phoneClothes];
-      let sendDialogShow = [...state.sendDialogShow];
-
-      phoneClothes[phoneClothes.length - 1].color = item;
-      phoneClothes[phoneClothes.length - 1].fullName =
-        phoneClothes[phoneClothes.length - 1].name + " " + item;
-      sendDialogShow.push(
-        { speaker: "player", text: item },
-        {
-          speaker: "",
-          text: "Legal! Que mais?",
-          textTranslate: "Cool! What else?",
-        }
-      );
-
-      setState((s) => ({
-        ...s,
-        phoneClothes,
-        sendDialogShow,
-        showPhoneClothes: true,
-      }));
-    }
-  };
-
   const addClothesToBody = (item) => () => {
     const wardrobeBody = ["Tronco", "Pernas", "Pés"];
     var clothes = { ...state.clothes };
@@ -487,6 +424,69 @@ const Game6 = (props) => {
   };
 
   // SELECT CLOTHES IN PHONE
+  const addAnswerToDialogSend = (item) => () => {
+    if (state.showPhoneClothes) {
+      const wardrobeBody = ["Tronco", "Pernas", "Pés"];
+      let phoneWardrobe = { ...state.phoneWardrobe };
+      let phoneClothes = [...state.phoneClothes];
+      let sendDialogShow = [...state.sendDialogShow];
+
+      phoneClothes.push(item);
+      sendDialogShow.push(
+        { speaker: "player", text: item.name },
+        { speaker: "", text: "De qual cor?" }
+      );
+
+      if (wardrobeBody.includes(item.category)) {
+        phoneWardrobe = {
+          ...phoneWardrobe,
+          [item.category]: phoneWardrobe[item.category].map((clothing) => {
+            if (clothing.id === item.id) return { ...clothing, picked: true };
+            return clothing;
+          }),
+        };
+      } else {
+        phoneWardrobe = {
+          ...phoneWardrobe,
+          Acessórios: phoneWardrobe["Acessórios"].map((clothing) => {
+            if (clothing.id === item.id) return { ...clothing, picked: true };
+            return clothing;
+          }),
+        };
+      }
+
+      setState((s) => ({
+        ...s,
+        phoneWardrobe,
+        phoneClothes,
+        sendDialogShow,
+        showPhoneClothes: false,
+      }));
+    } else {
+      let phoneClothes = [...state.phoneClothes];
+      let sendDialogShow = [...state.sendDialogShow];
+
+      phoneClothes[phoneClothes.length - 1].color = item;
+      phoneClothes[phoneClothes.length - 1].fullName =
+        phoneClothes[phoneClothes.length - 1].name + " " + item;
+      sendDialogShow.push(
+        { speaker: "player", text: item },
+        {
+          speaker: "",
+          text: "Legal! Que mais?",
+          textTranslate: "Cool! What else?",
+        }
+      );
+
+      setState((s) => ({
+        ...s,
+        phoneClothes,
+        sendDialogShow,
+        showPhoneClothes: true,
+      }));
+    }
+  };
+
   const sendReady = () => {
     if (state.phoneClothes.length === 0) {
       setState((s) => ({
@@ -522,15 +522,35 @@ const Game6 = (props) => {
     }
   };
 
-  const removeClothesFromPhone = (index) => {
+  const removeClothesFromPhone = (index) => () => {
     let phoneClothes = [...state.phoneClothes];
+    let item = phoneClothes.splice(index, 1)[0];
+    let sendDialogShow = [...state.sendDialogShow];
+    const category = ["Tronco", "Pernas", "Pés"].includes(item.category)
+      ? item.category
+      : "Acessórios";
 
-    phoneClothes.splice(index, 1);
+    sendDialogShow.push(
+      { speaker: "player", text: item.fullName },
+      {
+        speaker: "",
+        text: "OK! Tirei aqui. Que mais?",
+        textTranslate: "OK! Removed. What else?",
+      }
+    );
 
     setState((s) => ({
       ...s,
       phoneClothes,
-      lastConfirmation: true,
+      sendDialogShow,
+      removeItemPhone: false,
+      phoneWardrobe: {
+        ...s.phoneWardrobe,
+        [category]: state.phoneWardrobe[category].map((clothing) => {
+          if (clothing.id === item.id) return { ...clothing, picked: false };
+          return clothing;
+        }),
+      },
     }));
   };
 
@@ -694,7 +714,12 @@ const Game6 = (props) => {
     setState({
       ...state,
       scene: "END_GAME",
-      won: wrongClothes.length === 0 && checkFullOutfit(),
+      won:
+        wrongClothes.length === 0 &&
+        checkFullOutfit() &&
+        Object.keys(phoneBodyMatchErrors).reduce((acc, key) => {
+          return acc && phoneBodyMatchErrors[key].length === 0;
+        }, true),
       feedbackMessages,
     });
 
@@ -751,7 +776,7 @@ const Game6 = (props) => {
                       }).description
                     }
                     onStart={onStartGame}
-                    onBack={() => setState({ ...state, back: true })}
+                    onBack={() => setState((s) => ({ ...s, back: true }))}
                     ready={Object.keys(state.wardrobe).length > 0}
                   />
                 );
@@ -807,7 +832,7 @@ const Game6 = (props) => {
                         showCloseButton={false}
                         dialogHistory={state.introDialogShow}
                         onMinimize={() =>
-                          setState({ ...state, shouldMinimize: false })
+                          setState((s) => ({ ...s, shouldMinimize: false }))
                         }
                         shouldMinimize={state.shouldMinimize}
                         stopConversation={state.introDialog.length === 0}
@@ -859,7 +884,7 @@ const Game6 = (props) => {
                       autoLoad={false}
                       dialogHistory={state.dressDialogShow}
                       onMinimize={() =>
-                        setState({ ...state, shouldMinimize: false })
+                        setState((s) => ({ ...s, shouldMinimize: false }))
                       }
                       shouldMinimize={state.shouldMinimize}
                       nextMessage={showIntroDialog}
@@ -1051,6 +1076,76 @@ const Game6 = (props) => {
                           onRemoveClick={removeClothesFromBody}
                           style={{ height: "80em" }}
                         />
+                        <Button
+                          style={{
+                            position: "relative",
+                            margin: ".5em auto",
+                            width: "90%",
+                            fontSize: "1rem",
+                            display: "block",
+                          }}
+                          onClick={() => {
+                            setState((s) => ({
+                              ...s,
+                              sendDialogShow: [
+                                ...s.sendDialogShow,
+                                {
+                                  speaker: "player",
+                                  text: "Não",
+                                },
+                                {
+                                  speaker: "",
+                                  text: "Qual item devo tirar da lista?",
+                                  textTranslate:
+                                    "Which item should I remove from the list?",
+                                },
+                              ],
+                              removeItemPhone: true,
+                            }));
+                          }}
+                        >
+                          "Remover uma roupa da lista/Remove clothes from the
+                          list"
+                        </Button>
+                        <Button
+                          style={{
+                            position: "relative",
+                            margin: ".5em auto",
+                            width: "90%",
+                            fontSize: "1rem",
+                            display: "block",
+                          }}
+                          onClick={() => {
+                            let phoneWardrobe = {};
+
+                            Object.keys(state.phoneWardrobe).forEach(
+                              (category) => {
+                                phoneWardrobe[category] = state.phoneWardrobe[
+                                  category
+                                ].map((clothing) => ({
+                                  ...clothing,
+                                  picked: false,
+                                }));
+                              }
+                            );
+
+                            setState((s) => ({
+                              ...s,
+                              phoneClothes: [],
+                              sendDialogShow: [
+                                {
+                                  speaker: "",
+                                  text: "E aí, que roupa uso?",
+                                  textTranslate: "So, how should I dress?",
+                                },
+                              ],
+                              phoneWardrobe,
+                            }));
+                          }}
+                        >
+                          "Remover todos os items da lista e começar de
+                          novo/Remove all items from the list and start over"
+                        </Button>
                       </div>
                       <Cellphone
                         autoLoad={false}
@@ -1067,6 +1162,9 @@ const Game6 = (props) => {
                         colors={state.colorTags}
                         showClothes={state.showPhoneClothes}
                         confirmationButton={sendReady}
+                        removeItem={state.removeItemPhone}
+                        phoneClothes={state.phoneClothes}
+                        removeClothingFromList={removeClothesFromPhone}
                       />
                     </div>
 
@@ -1076,150 +1174,35 @@ const Game6 = (props) => {
                           autoLoad={false}
                           dialogHistory={state.sendDialogConfirmShow}
                           stopConversation={true}
-                          confirmationButton={() =>
-                            setState({ ...state, scene: "END" })
-                          }
+                          confirmationButton={() => endGame()}
                           cancelButton={() =>
-                            setState({ ...state, editSend: true })
+                            setState((s) => ({ ...s, lastConfirmation: false }))
                           }
-                          removeItem={state.removeItemPhone}
-                          phoneClothes={state.phoneClothes}
-                          removeClothingFromList={removeClothesFromPhone}
                         />
-                      </div>
-                    )}
-
-                    {state.editSend && (
-                      <div className="confirm-screen">
-                        <div className="character">
-                          <DressingCharacter
-                            character={state.choosenCharacter}
-                            clothes={state.clothes}
-                            showRemove
-                            onRemoveClick={removeClothesFromBody}
-                            style={{ height: "80em" }}
-                          />
-                        </div>
-                        <div className="confirm-blob">
-                          <div className="blob-spans">
-                            <span lang="pt-br">O que você quer fazer?</span>
-                            <span lang="en">What you wish to do?</span>
-                          </div>
-                          <div className="btns">
-                            <Button
-                              style={{
-                                position: "relative",
-                                margin: ".5em auto",
-                                width: "90%",
-                                fontSize: "1rem",
-                                display: "block",
-                              }}
-                              onClick={() =>
-                                setState((s) => ({
-                                  ...state,
-                                  editSend: false,
-                                  lastConfirmation: false,
-                                }))
-                              }
-                            >
-                              "Adicionar uma roupa à lista/Add clothes to the
-                              list"
-                            </Button>
-                            <Button
-                              style={{
-                                position: "relative",
-                                margin: ".5em auto",
-                                width: "90%",
-                                fontSize: "1rem",
-                                display: "block",
-                              }}
-                              onClick={() => {
-                                setState((s) => ({
-                                  ...s,
-                                  sendDialogConfirmShow: [
-                                    ...s.sendDialogConfirmShow,
-                                    {
-                                      speaker: "player",
-                                      text: "Não",
-                                    },
-                                    {
-                                      speaker: "",
-                                      text: "Qual item devo tirar da lista?",
-                                      textTranslate:
-                                        "Which item should I remove from the list?",
-                                    },
-                                  ],
-                                  editSend: false,
-                                  removeItemPhone: true,
-                                }));
-                              }}
-                            >
-                              "Remover uma roupa da lista/Remove clothes from
-                              the list"
-                            </Button>
-                            <Button
-                              style={{
-                                position: "relative",
-                                margin: ".5em auto",
-                                width: "90%",
-                                fontSize: "1rem",
-                                display: "block",
-                              }}
-                              onClick={() => {
-                                let phoneWardrobe = {};
-
-                                Object.keys(state.phoneWardrobe).forEach(
-                                  (category) => {
-                                    phoneWardrobe[
-                                      category
-                                    ] = state.phoneWardrobe[category].map(
-                                      (clothing) => ({
-                                        ...clothing,
-                                        picked: false,
-                                      })
-                                    );
-                                  }
-                                );
-
-                                setState((s) => ({
-                                  ...s,
-                                  phoneClothes: [],
-                                  sendDialogShow: [
-                                    {
-                                      speaker: "",
-                                      text: "E aí, que roupa uso?",
-                                      textTranslate: "So, how should I dress?",
-                                    },
-                                  ],
-                                  phoneWardrobe,
-                                  editSend: false,
-                                  lastConfirmation: false,
-                                }));
-                              }}
-                            >
-                              "Remover todos os items da lista e começar de
-                              novo/Remove all items from the list and start
-                              over"
-                            </Button>
-                          </div>
-                        </div>
                       </div>
                     )}
                   </React.Fragment>
                 );
-              case "END":
+              case "END_GAME":
                 return (
-                  <div>
-                    <div>Tela de feedback</div>
-                    <Button blink onClick={() => setState(initialState())}>
-                      Jogar novamente
-                    </Button>
-                    <Button
-                      blink
-                      onClick={() => setState({ ...state, back: true })}
-                    >
-                      Sair do jogo
-                    </Button>
+                  <div
+                    className={
+                      state.won ? "blue-background" : "salmon-background"
+                    }
+                  >
+                    <div className="feedback absolute-center">
+                      <DressingCharacter
+                        character={state.choosenCharacter}
+                        clothes={state.clothes}
+                        className="feedback-dressing-character"
+                      />
+                      <FeedbackPanel
+                        feedback={state.feedbackMessages}
+                        won={state.won}
+                        restart={restart}
+                        leave={() => setState((s) => ({ ...s, back: true }))}
+                      />
+                    </div>
                   </div>
                 );
               default:

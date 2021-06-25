@@ -75,7 +75,32 @@ const Cellphone = ({
               ))}
             </div>
           </div>
-          {!stopConversation ? (
+          {stopConversation ? (
+            <div>
+              <Button
+                style={{
+                  position: "relative",
+                  margin: "1em auto",
+                  width: "40%",
+                  fontSize: "0.4rem",
+                }}
+                onClick={cancelButton}
+              >
+                Não
+              </Button>
+              <Button
+                style={{
+                  position: "relative",
+                  margin: "1em auto",
+                  width: "40%",
+                  fontSize: "0.4rem",
+                }}
+                onClick={confirmationButton}
+              >
+                Sim
+              </Button>
+            </div>
+          ) : !removeItem ? (
             <div id="cellphone-wardrobe">
               {showClothes ? (
                 <div>
@@ -114,7 +139,7 @@ const Cellphone = ({
                 </div>
               )}
             </div>
-          ) : removeItem ? (
+          ) : (
             <div
               style={{
                 display: "grid",
@@ -130,31 +155,6 @@ const Cellphone = ({
                   {cloting.fullName}
                 </Button>
               ))}
-            </div>
-          ) : (
-            <div>
-              <Button
-                style={{
-                  position: "relative",
-                  margin: "1em auto",
-                  width: "40%",
-                  fontSize: "0.4rem",
-                }}
-                onClick={cancelButton}
-              >
-                Não
-              </Button>
-              <Button
-                style={{
-                  position: "relative",
-                  margin: "1em auto",
-                  width: "40%",
-                  fontSize: "0.4rem",
-                }}
-                onClick={confirmationButton}
-              >
-                Sim
-              </Button>
             </div>
           )}
         </div>
