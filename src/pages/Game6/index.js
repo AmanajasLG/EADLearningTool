@@ -27,10 +27,9 @@ import Lamp from "../../_components/Lamp";
 
 import { Iniciar, Voltar } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
-import { ContactSupportOutlined } from "@material-ui/icons";
+import { ContactSupportOutlined, ErrorSharp } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
-import FullscreenOverlay from "../../_components/FullscreenOverlay";
-import DialogHistory from "../../_components/DialogHistory";
+import CellphoneOverlay from "./components/CellphoneOverlay";
 import Cellphone from "./components/Cellphone";
 
 const Game6 = (props) => {
@@ -123,10 +122,31 @@ const Game6 = (props) => {
         return acc;
       }, {});
 
+      let phoneWardrobe = missionData.clothes.reduce((acc, clothing) => {
+        let clothingReduce = {
+          id: clothing.id,
+          name: clothing.asset.name,
+          category: clothing.tags.find((tag) => tag.type === "category").name,
+          picked: false,
+        };
+
+        if (wardrobeBody.includes(clothingReduce.category))
+          acc[clothingReduce.category] = [
+            ...(acc[clothingReduce.category] || []),
+            clothingReduce,
+          ];
+        else acc["Acessórios"] = [...(acc["Acessórios"] || []), clothingReduce];
+
+        return acc;
+      }, {});
+
       let colorTags = [
         ...new Set(
           missionData.clothes.reduce((acc, clothing) => {
-            return [...acc, clothing.color];
+            return [
+              ...acc,
+              clothing.tags.find((tag) => tag.type === "color").name,
+            ];
           }, [])
         ),
       ];
@@ -147,12 +167,12 @@ const Game6 = (props) => {
         { question: "Qual data?", answer: invitation.date, asked: false },
         {
           question: "A que horas?",
-          answer: "Às " + invitation.time.toLowerCase(),
+          answer: invitation.time.toLowerCase(),
           asked: false,
         },
         {
           question: "Qual estação?",
-          answer: "No(a) " + invitation.season.toLowerCase(),
+          answer: invitation.season.toLowerCase(),
           asked: false,
         },
         {
@@ -197,15 +217,34 @@ const Game6 = (props) => {
         },
       ];
 
+      let dressDialogShow = [
+        {
+          speaker: "",
+          text: "Se precisar de algum detalhe, só perguntar!",
+          textTranslate: "If you wanna know any details, just ask me!",
+        },
+      ];
+
+      let sendDialogShow = [
+        {
+          speaker: "",
+          text: "E aí, que roupa uso?",
+          textTranslate: "So, how should I dress?",
+        },
+      ];
+
       setState((s) => {
         return {
           ...s,
           wardrobe,
+          phoneWardrobe,
           characters,
           invitation,
           inviteQuestions,
           colorTags,
           introDialog,
+          dressDialogShow,
+          sendDialogShow,
         };
       });
     }
@@ -213,16 +252,98 @@ const Game6 = (props) => {
 
   const onStartGame = () => setState({ ...state, scene: "INTRO" });
 
+  // INTRO
   const showIntroDialog = () => {
     let introDialog = [...state.introDialog];
-    if (introDialog.length === 0)
-      setState((s) => ({ ...s, stopConversation: true }));
-    else {
+    if (introDialog.length !== 0) {
       let introDialogShow = [
         ...state.introDialogShow,
         ...introDialog.splice(0, 1),
       ];
       setState((s) => ({ ...s, introDialog, introDialogShow }));
+    }
+  };
+
+  const addAnswerToDialogDress = (index) => () => {
+    let inviteQuestions = [...state.inviteQuestions];
+
+    inviteQuestions[index].asked = true;
+
+    let dressDialogShow = [...state.dressDialogShow];
+
+    dressDialogShow.push(
+      { speaker: "player", text: inviteQuestions[index].question },
+      { speaker: "", text: inviteQuestions[index].answer }
+    );
+
+    setState((s) => ({
+      ...s,
+      inviteQuestions,
+      dressDialogShow,
+    }));
+  };
+
+  // WARDROBE
+  const addAnswerToDialogSend = (item) => () => {
+    if (state.showPhoneClothes) {
+      const wardrobeBody = ["Tronco", "Pernas", "Pés"];
+      let phoneWardrobe = { ...state.phoneWardrobe };
+      let phoneClothes = [...state.phoneClothes];
+      let sendDialogShow = [...state.sendDialogShow];
+
+      phoneClothes.push(item);
+      sendDialogShow.push(
+        { speaker: "player", text: item.name },
+        { speaker: "", text: "De qual cor?" }
+      );
+
+      if (wardrobeBody.includes(item.category)) {
+        phoneWardrobe = {
+          ...phoneWardrobe,
+          [item.category]: phoneWardrobe[item.category].map((clothing) => {
+            if (clothing.id === item.id) return { ...clothing, picked: true };
+            return clothing;
+          }),
+        };
+      } else {
+        phoneWardrobe = {
+          ...phoneWardrobe,
+          Acessórios: phoneWardrobe["Acessórios"].map((clothing) => {
+            if (clothing.id === item.id) return { ...clothing, picked: true };
+            return clothing;
+          }),
+        };
+      }
+
+      setState((s) => ({
+        ...s,
+        phoneWardrobe,
+        phoneClothes,
+        sendDialogShow,
+        showPhoneClothes: false,
+      }));
+    } else {
+      let phoneClothes = [...state.phoneClothes];
+      let sendDialogShow = [...state.sendDialogShow];
+
+      phoneClothes[phoneClothes.length - 1].color = item;
+      phoneClothes[phoneClothes.length - 1].fullName =
+        phoneClothes[phoneClothes.length - 1].name + " " + item;
+      sendDialogShow.push(
+        { speaker: "player", text: item },
+        {
+          speaker: "",
+          text: "Legal! Que mais?",
+          textTranslate: "Cool! What else?",
+        }
+      );
+
+      setState((s) => ({
+        ...s,
+        phoneClothes,
+        sendDialogShow,
+        showPhoneClothes: true,
+      }));
     }
   };
 
@@ -313,20 +434,6 @@ const Game6 = (props) => {
     }));
   };
 
-  const showInviteAnswer = (index) => () => {
-    let inviteQuestions = [...state.inviteQuestions];
-
-    inviteQuestions[index].asked = true;
-
-    setState((s) => ({
-      ...s,
-      inviteQuestions,
-      showInviteQuestions: false,
-      showInviteAnswer: true,
-      inviteAnswer: inviteQuestions[index].answer,
-    }));
-  };
-
   const checkFullOutfit = () => {
     let hasInteiroCover = false;
     for (var key in state.clothes) {
@@ -379,6 +486,91 @@ const Game6 = (props) => {
     return wrongClothes;
   };
 
+  // SELECT CLOTHES IN PHONE
+  const sendReady = () => {
+    if (state.phoneClothes.length === 0) {
+      setState((s) => ({
+        ...s,
+        showNoClothesChoosenPhoneErrorNotification: true,
+      }));
+    } else {
+      let sendDialogConfirmShow = [];
+      let phoneClothes = [...state.phoneClothes];
+
+      sendDialogConfirmShow.push(
+        {
+          speaker: "",
+          text: "Então, eu devo vestir:",
+          textTranslate: "So, I should wear:",
+        },
+        {
+          speaker: "",
+          text: phoneClothes
+            .reduce((acc, clothing) => {
+              return [...acc, clothing.fullName];
+            }, [])
+            .join("<br>"),
+        },
+        { speaker: "", text: "É isso?", textTranslate: "Is that it?" }
+      );
+
+      setState((s) => ({
+        ...s,
+        sendDialogConfirmShow,
+        lastConfirmation: true,
+      }));
+    }
+  };
+
+  const removeClothesFromPhone = (index) => {
+    let phoneClothes = [...state.phoneClothes];
+
+    phoneClothes.splice(index, 1);
+
+    setState((s) => ({
+      ...s,
+      phoneClothes,
+      lastConfirmation: true,
+    }));
+  };
+
+  // END
+  const checkPhoneBodyClothes = () => {
+    const clothes = { ...state.clothes };
+    const phoneClothes = [...state.phoneClothes];
+    let errors = {
+      wrongColor: [],
+      inBodyNotInPhone: [],
+      inPhoneNotInBody: [],
+    };
+    let clothesIds = [];
+
+    for (var key in clothes) {
+      for (let i = 0; i < clothes[key].length; i++) {
+        let bodyClothing = clothes[key][i];
+        clothesIds.push(bodyClothing.id);
+
+        let phoneClothing = phoneClothes.find(
+          (clothing) => clothing.id === bodyClothing.id
+        );
+
+        if (!phoneClothing) errors.inBodyNotInPhone.push(bodyClothing);
+        else if (phoneClothing.color !== bodyClothing.color)
+          errors.wrongColor.push({
+            clothing: bodyClothing.name,
+            rightColor: bodyClothing.color,
+            userColor: phoneClothing.color,
+          });
+      }
+    }
+
+    errors.inPhoneNotInBody = phoneClothes.filter(
+      (clothing) => !clothesIds.includes(clothing.id)
+    );
+
+    return errors;
+  };
+
   const restart = () => {
     setState({ ...initialState() });
     dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
@@ -386,95 +578,118 @@ const Game6 = (props) => {
 
   const endGame = (saveResult = false) => {
     let wrongClothes = getWrongClothes();
-    console.log(wrongClothes);
     let clothesCount = Object.keys(state.clothes).reduce((acc, key) => {
       return acc + state.clothes[key].length;
     }, 0);
     let sawInvite =
       state.inviteQuestions.filter((question) => question.asked).length > 0;
     let feedbackMessages = [];
+    let phoneBodyMatchErrors = checkPhoneBodyClothes();
 
-    if (wrongClothes.length === 0 && checkFullOutfit())
-      feedbackMessages.push(
-        {
+    if (wrongClothes.length === 0 && checkFullOutfit()) {
+      feedbackMessages.push({
+        image: tomato,
+        message:
+          "Parabéns! Você montou um look perfeito para a ocasião." +
+          (sawInvite
+            ? " Ainda bem que você checou novamente as informações do evento. Já pensou se tivesse escolhido as roupas erradas?"
+            : " E você nem precisou perguntar detalhes sobre o evento!"),
+        messageTranslate:
+          "Well done! You came up with the perfect outfit for the occasion." +
+          (sawInvite
+            ? " Good thing you checked the event informations again. What if you had picked the wrong pieces of clothing?"
+            : " And you didn't even need to ask for the event's details!"),
+      });
+      if (
+        Object.keys(phoneBodyMatchErrors).reduce((acc, key) => {
+          return acc && phoneBodyMatchErrors[key].length === 0;
+        }, true)
+      ) {
+        feedbackMessages.push({
           image: tomato,
           message:
-            "Parabéns! Você montou um look perfeito para a ocasião. Certamente fará um sucesso no evento!!",
+            "A descrição que você fez das roupas que Ariel devia usar foi perfeita! Tudo foi entendido sem problemas.",
           messageTranslate:
-            "Well done! You came up with the perfect outfit for the occasion. You'll surely be a blast in the event!!",
-        },
-        {
-          image: tomato,
-          message: sawInvite
-            ? "Ainda bem que você checou novamente as informações do convite. Já pensou se escolhesse as roupas erradas?"
-            : "Você completou seu look sem precisar rever as informações do convite. Que memória você tem!",
-          messageTranslate: sawInvite
-            ? "Good thing you checked the invite information. What if you had picked the wrong clothes?"
-            : "You finished your outfit without looking for the event's information. What a good memory you have!",
-        }
-      );
-    else if (wrongClothes.length === 0)
-      feedbackMessages.push(
-        {
+            "Your description of the clothes Ariel should wear was perfect! It was understood with no problems.",
+        });
+      } else {
+        feedbackMessages.push({
           image: tomato,
           message:
-            "Ei, até que não ficou tão mal, mas acho que algumas pessoas podem estranhar seu look para esse evento...",
+            "Apesar de ter montado um look fantástico, você não conseguiu descrevê-lo corretamente. Ariel sentiu insegurança na hora de se vestir, será que seus preciosos conselhos foram seguidos?",
           messageTranslate:
-            "Hey, it's not that bad, but people might think your outfit is a bit weird for the event...",
-        },
-        {
-          image: tomato,
-          message: sawInvite
-            ? "Ainda bem que você checou novamente as informações do convite. Ainda sim, acho que você cometeu alguns tropeços no seu look…"
-            : "Você completou seu look sem precisar rever as informações do convite. Mas acho que você se confundiu um pouco…",
-          messageTranslate: sawInvite
-            ? "Good thing you checked the invite information. Still, I think you made some mistakes in your outfit..."
-            : "You finished your outfit without looking for the event's information. But I think you got a bit lost...",
-        },
-        {
+            "Even though you came up with a fantastic outfit, you couldn't describe it correctly. Ariel felt a bit insecure when dressing up... I wonder if your precious advice was followed?",
+        });
+      }
+    } else if (wrongClothes.length === 0) {
+      feedbackMessages.push({
+        image: tomato,
+        message: sawInvite
+          ? "Apesar de ter checado as informações do evento novamente, o look que você montou não ficou completo... Tomara que Ariel não passe tanta vergonha..."
+          : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
+        messageTranslate: sawInvite
+          ? "Even though you checked the event informations again, the outfit you came up with doesn't look complete... Let's hope Ariel doesn't get too embarrassed..."
+          : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
+      });
+
+      if (
+        Object.keys(phoneBodyMatchErrors).reduce((acc, key) => {
+          return acc && phoneBodyMatchErrors[key].length === 0;
+        }, true)
+      ) {
+        feedbackMessages.push({
           image: tomato,
           message:
-            "Preste atenção nas peças que você escolheu. Provavelmente você esqueceu alguma peça de roupa importante para sair de casa!",
+            "A descrição que você fez das roupas que Ariel devia usar foi perfeita! Tudo foi entendido sem problemas. Pena que o look que você escolheu ficou incompleto...",
           messageTranslate:
-            "Pay attention to the garments you have chosen. You probably forgot some important piece of clothing!",
-        }
-      );
-    else
-      feedbackMessages.push(
-        {
+            "Your description of the clothes Ariel should wear was perfect! It was understood with no problems. It is a shame that the outfit you picked was incomplete...",
+        });
+      } else {
+        feedbackMessages.push({
           image: tomato,
           message:
-            wrongClothes.length / clothesCount < 0.5
-              ? "Ei, até que não ficou tão mal, mas acho que algumas pessoas podem estranhar seu look para esse evento..."
-              : "Ei, eu sei que estilo é uma questão pessoal, mas acho que esse não é o look mais adequado para este evento...",
+            "Tem certeza que sua amizade com Ariel é verdadeira? Você montou um look incompleto para o evento e fez uma bagunça na hora de descrevê-lo. Ariel conseguiu sentir mais confusão do que antes... ",
           messageTranslate:
-            wrongClothes.length / clothesCount < 0.5
-              ? "Hey, it's not that bad, but people might think your outfit is a bit weird for the event..."
-              : "Hey, I know style is a personal matter, but I think that is not the most adequate outfit for this event...",
-        },
-        {
-          image: tomato,
-          message: sawInvite
-            ? "Ainda bem que você checou novamente as informações do convite. Ainda sim, acho que você cometeu alguns tropeços no seu look…"
-            : "Você completou seu look sem precisar rever as informações do convite. Mas acho que você se confundiu um pouco…",
-          messageTranslate: sawInvite
-            ? "Good thing you checked the invite information. Still, I think you made some mistakes in your outfit..."
-            : "You finished your outfit without looking for the event's information. But I think you got a bit lost...",
-        },
-        {
-          image: tomato,
-          message:
-            "Preste atenção nas peças que você escolheu. Em seu look, você escolheu um total de " +
+            "Are you sure Ariel is a true friend for you? You came up with a incomplete outfit and made a mess when describing it. Ariel is more lost than they ever were...",
+        });
+      }
+    } else {
+      feedbackMessages.push({
+        image: tomato,
+        message: sawInvite
+          ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
             wrongClothes.length +
-            " peças que não combinam com o evento: " +
-            wrongClothes.map((clothes) => clothes.name).join(", "),
-          messageTranslate:
-            "Pay attention to the pieces of clothing you picked. In your outfit, you chose a total of " +
+            " peças ficaram estranhas... Tomara que Ariel não passe tanta vergonha..."
+          : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
+        messageTranslate: sawInvite
+          ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
             wrongClothes.length +
-            " pieces that did not match the event :" +
-            wrongClothes.map((clothes) => clothes.name).join(", "),
-        }
-      );
+            " pieces of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
+          : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
+      });
+
+      if (
+        Object.keys(phoneBodyMatchErrors).reduce((acc, key) => {
+          return acc && phoneBodyMatchErrors[key].length === 0;
+        }, true)
+      ) {
+        feedbackMessages.push({
+          image: tomato,
+          message:
+            "A descrição que você fez das roupas que Ariel devia usar foi perfeita! Tudo foi entendido sem problemas. Pena que o look que você escolheu ficou meio estranho...",
+          messageTranslate:
+            "Your description of the clothes Ariel should wear was perfect! It was understood with no problems. It is a shame that the outfit you picked was a bit weird...",
+        });
+      } else {
+        feedbackMessages.push({
+          image: tomato,
+          message:
+            "Tem certeza que sua amizade com Ariel é verdadeira? Você montou um look bem estranho para o evento e fez uma bagunça na hora de descrevê-lo. Ariel conseguiu sentir mais confusão do que antes...",
+          messageTranslate:
+            "Are you sure Ariel is a true friend for you? You came up with a very weird outfit and made a mess when describing it. Ariel is more lost than they ever were...",
+        });
+      }
+    }
 
     setState({
       ...state,
@@ -586,20 +801,16 @@ const Game6 = (props) => {
                     )}
 
                     {state.showCellphone && (
-                      <Cellphone
-                        style={{
-                          width: "30%",
-                          height: "90%",
-                          margin: "2% auto",
-                          backgroundColor: "red",
-                          border: "1px solid red",
-                        }}
+                      <CellphoneOverlay
+                        autoLoad={state.introDialog.length > 0}
+                        startMaximized={true}
+                        showCloseButton={false}
                         dialogHistory={state.introDialogShow}
                         onMinimize={() =>
                           setState({ ...state, shouldMinimize: false })
                         }
                         shouldMinimize={state.shouldMinimize}
-                        stopConversation={state.stopConversation}
+                        stopConversation={state.introDialog.length === 0}
                         nextMessage={showIntroDialog}
                         endConversation={() =>
                           setState((s) => ({
@@ -607,16 +818,16 @@ const Game6 = (props) => {
                             proceedToDressingConfirmation: true,
                           }))
                         }
-                      ></Cellphone>
+                      />
                     )}
 
                     {state.proceedToDressingConfirmation && (
                       <Notification
                         blobMessage={{
                           text:
-                            "Tem certeza? Você terá apenas UMA chance de rever cada informação do convite. Deseja continuar?",
+                            "Tem certeza? Você terá apenas UMA chance de perguntar cada informação do evento. Deseja continuar?",
                           textTranslate:
-                            "Are you sure? You will have only ONE chance to review each piece of information in the invitation. Do you want to continue?",
+                            "Are you sure? You will have only ONE chance to ask each event information. Do you want to continue?",
                         }}
                         continueButtonLabel="Continuar/Continue"
                         onClickToContinue={() =>
@@ -629,7 +840,7 @@ const Game6 = (props) => {
                             showBlob: true,
                           }))
                         }
-                        backButtonLabel="Ver o convite/See the invite"
+                        backButtonLabel="Ver conversa/View conversation"
                         onClickToBack={() =>
                           setState((s) => ({
                             ...s,
@@ -644,13 +855,13 @@ const Game6 = (props) => {
               case "DRESS":
                 return (
                   <React.Fragment>
-                    <Cellphone
-                      dialogHistory={state.introDialogShow}
+                    <CellphoneOverlay
+                      autoLoad={false}
+                      dialogHistory={state.dressDialogShow}
                       onMinimize={() =>
                         setState({ ...state, shouldMinimize: false })
                       }
                       shouldMinimize={state.shouldMinimize}
-                      stopConversation={state.stopConversation}
                       nextMessage={showIntroDialog}
                       endConversation={() =>
                         setState((s) => ({
@@ -661,6 +872,8 @@ const Game6 = (props) => {
                       style={{
                         zIndex: state.blobToShow === 3 ? 1000000 : 0,
                       }}
+                      questions={state.inviteQuestions}
+                      addAnswerToDialog={addAnswerToDialogDress}
                     />
                     {state.showBlob && (
                       <TutorialWardrobe
@@ -746,53 +959,6 @@ const Game6 = (props) => {
                       </div>
                     )}
 
-                    {state.showInvitation && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: 0,
-                          width: "50%",
-                          height: "50%",
-                          left: "25%",
-                          backgroundColor: "var(--color-second)",
-                          textAlign: "center",
-                        }}
-                      >
-                        {state.showInviteQuestions && (
-                          <div>
-                            {state.inviteQuestions.map((question, index) => (
-                              <button
-                                key={index}
-                                onClick={showInviteAnswer(index)}
-                                disabled={question.asked}
-                              >
-                                <span>{question.question}</span>
-                              </button>
-                            ))}
-                          </div>
-                        )}
-
-                        {state.showInviteAnswer && (
-                          <span>{state.inviteAnswer}</span>
-                        )}
-                        <Voltar
-                          onClick={() => {
-                            if (state.showInviteQuestions)
-                              setState((s) => ({
-                                ...s,
-                                showInvitation: false,
-                              }));
-                            else
-                              setState((s) => ({
-                                ...s,
-                                showInviteQuestions: true,
-                                showInviteAnswer: false,
-                              }));
-                          }}
-                        />
-                      </div>
-                    )}
-
                     {state.showClothingSpaceTakenErrorNotification && (
                       <Notification
                         blobMessage={{
@@ -837,8 +1003,10 @@ const Game6 = (props) => {
                         </div>
                         <div className="confirm-blob">
                           <div className="blob-spans">
-                            <span lang="pt-br">Pronto pra sair?</span>
-                            <span lang="en">Ready to go outside?</span>
+                            <span lang="pt-br">
+                              Pronto pra descrever o look?
+                            </span>
+                            <span lang="en">Ready to describe the look?</span>
                           </div>
                           <div className="btns">
                             <button
@@ -851,14 +1019,19 @@ const Game6 = (props) => {
                                 }))
                               }
                             >
-                              Voltar
+                              Ainda não/Not yet
                             </button>
                             <button
                               className="btn btn-center"
                               id="btn-start"
-                              onClick={() => endGame()}
+                              onClick={() =>
+                                setState((s) => ({
+                                  ...s,
+                                  scene: "SEND",
+                                }))
+                              }
                             >
-                              Continuar
+                              Sim!/Yes!
                             </button>
                           </div>
                         </div>
@@ -869,109 +1042,167 @@ const Game6 = (props) => {
               case "SEND":
                 return (
                   <React.Fragment>
-                    {state.namingClothesContext && (
-                      <div style={{ display: "flex", flexDirection: "row" }}>
-                        <div
-                          style={{ flex: "1 0 0px", border: "1px solid red" }}
-                        >
-                          <Cellphone
-                            style={{
-                              width: "30%",
-                              height: "90%",
-                              margin: "2% auto",
-                              backgroundColor: "red",
-                              border: "1px solid red",
-                            }}
-                          >
-                            <DialogHistory
-                              dialogHistory={[
-                                { speaker: "", text: "stuff" },
-                                { speaker: "", text: "stuff2" },
-                                { speaker: "player", text: "stuff3" },
-                              ]}
-                            />
+                    <div className="confirm-screen">
+                      <div className="character">
+                        <DressingCharacter
+                          character={state.choosenCharacter}
+                          clothes={state.clothes}
+                          showRemove
+                          onRemoveClick={removeClothesFromBody}
+                          style={{ height: "80em" }}
+                        />
+                      </div>
+                      <Cellphone
+                        autoLoad={false}
+                        dialogHistory={state.sendDialogShow}
+                        endConversation={() =>
+                          setState((s) => ({
+                            ...s,
+                            lastConfirmation: true,
+                          }))
+                        }
+                        stopConversation={state.lastConfirmation}
+                        addAnswerToDialog={addAnswerToDialogSend}
+                        wardrobe={state.phoneWardrobe}
+                        colors={state.colorTags}
+                        showClothes={state.showPhoneClothes}
+                        confirmationButton={sendReady}
+                      />
+                    </div>
 
-                            {!state.ready ? (
-                              <div>
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    position: "absolute",
-                                    bottom: 0,
-                                    width: "100%",
-                                    backgroundColor: "green",
-                                  }}
-                                >
-                                  <button>Que dia?</button>
-                                  <button>Onde?</button>
-                                  <button>Quando?</button>
-                                </div>
-
-                                <button
-                                  onClick={() =>
-                                    setState({ ...state, ready: true })
-                                  }
-                                  style={{
-                                    width: "60%",
-                                    marginLeft: "-30%",
-                                    position: "absolute",
-                                    bottom: "-5%",
-                                    left: "50%",
-                                  }}
-                                >
-                                  Prontinho!
-                                </button>
-                              </div>
-                            ) : (
-                              <div>
-                                <button
-                                  onClick={() =>
-                                    setState({
-                                      ...state,
-                                      lastConfirmation: true,
-                                      namingClothesContext: false,
-                                    })
-                                  }
-                                >
-                                  Sim
-                                </button>
-                                <button>Não</button>
-                              </div>
-                            )}
-                          </Cellphone>
-                        </div>
-                        <div
-                          style={{ flex: "1 0 0px", border: "1px solid red" }}
-                        >
-                          <DressingCharacter
-                            clothesTypes={state.clothesTypes}
-                            clothes={state.clothes}
-                          />
-                        </div>
+                    {state.lastConfirmation && (
+                      <div className="confirm-screen">
+                        <Cellphone
+                          autoLoad={false}
+                          dialogHistory={state.sendDialogConfirmShow}
+                          stopConversation={true}
+                          confirmationButton={() =>
+                            setState({ ...state, scene: "END" })
+                          }
+                          cancelButton={() =>
+                            setState({ ...state, editSend: true })
+                          }
+                          removeItem={state.removeItemPhone}
+                          phoneClothes={state.phoneClothes}
+                          removeClothingFromList={removeClothesFromPhone}
+                        />
                       </div>
                     )}
-                    {state.lastConfirmation && (
-                      <div>
-                        <Cellphone
-                          style={{
-                            width: "30%",
-                            height: "90%",
-                            margin: "2% auto",
-                            backgroundColor: "red",
-                            border: "1px solid red",
-                          }}
-                        >
+
+                    {state.editSend && (
+                      <div className="confirm-screen">
+                        <div className="character">
                           <DressingCharacter
-                            clothesTypes={state.clothesTypes}
+                            character={state.choosenCharacter}
                             clothes={state.clothes}
+                            showRemove
+                            onRemoveClick={removeClothesFromBody}
+                            style={{ height: "80em" }}
                           />
-                        </Cellphone>
-                        <button
-                          onClick={() => setState({ ...state, scene: "END" })}
-                        >
-                          Next
-                        </button>
+                        </div>
+                        <div className="confirm-blob">
+                          <div className="blob-spans">
+                            <span lang="pt-br">O que você quer fazer?</span>
+                            <span lang="en">What you wish to do?</span>
+                          </div>
+                          <div className="btns">
+                            <Button
+                              style={{
+                                position: "relative",
+                                margin: ".5em auto",
+                                width: "90%",
+                                fontSize: "1rem",
+                                display: "block",
+                              }}
+                              onClick={() =>
+                                setState((s) => ({
+                                  ...state,
+                                  editSend: false,
+                                  lastConfirmation: false,
+                                }))
+                              }
+                            >
+                              "Adicionar uma roupa à lista/Add clothes to the
+                              list"
+                            </Button>
+                            <Button
+                              style={{
+                                position: "relative",
+                                margin: ".5em auto",
+                                width: "90%",
+                                fontSize: "1rem",
+                                display: "block",
+                              }}
+                              onClick={() => {
+                                setState((s) => ({
+                                  ...s,
+                                  sendDialogConfirmShow: [
+                                    ...s.sendDialogConfirmShow,
+                                    {
+                                      speaker: "player",
+                                      text: "Não",
+                                    },
+                                    {
+                                      speaker: "",
+                                      text: "Qual item devo tirar da lista?",
+                                      textTranslate:
+                                        "Which item should I remove from the list?",
+                                    },
+                                  ],
+                                  editSend: false,
+                                  removeItemPhone: true,
+                                }));
+                              }}
+                            >
+                              "Remover uma roupa da lista/Remove clothes from
+                              the list"
+                            </Button>
+                            <Button
+                              style={{
+                                position: "relative",
+                                margin: ".5em auto",
+                                width: "90%",
+                                fontSize: "1rem",
+                                display: "block",
+                              }}
+                              onClick={() => {
+                                let phoneWardrobe = {};
+
+                                Object.keys(state.phoneWardrobe).forEach(
+                                  (category) => {
+                                    phoneWardrobe[
+                                      category
+                                    ] = state.phoneWardrobe[category].map(
+                                      (clothing) => ({
+                                        ...clothing,
+                                        picked: false,
+                                      })
+                                    );
+                                  }
+                                );
+
+                                setState((s) => ({
+                                  ...s,
+                                  phoneClothes: [],
+                                  sendDialogShow: [
+                                    {
+                                      speaker: "",
+                                      text: "E aí, que roupa uso?",
+                                      textTranslate: "So, how should I dress?",
+                                    },
+                                  ],
+                                  phoneWardrobe,
+                                  editSend: false,
+                                  lastConfirmation: false,
+                                }));
+                              }}
+                            >
+                              "Remover todos os items da lista e começar de
+                              novo/Remove all items from the list and start
+                              over"
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </React.Fragment>
