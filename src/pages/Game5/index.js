@@ -5,9 +5,6 @@ import DressingCharacter from '../../_components/DressingCharacter'
 import Wardrobe from '../../_components/Wardrobe'
 import Button from '../../_components/Button'
 import { BlobBg } from '../../_components/Blob'
-import { renderToStaticMarkup } from 'react-dom/server'
-
-
 
 import initialState from './initialState'
 

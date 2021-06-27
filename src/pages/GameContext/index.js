@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { headerActions, musicActions } from "../../_actions";
+import { headerActions, musicActions, apiActions } from "../../_actions";
 import ConfigWindow from "../../_components/ConfigWindow";
 import GameConfig from "../../_components/GameConfig";
 import ReactAudioPlayer from "react-audio-player";
@@ -30,9 +30,27 @@ const GameContext = (props) => {
     alignment: {vertical: ALIGNMENTS.CENTER, horizontal: ALIGNMENTS.CENTER}
   });
 
+  const { play_sessionsActions } = apiActions
+  const currentPlaySession = useSelector((state) =>
+    state.play_sessions ? state.play_sessions.items[state.play_sessions.items.length - 1] : {}
+  );
+
   const dispatch = useDispatch();
   const music = useSelector( state  => state.music)
   let headerInfo = useSelector( state  => state.header)
+  let mission = useSelector((state) =>
+    state.game.items.missions
+      ? state.game.items.missions.find(
+          (mission) => mission.id === props.match.params.id
+        )
+      : null
+  );
+
+  const userId = useSelector((state) => state.authentication.user.user.id);
+
+
+  const[mousePosition, setMousePosition] = React.useState({x: 0, y: 0})
+  const updateMousePosition = (e) => setMousePosition({x: e.clientX, y: e.clientY})
 
   let { children } = props;
   children = { ...children, props: { ...props } };
@@ -45,14 +63,61 @@ const GameContext = (props) => {
     };
   }, [dispatch]);
 
-
-  const[mousePosition, setMousePosition] = React.useState({x: 0, y: 0})
-  const updateMousePosition = (e) => setMousePosition({x: e.clientX, y: e.clientY})
-
   React.useEffect(() => {
     window.addEventListener("mousemove", updateMousePosition);
     return (() => window.removeEventListener("mousemove", updateMousePosition))
   }, [])
+
+  React.useEffect(()=>{
+    if (mission && mission.trackPlayerInput) {
+      console.log('create play session')
+      dispatch(
+        play_sessionsActions.create({
+          user: userId,
+          mission: mission.id,
+          data: {actions:[]}
+        })
+      );
+    }
+  }, [dispatch, play_sessionsActions])
+
+  React.useEffect(() => {
+    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
+
+    const getClickedObject = (e) => {
+      dispatch(
+        play_sessionsActions.update(
+          { id: currentPlaySession.id,
+            data: {
+              actions:
+              [...currentPlaySession.data.actions,
+                {
+                  tag: e.target.nodeName,
+                  src: e.target.src,
+                  alt: e.target.alt,
+                  className: e.target.className,
+                  class: e.target.class,
+                  id: e.target.id,
+                  innerHTML: e.target.innerHTML.includes("<div")
+                    ? null
+                    : e.target.innerHTML,
+                  clickTime: new Date(),
+                }
+              ]
+            }
+          }
+        )
+      );
+    };
+    document.addEventListener("mousedown", getClickedObject);
+
+    setState((s) => {
+      return { ...s, currentPlaySession, getClickedObject };
+    });
+    return () => {
+      document.removeEventListener("mousedown", getClickedObject);
+    };
+  }, [dispatch, currentPlaySession, play_sessionsActions, state.tracking, mission]);
 
   return (
     <React.Fragment>

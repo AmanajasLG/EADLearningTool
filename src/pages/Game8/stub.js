@@ -45,6 +45,50 @@ const stub = {
         takeOff: '02:00',
         land:'05:00'
       },
+    ],
+    buildings:[
+      {
+        type: 'Hotel',
+        name: 'Hotel 1',
+        data:{
+          coffee: true
+        }
+      },
+      {
+        type: 'Hotel',
+        name: 'Hotel 2',
+        data:{
+          coffee: true
+        }
+      },
+      {
+        type: 'Hotel',
+        name: 'Hotel 3',
+        data:{
+          coffee: true
+        }
+      },
+      {
+        type: 'Farmacia',
+        name: 'Farmacia 1',
+        data:{
+          coffee: true
+        }
+      },
+      {
+        type: 'Farmacia',
+        name: 'Farmacia 2',
+        data:{
+          coffee: true
+        }
+      },
+      {
+        type: 'Hospital',
+        name: 'Hospital 1',
+        data:{
+          coffee: true
+        }
+      },
     ]
   }
 }

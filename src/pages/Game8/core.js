@@ -2,12 +2,9 @@ import React from 'react'
 
 import WindowScreen from '../../_components/WindowScreen'
 import BuyTicketsLoop from '../../_components/BuyTicketsLoop'
-import SendEmail from '../../_components/SendEmail'
 
 import Button from '@material-ui/core/Button'
 import Map from '../../_components/Map'
-
-import { months } from '../../_helpers'
 
 import initialState from './initialState'
 
@@ -27,20 +24,23 @@ const Core = ({exitGame, mission, onEndGame}) => {
         <BuyTicketsLoop mission={mission} onDone={data => setState(s => ({...s, window: 'SEND_EMAIL', tickets: data}))} />
       }
 
-      {state.window === 'SEND_EMAIL' &&
+      {state.window !== 'NONE' &&
        <WindowScreen style={{position: 'absolute', left: '10%', width: '70%', height: '70%',  margin: '10% auto 0 auto', fontSize: '3em'}}>
-         {createTexts().map( (text, index) =>
-           <div key={index}>{text}</div>
-         )}
-         <Button onClick={() => setState(s => ({...s, window: 'MAP'}))}>
-           Fechar
-         </Button>
+         {state.window === 'SEND_EMAIL' &&
+           <React.Fragment>
+             {createTexts().map( (text, index) =>
+               <div key={index}>{text}</div>
+             )}
+             <Button onClick={() => setState(s => ({...s, window: 'MAP'}))}>
+               Fechar
+             </Button>
+           </React.Fragment>
+          }
+          {state.window === 'MAP' &&
+            <Map data={mission.buildings}/>
+          }
        </WindowScreen>
-      }
-
-      {state.window === 'MAP' &&
-        <Map />
-      }
+     }
 
       {process.env.NODE_ENV === 'development' &&
         <div>

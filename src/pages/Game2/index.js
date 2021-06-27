@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  apiActions,
   gameActions,
   headerActions,
   musicActions,
@@ -60,10 +59,7 @@ const Game2 = (props) => {
   const lang = useSelector(
     (state) => state.authentication.user.user.language.id
   );
-  let currentPlaySession = useSelector((state) =>
-    state.play_sessions ? state.play_sessions.items[0] : {}
-  );
-  const { play_sessionsActions } = apiActions;
+
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const hasPlayed = useSelector((state) =>
     state.game.items.resultsCount ? state.game.items.resultsCount > 0 : false
@@ -105,45 +101,6 @@ const Game2 = (props) => {
     // eslint-disable-next-line
   }, [userId, mission, dispatch, hasPlayed]);
 
-  //track player actions
-  React.useEffect(() => {
-    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
-
-    const getClickedObject = (e) => {
-      dispatch(
-        play_sessionsActions.update(
-          { id: currentPlaySession.id,
-            data: {
-              actions:
-              [...currentPlaySession.data.actions,
-                {
-                  tag: e.target.nodeName,
-                  src: e.target.src,
-                  alt: e.target.alt,
-                  className: e.target.className,
-                  class: e.target.class,
-                  id: e.target.id,
-                  innerHTML: e.target.innerHTML.includes("<div")
-                    ? null
-                    : e.target.innerHTML,
-                  clickTime: new Date(),
-                }
-              ]
-            }
-          }
-        )
-      );
-    };
-
-    document.addEventListener("mousedown", getClickedObject);
-
-    setState((s) => {
-      return { ...s, currentPlaySession, getClickedObject };
-    });
-    return () => {
-      document.removeEventListener("mousedown", getClickedObject);
-    };
-  }, [dispatch, play_sessionsActions, state.tracking, currentPlaySession, mission]);
   /*//Testing tool
 	if(error){
 		error = null
@@ -272,19 +229,7 @@ const Game2 = (props) => {
     }
   }, [missionData, state.locations]);
 
-  const onStartGame = (e) => {
-    if (mission.trackPlayerInput) {
-      dispatch(
-        play_sessionsActions.create({
-          user: userId,
-          mission: mission.id,
-          data:{actions:[]}
-        })
-      );
-    }
-    //check if should start or skip tutorial
-    setState({ ...state, scene: "TUTORIAL" });
-  };
+  const onStartGame = (e) =>  setState({ ...state, scene: "TUTORIAL" });
 
   const endTutorial = () => {
     let updateState = {

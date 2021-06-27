@@ -11,7 +11,7 @@ const Places = ({value, places, onPlaceClick, onConfirm}) => {
     <div style={{backgroundColor: '#ffffaa'}}>
     {places && places.map((place, index) =>
       <div key={index} style={{backgroundColor: index === state? '#99ddff':'#ffdd99', width: '10%',  borderRadius: '50%'}}>
-        <img style={{cursor: 'pointer'}} onClick={onClick(index)} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"/>
+        <img style={{cursor: 'pointer'}} onClick={onClick(index)} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg" alt=""/>
       </div>
     )}
     {state !== -1 &&

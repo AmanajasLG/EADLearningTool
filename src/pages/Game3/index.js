@@ -13,7 +13,6 @@ import {
 } from "../../_helpers";
 
 import {
-  apiActions,
   gameActions,
   headerActions,
   musicActions,
@@ -81,16 +80,11 @@ const Game3 = (props) => {
   );
   let missionData = mission ? mission.missionData : null;
 
-  let currentPlaySession = useSelector((state) =>
-    state.play_sessions ? state.play_sessions.items[0] : {}
-  );
-  const { play_sessionsActions } = apiActions;
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
-  const onStartGame = () => {
-    setState({ ...state, scene: "INTRO" });
-  };
+  const onStartGame = () => setState({ ...state, scene: "INTRO" });
+
 
   React.useEffect(() => {
     if (mission) dispatch(musicActions.set(mission.backgroundAudio.url));

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 import {
-  apiActions,
   gameActions,
   headerActions,
   musicActions,
@@ -17,7 +16,7 @@ import Intro from "../Game3/components/Intro";
 import ChefDialog from "../Game3/components/ChefDialog";
 import Timer from "../../_components/Timer";
 import Recipe from "../../_components/Recipe";
-import {Button, ButtonConfigs, Iniciar} from "../../_components/Button";
+import {Button, Iniciar} from "../../_components/Button";
 
 import initialState from "./initialState";
 
@@ -33,7 +32,6 @@ import {
   tomato,
   kitchen,
 } from "../../img";
-import DialogCharacter from "../../_components/DialogCharacter";
 import FeedbackPanel from "./components/FeedbackPanel";
 import Tutorial from "./components/Tutorial";
 
@@ -55,10 +53,6 @@ const Game4 = (props) => {
   );
   let missionData = mission ? mission.missionData : null;
 
-  let currentPlaySession = useSelector((state) =>
-    state.play_sessions ? state.play_sessions.items[0] : {}
-  );
-  const { play_sessionsActions } = apiActions;
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
@@ -576,7 +570,7 @@ const Game4 = (props) => {
               case "COOK":
                 return (
                   <React.Fragment>
-                    <img id="dialog-interact" src={kitchen} style={{position:'absolute', zIndex: -1, width: '100%', height: '100%'}}/>
+                    <img id="dialog-interact" src={kitchen} style={{position:'absolute', zIndex: -1, width: '100%', height: '100%'}} alt=""/>
                     {state.showBlob &&
                       <Tutorial
                         blobToShow={state.blobToShow}

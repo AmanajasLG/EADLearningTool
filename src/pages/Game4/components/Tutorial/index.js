@@ -1,5 +1,4 @@
 import React from 'react'
-import { blobLaranja } from '../../../../img'
 
 import { Button, ButtonConfigs } from '../../../../_components/Button'
 

@@ -220,10 +220,10 @@ button:focus {
 }
 
 .stretchIn:hover{
-  animation: stretchIn 1s forwards;
+  animation: stretchIn 0.2s forwards;
 }
 
 @keyframes stretchIn{
   from { transform: scale(1);}
-  to { transform: scale(1.5);}
+  to { transform: scale(1.2);}
 }

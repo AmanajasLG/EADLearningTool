@@ -4,8 +4,6 @@ import WindowScreen from '../../_components/WindowScreen'
 import BuyTicketsLoop from '../../_components/BuyTicketsLoop'
 import SendEmail from '../../_components/SendEmail'
 
-import { months } from '../../_helpers'
-
 import initialState from './initialState'
 
 const Core = ({exitGame, mission, onEndGame}) => {

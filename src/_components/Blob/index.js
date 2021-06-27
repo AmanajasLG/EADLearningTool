@@ -1,5 +1,4 @@
 import React from 'react'
-import { blobAzul } from '../../img'
 import { renderToStaticMarkup } from 'react-dom/server'
 
 const Blob = ({duration, fill, stroke, strokeWidth, animation, ...props}) => {

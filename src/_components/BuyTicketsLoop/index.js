@@ -34,14 +34,13 @@ const BuyTicketsLoop = ({mission, onDone}) => {
             />
           }
           {state.window === 'SCHEDULE' &&
-            <ScheduleTicket onConfirm={() => setState(s => ({...s, window: 'NONE'}))}
+            <ScheduleTicket
               day={state.day} month={state.month} flight={state.flight} tickets={state.tickets}
               flights={mission.flights}
               dateSelected={ value =>  setState(s => ({...s, day: value}) )}
               monthChange={ value => setState(s => ({...s, month: value}))}
               flightSelected={ value => setState(s => ({...s, flight: value}) )}
               counterChange={ value => setState(s => ({...s, tickets: value}) )}
-
               onConfirm={() => setState(s => ({...s, window: 'NONE', confirmWindow: true}) )}
             />
           }
@@ -66,18 +65,18 @@ const BuyTicketsLoop = ({mission, onDone}) => {
 
       <div style={{display: 'flex', flexDirection: 'column', width: '10%', position: 'absolute', top: '20%', right: 0}}>
         <div style={{backgroundColor: '#aaaaff', borderRadius: '50%'}}>
-          <img style={{cursor: 'pointer'}} onClick={() => setState(s => ({...s, window: 'EMAIL'}))} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"/>
+          <img style={{cursor: 'pointer'}} onClick={() => setState(s => ({...s, window: 'EMAIL'}))} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg" alt=""/>
         </div>
         <div style={{backgroundColor: '#aaaaff', borderRadius: '50%'}}>
-          <img style={{cursor: 'pointer'}} onClick={() => setState(s => ({...s, window: 'PLACES'}))} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"/>
+          <img style={{cursor: 'pointer'}} onClick={() => setState(s => ({...s, window: 'PLACES'}))} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg" alt=""/>
         </div>
         <div style={{backgroundColor: '#aaaaff', borderRadius: '50%'}}>
-          <img style={{cursor: 'pointer'}}  onClick={() => setState(s => ({...s, window: 'SCHEDULE'}))} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"/>
+          <img style={{cursor: 'pointer'}}  onClick={() => setState(s => ({...s, window: 'SCHEDULE'}))} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg" alt=""/>
         </div>
       </div>
 
       <div style={{position: 'absolute', bottom: 0, left: 0, backgroundColor: '#aaaaff', borderRadius: '50%', width: '10%'}}>
-        <img style={{cursor: 'pointer'}} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"/>
+        <img style={{cursor: 'pointer'}} src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg" alt=""/>
       </div>
 
     </React.Fragment>
