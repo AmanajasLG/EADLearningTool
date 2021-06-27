@@ -55,7 +55,12 @@ const Game1 = (props) => {
   // })
 
   React.useEffect(() => {
-    if (mission) dispatch(musicActions.set(mission.backgroundAudio.url));
+    if (mission)
+      dispatch(
+        musicActions.set(
+          mission.backgroundAudio ? mission.backgroundAudio.url : ""
+        )
+      );
     return () => dispatch(musicActions.set(""));
   }, [dispatch, mission]);
 
@@ -626,14 +631,30 @@ const Game1 = (props) => {
                               </div>
                               <div id="popup-btns">
                                 <Voltar
-                                  label={state.wrongContacts > 0 ? "Keep trying" : "Not yet"}
-                                  onClick={() => setState( (s) => {return {...s, shouldCloseDialog: true}} )}
-                                  colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
-                                  />
+                                  label={
+                                    state.wrongContacts > 0
+                                      ? "Keep trying"
+                                      : "Not yet"
+                                  }
+                                  onClick={() =>
+                                    setState((s) => {
+                                      return { ...s, shouldCloseDialog: true };
+                                    })
+                                  }
+                                  colorScheme={
+                                    ButtonConfigs.COLOR_SCHEMES.COR_3
+                                  }
+                                />
                                 <Iniciar
-                                  label={state.wrongContacts > 0 ? "Continue anyway" : "Let's go"}
+                                  label={
+                                    state.wrongContacts > 0
+                                      ? "Continue anyway"
+                                      : "Let's go"
+                                  }
                                   onClick={onGoNextRoom}
-                                  colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_2}
+                                  colorScheme={
+                                    ButtonConfigs.COLOR_SCHEMES.COR_2
+                                  }
                                 />
                               </div>
                             </div>

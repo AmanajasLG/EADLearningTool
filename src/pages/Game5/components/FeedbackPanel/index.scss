@@ -1,9 +1,9 @@
 .feedback-panel {
-  height: calc( var(--gameHeight) * 0.5);
-  width: calc( var(--gameWidth) * 0.5);
+  height: calc(var(--gameHeight) * 0.7);
+  width: calc(var(--gameWidth) * 0.8);
   position: relative;
-  
-  font-family: 'Barlow';
+
+  font-family: "Barlow";
   font-size: 3em;
   line-height: 1.2em;
   padding: 1em 3.2em;
@@ -20,7 +20,7 @@
 .feedback-arrow {
   position: absolute;
   font-size: 1.9em;
-  color: #59316D;
+  color: #59316d;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
@@ -30,7 +30,6 @@
 .feedback-arrow:hover {
   color: #fff;
 }
-
 
 .feedback-arrow-previous {
   left: 0.5em;
@@ -43,12 +42,20 @@
 .feedback-panel-content {
   display: flex;
   flex-direction: row;
+  align-items: baseline; /* Vertical */
+  justify-content: center; /* Horizontal */
+}
+
+.feedback-panel-column {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
   align-items: center; /* Vertical */
   justify-content: center; /* Horizontal */
 }
 
 .feedback-panel-img {
-  width: 35%;
+  width: 5em;
   padding: 0.5em;
 }
 
@@ -59,11 +66,11 @@
   align-content: center;
   justify-content: center;
 
-  span[lang="pt-br"]{
+  span[lang="pt-br"] {
     font-weight: 600;
   }
 
-  span[lang="en"]{
+  span[lang="en"] {
     font-style: italic;
   }
 }

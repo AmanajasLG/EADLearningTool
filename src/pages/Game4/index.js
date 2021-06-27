@@ -16,7 +16,12 @@ import Intro from "../Game3/components/Intro";
 import ChefDialog from "../Game3/components/ChefDialog";
 import Timer from "../../_components/Timer";
 import Recipe from "../../_components/Recipe";
-import {Button, Iniciar} from "../../_components/Button";
+import {
+  Button,
+  ButtonConfigs,
+  Iniciar,
+  Voltar,
+} from "../../_components/Button";
 
 import initialState from "./initialState";
 
@@ -57,7 +62,12 @@ const Game4 = (props) => {
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {
-    if (mission) dispatch(musicActions.set(mission.backgroundAudio.url));
+    if (mission)
+      dispatch(
+        musicActions.set(
+          mission.backgroundAudio ? mission.backgroundAudio.url : ""
+        )
+      );
     return () => dispatch(musicActions.set(""));
   }, [dispatch, mission]);
 
@@ -158,7 +168,7 @@ const Game4 = (props) => {
         };
       });
     }
-  }, [missionData, state.ingredientsList, timesPlayed, lang]);
+  }, [missionData, state.ingredientsList, state.tablewares, timesPlayed, lang]);
 
   const onStartGame = () => setState({ ...state, scene: "INTRO" });
 
@@ -166,8 +176,6 @@ const Game4 = (props) => {
     let currentIngredient = state.ingredientsList.find(
       (ingredient) => !ingredient.done
     );
-
-    console.log(state.wrongIngredientSelected);
 
     if (state.selectedIngredient.name !== currentIngredient.name) {
       setState({
@@ -209,7 +217,7 @@ const Game4 = (props) => {
         // updatedState.runTimer = false;
       }
 
-      if(state.blobToShow < 2) updatedState.showBlob = true;
+      if (state.blobToShow < 2) updatedState.showBlob = true;
 
       setState({
         ...state,
@@ -395,27 +403,6 @@ const Game4 = (props) => {
     });
   };
 
-  // const clearTableTableware = () => {
-  //   setState({
-  //     ...state,
-  //     wrongTablewareNotification: false,
-  //     shuffledTablewaresNames: state.shuffledTablewaresNames.map(
-  //       (tableware) => {
-  //         return {
-  //           ...tableware,
-  //           choosen: false,
-  //         };
-  //       }
-  //     ),
-  //     shuffledTablewares: state.shuffledTablewares.map((tableware) => {
-  //       return {
-  //         ...tableware,
-  //         choosen: false,
-  //       };
-  //     }),
-  //   });
-  // };
-
   const restart = () => {
     setState({ ...initialState(false) });
     dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
@@ -506,7 +493,9 @@ const Game4 = (props) => {
     <React.Fragment>
       {process.env.NODE_ENV === "development" && (
         <div style={{ position: "absolute", zIndex: 100000000, top: 0 }}>
-          <button onClick={() => setState({ ...state, runTimer: !state.runTimer })}>
+          <button
+            onClick={() => setState({ ...state, runTimer: !state.runTimer })}
+          >
             {state.runTimer ? "Stop timer" : "Continue timer"}
           </button>
           <button onClick={restart}>Restart</button>
@@ -561,7 +550,7 @@ const Game4 = (props) => {
                     goToTutorial={() =>
                       setState({
                         ...state,
-                        scene: "COOK"
+                        scene: "COOK",
                       })
                     }
                     seconds={state.remainingTime}
@@ -570,14 +559,35 @@ const Game4 = (props) => {
               case "COOK":
                 return (
                   <React.Fragment>
-                    <img id="dialog-interact" src={kitchen} style={{position:'absolute', zIndex: -1, width: '100%', height: '100%'}} alt=""/>
-                    {state.showBlob &&
+                    <img
+                      id="dialog-interact"
+                      src={kitchen}
+                      style={{
+                        position: "absolute",
+                        zIndex: -1,
+                        width: "100%",
+                        height: "100%",
+                      }} alt=""
+                    />
+                    {state.showBlob && (
                       <Tutorial
                         blobToShow={state.blobToShow}
-                        onClickToEnd={ () => setState( s => ({...s, blobToShow: s.blobToShow+1, showBlob: false}) )}
+                        onClickToEnd={() =>
+                          setState((s) => ({
+                            ...s,
+                            blobToShow: s.blobToShow + 1,
+                            showBlob: false,
+                          }))
+                        }
                       />
-                    }
-                    <Timer style={{ position: "absolute", top: "5%", left: "50%" }}
+                    )}
+                    <Timer
+                      style={{
+                        position: "absolute",
+                        top: "5%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                      }}
                       run={state.runTimer && !state.showBlob}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
@@ -603,14 +613,22 @@ const Game4 = (props) => {
                         <div className="shuffled-ingredients">
                           {state.shuffledIngredients.map(
                             (ingredient, index) => (
-                              <img   key={"suffled-ingredient-" + index} src={ingredient.image} alt=""
-                                onClick={() => setState({...state, selectedIngredient: { ...ingredient }})}
+                              <img
+                                key={"suffled-ingredient-" + index}
+                                src={ingredient.image}
+                                alt=""
+                                onClick={() =>
+                                  setState({
+                                    ...state,
+                                    selectedIngredient: { ...ingredient },
+                                  })
+                                }
                                 style={{
                                   opacity: ingredient.done ? 0 : 1,
                                   pointerEvents: ingredient.done
                                     ? "none"
                                     : "auto",
-                                  width: '12%',
+                                  width: "12%",
                                 }}
                                 className={
                                   (state.selectedIngredient
@@ -623,9 +641,6 @@ const Game4 = (props) => {
                               />
                             )
                           )}
-                          {state.selectedIngredient &&
-                            <Button id="btn-add-bancada" blink onClick={checkRightIngredient}>Adicionar à bancada</Button>
-                          }
                         </div>
                       ) : (
                         <div className="name-order-div absolute-center">
@@ -677,16 +692,22 @@ const Game4 = (props) => {
                           className="error-notification-blob absolute-center"
                         /> */}
                         <div className="error-notification-message absolute-center">
-                          <span>
+                          <span lang="pt-br">
                             Esse item não é o que você precisa agora.
+                          </span>
+                          <span lang="en">
+                            This is not the item that you need now.
                           </span>
                           <Iniciar
                             label="Continuar"
-                            onClick={() => setState({
-                              ...state,
-                              selectedIngredient: null,
-                              wrongIngredientNotification: false,
-                          })} />
+                            onClick={() =>
+                              setState({
+                                ...state,
+                                selectedIngredient: null,
+                                wrongIngredientNotification: false,
+                              })
+                            }
+                          />
                         </div>
                       </div>
                     )}
@@ -694,25 +715,25 @@ const Game4 = (props) => {
                     {state.wrongIngredientNameNotification && (
                       <div className="overlay-error-notification">
                         <div className="overlay-error-notification-content">
-                          <img
-                            src={blobLaranja}
-                            alt=""
-                            className="error-notification-blob absolute-center"
-                          />
                           <div className="error-notification-message absolute-center">
-                            <span>
+                            <span lang="pt-br">
                               {state.userLetterOrder.reduce(
                                 (acc, letter) => acc + letter.letter,
                                 ""
-                              )}{" "}
-                              não serve para sua receita.
+                              )}
+                              {" não serve para sua receita."}
                             </span>
-                            <button
-                              className="btn"
-                              onClick={() => clearIngredientName()}
-                            >
-                              Continuar
-                            </button>
+                            <span lang="en">
+                              {state.userLetterOrder.reduce(
+                                (acc, letter) => acc + letter.letter,
+                                ""
+                              )}
+                              {" doesn't work for your recipe."}
+                            </span>
+                            <Iniciar
+                              label="Continuar"
+                              onClick={clearIngredientName}
+                            />
                           </div>
                         </div>
                       </div>
@@ -735,6 +756,15 @@ const Game4 = (props) => {
                               }}
                             />
                           ))}
+                          {state.selectedIngredient && (
+                            <Button
+                              id="btn-add-bancada"
+                              blink
+                              onClick={checkRightIngredient}
+                            >
+                              Adicionar à bancada
+                            </Button>
+                          )}
                         </div>
                       ) : (
                         <div>
@@ -748,9 +778,15 @@ const Game4 = (props) => {
                       ))}
 
                     {state.doneCooking && (
-                      <ChefDialog chef={missionData.character} onContinue={moveToServing}
-                        text={"Parabéns! Parece bom, mas você não vai me servir na panela, né? Escolha <strong>três</strong> utensílios adequados para servir seu prato! Nem mais, nem menos."}
-                        translation={"Congratulations! It looks good, but you're not going to serv me in the pan, are you? Choose <strong>three</strong> approppriate utensils to serve your dish! No more, no less."}
+                      <ChefDialog
+                        chef={missionData.character}
+                        onContinue={moveToServing}
+                        text={
+                          "Parabéns! Parece bom, mas você não vai me servir na panela, né? Escolha <strong>três</strong> utensílios adequados para servir seu prato! Nem mais, nem menos."
+                        }
+                        translation={
+                          "Congratulations! It looks good, but you're not going to serve me in the pan, are you? Choose <strong>three</strong> approppriate utensils to serve your dish! No more, no less."
+                        }
                       />
                     )}
                   </React.Fragment>
@@ -758,10 +794,18 @@ const Game4 = (props) => {
               case "SERVE":
                 return (
                   <React.Fragment>
-                    <Timer style={{ position: "absolute", top: "5%", left: "50%" }}
+                    <Timer
+                      style={{
+                        position: "absolute",
+                        top: "5%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                      }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
-                      onStop={(remaining) => setState( s => ({...s, remainingTime: remaining})) }
+                      onStop={(remaining) =>
+                        setState((s) => ({ ...s, remainingTime: remaining }))
+                      }
                       onEnd={() => endGame(true)}
                     />
                     {!state.endConfirmation && (
@@ -775,20 +819,23 @@ const Game4 = (props) => {
                                 className="error-notification-blob absolute-center"
                               />
                               <div className="error-notification-message absolute-center">
-                                <span>Esse não é o nome desse item.</span>
-                                <button
-                                  className="btn"
+                                <span lang="pt-br">
+                                  Esse não é o nome desse item.
+                                </span>
+                                <span lang="en">
+                                  That isn't the name of this item.
+                                </span>
+                                <Iniciar
+                                  label={"Continuar"}
                                   onClick={() =>
-                                    setState({
-                                      ...state,
+                                    setState((s) => ({
+                                      ...s,
                                       tablewareImagePick: true,
                                       tablewareImageSelected: null,
                                       wrongCombiantionNotification: false,
-                                    })
+                                    }))
                                   }
-                                >
-                                  Continuar
-                                </button>
+                                />
                               </div>
                             </div>
                           </div>
@@ -796,86 +843,99 @@ const Game4 = (props) => {
 
                         {state.tutorialTablewareSelectionNotification && (
                           <div className="smaller-tutorial-notification-message">
-                            <div style={{position: 'relative', display: 'block', bottom: 0, margin: '20% auto', width: '30%', textAlign: 'center'}}>Quais 3 utensilios você vai escolher?</div>
+                            Quais 3 utensilios você vai escolher?
                           </div>
                         )}
 
                         {state.tableTablewares.length === 3 && (
-                          <img
-                            onClick={() => checkTableware()}
-                            src={silverCloche}
-                            alt=""
-                            className="serve-button"
-                          />
+                          <div className="serve-button">
+                            <img
+                              onClick={() => checkTableware()}
+                              src={silverCloche}
+                              alt=""
+                            />
+                            <span>Servir! / Serve!</span>
+                          </div>
                         )}
+                        <div id="shuffled-stuff">
+                          <div className="shuffled-tablewares">
+                            {state.shuffledTablewares.map(
+                              (tableware, index) => {
+                                let tablewarePicked =
+                                  state.tablewareImageSelected;
+                                let amountChoosen =
+                                  state.tableTablewares.length;
 
-                        <div className="shuffled-tablewares">
-                          {state.shuffledTablewares.map(
-                            (tableware, index) => (
-                              <img key={index} src={tableware.image}
-                                style={{opacity: tableware.choosen
-                                        ? 0
-                                        : !state.tablewareImagePick
-                                        ? 0.4
-                                        : 1,
-                                      pointerEvents: tableware.choosen
-                                        ? "none"
-                                        : !state.tablewareImagePick
-                                        ? "none"
-                                        : "auto",
-                                      width: '10%',
-                                }}
-                                onClick={() =>
-                                  setState(s => ({
-                                    ...s,
-                                    tutorialTablewareSelectionNotification: false,
-                                    tablewareImagePick: false,
-                                    tablewareImageSelected: tableware,
-                                  }))
-                                }
-                                className={
-                                  (state.tablewareImageSelected
-                                    ? tableware.name ===
-                                      state.tablewareImageSelected.name
-                                      ? "selected-tableware"
-                                      : ""
-                                    : "") + " ingredient-selection-img"
-                                }
-                                alt=""
-                              />
-                            )
-                          )}
-                        </div>
-                        <div className="shuffled-tableware-names">
-                          {state.shuffledTablewaresNames.map(
-                            (tableware, index) => (
-                              <span
-                                key={index}
-                                style={{
-                                  opacity: tableware.choosen
-                                    ? 0
-                                    : state.tablewareImagePick
-                                    ? 0.4
-                                    : 1,
-                                  pointerEvents: tableware.choosen
-                                    ? "none"
-                                    : state.tablewareImagePick
-                                    ? "none"
-                                    : "auto",
-                                  width:
-                                    (
-                                      60 / state.shuffledTablewares.length
-                                    ).toString() + "vw",
-                                }}
-                                onClick={addTableware(tableware)}
-                              >
-                                {tableware.name}
-                              </span>
-                            )
-                          )}
+                                let wasThisPicked =
+                                  tablewarePicked === tableware;
+                                let canBePicked =
+                                  wasThisPicked ||
+                                  (amountChoosen < 3 &&
+                                    !tablewarePicked &&
+                                    !tableware.choosen);
+                                let shouldDim =
+                                  tablewarePicked && !wasThisPicked;
+
+                                let width =
+                                  100 / (state.shuffledTablewares.length + 1);
+                                let classes = "tableware-selection-img";
+                                if (canBePicked)
+                                  classes += " pickable-tableware";
+                                if (shouldDim) classes += " dim-tableware";
+                                if (tableware.choosen)
+                                  classes += " choosen-tableware";
+                                if (wasThisPicked)
+                                  classes += " selected-tableware";
+
+                                return (
+                                  <img
+                                    key={index}
+                                    src={tableware.image}
+                                    style={{ width: width + "%" }}
+                                    onClick={() =>
+                                      setState((s) => ({
+                                        ...s,
+                                        tutorialTablewareSelectionNotification: false,
+                                        tablewareImageSelected: tablewarePicked
+                                          ? null
+                                          : tableware,
+                                        tablewareImagePick: !!tablewarePicked,
+                                      }))
+                                    }
+                                    className={classes}
+                                    alt=""
+                                  />
+                                );
+                              }
+                            )}
+                          </div>
+                          <div className="shuffled-tableware-names">
+                            {state.shuffledTablewaresNames.map(
+                              (tableware, index) => {
+                                let classes = "tableware-selection-name";
+                                if (!!state.tablewareImageSelected)
+                                  classes += " pickable-tableware-name";
+                                if (tableware.choosen)
+                                  classes += " choosen-tableware";
+
+                                return (
+                                  <span
+                                    key={index}
+                                    className={classes}
+                                    onClick={addTableware(tableware)}
+                                  >
+                                    {tableware.name}
+                                  </span>
+                                );
+                              }
+                            )}
+                          </div>
                         </div>
 
-                        <div className="counter">
+                        <div
+                          className="counter"
+                          style={{ justifyContent: "space-evenly" }}
+                        >
                           {state.tableTablewares.map((tableware, index) => (
                             <img
                               key={index}
@@ -884,23 +944,30 @@ const Game4 = (props) => {
                               className="table-tableware-space"
                             />
                           ))}
-                          {console.log(Array(3 - state.tableTablewares.length))}
                           {[...Array(3 - state.tableTablewares.length)].map(
                             (item, index) => (
-                              <div className="table-tableware-space"></div>
+                              <div
+                                key={index}
+                                className="table-tableware-space"
+                              ></div>
                             )
                           )}
                         </div>
                       </React.Fragment>
                     )}
 
-                    {state.endConfirmation &&
-                      <ChefDialog chef={missionData.character}
-                        onContinue={() => endGame(false) }
-                        text={"Parabéns! Você é o mais novo finalista do MestreCuca! Agora, aguarde a deliberação dos jurados."}
-                        translation={"Congrats! You are the brand new finalist of MestreCuca! Now, wait while the judges decide."}
+                    {state.endConfirmation && (
+                      <ChefDialog
+                        chef={missionData.character}
+                        onContinue={() => endGame(false)}
+                        text={
+                          "Parabéns! Você é o mais novo finalista do MestreCuca! Agora, aguarde a deliberação dos jurados."
+                        }
+                        translation={
+                          "Congrats! You are the brand new finalist of MestreCuca! Now, wait while the judges decide."
+                        }
                       />
-                    }
+                    )}
                   </React.Fragment>
                 );
               case "END_GAME":
@@ -912,7 +979,7 @@ const Game4 = (props) => {
                   >
                     <div className="game-4-feedback absolute-center">
                       {state.timeUp ? (
-                        <div>
+                        <div className="game-4-feedback-lose-wrapper">
                           <div className="game-4-feedback-lose">
                             <div className="game-4-feedback-lose-content">
                               <img src={hourglassEmpty} alt="hourglass-empty" />
@@ -947,16 +1014,17 @@ const Game4 = (props) => {
                               </span>
                             </div>
                           </div>
-                          <div
-                            id="feedback-endGame-action-btns"
-                            style={{ marginTop: "5vh" }}
-                          >
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
+                          <div className="jogo4-end-no-time-btns">
+                            <Voltar
+                              label={"Tentar novamente"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                              onClick={restart}
+                            />
+                            <Iniciar
+                              label={"Sair do jogo"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                               onClick={() => setState({ ...state, back: true })}
-                            >
-                              Sair do jogo
-                            </Button>
+                            />
                           </div>
                         </div>
                       ) : (

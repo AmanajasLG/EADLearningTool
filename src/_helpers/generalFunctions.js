@@ -173,6 +173,18 @@ function preventSingleWordBreak(sentence) {
   );
 }
 
+// function setElementPositonX(rect, element) {
+//   return rect.left - element.offsetWidth < 0
+//     ? rect.left + element.offsetWidth
+//     : rect.left - element.offsetWidth;
+// }
+
+// function setElementPositonY(rect, element) {
+//   return rect.top - element.offsetHeight < 0
+//     ? rect.top + element.offsetHeight
+//     : rect.top - element.offsetHeight;
+// }
+
 export {
   months,
   numberToMoney,
