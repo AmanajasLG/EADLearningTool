@@ -11,7 +11,13 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
             key={clothing.id}
             src={clothing.image}
             alt={clothing.name}
-            onClick={onRemoveClick(clothing)}
+            onClick={props.showRemove ? onRemoveClick(clothing) : null}
+            style={{
+              cursor: "pointer",
+              pointerEvents: "visiblePainted",
+              position: "absolute",
+              height: "100%",
+            }}
           />
         ))
       )}
