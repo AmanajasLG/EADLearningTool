@@ -101,6 +101,9 @@ const Game6 = (props) => {
           name: clothing.asset.name,
           cover: clothing.cover ?? "default",
           image: clothing.asset.image ? clothing.asset.image.url : "",
+          wardrobeImage: clothing.wardrobeImage
+            ? clothing.wardrobeImage.url
+            : "",
           category: clothing.tags.find((tag) => tag.type === "category").name,
           color: clothing.tags.find((tag) => tag.type === "color").name,
           time: clothing.tags

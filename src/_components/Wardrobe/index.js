@@ -35,8 +35,8 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
           display: "grid",
           gridTemplateColumns: "25% 25% 25% 25%",
           gridTemplateRows: "20% 20% 20%",
-          rowGap: "10%",
-          padding: "5%",
+          rowGap: "5%",
+          padding: "2%",
           backgroundColor: "#ffcca9",
         }}
       >
@@ -53,7 +53,9 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
                   opacity: item.picked ? 0.3 : 1,
                 }}
                 onClick={onClothesClick(item)}
-                src={item.image}
+                src={
+                  item.wardrobeImage !== "" ? item.wardrobeImage : item.image
+                }
                 alt={item.name}
               />
             ))
