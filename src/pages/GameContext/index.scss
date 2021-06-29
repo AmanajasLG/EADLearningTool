@@ -37,7 +37,11 @@ Not sure how does this affect accessibility, though. Might need tweaks for that.
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
-.debug{
+.debug {
 	box-sizing: content-box;
 	border: 3px solid red;
+	
+	* {
+		box-sizing: border-box;
+	}
 }

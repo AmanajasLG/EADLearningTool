@@ -50,6 +50,7 @@ import {
   bigBlob,
 } from "../../img";
 import Recipe from "../../_components/Recipe";
+import zIndex from "@material-ui/core/styles/zIndex";
 
 const endGameLines = [
   {
@@ -625,6 +626,29 @@ const Game3 = (props) => {
                       src={cashierTable}
                       alt=""
                     />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "64.1em",
+                        left: "45.8em",
+                        width: "8.1em",
+                        height: "2em",
+                        zIndex: 4,
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        color: "white"
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "2.2em"
+                        }}
+                      >
+                        {state.price}
+                      </span>
+                    </div>
                     {state.moneySelection && (
                       <Payment
                         moneyList={missionData.money}
