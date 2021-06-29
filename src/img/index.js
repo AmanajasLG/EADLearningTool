@@ -29,7 +29,9 @@ import bigBlob from "./Game3/bigBlob.svg";
 import ingredientsListRotated from "./Game3/ingredients-list-rotated.svg";
 import kitchen from "./Game3/kitchen.svg";
 import tomato from "./Game3/Tomate_lista.svg";
+// GAME 4
 import table from "./Game4/table.svg";
+import silverCloche from "./Game4/silver-cloche.svg";
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -43,7 +45,7 @@ import blobAzul2 from "./bg-forma-azul2.svg";
 import blobVerde from "./bg-forma-verde.svg";
 import blobLowScore from "./Score Baixo_blob.svg";
 import blobLaranja from "./bg-forma-laranja.svg";
-import silverCloche from "./placeholders/CL32_ml.png";
+
 import error from "./apagar.svg";
 import right from "./confirmar.svg";
 

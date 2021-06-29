@@ -119,6 +119,8 @@ function numberToMoney(n) {
   return words.join(" ");
 }
 
+const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+
 function goRound(value, max) {
   return value >= 0 ? value % max : max - (Math.abs(value) % max);
 }
@@ -171,7 +173,20 @@ function preventSingleWordBreak(sentence) {
   );
 }
 
+// function setElementPositonX(rect, element) {
+//   return rect.left - element.offsetWidth < 0
+//     ? rect.left + element.offsetWidth
+//     : rect.left - element.offsetWidth;
+// }
+
+// function setElementPositonY(rect, element) {
+//   return rect.top - element.offsetHeight < 0
+//     ? rect.top + element.offsetHeight
+//     : rect.top - element.offsetHeight;
+// }
+
 export {
+  months,
   numberToMoney,
   zeroFill,
   splitArrayIntoChunksOfLen,

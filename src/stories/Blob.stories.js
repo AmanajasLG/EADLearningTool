@@ -1,5 +1,5 @@
 import React from 'react'
-import Blob, { BlobBg } from '../_components/Blob'
+import Blob from '../_components/Blob'
 
 const Template = args => <Blob {...args} />
 

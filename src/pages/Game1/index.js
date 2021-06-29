@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 import {
-  apiActions,
   gameActions,
   headerActions,
   musicActions,
@@ -31,7 +30,6 @@ import { ButtonConfigs, Iniciar, Voltar } from "../../_components/Button";
 const Game1 = (props) => {
   const [state, setState] = React.useState(initialState());
 
-  const { play_sessionsActions } = apiActions;
   const id = props.match.params.id;
   const dispatch = useDispatch();
 
@@ -46,9 +44,6 @@ const Game1 = (props) => {
   );
   const missionData = mission ? mission.missionData : null;
   const userId = useSelector((state) => state.authentication.user.user.id);
-  const currentPlaySession = useSelector((state) =>
-    state.play_sessions ? state.play_sessions.items[state.play_sessions.items.length - 1] : {}
-  );
   const lang = useSelector(
     (state) => state.authentication.user.user.language.id
   );
@@ -60,48 +55,14 @@ const Game1 = (props) => {
   // })
 
   React.useEffect(() => {
-    if (mission) dispatch(musicActions.set(mission.backgroundAudio.url));
-    return () => dispatch(musicActions.set(""));
-  }, [dispatch, mission]);
-
-  //Track playerActions
-  React.useEffect(() => {
-    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
-
-    const getClickedObject = (e) => {
+    if (mission)
       dispatch(
-        play_sessionsActions.update(
-          { id: currentPlaySession.id,
-            data: {
-              actions:
-              [...currentPlaySession.data.actions,
-                {
-                  tag: e.target.nodeName,
-                  src: e.target.src,
-                  alt: e.target.alt,
-                  className: e.target.className,
-                  class: e.target.class,
-                  id: e.target.id,
-                  innerHTML: e.target.innerHTML.includes("<div")
-                    ? null
-                    : e.target.innerHTML,
-                  clickTime: new Date(),
-                }
-              ]
-            }
-          }
+        musicActions.set(
+          mission.backgroundAudio ? mission.backgroundAudio.url : ""
         )
       );
-    };
-    document.addEventListener("mousedown", getClickedObject);
-
-    setState((s) => {
-      return { ...s, currentPlaySession, getClickedObject };
-    });
-    return () => {
-      document.removeEventListener("mousedown", getClickedObject);
-    };
-  }, [dispatch, currentPlaySession, play_sessionsActions, state.tracking, mission]);
+    return () => dispatch(musicActions.set(""));
+  }, [dispatch, mission]);
 
   React.useEffect(() => {
     if (id && !missionData)
@@ -242,18 +203,7 @@ const Game1 = (props) => {
     mission = stub;
   }
 
-  const onStartGame = (e) => {
-    if (state.tracking) {
-      dispatch(
-        play_sessionsActions.create({
-          user: userId,
-          mission: mission.id,
-          data: {actions:[]}
-        })
-      );
-    }
-    setState({ ...state, scene: "ROOM" });
-  };
+  const onStartGame = (e) => setState({ ...state, scene: "ROOM" })
 
   const setCurrentChar = (character) => () => {
     // if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
@@ -538,15 +488,6 @@ const Game1 = (props) => {
       ) : (
         mission && (
           <div id="game1-content">
-            {/* <div id="input-tracker">
-              TrackInput:{" "}
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  setState({ ...state, tracking: e.target.checked });
-                }}
-              />
-            </div> */}
             {(function renderScene() {
               switch (state.scene) {
                 case "INIT":
@@ -690,14 +631,30 @@ const Game1 = (props) => {
                               </div>
                               <div id="popup-btns">
                                 <Voltar
-                                  label={state.wrongContacts > 0 ? "Keep trying" : "Not yet"}
-                                  onClick={() => setState( (s) => {return {...s, shouldCloseDialog: true}} )}
-                                  colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
-                                  />
+                                  label={
+                                    state.wrongContacts > 0
+                                      ? "Keep trying"
+                                      : "Not yet"
+                                  }
+                                  onClick={() =>
+                                    setState((s) => {
+                                      return { ...s, shouldCloseDialog: true };
+                                    })
+                                  }
+                                  colorScheme={
+                                    ButtonConfigs.COLOR_SCHEMES.COR_3
+                                  }
+                                />
                                 <Iniciar
-                                  label={state.wrongContacts > 0 ? "Continue anyway" : "Let's go"}
+                                  label={
+                                    state.wrongContacts > 0
+                                      ? "Continue anyway"
+                                      : "Let's go"
+                                  }
                                   onClick={onGoNextRoom}
-                                  colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_2}
+                                  colorScheme={
+                                    ButtonConfigs.COLOR_SCHEMES.COR_2
+                                  }
                                 />
                               </div>
                             </div>

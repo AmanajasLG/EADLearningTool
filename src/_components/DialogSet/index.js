@@ -17,7 +17,7 @@ const DialogSet = ({
   menuButtonList,
   onMenuButtonClick,
 }) => {
-  //<AcusationLamp onClick={() => setState({...state, acusation: true})} />
+  //<Lamp onClick={() => setState({...state, acusation: true})} />
   return (
     <div id="conversa" className="DialogPopUp">
       <div id="fechar" onClick={onClose}>
