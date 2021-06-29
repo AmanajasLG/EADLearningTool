@@ -783,6 +783,7 @@ const Game3 = (props) => {
                 ...state,
                 scene: "CASHIER",
                 checkoutConfirm: false,
+                runTimer: false,
                 cashierLines: {
                   text: `Maravilha! Sua compra deu ${numberToMoney(
                     48.05
