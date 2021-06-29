@@ -1,31 +1,22 @@
 import React from 'react'
 import { hourglassFull, blobAzul } from '../../img'
 import { zeroFill } from '../../_helpers'
-import Button from '../Button'
+import { Iniciar } from '../Button'
+
+import styles from './index.module.scss'
 
 const TimerAnounce = ({seconds, onReady}) => {
   return (
-    <div style={{position: 'relative', width: '100%', height: '100%',
-      backgroundImage: `url(${blobAzul})`,
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center',
-      backgroundSize: '100% 100%'
-    }}>
-      <div style={{width: 400, margin: '0 auto', paddingTop: '2%', paddinBottom: '2%', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-        <img style={{display: 'block', width: '20%', margin: '0 auto', marginBottom: '10%'}} src={hourglassFull} alt="hourglass" />
-        <h1 className="type-m type-display type-center subtitle">
-          Você tem
-        </h1>
-        <h1 style={{fontSize: 92}} className="type-l type-display type-center">
+    <div id={styles["timer-anounce-div"]} style={{ backgroundImage: `url(${blobAzul})` }}>
+      <div>
+        <img src={hourglassFull} alt="hourglass" />
+        <div>Você tem</div>
+        <div id={styles["timer"]}>
           {zeroFill(Math.floor(seconds / 60).toString(), 2)}:
           {zeroFill((seconds % 60).toString(), 2)}
-        </h1>
-        <h1 className="type-m type-display type-center subtitle">
-          minutos
-        </h1>
-        <Button style={{marginTop: '10%'}} blink center onClick={onReady}>
-          Estou pronto!
-        </Button>
+        </div>
+        <div>minutos</div>
+        <Iniciar label={"Estou pronto!"} onClick={onReady} stayAsPill />
       </div>
     </div>
   )
