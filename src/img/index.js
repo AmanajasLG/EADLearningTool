@@ -32,6 +32,9 @@ import tomato from "./Game3/Tomate_lista.svg";
 // GAME 4
 import table from "./Game4/table.svg";
 import silverCloche from "./Game4/silver-cloche.svg";
+//  GAME 5
+import envelope from './envelope grande.svg'
+
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -94,4 +97,5 @@ export {
   bloco,
   blocoButton,
   shelf,
+  envelope
 };

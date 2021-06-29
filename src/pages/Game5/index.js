@@ -18,7 +18,7 @@ import Wardrobe from "../../_components/Wardrobe";
 import Button from "../../_components/Button";
 import { BlobBg } from "../../_components/Blob";
 import { renderToStaticMarkup } from "react-dom/server";
-import { tomato } from "../../img";
+import { tomato, envelope } from "../../img";
 
 import initialState from "./initialState";
 import Tutorial from "./components/Tutorial";
@@ -29,6 +29,7 @@ import { Iniciar, Voltar } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
 import { ContactSupportOutlined } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
+import Invitation from './components/Invitation'
 
 const Game5 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -507,17 +508,18 @@ const Game5 = (props) => {
                       <div
                         style={{
                           display: "flex",
+                          marginTop: '10%',
                           flexDirection: "row",
                           justifyContent: "space-evenly",
                           width: "100%",
                           height: "100%",
                         }}
                       >
-                        {state.characters.map((character) => (
+                        {state.characters.map((character, index) => (
                           <img
-                            key={character.name}
+                            key={index}
                             src={character.image}
-                            style={{ height: "50%", cursor: "pointer" }}
+                            style={{ height: "80%", cursor: "pointer" }}
                             onClick={() =>
                               setState((s) => ({
                                 ...s,
@@ -533,59 +535,9 @@ const Game5 = (props) => {
                     )}
 
                     {state.showInvitation && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: 0,
-                          width: "50%",
-                          height: "50%",
-                          left: "25%",
-                          backgroundColor: "var(--color-second)",
-                          textAlign: "center",
-                        }}
-                      >
-                        <div className="">
-                          <span lang="pt-br" className="">
-                            Nós temos o prazer de convidar VOCÊ para nosso
-                            evento!
-                          </span>
-                          <span lang="en" className="">
-                            We're glad to invite YOU to our event!
-                          </span>
-                        </div>
-                        <div
-                          style={{
-                            position: "absolute",
-                            backgroundColor: "white",
-                            width: "50%",
-                            left: "25%",
-                            fontSize: "3em",
-                          }}
-                        >
-                          <div>Mês: {state.invitation.month}</div>
-                          <div>Estação: {state.invitation.season}</div>
-                          <div>Horário: {state.invitation.time}</div>
-                          <div>
-                            Previsão do tempo: {state.invitation.weather}
-                          </div>
-                        </div>
-
-                        <Button
-                          style={{
-                            position: "relative",
-                            bottom: "10%",
-                            margin: "50% auto 0% auto",
-                          }}
-                          onClick={() =>
-                            setState((s) => ({
-                              ...s,
-                              proceedToDressingConfirmation: true,
-                            }))
-                          }
-                        >
-                          Estou pronto!
-                        </Button>
-                      </div>
+                      <Invitation invitation={state.invitation} onClick={() =>
+                        setState( s  => ({...s, proceedToDressingConfirmation: true }))}
+                      />
                     )}
 
                     {state.proceedToDressingConfirmation && (

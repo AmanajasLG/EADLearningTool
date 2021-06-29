@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <g id="envelope_grande" data-name="envelope grande">
+    <g id="Grupo_10038" data-name="Grupo 10038">
+      <g id="União_2" data-name="União 2">
+        <path d="M522,1039V759h895v280Zm0-280L969.5,450,1417,759Z" style="fill:#535c89"/>
+      </g>
+      <g id="Retângulo_2132" data-name="Retângulo 2132">
+        <g id="Grupo_8526" data-name="Grupo 8526">
+          <g id="Grupo_8525" data-name="Grupo 8525">
+            <g id="Retângulo_2186" data-name="Retângulo 2186">
+              <rect x="551" y="158.97" width="813.52" height="1089.64" rx="53" style="fill:none"/>
+            </g>
+          </g>
+        </g>
+        <g id="Grupo_8527" data-name="Grupo 8527">
+          <g id="Caminho_14917" data-name="Caminho 14917">
+            <path d="M1333.87,1245.49a47.78,47.78,0,0,1-17.13,3.15l-718-.05A47.79,47.79,0,0,1,551,1200.84L551,206.69A47.73,47.73,0,0,1,598.79,159l718,.05a47.79,47.79,0,0,1,47.73,47.75l-.07,994.15a47.83,47.83,0,0,1-30.61,44.59Z" style="fill:#fff"/>
+          </g>
+        </g>
+      </g>
+      <g id="Grupo_8554" data-name="Grupo 8554">
+        <g id="Retângulo_2132-2" data-name="Retângulo 2132-2">
+          <g id="Grupo_8551" data-name="Grupo 8551">
+            <g id="Grupo_8550" data-name="Grupo 8550">
+              <g id="Retângulo_2208" data-name="Retângulo 2208">
+                <rect x="537.49" y="158.97" width="813.52" height="1089.64" rx="53" style="fill:none"/>
+              </g>
+            </g>
+          </g>
+          <g id="Grupo_8553" data-name="Grupo 8553">
+            <g id="Grupo_8552" data-name="Grupo 8552">
+              <g id="Caminho_14918" data-name="Caminho 14918">
+                <path d="M1320.36,1245.49a47.8,47.8,0,0,1-17.14,3.15l-718-.05a47.8,47.8,0,0,1-47.74-47.75l.07-994.15A47.75,47.75,0,0,1,585.27,159l718,.05A47.79,47.79,0,0,1,1351,206.75L1351,1200.9a47.86,47.86,0,0,1-30.61,44.59ZM568.78,163.79a46,46,0,0,0-29.46,42.9l-.07,994.15a46,46,0,0,0,45.94,46l718,0a45.94,45.94,0,0,0,46-45.94l.07-994.15a46,46,0,0,0-45.94-45.94l-718-.06a46,46,0,0,0-16.49,3Z" style="fill:#5a316b"/>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+      <g id="Subtração_1" data-name="Subtração 1">
+        <path d="M1417,1219H522V759L969.5,989,1417,759Z" style="fill:#d6e3f4"/>
+      </g>
+      <g id="Subtração_2" data-name="Subtração 2">
+        <path d="M1398,1219H503V759L950.5,989,1398,759Z" style="fill:none"/>
+        <path d="M1395,1216V763.86L951.87,991.61a3,3,0,0,1-2.74,0L506,763.86V1216h889m3,3H503V759L950.5,989,1398,759Z" style="fill:#5b3169"/>
+      </g>
+      <g id="Linha_239" data-name="Linha 239">
+        <rect x="498.29" y="741.95" width="47.42" height="3" transform="translate(-364.88 546.86) rotate(-42.43)" style="fill:#5b3169"/>
+      </g>
+      <g id="Linha_240" data-name="Linha 240">
+        <rect x="1379" y="721.24" width="3" height="47.42" transform="translate(-100.81 1261.13) rotate(-47.56)" style="fill:#5b3169"/>
+      </g>
+    </g>
+  </g>
+</svg>
