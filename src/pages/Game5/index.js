@@ -18,7 +18,7 @@ import Wardrobe from "../../_components/Wardrobe";
 import Button from "../../_components/Button";
 import { BlobBg } from "../../_components/Blob";
 import { renderToStaticMarkup } from "react-dom/server";
-import { tomato, envelope } from "../../img";
+import { tomato, envelope, hanger, hangerH, dressingBg } from "../../img";
 
 import initialState from "./initialState";
 import Tutorial from "./components/Tutorial";
@@ -30,6 +30,7 @@ import FeedbackPanel from "./components/FeedbackPanel";
 import { ContactSupportOutlined } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
 import Invitation from './components/Invitation'
+import ChooseCharacter from './components/ChooseCharacter'
 
 const Game5 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -505,33 +506,12 @@ const Game5 = (props) => {
                     )}
 
                     {state.chooseCharacterScreen && (
-                      <div
-                        style={{
-                          display: "flex",
-                          marginTop: '10%',
-                          flexDirection: "row",
-                          justifyContent: "space-evenly",
-                          width: "100%",
-                          height: "100%",
-                        }}
-                      >
-                        {state.characters.map((character, index) => (
-                          <img
-                            key={index}
-                            src={character.image}
-                            style={{ height: "80%", cursor: "pointer" }}
-                            onClick={() =>
-                              setState((s) => ({
-                                ...s,
-                                choosenCharacter: character,
-                                showInvitation: true,
-                                chooseCharacterScreen: false,
-                              }))
-                            }
-                            alt={character.id}
-                          />
-                        ))}
-                      </div>
+                      <ChooseCharacter characters={state.characters} onCharacterClick={(character) =>
+                        setState( s => ({...s,
+                          choosenCharacter: character,
+                          showInvitation: true,
+                          chooseCharacterScreen: false,
+                        }))}/>
                     )}
 
                     {state.showInvitation && (
@@ -605,6 +585,7 @@ const Game5 = (props) => {
                             flexDirection: "row",
                             flexWrap: "wrap",
                             width: "100%",
+                            backgroundImage: `url(${dressingBg})`
                           }}
                         >
                           <div
@@ -654,6 +635,7 @@ const Game5 = (props) => {
                           </div>
                         </div>
                         <Lamp
+                          img={[hanger, hangerH]}
                           onClick={() => {
                             let ready =
                               state.clothes["Tronco"].length > 0 &&

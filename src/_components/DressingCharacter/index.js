@@ -3,7 +3,7 @@ import React from "react";
 const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
   return (
     <div {...props}>
-      <img src={character.image} alt="character" style={{ height: "100%" }} />
+      <img src={character.image} alt="character" style={{ height: "100%", display: 'block', margin: '10% auto 0 auto' }} />
 
       {Object.keys(clothes).map((label) =>
         clothes[label].map((clothing, index) => (

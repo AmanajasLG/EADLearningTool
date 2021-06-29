@@ -34,6 +34,9 @@ import table from "./Game4/table.svg";
 import silverCloche from "./Game4/silver-cloche.svg";
 //  GAME 5
 import envelope from './envelope grande.svg'
+import hanger from './cabide roxo.svg'
+import hangerH from './cabide marrom.svg'
+import dressingBg from './Game5/cenario.svg'
 
 // GENERAL
 import avatar from "./avatar1.svg";
@@ -97,5 +100,8 @@ export {
   bloco,
   blocoButton,
   shelf,
-  envelope
+  envelope,
+  hanger,
+  hangerH,
+  dressingBg
 };

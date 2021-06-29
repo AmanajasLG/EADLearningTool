@@ -161,8 +161,10 @@ const GameContext = (props) => {
         volume={music.volume / 100}
         loop={true}
       />
-      <div id="game-screen-wrapper" style={{alignItems: state.alignment.vertical, justifyContent: state.alignment.horizontal}}>
-        <div id="game-screen" style={{"--aspectRatio": dimensions.width / dimensions.height}}>
+    <div id="game-screen-wrapper" style={{alignItems: state.alignment.vertical, justifyContent: state.alignment.horizontal}}>
+        <div id="game-screen" style={{"--aspectRatio": dimensions.width / dimensions.height}}
+          className={process.env.NODE_ENV === 'development' ? 'debug' : ''}
+        >
           {children}
         </div>
       </div>
