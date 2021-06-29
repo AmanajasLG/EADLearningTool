@@ -514,19 +514,18 @@ const Game5 = (props) => {
                         }}
                       >
                         {state.characters.map((character) => (
-                          <img
-                            key={character.name}
-                            src={character.image}
+                          <DressingCharacter
+                            clothes={state.clothes}
+                            character={character}
                             style={{ height: "50%", cursor: "pointer" }}
                             onClick={() =>
                               setState((s) => ({
                                 ...s,
                                 choosenCharacter: character,
-                                showInvitation: true,
+                                showCellphone: true,
                                 chooseCharacterScreen: false,
                               }))
                             }
-                            alt={character.id}
                           />
                         ))}
                       </div>
