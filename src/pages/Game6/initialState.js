@@ -22,9 +22,9 @@ const initialState = () => ({
   phoneWardrobe: {},
   characters: [],
   clothes: {
-    Tronco: [],
-    Pernas: [],
     Pés: [],
+    Pernas: [],
+    Tronco: [],
     Acessórios: [],
   },
   phoneClothes: [],
