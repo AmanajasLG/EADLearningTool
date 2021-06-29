@@ -45,11 +45,15 @@ import blobAzul2 from "./bg-forma-azul2.svg";
 import blobVerde from "./bg-forma-verde.svg";
 import blobLowScore from "./Score Baixo_blob.svg";
 import blobLaranja from "./bg-forma-laranja.svg";
+import shorts from "./roupa de baixo short.svg";
+import shirt from "./roupa de baixo top.svg";
 
 import error from "./apagar.svg";
 import right from "./confirmar.svg";
 
 export {
+  shorts,
+  shirt,
   tomato,
   error,
   right,
