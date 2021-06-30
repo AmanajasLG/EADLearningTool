@@ -1,58 +1,56 @@
 import React from "react";
 
 import { shorts, shirt } from "../../img";
+import InlineSVG from "../InlineSVG";
 
 const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
+  let hasInteiroCover = clothes["Tronco"].reduce((acc, clothing) => {
+    return acc || clothing.cover === "inteiro";
+  }, false);
+
   return (
     <div {...props}>
-      <img
+      <InlineSVG
         src={character.image}
         alt="character"
         style={{ height: "100%", position: "absolute" }}
       />
-
+      <InlineSVG
+        key={"underware-bottom-" + character.id}
+        src={shorts}
+        alt={"underware-bottom-" + character.id}
+        style={{
+          cursor: "pointer",
+          position: "absolute",
+          height: "100%",
+          display:
+            clothes["Pernas"].length !== 0
+              ? "none"
+              : hasInteiroCover
+              ? "none"
+              : "block",
+        }}
+      />
+      <InlineSVG
+        key={"underware-top-" + character.id}
+        src={shirt}
+        alt={"underware-top-" + character.id}
+        style={{
+          cursor: "pointer",
+          position: "absolute",
+          height: "100%",
+          display: clothes["Tronco"].length === 0 ? "block" : "none",
+        }}
+      />
       {Object.keys(clothes).map((label) => {
-        if (label === "Tronco" && clothes[label].length === 0) {
-          return (
-            <img
-              key="underware-top"
-              src={shirt}
-              alt="underware-top"
-              style={{
-                cursor: "pointer",
-                pointerEvents: "visiblePainted",
-                position: "absolute",
-                height: "100%",
-              }}
-            />
-          );
-        }
-
-        if (label === "Pernas" && clothes[label].length === 0) {
-          return (
-            <img
-              key="underware-top"
-              src={shorts}
-              alt="underware-top"
-              style={{
-                cursor: "pointer",
-                pointerEvents: "visiblePainted",
-                position: "absolute",
-                height: "100%",
-              }}
-            />
-          );
-        }
-
         return clothes[label].map((clothing, index) => (
-          <img
+          <InlineSVG
             key={clothing.id}
             src={clothing.image}
             alt={clothing.name}
             onClick={props.showRemove ? onRemoveClick(clothing) : null}
             style={{
               cursor: "pointer",
-              pointerEvents: "visiblePainted",
               position: "absolute",
               height: "100%",
             }}

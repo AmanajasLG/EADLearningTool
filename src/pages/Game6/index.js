@@ -289,18 +289,22 @@ const Game6 = (props) => {
   // WARDROBE
   const addClothesToBody = (item) => () => {
     const wardrobeBody = ["Tronco", "Pernas", "Pés"];
+    const covers = ["inteiro", "default"];
     var clothes = { ...state.clothes };
 
     if (wardrobeBody.includes(item.category)) {
       if (
         (clothes[item.category].length !== 0 &&
-          (clothes[item.category].find(
-            (clothing) => clothing.cover === item.cover
-          ) ||
-            item.cover === "inteiro")) ||
-        (clothes["Tronco"].find((clothing) => clothing.cover === "inteiro") &&
+          clothes[item.category].filter(
+            (clothing) =>
+              clothing.cover === item.cover ||
+              (covers.includes(clothing.cover) && covers.includes(item.cover))
+          ).length !== 0) ||
+        (clothes["Tronco"].filter((clothing) => clothing.cover === "inteiro")
+          .length !== 0 &&
           item.category !== "Pés" &&
-          item.cover === "default")
+          item.cover === "default") ||
+        (item.cover === "inteiro" && clothes["Pernas"].length !== 0)
       ) {
         setState((s) => ({
           ...s,
@@ -308,6 +312,11 @@ const Game6 = (props) => {
         }));
       } else {
         clothes[item.category] = [...clothes[item.category], item];
+
+        clothes[item.category].sort((a, b) => {
+          let weights = ["baixo", "default", "inteiro", "cima"];
+          return weights.indexOf(a.cover) < weights.indexOf(b.cover) ? -1 : 1;
+        });
 
         setState((s) => ({
           ...s,
@@ -601,9 +610,6 @@ const Game6 = (props) => {
 
   const endGame = (saveResult = false) => {
     let wrongClothes = getWrongClothes();
-    let clothesCount = Object.keys(state.clothes).reduce((acc, key) => {
-      return acc + state.clothes[key].length;
-    }, 0);
     let sawInvite =
       state.inviteQuestions.filter((question) => question.asked).length > 0;
     let feedbackMessages = [];
@@ -677,19 +683,34 @@ const Game6 = (props) => {
         });
       }
     } else {
-      feedbackMessages.push({
-        image: tomato,
-        message: sawInvite
-          ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
+      feedbackMessages.push(
+        {
+          image: tomato,
+          message: sawInvite
+            ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
+              wrongClothes.length +
+              " peças ficaram estranhas... Tomara que Ariel não passe tanta vergonha..."
+            : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
+          messageTranslate: sawInvite
+            ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
+              wrongClothes.length +
+              " pieces of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
+            : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
+        },
+        {
+          image: tomato,
+          message:
+            "Preste atenção nas peças que você escolheu. Em seu look, você escolheu um total de " +
             wrongClothes.length +
-            " peças ficaram estranhas... Tomara que Ariel não passe tanta vergonha..."
-          : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
-        messageTranslate: sawInvite
-          ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
+            " peças que não combinam com o evento: " +
+            wrongClothes.map((clothes) => clothes.name).join(", "),
+          messageTranslate:
+            "Pay attention to the pieces of clothing you picked. In your outfit, you chose a total of " +
             wrongClothes.length +
-            " pieces of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
-          : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
-      });
+            " pieces that did not match the event :" +
+            wrongClothes.map((clothes) => clothes.name).join(", "),
+        }
+      );
 
       if (
         Object.keys(phoneBodyMatchErrors).reduce((acc, key) => {

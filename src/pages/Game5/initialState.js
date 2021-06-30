@@ -11,9 +11,9 @@ const initialState = () => ({
   wardrobe: {},
   characters: [],
   clothes: {
-    Tronco: [],
-    Pernas: [],
     Pés: [],
+    Pernas: [],
+    Tronco: [],
     Acessórios: [],
   },
   readyAlert: false,
