@@ -175,18 +175,22 @@ const Game5 = (props) => {
 
   const addClothesToBody = (item) => () => {
     const wardrobeBody = ["Tronco", "Pernas", "Pés"];
+    const covers = ["inteiro", "default"];
     var clothes = { ...state.clothes };
 
     if (wardrobeBody.includes(item.category)) {
       if (
         (clothes[item.category].length !== 0 &&
-          (clothes[item.category].find(
-            (clothing) => clothing.cover === item.cover
-          ) ||
-            item.cover === "inteiro")) ||
-        (clothes["Tronco"].find((clothing) => clothing.cover === "inteiro") &&
+          clothes[item.category].filter(
+            (clothing) =>
+              clothing.cover === item.cover ||
+              (covers.includes(clothing.cover) && covers.includes(item.cover))
+          ).length !== 0) ||
+        (clothes["Tronco"].filter((clothing) => clothing.cover === "inteiro")
+          .length !== 0 &&
           item.category !== "Pés" &&
-          item.cover === "default")
+          item.cover === "default") ||
+        (item.cover === "inteiro" && clothes["Pernas"].length !== 0)
       ) {
         setState((s) => ({
           ...s,
@@ -194,6 +198,11 @@ const Game5 = (props) => {
         }));
       } else {
         clothes[item.category] = [...clothes[item.category], item];
+
+        clothes[item.category].sort((a, b) => {
+          let weights = ["baixo", "default", "inteiro", "cima"];
+          return weights.indexOf(a.cover) < weights.indexOf(b.cover) ? -1 : 1;
+        });
 
         setState((s) => ({
           ...s,
@@ -522,7 +531,7 @@ const Game5 = (props) => {
                               setState((s) => ({
                                 ...s,
                                 choosenCharacter: character,
-                                showCellphone: true,
+                                showInvitation: true,
                                 chooseCharacterScreen: false,
                               }))
                             }

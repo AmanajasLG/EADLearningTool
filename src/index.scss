@@ -22,7 +22,15 @@ html {
 img,
 svg {
   vertical-align: middle;
-  transform-box: fill-box
+  transform-box: fill-box;
+}
+
+svg {
+  pointer-events: none;
+}
+
+path {
+  pointer-events: auto;
 }
 
 /* TYPE */
@@ -215,15 +223,19 @@ button:focus {
   background: #c0c0ec;
 }
 
-.stretchIn{
+.stretchIn {
   transform-origin: center;
 }
 
-.stretchIn:hover{
+.stretchIn:hover {
   animation: stretchIn 0.2s forwards;
 }
 
-@keyframes stretchIn{
-  from { transform: scale(1);}
-  to { transform: scale(1.2);}
+@keyframes stretchIn {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
 }
