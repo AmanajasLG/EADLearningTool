@@ -4,38 +4,29 @@ import { bigPhone, dedao, palma } from "../../../../img";
 import { Button, ButtonConfigs } from "../../../../_components/Button";
 import Wardrobe from "../../../../_components/Wardrobe";
 
-import marked from "marked";
 import parse from "html-react-parser";
 
 import "./index.scss";
+import { Dropdown } from "react-bootstrap";
+import { Icon } from "@material-ui/core";
 
 // const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const Cellphone = ({
-  nextMessage,
   stopConversation,
   dialogHistory,
   showClothes,
   addAnswerToDialog,
-  autoLoad,
   wardrobe,
   colors,
   confirmationButton,
   cancelButton,
-  removeItem = false,
   phoneClothes,
+  cancelAddRemoveDialog,
   removeClothingFromList,
+  removeAllClothes,
+  addRemoveDialog,
 }) => {
-  // const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
-
-  React.useEffect(() => {
-    if (autoLoad) {
-      setTimeout(() => {
-        nextMessage();
-      }, 3000);
-    }
-
-    //eslint-disable-next-line
-  }, [dialogHistory]);
+  const [state, setState] = React.useState({ removeItem: false });
 
   return (
     <div id="big-cellphone-wrapper">
@@ -46,6 +37,31 @@ const Cellphone = ({
       </div>
       <div id="big-cellphone-screen-wrapper">
         <div id="big-cellphone-screen-content">
+          <div id="big-cellphone-screen-header">
+            <img src="" alt="cellphone-profile-pic" />
+            <span>Ariel</span>
+            {!stopConversation && (
+              <Dropdown>
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  <Icon namo="trash alternate" />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={() => {
+                      addRemoveDialog();
+                      setState((s) => ({ ...s, removeItem: true }));
+                    }}
+                  >
+                    Remover roupa/Remove clothing
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={removeAllClothes}>
+                    Remover todas as roupas/ Remove all clothes
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            )}
+          </div>
           <div
             id="cellphone-dialog-history-wrapper"
             className={stopConversation ? "has-ready-button" : "has-wardrobe"}
@@ -100,7 +116,7 @@ const Cellphone = ({
                 Sim
               </Button>
             </div>
-          ) : !removeItem ? (
+          ) : !state.removeItem ? (
             <div id="cellphone-wardrobe">
               {showClothes ? (
                 <div>
@@ -123,19 +139,34 @@ const Cellphone = ({
                   </Button>
                 </div>
               ) : (
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "25% 25% 25% 25%",
-                    gridTemplateRows: "20% 20% 20%",
-                    rowGap: "10%",
-                    padding: "5%",
-                    backgroundColor: "#ffcca9",
-                  }}
-                >
-                  {colors.map((color) => (
-                    <Button onClick={addAnswerToDialog(color)}>{color}</Button>
-                  ))}
+                <div>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "25% 25% 25% 25%",
+                      gridTemplateRows: "20% 20% 20%",
+                      rowGap: "10%",
+                      padding: "5%",
+                      backgroundColor: "#ffcca9",
+                    }}
+                  >
+                    {colors.map((color) => (
+                      <Button onClick={addAnswerToDialog(color)}>
+                        {color}
+                      </Button>
+                    ))}
+                  </div>
+                  <Button
+                    style={{
+                      position: "relative",
+                      margin: "1em auto",
+                      width: "80%",
+                      fontSize: "1rem",
+                    }}
+                    onClick={cancelAddRemoveDialog}
+                  >
+                    Cancel
+                  </Button>
                 </div>
               )}
             </div>
@@ -151,7 +182,12 @@ const Cellphone = ({
               }}
             >
               {phoneClothes.map((cloting, index) => (
-                <Button onClick={removeClothingFromList(index)}>
+                <Button
+                  onClick={() => {
+                    removeClothingFromList(index);
+                    setState((s) => ({ ...s, removeItem: false }));
+                  }}
+                >
                   {cloting.fullName}
                 </Button>
               ))}
