@@ -9,6 +9,7 @@ import parse from "html-react-parser";
 import "./index.scss";
 import { Dropdown } from "react-bootstrap";
 import { Icon } from "@material-ui/core";
+import Notification from "../Notification";
 
 // const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const Cellphone = ({
@@ -26,10 +27,38 @@ const Cellphone = ({
   removeAllClothes,
   addRemoveDialog,
 }) => {
-  const [state, setState] = React.useState({ removeItem: false });
+  const [state, setState] = React.useState({
+    removeItem: false,
+    clearClothesConfirmation: false,
+  });
 
   return (
     <div id="big-cellphone-wrapper">
+      {state.clearClothesConfirmation && (
+        <Notification
+          blobMessage={{
+            text:
+              "Essa ação irá remover TODAS ass roupas enviadas por você e reiniciar a conversa, é isso memso que deseja fazer?",
+            textTranslate:
+              "This action will remove ALL clothes sent by you and restart the conversation, is that what you want to do?",
+          }}
+          continueButtonLabel="Remover todas as roupas/Remove all clothes"
+          onClickToContinue={() => {
+            removeAllClothes();
+            setState((s) => ({
+              ...s,
+              clearClothesConfirmation: false,
+            }));
+          }}
+          backButtonLabel="Cancelar/Cancel"
+          onClickToBack={() =>
+            setState((s) => ({
+              ...s,
+              clearClothesConfirmation: false,
+            }))
+          }
+        />
+      )}
       <div id="big-cellphone-imgs">
         <img src={palma} alt="" />
         <img src={bigPhone} alt="" />
@@ -55,7 +84,14 @@ const Cellphone = ({
                   >
                     Remover roupa/Remove clothing
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={removeAllClothes}>
+                  <Dropdown.Item
+                    onClick={() =>
+                      setState((s) => ({
+                        ...s,
+                        clearClothesConfirmation: true,
+                      }))
+                    }
+                  >
                     Remover todas as roupas/ Remove all clothes
                   </Dropdown.Item>
                 </Dropdown.Menu>
