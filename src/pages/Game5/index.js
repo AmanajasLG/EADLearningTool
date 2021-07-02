@@ -18,7 +18,7 @@ import Wardrobe from "../../_components/Wardrobe";
 import Button from "../../_components/Button";
 import { BlobBg } from "../../_components/Blob";
 import { renderToStaticMarkup } from "react-dom/server";
-import { tomato, envelope, hanger, hangerH, dressingBg } from "../../img";
+import { tomato, envelope, hanger, hangerH, dressingBg, envelopeIcon } from "../../img";
 
 import initialState from "./initialState";
 import Tutorial from "./components/Tutorial";
@@ -619,7 +619,9 @@ const Game5 = (props) => {
                             width: '25%',
                             height: "80em",
                             zIndex: state.blobToShow === 2 ? 1000000 : 0,
-                            position: "relative",
+                            position: "absolute",
+                            bottom: '8%',
+                            left: '10%'
                           }}
                         />
 
@@ -638,7 +640,7 @@ const Game5 = (props) => {
                         />
                         {!state.showInvitation && (
                           <img
-                            src=""
+                            src={envelopeIcon}
                             alt="invite-button"
                             onClick={() =>
                               setState( s => ({ ...s,
@@ -647,8 +649,12 @@ const Game5 = (props) => {
                               }))
                             }
                             style={{
+                              cursor: 'pointer',
                               zIndex: state.blobToShow === 3 ? 1000000 : 0,
-                              position: "relative",
+                              position: "absolute",
+                              bottom: '3%',
+                              right: '2%',
+                              width: '10%',
                             }}
                           />
                         )}

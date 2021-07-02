@@ -34,6 +34,7 @@ import table from "./Game4/table.svg";
 import silverCloche from "./Game4/silver-cloche.svg";
 //  GAME 5
 import envelope from './envelope grande.svg'
+import envelopeIcon from './Game5/envelope icone.svg'
 import hanger from './cabide roxo.svg'
 import hangerH from './cabide marrom.svg'
 import dressingBg from './Game5/cenario.svg'
@@ -105,6 +106,7 @@ export {
   blocoButton,
   shelf,
   envelope,
+  envelopeIcon,
   hanger,
   hangerH,
   dressingBg
