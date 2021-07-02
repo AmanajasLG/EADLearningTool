@@ -34,6 +34,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
         style={{
           display: "flex",
           flexDirection: 'column',
+          justifyContent: 'space-between',
           padding: "2%",
           width: '100%',
           height: '100%',
@@ -44,7 +45,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
         <div key={index}
           style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-around',
-            width: '100%', height: '100%', backgroundColor: '#ffddba'}}
+            width: '100%', height: '100%', marginTop: '5%', backgroundColor: '#ffddba'}}
         >
           { wardrobe[state]
             .slice(line * wardrobe[state].length/columns, columns + line * wardrobe[state].length/columns)
@@ -52,7 +53,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
               <div
                 key={index}
                 style={{
-                  width: '15%',
+                  width: '10%',
                   overflow: 'hidden',
                   pointerEvents: item.picked ? "none" : "auto",
                   opacity: item.picked ? 0.3 : 1,
