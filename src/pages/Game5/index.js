@@ -626,7 +626,7 @@ const Game5 = (props) => {
                         />
 
                         <Wardrobe
-                          className={process.env.NODE_ENV === 'development' ? 'debug' : ''}
+                          className={process.env.NODE_ENV === 'development' ? '' : ''}
                           style={{
                             zIndex: state.blobToShow === 1 ? 1000000 : 0,
                             position: "absolute",
@@ -676,6 +676,8 @@ const Game5 = (props) => {
                           }}
                           message="Estou pronto!"
                           style={{
+                            top: '0.5%',
+                            left: '1%',
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
                         />
