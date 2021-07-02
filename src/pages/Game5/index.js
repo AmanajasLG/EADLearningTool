@@ -577,7 +577,11 @@ const Game5 = (props) => {
                     )}
 
                     {state.dressingContext && (
-                      <div>
+                      <div style={{
+                          backgroundImage: `url(${dressingBg})`,
+                          backgroundRepeat: 'no-repeat',
+                          backgroundSize: 'auto 50%'}}
+                      >
                         <div
                           style={{
                             marginTop: "15em",
@@ -585,7 +589,7 @@ const Game5 = (props) => {
                             flexDirection: "row",
                             flexWrap: "wrap",
                             width: "100%",
-                            backgroundImage: `url(${dressingBg})`
+
                           }}
                         >
                           <div
@@ -604,7 +608,7 @@ const Game5 = (props) => {
                             />
                           </div>
                           <div
-                            style={{ flex: "1 0 0px", border: "1px solid red" }}
+                            style={{ flex: "1 0 0px", border: "1px solid red", padding: '5%'}}
                           >
                             <Wardrobe
                               style={{
@@ -620,8 +624,7 @@ const Game5 = (props) => {
                                 src=""
                                 alt="invite-button"
                                 onClick={() =>
-                                  setState((s) => ({
-                                    ...s,
+                                  setState( s => ({ ...s,
                                     showInvitation: true,
                                     showInviteQuestions: true,
                                   }))
@@ -634,6 +637,7 @@ const Game5 = (props) => {
                             )}
                           </div>
                         </div>
+                        
                         <Lamp
                           img={[hanger, hangerH]}
                           onClick={() => {

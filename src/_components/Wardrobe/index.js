@@ -24,6 +24,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
             style={{
               flex: "1 0 0px",
               backgroundColor: state === label ? "#ffcca9" : "white",
+              fontSize: '0.5rem'
             }}
           >
             {label}
@@ -33,24 +34,24 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "25% 25% 25% 25%",
-          gridTemplateRows: "20% 20% 20%",
+          gridTemplateColumns: "33% 33% 33%",
+          gridTemplateRows: "10% 10% 10%",
           rowGap: "5%",
           padding: "2%",
           backgroundColor: "#ffcca9",
         }}
       >
         {showImage
-          ? wardrobe[state].map((item, index) => (
+          ? wardrobe[state].map((item, index) => (  
               <img
                 key={index}
                 style={{
                   cursor: "pointer",
                   height: "100%",
-                  margin: "0 auto",
                   display: "block",
                   pointerEvents: item.picked ? "none" : "auto",
                   opacity: item.picked ? 0.3 : 1,
+                  backgroundColor: '#ffddba'
                 }}
                 onClick={onClothesClick(item)}
                 src={
