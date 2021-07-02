@@ -8,6 +8,7 @@ import ReactAudioPlayer from "react-audio-player";
 import { settings } from "../../img";
 import "./index.scss";
 import { headerConstants } from "../../_constants";
+import CursorPoint from '../../_components/CursorPoint'
 
 const dimensions = { width: 16, height: 9}
 const ALIGNMENTS = {
@@ -48,10 +49,6 @@ const GameContext = (props) => {
 
   const userId = useSelector((state) => state.authentication.user.user.id);
 
-
-  const[mousePosition, setMousePosition] = React.useState({x: 0, y: 0})
-  const updateMousePosition = (e) => setMousePosition({x: e.clientX, y: e.clientY})
-
   let { children } = props;
   children = { ...children, props: { ...props } };
 
@@ -62,13 +59,6 @@ const GameContext = (props) => {
       dispatch(headerActions.setState(headerConstants.STATES.NORMAL));
     };
   }, [dispatch]);
-
-  React.useEffect(() => {
-    if(state.debug) {
-      window.addEventListener("mousemove", updateMousePosition);
-      return (() => window.removeEventListener("mousemove", updateMousePosition))
-    }
-  }, [state.debug])
 
   React.useEffect(()=>{
     if (mission && mission.trackPlayerInput) {
@@ -170,12 +160,7 @@ const GameContext = (props) => {
       </div>
       {state.back && <Redirect to="/userspace" />}
       {(process.env.NODE_ENV === 'development' && state.debug) &&
-        <div style={{position: 'absolute', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'red', top: mousePosition.y - 5, left: mousePosition.x - 5,
-        cursor: 'default', pointerEvents: 'none' }}>
-          <div style={{position: 'relative', top: -15}}>
-            ({mousePosition.x},{mousePosition.y})
-          </div>
-        </div>
+        <CursorPoint />
       }
     </React.Fragment>
   );

@@ -643,6 +643,7 @@ const Game5 = (props) => {
                                 border: "1px solid red",
                                 zIndex: state.blobToShow === 1 ? 1000000 : 0,
                                 position: "relative",
+                                height: "80%"
                               }}
                               wardrobe={state.wardrobe}
                               onClothesClick={addClothesToBody}

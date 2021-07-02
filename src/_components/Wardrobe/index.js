@@ -1,12 +1,10 @@
 import React from "react";
 
-// import Tabs from '@material-ui/core/Tabs'
-// import Tab from '@material-ui/core/Tab'
-import Button from "@material-ui/core/Button";
-import { Button as CustomButton } from "../Button";
+import Button from "../Button";
 
 const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
   const [state, setState] = React.useState(Object.keys(wardrobe)[0]);
+  const columns = 3
   return (
     <div {...props}>
       <div
@@ -31,55 +29,77 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
           </Button>
         ))}
       </div>
+
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "33% 33% 33%",
-          gridTemplateRows: "10% 10% 10%",
-          rowGap: "5%",
+          display: "flex",
+          flexDirection: 'column',
           padding: "2%",
+          width: '100%',
+          height: '100%',
           backgroundColor: "#ffcca9",
         }}
       >
-        {showImage
-          ? [0, 1, 2].map( value =>
-          <div>
-            wardrobe[state].map((item, index) => (
-              <img
+      { [0, 1, 2].map( (line, index) =>
+        <div key={index}
+          style={{
+            display: 'flex', flexDirection: 'row', justifyContent: 'space-around',
+            width: '100%', height: '100%', backgroundColor: '#ffddba'}}
+        >
+          { wardrobe[state]
+            .slice(line * wardrobe[state].length/columns, columns + line * wardrobe[state].length/columns)
+            .map((item, index) =>
+              <div
                 key={index}
                 style={{
-                  cursor: "pointer",
-                  height: "100%",
-                  display: "block",
+                  width: '15%',
+                  overflow: 'hidden',
                   pointerEvents: item.picked ? "none" : "auto",
                   opacity: item.picked ? 0.3 : 1,
-                  backgroundColor: '#ffddba'
+                  backgroundColor: '#ffddba',
                 }}
-                onClick={onClothesClick(item)}
-                src={
-                  item.wardrobeImage !== "" ? item.wardrobeImage : item.image
-                }
-                alt={item.name}
-              />
 
-            ))
-          : wardrobe[state].map((item, index) => (
-              <CustomButton
-                style={{
-                  pointerEvents: item.picked ? "none" : "auto",
-                  opacity: item.picked ? 0.3 : 1,
-                }}
-                key={index}
-                onClick={onClothesClick(item)}
               >
-                {item.name}
-              </CustomButton>
-            ))}
-          </div>
-          )
+                <img style={{cursor: "pointer"}} onClick={onClothesClick(item)}
+                  src={item.wardrobeImage !== "" ? item.wardrobeImage : item.image} alt=''/>
+              </div>
+            )
+          }
+        </div>
+      )}
       </div>
     </div>
   );
 };
+/*
+{ wardrobe[state].slice(value * wardrobe[state].length/columns, columns + value * wardrobe[state].length/columns).map((item, index) => (
 
+<img
+  key={index}
+  style={{
+    cursor: "pointer",
+    pointerEvents: item.picked ? "none" : "auto",
+    opacity: item.picked ? 0.3 : 1,
+    backgroundColor: '#ffddba'
+  }}
+  onClick={onClothesClick(item)}
+  src={
+    item.wardrobeImage !== "" ? item.wardrobeImage : item.image
+  }
+  alt={item.name}
+/>
+*/
+/*
+: wardrobe[state].map((item, index) => (
+  <CustomButton
+    style={{
+      pointerEvents: item.picked ? "none" : "auto",
+      opacity: item.picked ? 0.3 : 1,
+    }}
+    key={index}
+    onClick={onClothesClick(item)}
+  >
+    {item.name}
+  </CustomButton>
+*/
 export default Wardrobe;
