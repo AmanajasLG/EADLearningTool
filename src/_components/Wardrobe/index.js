@@ -36,19 +36,20 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
           height: '90%',
           display: "flex",
           flexDirection: 'column',
-          justifyContent: 'space-between',
+          justifyContent: 'space-around',
           padding: "2%",
           backgroundColor: "#ffcca9",
         }}
       >
-      { [0, 1, 2].map( (line, index) =>
+      { Array.from(new Array(Math.floor(wardrobe[state].length/columns) + 1), (item, index) => index)
+        .map( (line, index) =>
         <div key={index}
           style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-around',
             height: '28%', marginTop: '5%', backgroundColor: '#ffddba'}}
         >
           { wardrobe[state]
-            .slice(line * wardrobe[state].length/columns, columns + line * wardrobe[state].length/columns)
+            .slice(line * columns, columns + line * columns)
             .map((item, index) =>
               <div
                 key={index}
