@@ -37,16 +37,16 @@
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #FFF;
-	padding: 0.5em;
-	border: 2px solid #59316D;
-	border-radius: 0.8em;
+	padding: 0.25em;
+	border: 0.1em solid #59316D;
+	border-radius: 0.5em;
 	z-index: 1;
-	min-width: 12%;
+	min-width: 10%;
 	text-align: center;
 	align-self: center;
 	font-family: 'Barlow';
 	font-weight: 600;
-	font-size: 1.2em;
+	font-size: 2em;
 }
 
 .products {
@@ -82,16 +82,19 @@
 /* Tooltip text */
 .tooltip .tooltiptext {
 	visibility: hidden;
-	width: 100%;
+	min-width: 70%;
 	background-color: black;
 	color: #fff;
 	text-align: center;
-	padding: 5px 0;
-	border-radius: 6px;
+	padding: 0.25em 0 0.3em;
+	border-radius: 0.25em;
+	font-size: 2em;
+	line-height: 0.8em;
 
-	/* Position the tooltip text - see examples below! */
 	position: absolute;
 	top: 105%;
+	left: 50%;
+	transform: translateX(-50%);
 	z-index: 2;
 }
 

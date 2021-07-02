@@ -7,8 +7,6 @@ const TutorialWardrobe = ({ blobMessage, onClickToEnd, index }) => {
   let blobPosition =
     index === 1 ? " blob-left" : index === 2 ? " blob-right" : " blob-center";
 
-  console.log(blobPosition);
-
   return (
     <React.Fragment>
       <div className="overlay-tutorial-notification">

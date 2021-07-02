@@ -64,9 +64,11 @@ const GameContext = (props) => {
   }, [dispatch]);
 
   React.useEffect(() => {
-    window.addEventListener("mousemove", updateMousePosition);
-    return (() => window.removeEventListener("mousemove", updateMousePosition))
-  }, [])
+    if(state.debug) {
+      window.addEventListener("mousemove", updateMousePosition);
+      return (() => window.removeEventListener("mousemove", updateMousePosition))
+    }
+  }, [state.debug])
 
   React.useEffect(()=>{
     if (mission && mission.trackPlayerInput) {
@@ -161,15 +163,13 @@ const GameContext = (props) => {
         volume={music.volume / 100}
         loop={true}
       />
-    <div id="game-screen-wrapper" style={{alignItems: state.alignment.vertical, justifyContent: state.alignment.horizontal}}>
-        <div id="game-screen" style={{"--aspectRatio": dimensions.width / dimensions.height}}
-          className={process.env.NODE_ENV === 'development' ? 'debug' : ''}
-        >
+      <div id="game-screen-wrapper" style={{alignItems: state.alignment.vertical, justifyContent: state.alignment.horizontal}}>
+        <div id="game-screen" style={{"--aspectRatio": dimensions.width / dimensions.height}} className={state.debug ? "debug" : null}>
           {children}
         </div>
       </div>
       {state.back && <Redirect to="/userspace" />}
-      {process.env.NODE_ENV === 'development' &&
+      {(process.env.NODE_ENV === 'development' && state.debug) &&
         <div style={{position: 'absolute', width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'red', top: mousePosition.y - 5, left: mousePosition.x - 5,
         cursor: 'default', pointerEvents: 'none' }}>
           <div style={{position: 'relative', top: -15}}>

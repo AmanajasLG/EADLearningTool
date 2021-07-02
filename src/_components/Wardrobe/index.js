@@ -42,7 +42,9 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
         }}
       >
         {showImage
-          ? wardrobe[state].map((item, index) => (  
+          ? [0, 1, 2].map( value =>
+          <div>
+            wardrobe[state].map((item, index) => (
               <img
                 key={index}
                 style={{
@@ -59,6 +61,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
                 }
                 alt={item.name}
               />
+
             ))
           : wardrobe[state].map((item, index) => (
               <CustomButton
@@ -72,6 +75,8 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
                 {item.name}
               </CustomButton>
             ))}
+          </div>
+          )
       </div>
     </div>
   );

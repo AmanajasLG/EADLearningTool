@@ -101,8 +101,8 @@ const Game6 = (props) => {
           name: clothing.asset.name,
           cover: clothing.cover ?? "default",
           image: clothing.asset.image ? clothing.asset.image.url : "",
-          wardrobeImage: clothing.wardrobeImage
-            ? clothing.wardrobeImage.url
+          wardrobeImage: clothing.wardrobeAsset
+            ? clothing.wardrobeAsset.url
             : "",
           category: clothing.tags.find((tag) => tag.type === "category").name,
           color: clothing.tags.find((tag) => tag.type === "color").name,
@@ -289,18 +289,22 @@ const Game6 = (props) => {
   // WARDROBE
   const addClothesToBody = (item) => () => {
     const wardrobeBody = ["Tronco", "Pernas", "Pés"];
+    const covers = ["inteiro", "default"];
     var clothes = { ...state.clothes };
 
     if (wardrobeBody.includes(item.category)) {
       if (
         (clothes[item.category].length !== 0 &&
-          (clothes[item.category].find(
-            (clothing) => clothing.cover === item.cover
-          ) ||
-            item.cover === "inteiro")) ||
-        (clothes["Tronco"].find((clothing) => clothing.cover === "inteiro") &&
+          clothes[item.category].filter(
+            (clothing) =>
+              clothing.cover === item.cover ||
+              (covers.includes(clothing.cover) && covers.includes(item.cover))
+          ).length !== 0) ||
+        (clothes["Tronco"].filter((clothing) => clothing.cover === "inteiro")
+          .length !== 0 &&
           item.category !== "Pés" &&
-          item.cover === "default")
+          item.cover === "default") ||
+        (item.cover === "inteiro" && clothes["Pernas"].length !== 0)
       ) {
         setState((s) => ({
           ...s,
@@ -308,6 +312,11 @@ const Game6 = (props) => {
         }));
       } else {
         clothes[item.category] = [...clothes[item.category], item];
+
+        clothes[item.category].sort((a, b) => {
+          let weights = ["baixo", "default", "inteiro", "cima"];
+          return weights.indexOf(a.cover) < weights.indexOf(b.cover) ? -1 : 1;
+        });
 
         setState((s) => ({
           ...s,
@@ -374,58 +383,6 @@ const Game6 = (props) => {
     }));
   };
 
-  const checkFullOutfit = () => {
-    let hasInteiroCover = false;
-    for (var key in state.clothes) {
-      if (key === "Acessórios") continue;
-
-      let clothesCovers = state.clothes[key].reduce(
-        (acc, clothing) => [...acc, clothing.cover],
-        []
-      );
-
-      if (clothesCovers.includes("inteiro")) hasInteiroCover = true;
-
-      if (
-        key === "Pernas" &&
-        state.clothes[key].length === 0 &&
-        hasInteiroCover
-      )
-        continue;
-
-      if (
-        !clothesCovers.includes("default") &&
-        !clothesCovers.includes("inteiro")
-      )
-        return false;
-    }
-
-    return true;
-  };
-
-  const getWrongClothes = () => {
-    const rightTags = [...state.invitation.rightTags];
-    let wrongClothes = [];
-
-    for (var key in state.clothes) {
-      for (let i = 0; i < state.clothes[key].length; i++) {
-        if (
-          state.clothes[key][i].time.reduce(
-            (acc, tag) => acc && !rightTags.includes(tag),
-            true
-          ) ||
-          state.clothes[key][i].weather.reduce(
-            (acc, tag) => acc && !rightTags.includes(tag),
-            true
-          )
-        )
-          wrongClothes.push(state.clothes[key][i]);
-      }
-    }
-
-    return wrongClothes;
-  };
-
   // SELECT CLOTHES IN PHONE
   const addAnswerToDialogSend = (item) => () => {
     if (state.showPhoneClothes) {
@@ -490,6 +447,37 @@ const Game6 = (props) => {
     }
   };
 
+  const cancelAddAnswerToDialog = () => {
+    let phoneClothes = [...state.phoneClothes];
+    let item = phoneClothes.pop();
+
+    setState((s) => ({
+      ...s,
+      sendDialogShow: [
+        ...s.sendDialogShow,
+        {
+          speaker: "player",
+          text: "Não, não era isso não! Pera ai.",
+          textTranslate: "No, that was not it! Hold on.",
+        },
+        {
+          speaker: "",
+          text: "Tudo bem hahaha O que mais?",
+          textTranslate: "It's OK hahaha What else?",
+        },
+      ],
+      phoneWardrobe: {
+        ...s.phoneWardrobe,
+        [item.category]: state.phoneWardrobe[item.category].map((clothing) => {
+          if (clothing.id === item.id) return { ...clothing, picked: false };
+          return clothing;
+        }),
+      },
+      showPhoneClothes: true,
+      phoneClothes,
+    }));
+  };
+
   const sendReady = () => {
     if (state.phoneClothes.length === 0) {
       setState((s) => ({
@@ -525,7 +513,7 @@ const Game6 = (props) => {
     }
   };
 
-  const removeClothesFromPhone = (index) => () => {
+  const removeClothesFromPhone = (index) => {
     let phoneClothes = [...state.phoneClothes];
     let item = phoneClothes.splice(index, 1)[0];
     let sendDialogShow = [...state.sendDialogShow];
@@ -557,7 +545,85 @@ const Game6 = (props) => {
     }));
   };
 
+  const removeAllClothesFromPhone = () => {
+    let phoneWardrobe = {};
+
+    Object.keys(state.phoneWardrobe).forEach((category) => {
+      phoneWardrobe[category] = state.phoneWardrobe[category].map(
+        (clothing) => ({
+          ...clothing,
+          picked: false,
+        })
+      );
+    });
+
+    setState((s) => ({
+      ...s,
+      phoneClothes: [],
+      sendDialogShow: [
+        {
+          speaker: "",
+          text: "E aí, que roupa uso?",
+          textTranslate: "So, how should I dress?",
+        },
+      ],
+      phoneWardrobe,
+    }));
+  };
+
   // END
+  const checkFullOutfit = () => {
+    let hasInteiroCover = false;
+    for (var key in state.clothes) {
+      if (key === "Acessórios") continue;
+
+      let clothesCovers = state.clothes[key].reduce(
+        (acc, clothing) => [...acc, clothing.cover],
+        []
+      );
+
+      if (clothesCovers.includes("inteiro")) hasInteiroCover = true;
+
+      if (
+        key === "Pernas" &&
+        state.clothes[key].length === 0 &&
+        hasInteiroCover
+      )
+        continue;
+
+      if (
+        !clothesCovers.includes("default") &&
+        !clothesCovers.includes("inteiro")
+      )
+        return false;
+    }
+
+    return true;
+  };
+
+  const getWrongClothes = () => {
+    const rightTags = [...state.invitation.rightTags];
+    let wrongClothes = [];
+
+    for (var key in state.clothes) {
+      for (let i = 0; i < state.clothes[key].length; i++) {
+        if (
+          state.clothes[key][i].time.reduce(
+            (acc, tag) => acc && !rightTags.includes(tag),
+            true
+          ) ||
+          state.clothes[key][i].weather.reduce(
+            (acc, tag) => acc && !rightTags.includes(tag),
+            true
+          )
+        )
+          wrongClothes.push(state.clothes[key][i]);
+      }
+    }
+
+    return wrongClothes;
+  };
+
   const checkPhoneBodyClothes = () => {
     const clothes = { ...state.clothes };
     const phoneClothes = [...state.phoneClothes];
@@ -601,9 +667,6 @@ const Game6 = (props) => {
 
   const endGame = (saveResult = false) => {
     let wrongClothes = getWrongClothes();
-    let clothesCount = Object.keys(state.clothes).reduce((acc, key) => {
-      return acc + state.clothes[key].length;
-    }, 0);
     let sawInvite =
       state.inviteQuestions.filter((question) => question.asked).length > 0;
     let feedbackMessages = [];
@@ -677,19 +740,34 @@ const Game6 = (props) => {
         });
       }
     } else {
-      feedbackMessages.push({
-        image: tomato,
-        message: sawInvite
-          ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
+      feedbackMessages.push(
+        {
+          image: tomato,
+          message: sawInvite
+            ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
+              wrongClothes.length +
+              " peças ficaram estranhas... Tomara que Ariel não passe tanta vergonha..."
+            : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
+          messageTranslate: sawInvite
+            ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
+              wrongClothes.length +
+              " pieces of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
+            : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
+        },
+        {
+          image: tomato,
+          message:
+            "Preste atenção nas peças que você escolheu. Em seu look, você escolheu um total de " +
             wrongClothes.length +
-            " peças ficaram estranhas... Tomara que Ariel não passe tanta vergonha..."
-          : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
-        messageTranslate: sawInvite
-          ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
+            " peças que não combinam com o evento: " +
+            wrongClothes.map((clothes) => clothes.name).join(", "),
+          messageTranslate:
+            "Pay attention to the pieces of clothing you picked. In your outfit, you chose a total of " +
             wrongClothes.length +
-            " pieces of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
-          : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
-      });
+            " pieces that did not match the event :" +
+            wrongClothes.map((clothes) => clothes.name).join(", "),
+        }
+      );
 
       if (
         Object.keys(phoneBodyMatchErrors).reduce((acc, key) => {
@@ -810,9 +888,9 @@ const Game6 = (props) => {
                         }}
                       >
                         {state.characters.map((character) => (
-                          <img
-                            key={character.name}
-                            src={character.image}
+                          <DressingCharacter
+                            clothes={state.clothes}
+                            character={character}
                             style={{ height: "50%", cursor: "pointer" }}
                             onClick={() =>
                               setState((s) => ({
@@ -822,7 +900,6 @@ const Game6 = (props) => {
                                 chooseCharacterScreen: false,
                               }))
                             }
-                            alt={character.id}
                           />
                         ))}
                       </div>
@@ -1079,111 +1156,53 @@ const Game6 = (props) => {
                           onRemoveClick={removeClothesFromBody}
                           style={{ height: "80em" }}
                         />
-                        <Button
-                          style={{
-                            position: "relative",
-                            margin: ".5em auto",
-                            width: "90%",
-                            fontSize: "1rem",
-                            display: "block",
-                          }}
-                          onClick={() => {
-                            setState((s) => ({
-                              ...s,
-                              sendDialogShow: [
-                                ...s.sendDialogShow,
-                                {
-                                  speaker: "player",
-                                  text: "Não",
-                                },
-                                {
-                                  speaker: "",
-                                  text: "Qual item devo tirar da lista?",
-                                  textTranslate:
-                                    "Which item should I remove from the list?",
-                                },
-                              ],
-                              removeItemPhone: true,
-                            }));
-                          }}
-                        >
-                          "Remover uma roupa da lista/Remove clothes from the
-                          list"
-                        </Button>
-                        <Button
-                          style={{
-                            position: "relative",
-                            margin: ".5em auto",
-                            width: "90%",
-                            fontSize: "1rem",
-                            display: "block",
-                          }}
-                          onClick={() => {
-                            let phoneWardrobe = {};
-
-                            Object.keys(state.phoneWardrobe).forEach(
-                              (category) => {
-                                phoneWardrobe[category] = state.phoneWardrobe[
-                                  category
-                                ].map((clothing) => ({
-                                  ...clothing,
-                                  picked: false,
-                                }));
-                              }
-                            );
-
-                            setState((s) => ({
-                              ...s,
-                              phoneClothes: [],
-                              sendDialogShow: [
-                                {
-                                  speaker: "",
-                                  text: "E aí, que roupa uso?",
-                                  textTranslate: "So, how should I dress?",
-                                },
-                              ],
-                              phoneWardrobe,
-                            }));
-                          }}
-                        >
-                          "Remover todos os items da lista e começar de
-                          novo/Remove all items from the list and start over"
-                        </Button>
                       </div>
                       <Cellphone
-                        autoLoad={false}
-                        dialogHistory={state.sendDialogShow}
+                        // BOOLS
+                        stopConversation={state.lastConfirmation}
+                        showClothes={state.showPhoneClothes}
+                        //DATA
+                        dialogHistory={
+                          state.lastConfirmation
+                            ? state.sendDialogConfirmShow
+                            : state.sendDialogShow
+                        }
+                        wardrobe={state.phoneWardrobe}
+                        phoneClothes={state.phoneClothes}
+                        colors={state.colorTags}
+                        // FUCTIONS
                         endConversation={() =>
                           setState((s) => ({
                             ...s,
                             lastConfirmation: true,
                           }))
                         }
-                        stopConversation={state.lastConfirmation}
                         addAnswerToDialog={addAnswerToDialogSend}
-                        wardrobe={state.phoneWardrobe}
-                        colors={state.colorTags}
-                        showClothes={state.showPhoneClothes}
-                        confirmationButton={sendReady}
-                        removeItem={state.removeItemPhone}
-                        phoneClothes={state.phoneClothes}
+                        addRemoveDialog={() => {
+                          setState((s) => ({
+                            ...s,
+                            sendDialogShow: [
+                              ...s.sendDialogShow,
+                              {
+                                speaker: "",
+                                text: "Qual item devo tirar da lista?",
+                                textTranslate:
+                                  "Which item should I remove from the list?",
+                              },
+                            ],
+                          }));
+                        }}
+                        cancelAddRemoveDialog={cancelAddAnswerToDialog}
                         removeClothingFromList={removeClothesFromPhone}
+                        removeAllClothes={removeAllClothesFromPhone}
+                        confirmationButton={
+                          state.lastConfirmation ? () => endGame() : sendReady
+                        }
+                        cancelButton={() =>
+                          setState((s) => ({ ...s, lastConfirmation: false }))
+                        }
                       />
                     </div>
-
-                    {state.lastConfirmation && (
-                      <div className="confirm-screen">
-                        <Cellphone
-                          autoLoad={false}
-                          dialogHistory={state.sendDialogConfirmShow}
-                          stopConversation={true}
-                          confirmationButton={() => endGame()}
-                          cancelButton={() =>
-                            setState((s) => ({ ...s, lastConfirmation: false }))
-                          }
-                        />
-                      </div>
-                    )}
                   </React.Fragment>
                 );
               case "END_GAME":

@@ -101,8 +101,8 @@ const Game5 = (props) => {
           name: clothing.asset.name,
           cover: clothing.cover ?? "default",
           image: clothing.asset.image ? clothing.asset.image.url : "",
-          wardrobeImage: clothing.wardrobeImage
-            ? clothing.wardrobeImage.url
+          wardrobeImage: clothing.wardrobeAsset
+            ? clothing.wardrobeAsset.url
             : "",
           category: clothing.tags.find((tag) => tag.type === "category").name,
           color: clothing.tags.find((tag) => tag.type === "color").name,
@@ -177,18 +177,22 @@ const Game5 = (props) => {
 
   const addClothesToBody = (item) => () => {
     const wardrobeBody = ["Tronco", "Pernas", "Pés"];
+    const covers = ["inteiro", "default"];
     var clothes = { ...state.clothes };
 
     if (wardrobeBody.includes(item.category)) {
       if (
         (clothes[item.category].length !== 0 &&
-          (clothes[item.category].find(
-            (clothing) => clothing.cover === item.cover
-          ) ||
-            item.cover === "inteiro")) ||
-        (clothes["Tronco"].find((clothing) => clothing.cover === "inteiro") &&
+          clothes[item.category].filter(
+            (clothing) =>
+              clothing.cover === item.cover ||
+              (covers.includes(clothing.cover) && covers.includes(item.cover))
+          ).length !== 0) ||
+        (clothes["Tronco"].filter((clothing) => clothing.cover === "inteiro")
+          .length !== 0 &&
           item.category !== "Pés" &&
-          item.cover === "default")
+          item.cover === "default") ||
+        (item.cover === "inteiro" && clothes["Pernas"].length !== 0)
       ) {
         setState((s) => ({
           ...s,
@@ -196,6 +200,11 @@ const Game5 = (props) => {
         }));
       } else {
         clothes[item.category] = [...clothes[item.category], item];
+
+        clothes[item.category].sort((a, b) => {
+          let weights = ["baixo", "default", "inteiro", "cima"];
+          return weights.indexOf(a.cover) < weights.indexOf(b.cover) ? -1 : 1;
+        });
 
         setState((s) => ({
           ...s,
@@ -506,12 +515,31 @@ const Game5 = (props) => {
                     )}
 
                     {state.chooseCharacterScreen && (
-                      <ChooseCharacter characters={state.characters} onCharacterClick={(character) =>
-                        setState( s => ({...s,
-                          choosenCharacter: character,
-                          showInvitation: true,
-                          chooseCharacterScreen: false,
-                        }))}/>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-evenly",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        {state.characters.map((character) => (
+                          <DressingCharacter
+                            clothes={state.clothes}
+                            character={character}
+                            style={{ height: "50%", cursor: "pointer" }}
+                            onClick={() =>
+                              setState((s) => ({
+                                ...s,
+                                choosenCharacter: character,
+                                showInvitation: true,
+                                chooseCharacterScreen: false,
+                              }))
+                            }
+                          />
+                        ))}
+                      </div>
                     )}
 
                     {state.showInvitation && (
@@ -637,7 +665,7 @@ const Game5 = (props) => {
                             )}
                           </div>
                         </div>
-                        
+
                         <Lamp
                           img={[hanger, hangerH]}
                           onClick={() => {
