@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import { useDispatch, useSelector } from "react-redux";
 // import { Link, Redirect } from "react-router-dom";
 import { Redirect } from "react-router-dom";
@@ -605,66 +605,53 @@ const Game5 = (props) => {
                     )}
 
                     {state.dressingContext && (
-                      <div style={{
-                          backgroundImage: `url(${dressingBg})`,
-                          backgroundRepeat: 'no-repeat',
-                          backgroundSize: 'auto 50%'}}
-                      >
-                        <div
-                          style={{
-                            marginTop: "15em",
-                            display: "flex",
-                            flexDirection: "row",
-                            flexWrap: "wrap",
-                            width: "100%",
+                      <React.Fragment>
+                        <img src={dressingBg}
+                          style={{ position: 'absolute'}}
+                        />
 
+                        <DressingCharacter
+                          character={state.choosenCharacter}
+                          clothes={state.clothes}
+                          showRemove
+                          onRemoveClick={removeClothesFromBody}
+                          style={{
+                            width: '25%',
+                            height: "80em",
+                            zIndex: state.blobToShow === 2 ? 1000000 : 0,
+                            position: "relative",
                           }}
-                        >
-                          <div
-                            style={{ flex: "1 0 0px", border: "1px solid red" }}
-                          >
-                            <DressingCharacter
-                              character={state.choosenCharacter}
-                              clothes={state.clothes}
-                              showRemove
-                              onRemoveClick={removeClothesFromBody}
-                              style={{
-                                height: "80em",
-                                zIndex: state.blobToShow === 2 ? 1000000 : 0,
-                                position: "relative",
-                              }}
-                            />
-                          </div>
-                          <div
-                            style={{ flex: "1 0 0px", border: "1px solid red", padding: '5%'}}
-                          >
-                            <Wardrobe
-                              style={{
-                                border: "1px solid red",
-                                zIndex: state.blobToShow === 1 ? 1000000 : 0,
-                                position: "relative",
-                              }}
-                              wardrobe={state.wardrobe}
-                              onClothesClick={addClothesToBody}
-                            />
-                            {!state.showInvitation && (
-                              <img
-                                src=""
-                                alt="invite-button"
-                                onClick={() =>
-                                  setState( s => ({ ...s,
-                                    showInvitation: true,
-                                    showInviteQuestions: true,
-                                  }))
-                                }
-                                style={{
-                                  zIndex: state.blobToShow === 3 ? 1000000 : 0,
-                                  position: "relative",
-                                }}
-                              />
-                            )}
-                          </div>
-                        </div>
+                        />
+
+                        <Wardrobe
+                          className={process.env.NODE_ENV === 'development' ? 'debug' : ''}
+                          style={{
+                            zIndex: state.blobToShow === 1 ? 1000000 : 0,
+                            position: "absolute",
+                            right: '5%',
+                            top: '10%',
+                            width: '45%',
+                            height: '80%'
+                          }}
+                          wardrobe={state.wardrobe}
+                          onClothesClick={addClothesToBody}
+                        />
+                        {!state.showInvitation && (
+                          <img
+                            src=""
+                            alt="invite-button"
+                            onClick={() =>
+                              setState( s => ({ ...s,
+                                showInvitation: true,
+                                showInviteQuestions: true,
+                              }))
+                            }
+                            style={{
+                              zIndex: state.blobToShow === 3 ? 1000000 : 0,
+                              position: "relative",
+                            }}
+                          />
+                        )}
 
                         <Lamp
                           img={[hanger, hangerH]}
@@ -686,7 +673,7 @@ const Game5 = (props) => {
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
                         />
-                      </div>
+                    </React.Fragment>
                     )}
 
                     {state.showInvitation && (

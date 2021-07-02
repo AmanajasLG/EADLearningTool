@@ -9,9 +9,9 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
     <div {...props}>
       <div
         style={{
+          height: '10%',
           display: "flex",
           flexDirection: "row",
-          backgroundColor: "#ffcca9",
           justifyContent: "space-around",
         }}
       >
@@ -20,9 +20,10 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
             key={index}
             onClick={() => setState(label)}
             style={{
+              borderRadius: '10% 10% 0 0',
               flex: "1 0 0px",
               backgroundColor: state === label ? "#ffcca9" : "white",
-              fontSize: '0.5rem'
+              fontSize: '1rem'
             }}
           >
             {label}
@@ -32,12 +33,11 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
 
       <div
         style={{
+          height: '90%',
           display: "flex",
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: "2%",
-          width: '100%',
-          height: '100%',
           backgroundColor: "#ffcca9",
         }}
       >
@@ -45,7 +45,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
         <div key={index}
           style={{
             display: 'flex', flexDirection: 'row', justifyContent: 'space-around',
-            width: '100%', height: '100%', marginTop: '5%', backgroundColor: '#ffddba'}}
+            height: '28%', marginTop: '5%', backgroundColor: '#ffddba'}}
         >
           { wardrobe[state]
             .slice(line * wardrobe[state].length/columns, columns + line * wardrobe[state].length/columns)
@@ -53,7 +53,6 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
               <div
                 key={index}
                 style={{
-                  width: '10%',
                   overflow: 'hidden',
                   pointerEvents: item.picked ? "none" : "auto",
                   opacity: item.picked ? 0.3 : 1,
@@ -61,7 +60,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
                 }}
 
               >
-                <img style={{cursor: "pointer"}} onClick={onClothesClick(item)}
+                <img style={{cursor: "pointer", height: '100%'}} onClick={onClothesClick(item)}
                   src={item.wardrobeImage !== "" ? item.wardrobeImage : item.image} alt=''/>
               </div>
             )
@@ -73,34 +72,6 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
   );
 };
 /*
-{ wardrobe[state].slice(value * wardrobe[state].length/columns, columns + value * wardrobe[state].length/columns).map((item, index) => (
 
-<img
-  key={index}
-  style={{
-    cursor: "pointer",
-    pointerEvents: item.picked ? "none" : "auto",
-    opacity: item.picked ? 0.3 : 1,
-    backgroundColor: '#ffddba'
-  }}
-  onClick={onClothesClick(item)}
-  src={
-    item.wardrobeImage !== "" ? item.wardrobeImage : item.image
-  }
-  alt={item.name}
-/>
-*/
-/*
-: wardrobe[state].map((item, index) => (
-  <CustomButton
-    style={{
-      pointerEvents: item.picked ? "none" : "auto",
-      opacity: item.picked ? 0.3 : 1,
-    }}
-    key={index}
-    onClick={onClothesClick(item)}
-  >
-    {item.name}
-  </CustomButton>
 */
 export default Wardrobe;
