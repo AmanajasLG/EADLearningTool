@@ -628,7 +628,7 @@ const Game6 = (props) => {
     const clothes = { ...state.clothes };
     const phoneClothes = [...state.phoneClothes];
     let errors = {
-      wrongColor: [],
+      wrongColors: [],
       inBodyNotInPhone: [],
       inPhoneNotInBody: [],
     };
@@ -643,9 +643,9 @@ const Game6 = (props) => {
           (clothing) => clothing.id === bodyClothing.id
         );
 
-        if (!phoneClothing) errors.inBodyNotInPhone.push(bodyClothing);
+        if (!phoneClothing) errors.inBodyNotInPhone.push(bodyClothing.id);
         else if (phoneClothing.color !== bodyClothing.color)
-          errors.wrongColor.push({
+          errors.wrongColors.push({
             clothing: bodyClothing.name,
             rightColor: bodyClothing.color,
             userColor: phoneClothing.color,
@@ -653,9 +653,9 @@ const Game6 = (props) => {
       }
     }
 
-    errors.inPhoneNotInBody = phoneClothes.filter(
-      (clothing) => !clothesIds.includes(clothing.id)
-    );
+    errors.inPhoneNotInBody = phoneClothes
+      .filter((clothing) => !clothesIds.includes(clothing.id))
+      .map((clothing) => clothing.id);
 
     return errors;
   };
@@ -665,7 +665,7 @@ const Game6 = (props) => {
     dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
   };
 
-  const endGame = (saveResult = false) => {
+  const endGame = (saveResult = true) => {
     let wrongClothes = getWrongClothes();
     let sawInvite =
       state.inviteQuestions.filter((question) => question.asked).length > 0;
@@ -820,7 +820,12 @@ const Game6 = (props) => {
           user: userId,
           mission: mission.id,
           invite: state.invitation.id,
-          won: wrongClothes.length === 0 && checkFullOutfit(),
+          won:
+            wrongClothes.length === 0 &&
+            checkFullOutfit() &&
+            Object.keys(phoneBodyMatchErrors).reduce((acc, key) => {
+              return acc && phoneBodyMatchErrors[key].length === 0;
+            }, true),
           sawInviteAgain: sawInvite,
           wrongClothesCount: wrongClothes.length,
           outfit: Object.keys(state.clothes).reduce((acc, key) => {
@@ -830,6 +835,11 @@ const Game6 = (props) => {
             ];
           }, []),
           character: state.choosenCharacter.id,
+          wrongColors: phoneBodyMatchErrors.wrongColors.length
+            ? JSON.stringify(phoneBodyMatchErrors.wrongColors)
+            : null,
+          inBodyNotInPhone: phoneBodyMatchErrors.inBodyNotInPhone,
+          inPhoneNotInBody: phoneBodyMatchErrors.inPhoneNotInBody,
         })
       );
   };
