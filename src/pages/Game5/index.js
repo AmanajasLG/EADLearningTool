@@ -639,7 +639,7 @@ const Game5 = (props) => {
                           onClothesClick={addClothesToBody}
                         />
                         {!state.showInvitation && (
-                          <img
+                          <img className="stretchIn"
                             src={envelopeIcon}
                             alt="invite-button"
                             onClick={() =>

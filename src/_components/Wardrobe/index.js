@@ -24,7 +24,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
               borderRadius: '5% 5% 0 0',
               flex: "1 0 0px",
               backgroundColor: state === label ? "#ffcca9" : "white",
-              fontSize: '1rem'
+              fontSize: '3em'
             }}
           >
             {label}
@@ -64,7 +64,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
                   }}
 
                 >
-                  <img style={{cursor: "pointer", height: '100%'}} onClick={onClothesClick(item)}
+                  <img className="stretchIn" style={{cursor: "pointer", height: '100%'}} onClick={onClothesClick(item)}
                     src={item.wardrobeImage !== "" ? item.wardrobeImage : item.image} alt=''/>
                 </div>
               )
