@@ -2,6 +2,7 @@ import React from "react";
 
 import { shorts, shirt } from "../../img";
 import InlineSVG from "../InlineSVG";
+import "./index.scss";
 
 const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
   let hasInteiroCover = clothes["Tronco"].reduce((acc, clothing) => {

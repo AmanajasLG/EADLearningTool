@@ -33,7 +33,7 @@ const Cellphone = ({
   });
 
   return (
-    <div id="big-cellphone-wrapper">
+    <div id="big-cellphone-solo-wrapper">
       {state.clearClothesConfirmation && (
         <Notification
           blobMessage={{
