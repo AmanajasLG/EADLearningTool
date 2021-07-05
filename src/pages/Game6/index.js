@@ -18,7 +18,7 @@ import Wardrobe from "../../_components/Wardrobe";
 import Button from "../../_components/Button";
 import { BlobBg } from "../../_components/Blob";
 import { renderToStaticMarkup } from "react-dom/server";
-import { tomato } from "../../img";
+import { tomato, dressingBg, hanger, hangerH } from "../../img";
 
 import initialState from "./initialState";
 import Tutorial from "./components/Tutorial";
@@ -970,26 +970,7 @@ const Game6 = (props) => {
               case "DRESS":
                 return (
                   <React.Fragment>
-                    <CellphoneOverlay
-                      autoLoad={false}
-                      dialogHistory={state.dressDialogShow}
-                      onMinimize={() =>
-                        setState((s) => ({ ...s, shouldMinimize: false }))
-                      }
-                      shouldMinimize={state.shouldMinimize}
-                      nextMessage={showIntroDialog}
-                      endConversation={() =>
-                        setState((s) => ({
-                          ...s,
-                          proceedToDressingConfirmation: true,
-                        }))
-                      }
-                      style={{
-                        zIndex: state.blobToShow === 3 ? 1000000 : 0,
-                      }}
-                      questions={state.inviteQuestions}
-                      addAnswerToDialog={addAnswerToDialogDress}
-                    />
+
                     {state.showBlob && (
                       <TutorialWardrobe
                         blobMessage={state.tutorialBlobsText[state.blobToShow]}
@@ -1013,46 +994,39 @@ const Game6 = (props) => {
                     )}
 
                     {state.dressingContext && (
-                      <div>
-                        <div
+                      <React.Fragment>
+                        <img src={dressingBg}
+                          style={{ position: 'absolute'}}
+                        />
+                        <DressingCharacter
+                          character={state.choosenCharacter}
+                          clothes={state.clothes}
+                          showRemove
+                          onRemoveClick={removeClothesFromBody}
                           style={{
-                            marginTop: "15em",
-                            display: "flex",
-                            flexDirection: "row",
-                            flexWrap: "wrap",
-                            width: "100%",
+                            width: '25%',
+                            height: "80em",
+                            zIndex: state.blobToShow === 2 ? 1000000 : 0,
+                            position: "absolute",
+                            bottom: '8%',
+                            left: '10%'
                           }}
-                        >
-                          <div
-                            style={{ flex: "1 0 0px", border: "1px solid red" }}
-                          >
-                            <DressingCharacter
-                              character={state.choosenCharacter}
-                              clothes={state.clothes}
-                              showRemove
-                              onRemoveClick={removeClothesFromBody}
-                              style={{
-                                height: "80em",
-                                zIndex: state.blobToShow === 2 ? 1000000 : 0,
-                                position: "relative",
-                              }}
-                            />
-                          </div>
-                          <div
-                            style={{ flex: "1 0 0px", border: "1px solid red" }}
-                          >
-                            <Wardrobe
-                              style={{
-                                border: "1px solid red",
-                                zIndex: state.blobToShow === 1 ? 1000000 : 0,
-                                position: "relative",
-                              }}
-                              wardrobe={state.wardrobe}
-                              onClothesClick={addClothesToBody}
-                            />
-                          </div>
-                        </div>
-                        <Lamp
+                        />
+
+                        <Wardrobe
+                          style={{
+                            zIndex: state.blobToShow === 1 ? 1000000 : 0,
+                            position: "absolute",
+                            right: '5%',
+                            top: '10%',
+                            width: '45%',
+                            height: '80%'
+                          }}
+                          wardrobe={state.wardrobe}
+                          onClothesClick={addClothesToBody}
+                        />
+
+                      <Lamp img={[hanger, hangerH]}
                           onClick={() => {
                             let ready =
                               state.clothes["Tronco"].length > 0 &&
@@ -1068,10 +1042,12 @@ const Game6 = (props) => {
                           }}
                           message="Estou pronto!"
                           style={{
+                            top: '0.5%',
+                            left: '1%',
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
                         />
-                      </div>
+                    </React.Fragment>
                     )}
 
                     {state.showClothingSpaceTakenErrorNotification && (
@@ -1152,6 +1128,26 @@ const Game6 = (props) => {
                         </div>
                       </div>
                     )}
+                    <CellphoneOverlay
+                      autoLoad={false}
+                      dialogHistory={state.dressDialogShow}
+                      onMinimize={() =>
+                        setState((s) => ({ ...s, shouldMinimize: false }))
+                      }
+                      shouldMinimize={state.shouldMinimize}
+                      nextMessage={showIntroDialog}
+                      endConversation={() =>
+                        setState((s) => ({
+                          ...s,
+                          proceedToDressingConfirmation: true,
+                        }))
+                      }
+                      style={{
+                        zIndex: state.blobToShow === 3 ? 1000000 : 0,
+                      }}
+                      questions={state.inviteQuestions}
+                      addAnswerToDialog={addAnswerToDialogDress}
+                    />
                   </React.Fragment>
                 );
               case "SEND":

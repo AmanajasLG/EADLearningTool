@@ -9,8 +9,8 @@ const Lamp = ({ img, onClick, message, ...props }) => {
   return (
     <div id="acusar" onClick={onClick} {...props}>
       <span>{message}</span>
-      <img id="lamp-apagada" src={img[0]} alt=""></img>
-      <img id="lamp-acesa" src={img[1]} alt=""></img>
+      <img id="lamp-apagada" src={icon[0]} alt=""></img>
+      <img id="lamp-acesa" src={icon[1]} alt=""></img>
     </div>
   );
 };
