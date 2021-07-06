@@ -1,0 +1,21 @@
+.feedback-arrow-phone {
+  position: absolute;
+  font-size: 1.9em;
+  color: #59316d;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: 100ms linear;
+}
+
+.feedback-arrow-phone:hover {
+  color: #fff;
+}
+
+.feedback-arrow-previous {
+  left: 0.5em;
+}
+
+.feedback-arrow-next {
+  right: 0.5em;
+}

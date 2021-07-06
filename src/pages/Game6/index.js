@@ -15,7 +15,11 @@ import { headerConstants } from "../../_constants";
 import Init from "../../_components/Init";
 import DressingCharacter from "../../_components/DressingCharacter";
 import Wardrobe from "../../_components/Wardrobe";
-import Button, {Iniciar, Voltar} from "../../_components/Button";
+import Button, {
+  ButtonConfigs,
+  Iniciar,
+  Voltar,
+} from "../../_components/Button";
 import { BlobBg } from "../../_components/Blob";
 import { renderToStaticMarkup } from "react-dom/server";
 import { tomato, dressingBg, camera } from "../../img";
@@ -39,7 +43,6 @@ const Game6 = (props) => {
   const lang = useSelector(
     (state) => state.authentication.user.user.language.id
   );
-
   let mission = useSelector((state) =>
     state.game.items.missions
       ? state.game.items.missions.find(
@@ -151,7 +154,7 @@ const Game6 = (props) => {
             ];
           }, [])
         ),
-      ];
+      ].sort();
 
       let characters = missionData.characters.map((character) => {
         return {
@@ -384,6 +387,13 @@ const Game6 = (props) => {
 
   // SELECT CLOTHES IN PHONE
   const addAnswerToDialogSend = (item) => () => {
+    if (state.showBlob) {
+      setState((s) => ({
+        ...s,
+        blobToShow: s.blobToShow + 1,
+      }));
+    }
+
     if (state.showPhoneClothes) {
       const wardrobeBody = ["Tronco", "Pernas", "Pés"];
       let phoneWardrobe = { ...state.phoneWardrobe };
@@ -745,12 +755,12 @@ const Game6 = (props) => {
           message: sawInvite
             ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
               wrongClothes.length +
-              " peças ficaram estranhas... Tomara que Ariel não passe tanta vergonha..."
+              " peça(s) ficou(ficaram) estranha(s)... Tomara que Ariel não passe tanta vergonha..."
             : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
           messageTranslate: sawInvite
             ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
               wrongClothes.length +
-              " pieces of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
+              " piece(s) of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
             : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
         },
         {
@@ -970,7 +980,6 @@ const Game6 = (props) => {
               case "DRESS":
                 return (
                   <React.Fragment>
-
                     {state.showBlob && (
                       <TutorialWardrobe
                         blobMessage={state.tutorialBlobsText[state.blobToShow]}
@@ -995,8 +1004,10 @@ const Game6 = (props) => {
 
                     {state.dressingContext && (
                       <React.Fragment>
-                        <img src={dressingBg}
-                          style={{ position: 'absolute'}}
+                        <img
+                          src={dressingBg}
+                          style={{ position: "absolute" }}
+                          alt=""
                         />
                         <DressingCharacter
                           character={state.choosenCharacter}
@@ -1004,12 +1015,12 @@ const Game6 = (props) => {
                           showRemove
                           onRemoveClick={removeClothesFromBody}
                           style={{
-                            width: '25%',
+                            width: "25%",
                             height: "80em",
                             zIndex: state.blobToShow === 2 ? 1000000 : 0,
                             position: "absolute",
-                            bottom: '8%',
-                            left: '10%'
+                            bottom: "8%",
+                            left: "10%",
                           }}
                         />
 
@@ -1017,16 +1028,17 @@ const Game6 = (props) => {
                           style={{
                             zIndex: state.blobToShow === 1 ? 1000000 : 0,
                             position: "absolute",
-                            right: '5%',
-                            top: '10%',
-                            width: '45%',
-                            height: '80%'
+                            right: "5%",
+                            top: "10%",
+                            width: "45%",
+                            height: "80%",
                           }}
                           wardrobe={state.wardrobe}
                           onClothesClick={addClothesToBody}
                         />
 
-                      <Lamp img={[camera]}
+                        <Lamp
+                          img={[camera]}
                           onClick={() => {
                             let ready =
                               state.clothes["Tronco"].length > 0 &&
@@ -1038,16 +1050,35 @@ const Game6 = (props) => {
                               ...s,
                               ready: ready,
                               readyAlert: !ready,
+                              dressingContext: !ready,
                             }));
                           }}
                           message="Estou pronto!"
                           style={{
-                            top: '0.5%',
-                            left: '1%',
+                            top: "0.5%",
+                            left: "1%",
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
                         />
-                    </React.Fragment>
+
+                        <CellphoneOverlay
+                          autoLoad={false}
+                          dialogHistory={state.dressDialogShow}
+                          onMinimize={() =>
+                            setState((s) => ({ ...s, shouldMinimize: false }))
+                          }
+                          shouldMinimize={state.shouldMinimize}
+                          nextMessage={showIntroDialog}
+                          endConversation={() =>
+                            setState((s) => ({
+                              ...s,
+                              proceedToDressingConfirmation: true,
+                            }))
+                          }
+                          questions={state.inviteQuestions}
+                          addAnswerToDialog={addAnswerToDialogDress}
+                        />
+                      </React.Fragment>
                     )}
 
                     {state.showClothingSpaceTakenErrorNotification && (
@@ -1093,33 +1124,59 @@ const Game6 = (props) => {
                           />
                         </div>
 
-                        <div className="confirm-blob" style={{ textAlign: 'center'}}>
-                          <div className="blob-spans" style={{fontSize: '1.5em', padding: '8%'}}>
+                        <div
+                          className="confirm-blob"
+                          style={{ textAlign: "center" }}
+                        >
+                          <div
+                            className="blob-spans"
+                            style={{ fontSize: "1.5em", padding: "8%" }}
+                          >
                             <span lang="pt-br">
-                              Terminou de escolher o look ideal para Ariel ir à festa?
+                              Terminou de escolher o look ideal para Ariel ir à
+                              festa?
                             </span>
-                            <span lang="en">Are you done choosing the outfit Ariel should wear to the party?</span>
+                            <span lang="en">
+                              Are you done choosing the outfit Ariel should wear
+                              to the party?
+                            </span>
                           </div>
-                          <div style={{backgroundColor: '#fbbba3', borderRadius: '100px', padding: '8%', fontSize: '1.2em'}}>
+                          <div
+                            style={{
+                              backgroundColor: "#fbbba3",
+                              borderRadius: "100px",
+                              padding: "8%",
+                              fontSize: "1.2em",
+                            }}
+                          >
                             <span lang="pt-br">
-                              Atenção: A partir desse momento você não poderá mais alterar as roupas escolhidas.
+                              Atenção: A partir desse momento você não poderá
+                              mais alterar as roupas escolhidas.
                             </span>
-                            <span lang="en">Atention: From now on you will no longer be able to change your chosen clothes. </span>
+                            <span lang="en">
+                              Atention: From now on you will no longer be able
+                              to change your chosen clothes.{" "}
+                            </span>
                           </div>
                           <div className="btns">
-                            <Voltar label="Ainda não/Not yet"
+                            <Voltar
+                              label="Ainda não/Not yet"
                               onClick={() =>
                                 setState((s) => ({
                                   ...s,
                                   ready: false,
+                                  dressingContext: true,
                                 }))
                               }
                             />
-                            <Iniciar label="Sim!/Yes!"
+                            <Iniciar
+                              label="Sim!/Yes!"
                               onClick={() =>
                                 setState((s) => ({
                                   ...s,
                                   scene: "SEND",
+                                  showBlob: true,
+                                  blobToShow: 0,
                                 }))
                               }
                             />
@@ -1127,31 +1184,45 @@ const Game6 = (props) => {
                         </div>
                       </div>
                     )}
-                    <CellphoneOverlay
-                      autoLoad={false}
-                      dialogHistory={state.dressDialogShow}
-                      onMinimize={() =>
-                        setState((s) => ({ ...s, shouldMinimize: false }))
-                      }
-                      shouldMinimize={state.shouldMinimize}
-                      nextMessage={showIntroDialog}
-                      endConversation={() =>
-                        setState((s) => ({
-                          ...s,
-                          proceedToDressingConfirmation: true,
-                        }))
-                      }
-                      style={{
-                        zIndex: state.blobToShow === 3 ? 1000000 : 0,
-                      }}
-                      questions={state.inviteQuestions}
-                      addAnswerToDialog={addAnswerToDialogDress}
-                    />
                   </React.Fragment>
                 );
               case "SEND":
                 return (
                   <React.Fragment>
+                    {state.showBlob && (
+                      <div className="tutorial-notification">
+                        <div className="utorial-notification-content">
+                          <div className="tutorial-notification-message blob-right">
+                            <span lang="pt-br">
+                              {
+                                state.tutorialPhoneBlobsText[state.blobToShow]
+                                  .text
+                              }
+                            </span>
+                            <span lang="en">
+                              {
+                                state.tutorialPhoneBlobsText[state.blobToShow]
+                                  .textTranslate
+                              }
+                            </span>
+                            {state.blobToShow === 2 && (
+                              <Button
+                                blink
+                                colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                                onClick={() =>
+                                  setState((s) => ({
+                                    ...s,
+                                    showBlob: false,
+                                  }))
+                                }
+                              >
+                                Entendi! / Got it!
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div className="confirm-screen">
                       <div className="character">
                         <DressingCharacter
@@ -1189,6 +1260,12 @@ const Game6 = (props) => {
                             sendDialogShow: [
                               ...s.sendDialogShow,
                               {
+                                speaker: "player",
+                                text: "Acho que falei alguma coisa errada...",
+                                textTranslate:
+                                  "I think I said something wrong...",
+                              },
+                              {
                                 speaker: "",
                                 text: "Qual item devo tirar da lista?",
                                 textTranslate:
@@ -1197,7 +1274,27 @@ const Game6 = (props) => {
                             ],
                           }));
                         }}
-                        cancelAddRemoveDialog={cancelAddAnswerToDialog}
+                        addCancelRemoveDialog={() => {
+                          setState((s) => ({
+                            ...s,
+                            sendDialogShow: [
+                              ...s.sendDialogShow,
+                              {
+                                speaker: "player",
+                                text:
+                                  "Me confundi, ta tudo certo haha deixa pra lá",
+                                textTranslate:
+                                  "I got confused, it's all good haha never mind",
+                              },
+                              {
+                                speaker: "",
+                                text: "Sem problemas hahaha o que mais?",
+                                textTranslate: "No problem haha what else?",
+                              },
+                            ],
+                          }));
+                        }}
+                        cancelAddAnswerToDialog={cancelAddAnswerToDialog}
                         removeClothingFromList={removeClothesFromPhone}
                         removeAllClothes={removeAllClothesFromPhone}
                         confirmationButton={

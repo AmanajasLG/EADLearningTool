@@ -1,0 +1,27 @@
+.grid-wrapper {
+  margin-top: 1em;
+  height: 8.8rem;
+  padding: 2%;
+  background-color: #ffcca9;
+  border-radius: 1%;
+  position: relative;
+}
+
+.grid-background {
+  height: 100%;
+  background-color: #fff7f2;
+}
+
+.grid-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.grid-content-row {
+  flex-grow: 1;
+  flex-direction: row;
+  display: flex;
+  justify-content: space-around;
+  background-color: #fff7f2;
+}
