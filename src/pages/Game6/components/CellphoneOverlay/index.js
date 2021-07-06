@@ -29,7 +29,7 @@ const CellphoneOverlay = ({
 }) => {
   const [state, setState] = React.useState({
     maximized: startMaximized,
-    shouldMinimize: startMaximized,
+    shouldMinimize: false,
   });
   // const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
 
