@@ -40,7 +40,8 @@ import hangerH from './cabide marrom.svg'
 import dressingBg from './Game5/cenario.svg'
 // GAME 6
 import camera from './camera fotografica.svg'
-
+import fireworks1 from './fogos de artificio azul.svg'
+import fireworks2 from './fogos de artificio rosa.svg'
 
 // GENERAL
 import avatar from "./avatar1.svg";
