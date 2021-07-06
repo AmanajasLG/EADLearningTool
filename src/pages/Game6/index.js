@@ -1050,6 +1050,7 @@ const Game6 = (props) => {
                               ...s,
                               ready: ready,
                               readyAlert: !ready,
+                              dressingContext: !ready,
                             }));
                           }}
                           message="Estou pronto!"
@@ -1058,6 +1059,24 @@ const Game6 = (props) => {
                             left: "1%",
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
+                        />
+
+                        <CellphoneOverlay
+                          autoLoad={false}
+                          dialogHistory={state.dressDialogShow}
+                          onMinimize={() =>
+                            setState((s) => ({ ...s, shouldMinimize: false }))
+                          }
+                          shouldMinimize={state.shouldMinimize}
+                          nextMessage={showIntroDialog}
+                          endConversation={() =>
+                            setState((s) => ({
+                              ...s,
+                              proceedToDressingConfirmation: true,
+                            }))
+                          }
+                          questions={state.inviteQuestions}
+                          addAnswerToDialog={addAnswerToDialogDress}
                         />
                       </React.Fragment>
                     )}
@@ -1146,6 +1165,7 @@ const Game6 = (props) => {
                                 setState((s) => ({
                                   ...s,
                                   ready: false,
+                                  dressingContext: true,
                                 }))
                               }
                             />
@@ -1164,26 +1184,6 @@ const Game6 = (props) => {
                         </div>
                       </div>
                     )}
-                    <CellphoneOverlay
-                      autoLoad={false}
-                      dialogHistory={state.dressDialogShow}
-                      onMinimize={() =>
-                        setState((s) => ({ ...s, shouldMinimize: false }))
-                      }
-                      shouldMinimize={state.shouldMinimize}
-                      nextMessage={showIntroDialog}
-                      endConversation={() =>
-                        setState((s) => ({
-                          ...s,
-                          proceedToDressingConfirmation: true,
-                        }))
-                      }
-                      style={{
-                        zIndex: state.blobToShow === 3 ? 1000000 : 0,
-                      }}
-                      questions={state.inviteQuestions}
-                      addAnswerToDialog={addAnswerToDialogDress}
-                    />
                   </React.Fragment>
                 );
               case "SEND":
