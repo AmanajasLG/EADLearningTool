@@ -15,7 +15,11 @@ import { headerConstants } from "../../_constants";
 import Init from "../../_components/Init";
 import DressingCharacter from "../../_components/DressingCharacter";
 import Wardrobe from "../../_components/Wardrobe";
-import Button, { Iniciar, Voltar } from "../../_components/Button";
+import Button, {
+  ButtonConfigs,
+  Iniciar,
+  Voltar,
+} from "../../_components/Button";
 import { BlobBg } from "../../_components/Blob";
 import { renderToStaticMarkup } from "react-dom/server";
 import { tomato, dressingBg, camera } from "../../img";
@@ -39,7 +43,6 @@ const Game6 = (props) => {
   const lang = useSelector(
     (state) => state.authentication.user.user.language.id
   );
-
   let mission = useSelector((state) =>
     state.game.items.missions
       ? state.game.items.missions.find(
@@ -384,6 +387,13 @@ const Game6 = (props) => {
 
   // SELECT CLOTHES IN PHONE
   const addAnswerToDialogSend = (item) => () => {
+    if (state.showBlob) {
+      setState((s) => ({
+        ...s,
+        blobToShow: s.blobToShow + 1,
+      }));
+    }
+
     if (state.showPhoneClothes) {
       const wardrobeBody = ["Tronco", "Pernas", "Pés"];
       let phoneWardrobe = { ...state.phoneWardrobe };
@@ -745,12 +755,12 @@ const Game6 = (props) => {
           message: sawInvite
             ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
               wrongClothes.length +
-              " peças ficaram estranhas... Tomara que Ariel não passe tanta vergonha..."
+              " peça(s) ficou(ficaram) estranha(s)... Tomara que Ariel não passe tanta vergonha..."
             : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
           messageTranslate: sawInvite
             ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
               wrongClothes.length +
-              " pieces of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
+              " piece(s) of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
             : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
         },
         {
@@ -1145,6 +1155,8 @@ const Game6 = (props) => {
                                 setState((s) => ({
                                   ...s,
                                   scene: "SEND",
+                                  showBlob: true,
+                                  blobToShow: 0,
                                 }))
                               }
                             />
@@ -1177,6 +1189,40 @@ const Game6 = (props) => {
               case "SEND":
                 return (
                   <React.Fragment>
+                    {state.showBlob && (
+                      <div className="tutorial-notification">
+                        <div className="utorial-notification-content">
+                          <div className="tutorial-notification-message blob-right">
+                            <span lang="pt-br">
+                              {
+                                state.tutorialPhoneBlobsText[state.blobToShow]
+                                  .text
+                              }
+                            </span>
+                            <span lang="en">
+                              {
+                                state.tutorialPhoneBlobsText[state.blobToShow]
+                                  .textTranslate
+                              }
+                            </span>
+                            {state.blobToShow === 2 && (
+                              <Button
+                                blink
+                                colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                                onClick={() =>
+                                  setState((s) => ({
+                                    ...s,
+                                    showBlob: false,
+                                  }))
+                                }
+                              >
+                                Entendi! / Got it!
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div className="confirm-screen">
                       <div className="character">
                         <DressingCharacter

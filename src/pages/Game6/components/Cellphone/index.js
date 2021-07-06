@@ -138,9 +138,9 @@ const Cellphone = ({
                 <Button
                   style={{
                     position: "relative",
-                    margin: "1em auto",
-                    width: "40%",
-                    fontSize: "0.4rem",
+                    margin: "1em 1em",
+                    width: "30%",
+                    fontSize: "1.5em",
                   }}
                   onClick={cancelButton}
                 >
@@ -149,9 +149,9 @@ const Cellphone = ({
                 <Button
                   style={{
                     position: "relative",
-                    margin: "1em auto",
-                    width: "40%",
-                    fontSize: "0.4rem",
+                    margin: "1em 1em",
+                    width: "30%",
+                    fontSize: "1.5em",
                   }}
                   onClick={confirmationButton}
                 >
