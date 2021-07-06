@@ -38,6 +38,9 @@ import envelopeIcon from './Game5/envelope icone.svg'
 import hanger from './cabide roxo.svg'
 import hangerH from './cabide marrom.svg'
 import dressingBg from './Game5/cenario.svg'
+// GAME 6
+import camera from './camera fotografica.svg'
+
 
 // GENERAL
 import avatar from "./avatar1.svg";
@@ -109,5 +112,6 @@ export {
   envelopeIcon,
   hanger,
   hangerH,
-  dressingBg
+  dressingBg,
+  camera
 };

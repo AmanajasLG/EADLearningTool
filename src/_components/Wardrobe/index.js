@@ -74,7 +74,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
         </div>
         <div style={{height: '10%', margin: '2% 0', display: 'flex', flexDirection: 'row', justifyContent: 'space-around', gap: '3%'}}>
           {[0, 1, 2].map( value =>
-            <div style={{backgroundColor: '#ffbc8f', height: '100%', flexGrow: 1, borderRadius: '8%'}}>
+            <div key={value} style={{backgroundColor: '#ffbc8f', height: '100%', flexGrow: 1, borderRadius: '8%'}}>
               <hr style={{width: '25%', margin: '12% auto', border: '2px solid white'}}/>
             </div>
           )}

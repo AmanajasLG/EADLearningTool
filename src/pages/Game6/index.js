@@ -15,17 +15,16 @@ import { headerConstants } from "../../_constants";
 import Init from "../../_components/Init";
 import DressingCharacter from "../../_components/DressingCharacter";
 import Wardrobe from "../../_components/Wardrobe";
-import Button from "../../_components/Button";
+import Button, {Iniciar, Voltar} from "../../_components/Button";
 import { BlobBg } from "../../_components/Blob";
 import { renderToStaticMarkup } from "react-dom/server";
-import { tomato, dressingBg, hanger, hangerH } from "../../img";
+import { tomato, dressingBg, camera } from "../../img";
 
 import initialState from "./initialState";
 import Tutorial from "./components/Tutorial";
 import Notification from "./components/Notification";
 import Lamp from "../../_components/Lamp";
 
-import { Iniciar, Voltar } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
 import { ContactSupportOutlined, ErrorSharp } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
@@ -897,8 +896,9 @@ const Game6 = (props) => {
                           height: "100%",
                         }}
                       >
-                        {state.characters.map((character) => (
+                        {state.characters.map((character, index) => (
                           <DressingCharacter
+                            key={index}
                             clothes={state.clothes}
                             character={character}
                             style={{ height: "50%", cursor: "pointer" }}
@@ -1026,7 +1026,7 @@ const Game6 = (props) => {
                           onClothesClick={addClothesToBody}
                         />
 
-                      <Lamp img={[hanger, hangerH]}
+                      <Lamp img={[camera]}
                           onClick={() => {
                             let ready =
                               state.clothes["Tronco"].length > 0 &&
@@ -1092,38 +1092,37 @@ const Game6 = (props) => {
                             style={{ height: "80em" }}
                           />
                         </div>
-                        <div className="confirm-blob">
-                          <div className="blob-spans">
+
+                        <div className="confirm-blob" style={{ textAlign: 'center'}}>
+                          <div className="blob-spans" style={{fontSize: '1.5em', padding: '8%'}}>
                             <span lang="pt-br">
-                              Pronto pra descrever o look?
+                              Terminou de escolher o look ideal para Ariel ir à festa?
                             </span>
-                            <span lang="en">Ready to describe the look?</span>
+                            <span lang="en">Are you done choosing the outfit Ariel should wear to the party?</span>
+                          </div>
+                          <div style={{backgroundColor: '#fbbba3', borderRadius: '100px', padding: '8%', fontSize: '1.2em'}}>
+                            <span lang="pt-br">
+                              Atenção: A partir desse momento você não poderá mais alterar as roupas escolhidas.
+                            </span>
+                            <span lang="en">Atention: From now on you will no longer be able to change your chosen clothes. </span>
                           </div>
                           <div className="btns">
-                            <button
-                              className="btn btn-center"
-                              id="btn-back"
+                            <Voltar label="Ainda não/Not yet"
                               onClick={() =>
                                 setState((s) => ({
                                   ...s,
                                   ready: false,
                                 }))
                               }
-                            >
-                              Ainda não/Not yet
-                            </button>
-                            <button
-                              className="btn btn-center"
-                              id="btn-start"
+                            />
+                            <Iniciar label="Sim!/Yes!"
                               onClick={() =>
                                 setState((s) => ({
                                   ...s,
                                   scene: "SEND",
                                 }))
                               }
-                            >
-                              Sim!/Yes!
-                            </button>
+                            />
                           </div>
                         </div>
                       </div>
