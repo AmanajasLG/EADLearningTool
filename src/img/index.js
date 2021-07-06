@@ -33,12 +33,14 @@ import tomato from "./Game3/Tomate_lista.svg";
 import table from "./Game4/table.svg";
 import silverCloche from "./Game4/silver-cloche.svg";
 //  GAME 5
-import envelope from './envelope grande.svg'
-import envelopeIcon from './Game5/envelope icone.svg'
-import hanger from './cabide roxo.svg'
-import hangerH from './cabide marrom.svg'
-import dressingBg from './Game5/cenario.svg'
-
+import envelope from "./envelope grande.svg";
+import envelopeIcon from "./Game5/envelope icone.svg";
+import hanger from "./cabide roxo.svg";
+import hangerH from "./cabide marrom.svg";
+import dressingBg from "./Game5/cenario.svg";
+// GAME 6
+import ariel from "./Game6/ariel.svg";
+import smallPhoneBlank from "./Game6/celular icone.svg";
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -57,8 +59,12 @@ import shirt from "./roupa de baixo top.svg";
 
 import error from "./apagar.svg";
 import right from "./confirmar.svg";
+import trash from "./trash-can.svg";
 
 export {
+  smallPhoneBlank,
+  trash,
+  ariel,
   shorts,
   shirt,
   tomato,
@@ -109,5 +115,5 @@ export {
   envelopeIcon,
   hanger,
   hangerH,
-  dressingBg
+  dressingBg,
 };

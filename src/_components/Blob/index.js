@@ -1,11 +1,19 @@
-import React from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 
-const Blob = ({duration, fill, stroke, strokeWidth, animation, ...props}) => {
-  return(
-  <svg xmlns="http://www.w3.org/2000/svg" width="auto" preserveAspectRatio="true" viewBox="-200 0 1800 1080" {...props}>
-      <path id="Path_5521" data-name="Path 5521" fill={fill ? fill: "#d6e3f4"}
-        stroke={ stroke }
+const Blob = ({ duration, fill, stroke, strokeWidth, animation, ...props }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+      viewBox="-200 0 1800 1080"
+      {...props}
+    >
+      <path
+        id="Path_5521"
+        data-name="Path 5521"
+        fill={fill ? fill : "#d6e3f4"}
+        stroke={stroke}
         strokeWidth={strokeWidth}
         d="M1122.91 806.578
         C1193.7 670.545 1198.48 489.306 1149.6 343.976
@@ -16,8 +24,11 @@ const Blob = ({duration, fill, stroke, strokeWidth, animation, ...props}) => {
         C186.486 336.976 116.417 417.611 67.7008 458.349
         C-63.8393 568.259 11.9697 825.455 163.713 912.282
         C324.632 1004.43 947.554 1143.52 1122.91 806.578Z"
-        >
-        <animate dur={duration? duration : "15s"} repeatCount="indefinite" attributeName="d"
+      >
+        <animate
+          dur={duration ? duration : "15s"}
+          repeatCount="indefinite"
+          attributeName="d"
           values="
           M1122.91 806.578
           C1193.7 670.545 1198.48 489.306 1149.6 343.976
@@ -54,20 +65,29 @@ const Blob = ({duration, fill, stroke, strokeWidth, animation, ...props}) => {
           C255.741 135.338 274.91 220.659 226.888 283.822
           C186.486 336.976 116.417 417.611 67.7008 458.349
           C-63.8393 568.259 11.9697 825.455 163.713 912.282
-          C324.632 1004.43 947.554 1143.52 1122.91 806.578Z"/>
+          C324.632 1004.43 947.554 1143.52 1122.91 806.578Z"
+        />
       </path>
-  </svg>
-  )
-}
+    </svg>
+  );
+};
 
-export default Blob
+export default Blob;
 
-const BlobBg = ({children, style, ...props}) => (
-  <div style={{background: `url("data:image/svg+xml,${encodeURIComponent(renderToStaticMarkup(<Blob {...props.blob} />))}")`,
-    brackgroundRepeat: 'no-repeat', backgroundPosition: 'center', ...style}}
-  {...props}>
+const BlobBg = ({ children, style, ...props }) => (
+  <div
+    style={{
+      background: `url("data:image/svg+xml,${encodeURIComponent(
+        renderToStaticMarkup(<Blob {...props.blob} />)
+      )}")`,
+      brackgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      ...style,
+    }}
+    {...props}
+  >
     {children}
   </div>
-)
+);
 
-export { BlobBg }
+export { BlobBg };

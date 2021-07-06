@@ -1,6 +1,12 @@
 import React from "react";
 
-import { smallPhone, bigPhone, dedao, palma } from "../../../../img";
+import {
+  smallPhoneBlank as smallPhone,
+  bigPhone,
+  dedao,
+  palma,
+  ariel,
+} from "../../../../img";
 import { Button, ButtonConfigs } from "../../../../_components/Button";
 
 import "./index.scss";
@@ -98,6 +104,10 @@ const CellphoneOverlay = ({
             </div>
             <div id="big-cellphone-screen-wrapper">
               <div id="big-cellphone-screen-content">
+                <div id="big-cellphone-screen-header">
+                  <img src={ariel} alt="cellphone-profile-pic" />
+                  <span>Ariel</span>
+                </div>
                 <div
                   id="cellphone-dialog-history-wrapper"
                   className={

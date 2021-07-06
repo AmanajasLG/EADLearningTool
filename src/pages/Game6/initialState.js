@@ -53,6 +53,25 @@ const initialState = () => ({
     },
   ],
 
+  tutorialPhoneBlobsText: [
+    {
+      text:
+        "Chegou o momento de contar para Ariel o look escolhido! Selecione no celular a primeira peça de roupa que você gostaria de descrever.",
+      textTranslate:
+        "It's time to tell Ariel about the chosen outfit! Select on the phone the first piece of cloting you would like to describe.",
+    },
+    {
+      text: "Agora clique na cor da peça selecionada.",
+      textTranslate: "Now click onthe color of the selected piece.",
+    },
+    {
+      text:
+        "Clique no ícone de lixeira caso queria remover algua peça descrita para Ariel na conversa.",
+      textTranslate:
+        "Click on the trash icon if you want to remove any pieces of clothing described to ariel in the conversation.",
+    },
+  ],
+
   // DIALOGS
   introDialog: [],
   introDialogShow: [],

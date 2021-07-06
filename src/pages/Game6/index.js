@@ -152,7 +152,7 @@ const Game6 = (props) => {
             ];
           }, [])
         ),
-      ];
+      ].sort();
 
       let characters = missionData.characters.map((character) => {
         return {
@@ -970,7 +970,6 @@ const Game6 = (props) => {
               case "DRESS":
                 return (
                   <React.Fragment>
-
                     {state.showBlob && (
                       <TutorialWardrobe
                         blobMessage={state.tutorialBlobsText[state.blobToShow]}
@@ -995,8 +994,10 @@ const Game6 = (props) => {
 
                     {state.dressingContext && (
                       <React.Fragment>
-                        <img src={dressingBg}
-                          style={{ position: 'absolute'}}
+                        <img
+                          src={dressingBg}
+                          style={{ position: "absolute" }}
+                          alt=""
                         />
                         <DressingCharacter
                           character={state.choosenCharacter}
@@ -1004,12 +1005,12 @@ const Game6 = (props) => {
                           showRemove
                           onRemoveClick={removeClothesFromBody}
                           style={{
-                            width: '25%',
+                            width: "25%",
                             height: "80em",
                             zIndex: state.blobToShow === 2 ? 1000000 : 0,
                             position: "absolute",
-                            bottom: '8%',
-                            left: '10%'
+                            bottom: "8%",
+                            left: "10%",
                           }}
                         />
 
@@ -1017,16 +1018,17 @@ const Game6 = (props) => {
                           style={{
                             zIndex: state.blobToShow === 1 ? 1000000 : 0,
                             position: "absolute",
-                            right: '5%',
-                            top: '10%',
-                            width: '45%',
-                            height: '80%'
+                            right: "5%",
+                            top: "10%",
+                            width: "45%",
+                            height: "80%",
                           }}
                           wardrobe={state.wardrobe}
                           onClothesClick={addClothesToBody}
                         />
 
-                      <Lamp img={[hanger, hangerH]}
+                        <Lamp
+                          img={[hanger, hangerH]}
                           onClick={() => {
                             let ready =
                               state.clothes["Tronco"].length > 0 &&
@@ -1042,12 +1044,12 @@ const Game6 = (props) => {
                           }}
                           message="Estou pronto!"
                           style={{
-                            top: '0.5%',
-                            left: '1%',
+                            top: "0.5%",
+                            left: "1%",
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
                         />
-                    </React.Fragment>
+                      </React.Fragment>
                     )}
 
                     {state.showClothingSpaceTakenErrorNotification && (
@@ -1190,6 +1192,12 @@ const Game6 = (props) => {
                             sendDialogShow: [
                               ...s.sendDialogShow,
                               {
+                                speaker: "player",
+                                text: "Acho que falei alguma coisa errada...",
+                                textTranslate:
+                                  "I think I said something wrong...",
+                              },
+                              {
                                 speaker: "",
                                 text: "Qual item devo tirar da lista?",
                                 textTranslate:
@@ -1198,7 +1206,27 @@ const Game6 = (props) => {
                             ],
                           }));
                         }}
-                        cancelAddRemoveDialog={cancelAddAnswerToDialog}
+                        addCancelRemoveDialog={() => {
+                          setState((s) => ({
+                            ...s,
+                            sendDialogShow: [
+                              ...s.sendDialogShow,
+                              {
+                                speaker: "player",
+                                text:
+                                  "Me confundi, ta tudo certo haha deixa pra lá",
+                                textTranslate:
+                                  "I got confused, it's all good haha never mind",
+                              },
+                              {
+                                speaker: "",
+                                text: "Sem problemas hahaha o que mais?",
+                                textTranslate: "No problem haha what else?",
+                              },
+                            ],
+                          }));
+                        }}
+                        cancelAddAnswerToDialog={cancelAddAnswerToDialog}
                         removeClothingFromList={removeClothesFromPhone}
                         removeAllClothes={removeAllClothesFromPhone}
                         confirmationButton={
