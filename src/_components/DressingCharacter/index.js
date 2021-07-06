@@ -4,7 +4,7 @@ import { shorts, shirt } from "../../img";
 import InlineSVG from "../InlineSVG";
 import "./index.scss";
 
-const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
+const DressingCharacter = ({ character, clothes, onRemoveClick, showRemove, ...props }) => {
   let hasInteiroCover = clothes["Tronco"].reduce((acc, clothing) => {
     return acc || clothing.cover === "inteiro";
   }, false);
@@ -43,8 +43,8 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
           display: clothes["Tronco"].length === 0 ? "block" : "none",
         }}
       />
-      {Object.keys(clothes).map((label) => {
-        return clothes[label].map((clothing, index) => (
+      {Object.keys(clothes).map((label) =>
+        clothes[label].map((clothing, index) => (
           <InlineSVG
             key={clothing.id}
             src={clothing.image}
@@ -56,8 +56,8 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
               height: "100%",
             }}
           />
-        ));
-      })}
+        ))
+      )}
     </div>
   );
 };

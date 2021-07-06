@@ -4,8 +4,10 @@ import "./index.scss";
 
 const Lamp = ({ img, onClick, message, ...props }) => {
   const icon = [lamp_apagada, lamp_acesa]
-  if(img && img[0]) icon[0] = img[0]
-  if(img && img[1]) icon[1] = img[1]
+  if(img){
+    if(img[0]) icon[0] = img[0]
+    icon[1] = img[1] ? img[1] : img[0]
+  }
   return (
     <div id="acusar" onClick={onClick} {...props}>
       <span>{message}</span>

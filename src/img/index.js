@@ -39,8 +39,10 @@ import hanger from "./cabide roxo.svg";
 import hangerH from "./cabide marrom.svg";
 import dressingBg from "./Game5/cenario.svg";
 // GAME 6
+import camera from "./camera fotografica.svg";
 import ariel from "./Game6/ariel.svg";
 import smallPhoneBlank from "./Game6/celular icone.svg";
+
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -116,4 +118,5 @@ export {
   hanger,
   hangerH,
   dressingBg,
+  camera,
 };

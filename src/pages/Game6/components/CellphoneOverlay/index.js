@@ -158,6 +158,7 @@ const CellphoneOverlay = ({
                   <div>
                     {questions.map((question, index) => (
                       <Button
+                        key={index}
                         style={{
                           position: "relative",
                           margin: ".5em auto",
