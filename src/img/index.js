@@ -39,6 +39,8 @@ import hanger from "./cabide roxo.svg";
 import hangerH from "./cabide marrom.svg";
 import dressingBg from "./Game5/cenario.svg";
 // GAME 6
+import fireworks1 from './fogos de artificio azul.svg'
+import fireworks2 from './fogos de artificio rosa.svg'
 import camera from "./camera fotografica.svg";
 import ariel from "./Game6/ariel.svg";
 import smallPhoneBlank from "./Game6/celular icone.svg";
