@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { Link, Redirect } from "react-router-dom";
 import { Redirect } from "react-router-dom";
@@ -18,7 +18,14 @@ import Wardrobe from "../../_components/Wardrobe";
 import Button from "../../_components/Button";
 import { BlobBg } from "../../_components/Blob";
 import { renderToStaticMarkup } from "react-dom/server";
-import { tomato, envelope, hanger, hangerH, dressingBg, envelopeIcon } from "../../img";
+import {
+  tomato,
+  envelope,
+  hanger,
+  hangerH,
+  dressingBg,
+  envelopeIcon,
+} from "../../img";
 
 import initialState from "./initialState";
 import Tutorial from "./components/Tutorial";
@@ -29,8 +36,8 @@ import { Iniciar, Voltar } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
 import { ContactSupportOutlined } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
-import Invitation from './components/Invitation'
-import ChooseCharacter from './components/ChooseCharacter'
+import Invitation from "./components/Invitation";
+import ChooseCharacter from "./components/ChooseCharacter";
 
 const Game5 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -543,8 +550,14 @@ const Game5 = (props) => {
                     )}
 
                     {state.showInvitation && (
-                      <Invitation invitation={state.invitation} onClick={() =>
-                        setState( s  => ({...s, proceedToDressingConfirmation: true }))}
+                      <Invitation
+                        invitation={state.invitation}
+                        onClick={() =>
+                          setState((s) => ({
+                            ...s,
+                            proceedToDressingConfirmation: true,
+                          }))
+                        }
                       />
                     )}
 
@@ -606,8 +619,9 @@ const Game5 = (props) => {
 
                     {state.dressingContext && (
                       <React.Fragment>
-                        <img src={dressingBg}
-                          style={{ position: 'absolute'}}
+                        <img
+                          src={dressingBg}
+                          style={{ position: "absolute" }}
                         />
 
                         <DressingCharacter
@@ -616,45 +630,49 @@ const Game5 = (props) => {
                           showRemove
                           onRemoveClick={removeClothesFromBody}
                           style={{
-                            width: '25%',
+                            width: "25%",
                             height: "80em",
                             zIndex: state.blobToShow === 2 ? 1000000 : 0,
                             position: "absolute",
-                            bottom: '8%',
-                            left: '10%'
+                            bottom: "8%",
+                            left: "10%",
                           }}
                         />
 
                         <Wardrobe
-                          className={process.env.NODE_ENV === 'development' ? '' : ''}
+                          className={
+                            process.env.NODE_ENV === "development" ? "" : ""
+                          }
                           style={{
                             zIndex: state.blobToShow === 1 ? 1000000 : 0,
                             position: "absolute",
-                            right: '5%',
-                            top: '10%',
-                            width: '45%',
-                            height: '80%'
+                            right: "5%",
+                            top: "10%",
+                            width: "45%",
+                            height: "80%",
                           }}
                           wardrobe={state.wardrobe}
                           onClothesClick={addClothesToBody}
                         />
                         {!state.showInvitation && (
-                          <img className="stretchIn"
+                          <img
+                            className="stretchIn"
                             src={envelopeIcon}
                             alt="invite-button"
                             onClick={() =>
-                              setState( s => ({ ...s,
+                              setState((s) => ({
+                                ...s,
                                 showInvitation: true,
                                 showInviteQuestions: true,
                               }))
                             }
                             style={{
-                              cursor: 'pointer',
+                              cursor: "pointer",
                               zIndex: state.blobToShow === 3 ? 1000000 : 0,
                               position: "absolute",
-                              bottom: '3%',
-                              right: '2%',
-                              width: '10%',
+                              bottom: "3%",
+                              right: "2%",
+                              width: "10%",
                             }}
                           />
                         )}
@@ -672,16 +690,17 @@ const Game5 = (props) => {
                               ...s,
                               ready: ready,
                               readyAlert: !ready,
+                              dressingContext: !ready,
                             }));
                           }}
                           message="Estou pronto!"
                           style={{
-                            top: '0.5%',
-                            left: '1%',
+                            top: "0.5%",
+                            left: "1%",
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
                         />
-                    </React.Fragment>
+                      </React.Fragment>
                     )}
 
                     {state.showInvitation && (
@@ -768,8 +787,6 @@ const Game5 = (props) => {
                           <DressingCharacter
                             character={state.choosenCharacter}
                             clothes={state.clothes}
-                            showRemove
-                            onRemoveClick={removeClothesFromBody}
                             style={{ height: "80em" }}
                           />
                         </div>
@@ -786,6 +803,7 @@ const Game5 = (props) => {
                                 setState((s) => ({
                                   ...s,
                                   ready: false,
+                                  dressingContext: true,
                                 }))
                               }
                             >

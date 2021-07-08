@@ -42,7 +42,7 @@ const CellphoneOverlay = ({
     if (autoLoad) {
       setTimeout(() => {
         nextMessage();
-      }, 1000);
+      }, 2000);
     }
 
     //eslint-disable-next-line

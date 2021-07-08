@@ -4,7 +4,7 @@ import { shorts, shirt } from "../../img";
 import InlineSVG from "../InlineSVG";
 import "./index.scss";
 
-const DressingCharacter = ({ character, clothes, onRemoveClick, showRemove, ...props }) => {
+const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
   let hasInteiroCover = clothes["Tronco"].reduce((acc, clothing) => {
     return acc || clothing.cover === "inteiro";
   }, false);
@@ -21,7 +21,6 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, showRemove, ...p
         src={shorts}
         alt={"underware-bottom-" + character.id}
         style={{
-          cursor: "pointer",
           position: "absolute",
           height: "100%",
           display:
@@ -37,7 +36,6 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, showRemove, ...p
         src={shirt}
         alt={"underware-top-" + character.id}
         style={{
-          cursor: "pointer",
           position: "absolute",
           height: "100%",
           display: clothes["Tronco"].length === 0 ? "block" : "none",
@@ -51,7 +49,7 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, showRemove, ...p
             alt={clothing.name}
             onClick={props.showRemove ? onRemoveClick(clothing) : null}
             style={{
-              cursor: "pointer",
+              cursor: props.showRemove ? "pointer" : "default",
               position: "absolute",
               height: "100%",
             }}

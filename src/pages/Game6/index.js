@@ -1118,8 +1118,6 @@ const Game6 = (props) => {
                           <DressingCharacter
                             character={state.choosenCharacter}
                             clothes={state.clothes}
-                            showRemove
-                            onRemoveClick={removeClothesFromBody}
                             style={{ height: "80em" }}
                           />
                         </div>
@@ -1228,8 +1226,6 @@ const Game6 = (props) => {
                         <DressingCharacter
                           character={state.choosenCharacter}
                           clothes={state.clothes}
-                          showRemove
-                          onRemoveClick={removeClothesFromBody}
                           style={{ height: "80em" }}
                         />
                       </div>
