@@ -1,26 +1,23 @@
-import React from 'react'
+import React from "react";
+import marked from "marked";
+import parse from "html-react-parser";
 
-const Email = ({message, onReady}) => {
-  return(
+const Email = ({ email, onReady }) => {
+  return (
     <div>
+      <div>{email.date}</div>
       <div>
-        De: fulano@mail.com
+        De: <span>{email.senderName}</span> <span>{email.senderEmail}</span>
       </div>
       <div>
-        Assunto: Viajar
+        Assunto: <span>{email.title}</span> <span>{email.titleTranslate}</span>
       </div>
-      <div>
-        {message}
-      </div>
-      <div>
-        Atenciosamente,
-      </div>
-      <div>
-        Cliente
-      </div>
+      <div>{parse(marked(email.message.replace("\n", "</br>")))}</div>
+      <div>Atenciosamente,</div>
+      <div>{email.senderName}</div>
       <button onClick={onReady}>Estou pronto!</button>
     </div>
-  )
-}
+  );
+};
 
-export default Email
+export default Email;
