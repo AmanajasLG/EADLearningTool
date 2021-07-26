@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { apiActions, gameActions } from "../../_actions";
 import { shuffle } from "../../_helpers";
 
-import GameLoad from "../GameLoad";
+import GameTemplate from "../GameTemplate";
 import Core from "./core";
 import Feedback from "./feedback";
 
@@ -87,7 +87,7 @@ const Game7 = (props) => {
   };
 
   return (
-    <GameLoad
+    <GameTemplate
       Core={Core}
       Feedback={Feedback}
       missionId={props.match.params.id}
