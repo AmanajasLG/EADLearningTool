@@ -15,15 +15,13 @@ const Cities = ({ value, cities, onPlaceClick, onConfirm }) => {
             style={{
               backgroundColor: index === state ? "#99ddff" : "#ffdd99",
               width: "10%",
-              borderRadius: "50%",
+              padding: 5,
+              cursor: "pointer",
             }}
+            onClick={onClick(index)}
           >
-            <img
-              style={{ cursor: "pointer" }}
-              onClick={onClick(index)}
-              src={city.image}
-              alt=""
-            />
+            <img src={city.image} alt="" />
+            <p>{city.name}</p>
           </div>
         ))}
       {state !== -1 && <button onClick={onConfirm}>Confirmar local</button>}

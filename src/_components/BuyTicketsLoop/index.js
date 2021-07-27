@@ -56,13 +56,17 @@ const BuyTicketsLoop = ({ data, onDone }) => {
             <ScheduleTicket
               day={state.day}
               month={state.month}
-              flight={state.flight}
+              flight={state.flight[state.flightType]}
               tickets={state.tickets}
-              flights={data.flights}
+              flights={data.flights[state.flightType]}
               dateSelected={(value) => setState((s) => ({ ...s, day: value }))}
               monthChange={(value) => setState((s) => ({ ...s, month: value }))}
               flightSelected={(value) =>
-                setState((s) => ({ ...s, flight: value }))
+                setState((s) => ({
+                  ...s,
+                  flightType: "return",
+                  flight: { ...state.flight, [state.flightType]: value },
+                }))
               }
               counterChange={(value) =>
                 setState((s) => ({ ...s, tickets: value }))

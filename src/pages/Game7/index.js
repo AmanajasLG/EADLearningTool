@@ -12,8 +12,16 @@ import Feedback from "./feedback";
 const Game7 = (props) => {
   const load = (missionData, lang, state, setState) => {
     if (missionData && !state.email) {
+      let dateArray = missionData.mail.date.split("-");
       let email = {
         ...missionData.mail,
+        date:
+          dateArray[2] +
+          "/" +
+          dateArray[1] +
+          "/" +
+          dateArray[0].slice(0, -2) +
+          "XX",
         titleTranslate: missionData.mail.titleTranslate.find((title) => {
           return title.language.id === lang;
         }).text,

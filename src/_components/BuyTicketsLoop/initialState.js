@@ -1,15 +1,12 @@
 const initialState = () => ({
   window: "EMAIL",
   place: null,
-  day: null,
+  dayInit: null,
+  dayEnd: null,
   month: 0,
   tickets: 0,
   confirmWindow: false,
-  email: null,
-  cities: null,
-  flights: null,
-  periods: null,
-  phases: null,
-  userAnswer: {},
+  flightType: "going",
+  flight: { going: -1, return: -1 },
 });
 export default initialState;
