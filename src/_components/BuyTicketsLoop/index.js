@@ -20,6 +20,9 @@ const BuyTicketsLoop = ({ data, onDone }) => {
     flight: { ...data.flights[state.flight] },
   });
 
+  console.log('state', state)
+  console.log('data', data)
+
   return (
     <React.Fragment>
       {state.window !== "NONE" && (
@@ -94,11 +97,20 @@ const BuyTicketsLoop = ({ data, onDone }) => {
               {state.tickets + 1} passage{state.tickets === 0 ? "m" : "ns"}.
             </div>
             <div>Destino: {data.cities[state.city].name}</div>
-            <div>Mês: {months[state.month]}</div>
-            <div>Dia: {state.day}</div>
-            <div>
-              Horário: {data.flights[state.flight].takeOff} -{" "}
-              {data.flights[state.flight].land}
+            <div>Ida:
+              <div>Dia: {state.day} de {months[state.month]}</div>
+              <div>
+                Horário: {data.flights.going[state.flight.going].takeOff} -{" "}
+                {data.flights.going[state.flight.going].land}
+              </div>
+            </div>
+
+            <div>Volta:
+              <div>Dia: {state.day} de {months[state.month]}</div>
+              <div>
+                Horário: {data.flights.return[state.flight.return].takeOff} -{" "}
+                {data.flights.return[state.flight.return].land}
+              </div>
             </div>
             <button
               onClick={() => setState((s) => ({ ...s, confirmWindow: false }))}

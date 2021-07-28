@@ -37,7 +37,7 @@ const Core = ({exitGame, mission, onEndGame}) => {
            </React.Fragment>
           }
           {state.window === 'MAP' &&
-            <Map data={mission.buildings}/>
+            <Map data={mission.buildings} onIconClick={mission.buildings.map( building => index => console.log(`building:${index}`, building) ) }/>
           }
        </WindowScreen>
      }
