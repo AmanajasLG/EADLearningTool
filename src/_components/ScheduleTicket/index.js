@@ -20,9 +20,11 @@ const ScheduleTicket = ({
 }) => {
   const [state, setState] = React.useState({
     step: step ? step : 0,
-    day: day ? day : null,
+    goingDate: null,
+    returnDate: null,
     flight: flight ? flight : null,
     tickets: tickets ? tickets : null,
+    calendarIndex: 0
   });
 
   const steps = [
@@ -33,7 +35,7 @@ const ScheduleTicket = ({
   ];
   const checkStep = () => {
     return (
-      (state.step === 0 && state.day) ||
+      (state.step === 0 && state.returnDate) ||
       (state.step === 1 && state.flight) ||
       (state.step === 2 && state.flight) ||
       state.step === 3
@@ -66,6 +68,26 @@ const ScheduleTicket = ({
     if (counterChange) counterChange(value);
   };
 
+  const onCalendarChange = data => {
+    let updateData = {}
+    if(data.dates.length === 0){
+      updateData.goingDate = null
+      updateData.returnDate = null
+      updateData.calendarIndex = 0
+    }
+    if(data.dates.length > 0)
+    {
+      updateData.goingDate = data.dates[0]
+      if(state.calendarIndex === 0)
+          updateData.calendarIndex = 1
+
+      if(data.dates.length > 1){
+        updateData.returnDate = data.dates[1]
+
+      }
+    }
+    setState( s => ({...s, ...updateData}))
+  }
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <div>
@@ -73,8 +95,9 @@ const ScheduleTicket = ({
       </div>
       {state.step === 0 && (
         <Calendar
-          day={day}
+          valueIndex={state.calendarIndex}
           month={month}
+          onChange={onCalendarChange}
           onDaySelected={onDateSelected}
           onMonthChange={onMonthChange}
         />
