@@ -21,7 +21,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
   ];
 
   return (
-    <React.Fragment>
+    <div style={{position: 'relative', width: '100%', height: '100%', backgroundColor: '#0a505f'}}>
       {state.window === "BUY_TICKETS" && (
         <BuyTicketsLoop
           data={data}
@@ -52,7 +52,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
           />
         </WindowScreen>
       )}
-    </React.Fragment>
+    </div>
   );
 };
 
