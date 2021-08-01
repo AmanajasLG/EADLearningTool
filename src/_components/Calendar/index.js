@@ -33,22 +33,25 @@ const Calendar = ({clear, month, valueIndex, onChange}) => {
 
   const setColor = num => {
     if(dates.length > 0){
-      //if(num === dates[0].day || num === dates[dates.length - 1].day)
-      //  return '#fdcccc'
-      if(dates[0].day <= num && num <= dates[dates.length - 1].day)
-        return '#ffdddd'
+      if(num === dates[0].day || num === dates[dates.length - 1].day){
+        let side = num === dates[0].day ? 'right' : 'left'
+        return `-webkit-linear-gradient(${side}, #ffeeee, #ffeeee 50%, transparent 50%, transparent 100%)`
+      }
+      if(dates[0].day < num && num < dates[dates.length - 1].day)
+        return '-webkit-linear-gradient(top, #ffeeee, #ffeeee 100%, transparent 100%, transparent 100%)'
     }
     return null
   }
   console.log('dates', dates)
   return(
-    <div style={{width: '100%'}}>
+    <div style={{width: '100%', height: '100%'}}>
       <Counter value={monthValue} list={months} onChange={ monthChange }/>
-      <Button onClick={() => setDates([])}>Limpar datas</Button>
       <div style={{display: 'grid',
         gridTemplateColumns: `${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}%`,
         gridTemplateRows: `20% 20% 20% 20% 20% 20%`,
-        padding: '5%'
+        rowGap: '3%',
+        padding: '5%',
+        paddingTop: 0
       }}
       >
         {['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'].map( (value, index) =>
@@ -57,11 +60,11 @@ const Calendar = ({clear, month, valueIndex, onChange}) => {
         {Array.from({length: 31}, (_, i) => i + 1).map((num, index) =>
           <div key={index}
             style={{cursor: 'pointer',
-              backgroundColor: setColor(num),
-              padding: '0 10% 0 10%'
+              backgroundImage: setColor(num),
+              padding: '0 10% 0 10%',
             }}
             onClick={() => dateSelect(num)}>
-            <p style={{borderRadius: '50%', textAlign: 'center',
+            <p style={{borderRadius: '50%', textAlign: 'center', height: '100%', aspectRatio: '1',
                 backgroundColor:  dates.length > 0 && (num === dates[0].day || num === dates[dates.length - 1].day) ? '#fdcccc' : null }}>
             {num}
           </p>

@@ -2,6 +2,7 @@ import React from "react";
 import Calendar from "../Calendar";
 import Flights from "../Flights";
 import Counter from "../Counter";
+import { Iniciar } from '../Button'
 
 const numberList = Array.from({ length: 9 }, (_, i) => i + 1);
 
@@ -89,7 +90,7 @@ const ScheduleTicket = ({
     setState( s => ({...s, ...updateData}))
   }
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <React.Fragment>
       <div>
         Agende o Voo! {steps.slice(0, state.step + 1).map((t) => ` > ${t}`)}
       </div>
@@ -138,10 +139,8 @@ const ScheduleTicket = ({
           Voltar
         </button>
       )}
-      <button disabled={!checkStep()} onClick={advance}>
-        Avançar
-      </button>
-    </div>
+      <Iniciar style={{position: 'absolute', right: '5%', bottom: '-2.5%'}}disabled={!checkStep()} onClick={advance} label='Confirmar'/>
+    </React.Fragment>
   );
 };
 
