@@ -31,21 +31,41 @@ const Calendar = ({clear, month, valueIndex, onChange}) => {
     if(onChange) onChange({month: monthValue, dates: dates})
   }, [monthValue, dates])
 
+  const setColor = num => {
+    if(dates.length > 0){
+      //if(num === dates[0].day || num === dates[dates.length - 1].day)
+      //  return '#fdcccc'
+      if(dates[0].day <= num && num <= dates[dates.length - 1].day)
+        return '#ffdddd'
+    }
+    return null
+  }
   console.log('dates', dates)
   return(
-    <div>
+    <div style={{width: '100%'}}>
       <Counter value={monthValue} list={months} onChange={ monthChange }/>
       <Button onClick={() => setDates([])}>Limpar datas</Button>
-      <div style={{display: 'grid', width: '100%', height: '75%',
+      <div style={{display: 'grid',
         gridTemplateColumns: `${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}%`,
-        gridTemplateRows: `20% 20% 20% 20% 20%`}}
+        gridTemplateRows: `20% 20% 20% 20% 20% 20%`,
+        padding: '5%'
+      }}
       >
+        {['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'].map( (value, index) =>
+          <p key={index} style={{textAlign: 'center'}}>{value}</p>
+        )}
         {Array.from({length: 31}, (_, i) => i + 1).map((num, index) =>
-          <Button key={index}
-            style={{backgroundColor: dates.find(d => d.day === num)? '#ffdddd' : null}}
+          <div key={index}
+            style={{cursor: 'pointer',
+              backgroundColor: setColor(num),
+              padding: '0 10% 0 10%'
+            }}
             onClick={() => dateSelect(num)}>
+            <p style={{borderRadius: '50%', textAlign: 'center',
+                backgroundColor:  dates.length > 0 && (num === dates[0].day || num === dates[dates.length - 1].day) ? '#fdcccc' : null }}>
             {num}
-          </Button>
+          </p>
+          </div>
         )}
       </div>
     </div>

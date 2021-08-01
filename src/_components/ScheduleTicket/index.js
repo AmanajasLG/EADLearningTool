@@ -94,13 +94,24 @@ const ScheduleTicket = ({
         Agende o Voo! {steps.slice(0, state.step + 1).map((t) => ` > ${t}`)}
       </div>
       {state.step === 0 && (
-        <Calendar
-          valueIndex={state.calendarIndex}
-          month={month}
-          onChange={onCalendarChange}
-          onDaySelected={onDateSelected}
-          onMonthChange={onMonthChange}
-        />
+        <React.Fragment>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
+          <Calendar
+            valueIndex={state.calendarIndex}
+            month={month}
+            onChange={onCalendarChange}
+            onDaySelected={onDateSelected}
+            onMonthChange={onMonthChange}
+          />
+          <Calendar
+            valueIndex={state.calendarIndex}
+            month={month + 1}
+            onChange={onCalendarChange}
+            onDaySelected={onDateSelected}
+            onMonthChange={onMonthChange}
+          />
+          </div>
+        </React.Fragment>
       )}
       {state.step === 1 && (
         <Flights
