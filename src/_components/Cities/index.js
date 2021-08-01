@@ -1,6 +1,6 @@
 import React from "react";
 import { Iniciar } from '../Button'
-
+import './index.scss'
 const Cities = ({ value, cities, onPlaceClick, onConfirm }) => {
   const [state, setState] = React.useState(value);
   const onClick = (index) => () => {
@@ -19,13 +19,10 @@ const Cities = ({ value, cities, onPlaceClick, onConfirm }) => {
       }}>
         {cities &&
           cities.map((city, index) => (
-            <div
+            <div className='cityCard'
               key={index}
               style={{
-                backgroundColor: index === state ? "#f9afa1" : "#59316d",
-                borderTop: index === state? '4px solid #f9afa1' : 'none',
-                borderRight: index === state? '4px solid #f9afa1' : 'none',
-                borderLeft: index === state? '4px solid #f9afa1' : 'none',
+                backgroundColor: index === state ? "#f9afa1" : null,
                 cursor: "pointer",
                 width: '30%',
                 margin: '1%',
