@@ -20,9 +20,6 @@ const BuyTicketsLoop = ({ data, onDone }) => {
     flight: { ...data.flights[state.flight] },
   });
 
-  console.log('state', state)
-  console.log('data', data)
-
   return (
     <React.Fragment>
       {state.window !== "NONE" && (
@@ -31,8 +28,8 @@ const BuyTicketsLoop = ({ data, onDone }) => {
             position: "absolute",
             left: "10%",
             width: "70%",
-            height: "70%",
-            margin: "10% auto 0 auto",
+            height: "80%",
+            margin: "5% auto 0 auto",
             fontSize: "3em",
           }}
         >
@@ -126,10 +123,15 @@ const BuyTicketsLoop = ({ data, onDone }) => {
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "10%",
+          width: "13%",
+          height: '70%',
           position: "absolute",
-          top: "20%",
-          right: 0,
+          top: "5%",
+          right: '2%',
+          backgroundColor: '#336573',
+          padding: '1% 2% 1% 2%',
+          justifyContent: 'space-evenly',
+          borderRadius: '6%/2%'
         }}
       >
         <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
@@ -156,23 +158,6 @@ const BuyTicketsLoop = ({ data, onDone }) => {
             alt=""
           />
         </div>
-      </div>
-
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          backgroundColor: "#aaaaff",
-          borderRadius: "50%",
-          width: "10%",
-        }}
-      >
-        <img
-          style={{ cursor: "pointer" }}
-          src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
-          alt=""
-        />
       </div>
     </React.Fragment>
   );

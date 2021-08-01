@@ -38,7 +38,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
             left: "10%",
             width: "70%",
             height: "70%",
-            margin: "10% auto 0 auto",
+            margin: "5% auto 0 auto",
             fontSize: "3em",
           }}
         >
