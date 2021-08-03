@@ -13,8 +13,6 @@ const BuyTicketsLoop = ({ data, onDone }) => {
   const [state, setState] = React.useState(initialState());
 
   const ticketData = () => ({
-    day: state.day,
-    month: state.month,
     city: state.city,
     tickets: state.tickets + 1,
     flight: { ...data.flights[state.flight] },
@@ -54,13 +52,9 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           )}
           {state.window === "SCHEDULE" && (
             <ScheduleTicket
-              day={state.day}
-              month={state.month}
               flight={state.flight[state.flightType]}
               tickets={state.tickets}
               flights={data.flights[state.flightType]}
-              dateSelected={(value) => setState((s) => ({ ...s, day: value }))}
-              monthChange={(value) => setState((s) => ({ ...s, month: value }))}
               flightSelected={(value) =>
                 setState((s) => ({
                   ...s,

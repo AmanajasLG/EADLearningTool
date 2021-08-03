@@ -1,8 +1,10 @@
 import React from 'react'
 
-const Counter = ({value, list, onChange}) => {
+const Counter = ({noLeft, noRight, value, list, onChange}) => {
   const [state, setState] = React.useState(value)
 
+  React.useEffect(() => setState(value), [value])
+  
   const move = direction => () => {
     let next = state + direction
     if(next < 0) next = list.length - 1
@@ -14,7 +16,9 @@ const Counter = ({value, list, onChange}) => {
 
   return(
     <div>
-      <button onClick={move(-1)}>{"<"}</button>{list[state]}<button onClick={move(1)}>{">"}</button>
+      { !noLeft && <button onClick={move(-1)}>{"<"}</button> }
+        {list[state]}
+      { !noRight && <button onClick={move(1)}>{">"}</button> }
     </div>
   )
 }

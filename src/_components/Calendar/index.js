@@ -3,33 +3,37 @@ import Button from '@material-ui/core/Button'
 import Counter from '../Counter'
 import { months } from '../../_helpers'
 
-const Calendar = ({clear, month, valueIndex, onChange}) => {
+const Calendar = ({noLeft, noRight, clear, month, valueIndex, onChange}) => {
 
-  const [monthValue, setMonth] = React.useState(month ? month : 0)
   const [dates, setDates] = React.useState([])
-
+  const [monthValue, setMonth] = React.useState(month ? month : 0)
   const dateSelect = num => {
     let d = dates.slice(0)
-    console.log('d:', d)
     if(valueIndex === null || valueIndex === undefined)
       valueIndex = 0
 
-    console.log('valueIndex:', valueIndex)
     if(valueIndex > dates.length - 1)
     {
       d = [...d, ...new Array( valueIndex - (dates.length - 1) )]
     }
     d[valueIndex] = {day: num, month: monthValue}
-    console.log('d:', d)
     setDates(d)
   }
 
-  const monthChange = value => setMonth(value)
+  React.useEffect(() => {
+    console.log('month changed')
+    setMonth(month)
+  }, [month])
 
   React.useEffect(() => {
-    console.log('called useEffect d:', dates)
+    console.log('monthValue changed')
     if(onChange) onChange({month: monthValue, dates: dates})
   }, [monthValue, dates])
+
+  const onMonthChange = value => {
+    if(onChange) onChange({month: value, dates: dates})
+    setMonth(value)
+  }
 
   const setColor = num => {
     if(dates.length > 0){
@@ -42,10 +46,10 @@ const Calendar = ({clear, month, valueIndex, onChange}) => {
     }
     return null
   }
-  console.log('dates', dates)
+
   return(
     <div style={{width: '100%', height: '100%'}}>
-      <Counter value={monthValue} list={months} onChange={ monthChange }/>
+      <Counter noLeft={ noLeft } noRight={ noRight } value={ monthValue } list={ months } onChange={ value => setMonth(value) }/>
       <div style={{display: 'grid',
         gridTemplateColumns: `${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}%`,
         gridTemplateRows: `20% 20% 20% 20% 20% 20%`,

@@ -8,8 +8,6 @@ const numberList = Array.from({ length: 9 }, (_, i) => i + 1);
 
 const ScheduleTicket = ({
   step,
-  day,
-  month,
   flight,
   flights,
   tickets,
@@ -25,7 +23,8 @@ const ScheduleTicket = ({
     returnDate: null,
     flight: flight ? flight : null,
     tickets: tickets ? tickets : null,
-    calendarIndex: 0
+    calendarIndex: 0,
+    month: 0
   });
 
   const steps = [
@@ -47,15 +46,6 @@ const ScheduleTicket = ({
     state.step < 3
       ? () => setState((s) => ({ ...s, step: state.step + 1 }))
       : onConfirm;
-  const onDateSelected = (num) => {
-    setState((s) => ({ ...s, day: num }));
-    if (dateSelected) dateSelected(num);
-  };
-
-  const onMonthChange = (value) => {
-    setState((s) => ({ ...s, month: value }));
-    if (monthChange) monthChange(value);
-  };
 
   const onFlightSelected = (index) => {
     if (state.step === 1) setState((s) => ({ ...s, step: state.step + 1 }));
@@ -69,9 +59,16 @@ const ScheduleTicket = ({
     if (counterChange) counterChange(value);
   };
 
-  const onCalendarChange = data => {
+  const onCalendarChange = index => data =>
+  {
     let updateData = {}
-    if(data.dates.length === 0){
+    console.log(`${index} data.month:`, data.month)
+    updateData.month = data.month - index
+    updateData.month = updateData.month === -1 ? 11 : updateData.month
+    console.log(`${index} updateData.month:`, updateData.month)
+
+    if(data.dates.length === 0)
+    {
       updateData.goingDate = null
       updateData.returnDate = null
       updateData.calendarIndex = 0
@@ -89,6 +86,7 @@ const ScheduleTicket = ({
     }
     setState( s => ({...s, ...updateData}))
   }
+
   return (
     <React.Fragment>
       <div>
@@ -98,18 +96,16 @@ const ScheduleTicket = ({
         <React.Fragment>
           <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
           <Calendar
+            noRight
             valueIndex={state.calendarIndex}
-            month={month}
-            onChange={onCalendarChange}
-            onDaySelected={onDateSelected}
-            onMonthChange={onMonthChange}
+            month={ state.month }
+            onChange={onCalendarChange(0)}
           />
           <Calendar
+            noLeft
             valueIndex={state.calendarIndex}
-            month={month + 1}
-            onChange={onCalendarChange}
-            onDaySelected={onDateSelected}
-            onMonthChange={onMonthChange}
+            month={ (state.month + 1) % 12 }
+            onChange={onCalendarChange(1)}
           />
           </div>
         </React.Fragment>

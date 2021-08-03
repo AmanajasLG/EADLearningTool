@@ -1,9 +1,7 @@
 const initialState = () => ({
   window: "EMAIL",
   place: null,
-  dayInit: null,
-  dayEnd: null,
-  month: 0,
+  schedule:[],
   tickets: 0,
   confirmWindow: false,
   flightType: "going",
