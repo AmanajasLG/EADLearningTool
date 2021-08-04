@@ -9,27 +9,26 @@ import BuyTicketsLoop from "../../_components/BuyTicketsLoop";
 import SendEmail from "../../_components/SendEmail";
 
 import initialState from "./initialState";
-import { WorkSharp } from "@material-ui/icons";
 import { format } from "date-fns";
 import { months, shuffle } from "../../_helpers";
 
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState({ ...initialState() });
 
-  const createTexts = () => {
-    return [...data.phrases].map((phrase) => {
+  const createTexts = (userData) => {
+    data.phrases.map((phrase) => {
       phrase.extraFields.forEach((extraField, index) => {
         let periods = ["manhã", "tarde", "noite", "madrugada"];
 
         switch (extraField.type) {
           case "city":
-            if (!phrase.words.includes(state.city.name))
-              phrase.words.push(state.city.name);
+            if (!phrase.words.includes(userData.city.name))
+              phrase.words.push(userData.city.name);
 
             phrase.rightOrder.map((word) => {
               if (!word.preset && word.type === extraField.type) {
                 word.preset = true;
-                word.text = state.city.name;
+                word.text = userData.city.name;
               }
 
               return word;
@@ -47,18 +46,18 @@ const Core = ({ exitGame, data, onEndGame }) => {
           case "month":
             if (
               !phrase.words.includes(
-                months[parseInt(format(state.dates.return, "M")) - 1]
+                months[parseInt(format(userData.dates.return, "M")) - 1]
               )
             )
               phrase.words.push(
-                months[parseInt(format(state.dates.return, "M")) - 1]
+                months[parseInt(format(userData.dates.return, "M")) - 1]
               );
 
             phrase.rightOrder.map((word) => {
               if (!word.preset && word.type === extraField.type) {
                 word.preset = true;
                 word.text =
-                  months[parseInt(format(state.dates.return, "M")) - 1];
+                  months[parseInt(format(userData.dates.return, "M")) - 1];
               }
 
               return word;
@@ -71,14 +70,14 @@ const Core = ({ exitGame, data, onEndGame }) => {
             }
             break;
           case "day":
-            phrase.words.push(format(state.dates.going, "dd"));
-            phrase.words.push(format(state.dates.return, "dd"));
+            phrase.words.push(format(userData.dates.going, "dd"));
+            phrase.words.push(format(userData.dates.return, "dd"));
 
             phrase.rightOrder.map((word) => {
               if (!word.preset && word.type === extraField.type) {
                 word.preset = true;
-                if (index === 1) word.text = format(state.dates.going, "dd");
-                else word.text = format(state.dates.return, "dd");
+                if (index === 1) word.text = format(userData.dates.going, "dd");
+                else word.text = format(userData.dates.return, "dd");
               }
 
               return word;
@@ -86,15 +85,15 @@ const Core = ({ exitGame, data, onEndGame }) => {
 
             break;
           case "period":
-            phrase.words.push(state.flights.going.period);
-            if (!phrase.words.includes(state.flights.return.period))
-              phrase.words.push(state.flights.return.period);
+            phrase.words.push(userData.flights.going.period);
+            if (!phrase.words.includes(userData.flights.return.period))
+              phrase.words.push(userData.flights.return.period);
 
             phrase.rightOrder.map((word) => {
               if (!word.preset && word.type === extraField.type) {
                 word.preset = true;
-                if (index === 2) word.text = state.flights.going.period;
-                else word.text = state.flights.return.period;
+                if (index === 2) word.text = userData.flights.going.period;
+                else word.text = userData.flights.return.period;
               }
 
               return word;
@@ -107,13 +106,13 @@ const Core = ({ exitGame, data, onEndGame }) => {
             }
             break;
           case "peopleCount":
-            if (!phrase.words.includes(state.tickets))
-              phrase.words.push(state.tickets);
+            if (!phrase.words.includes(userData.tickets))
+              phrase.words.push(userData.tickets);
 
             phrase.rightOrder.map((word) => {
               if (!word.preset && word.type === extraField.type) {
                 word.preset = true;
-                word.text = state.tickets;
+                word.text = userData.tickets;
               }
 
               return word;
@@ -144,9 +143,14 @@ const Core = ({ exitGame, data, onEndGame }) => {
       {state.window === "BUY_TICKETS" && (
         <BuyTicketsLoop
           data={data}
-          onDone={(data) =>
-            setState((s) => ({ ...s, ...data, window: "SEND_EMAIL" }))
-          }
+          onDone={(buyTicketsData) => {
+            createTexts(buyTicketsData);
+            setState((s) => ({
+              ...s,
+              ...buyTicketsData,
+              window: "SEND_EMAIL",
+            }));
+          }}
         />
       )}
 
@@ -162,9 +166,9 @@ const Core = ({ exitGame, data, onEndGame }) => {
           }}
         >
           <SendEmail
-            phrases={createTexts()}
+            phrases={data.phrases}
             onConfirm={(sentences) =>
-              onEndGame({ tickets: state.tickets, sentences })
+              onEndGame({ ...data, userAnswers: { ...state, sentences } })
             }
           />
         </WindowScreen>

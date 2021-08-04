@@ -36,12 +36,7 @@ const SendEmail = ({ phrases, onConfirm }) => {
     }));
   };
   const sendData = () => {
-    // onConfirm(
-    //   phrases.map((t, index) => ({
-    //     correct: t,
-    //     player: state.sentences[index],
-    //   }))
-    // );
+    onConfirm(state.sentences);
   };
 
   return (

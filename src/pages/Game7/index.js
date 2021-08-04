@@ -1,4 +1,4 @@
-import { LaptopWindowsRounded } from "@material-ui/icons";
+import { ErrorSharp, LaptopWindowsRounded } from "@material-ui/icons";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -8,7 +8,11 @@ import GameTemplate from "../GameTemplate";
 import Core from "./core";
 import Feedback from "./feedback";
 
+import { checkErros, genFeedbackMessages } from "./helpers";
+
 const Game7 = (props) => {
+  let dispatch = useDispatch();
+
   const load = (missionData, lang, state, setState) => {
     if (missionData && !state.email) {
       let dateArray = missionData.mail.date.split("-");
@@ -88,12 +92,35 @@ const Game7 = (props) => {
     }
   };
 
+  const loadFeedback = (data, missionId, userId) => {
+    let errors = checkErros(data);
+
+    dispatch(
+      gameActions.create("results", {
+        user: userId,
+        mission: missionId,
+        won: errors.length === 0,
+        userErrors: errors.length ? JSON.stringify(errors) : null,
+      })
+    );
+
+    return {
+      won: errors.length === 0,
+      messages: genFeedbackMessages(
+        errors,
+        data.userAnswers.city.name,
+        data.email.senderName
+      ),
+    };
+  };
+
   return (
     <GameTemplate
       Core={Core}
       Feedback={Feedback}
       missionId={props.match.params.id}
       loadData={load}
+      loadFeedback={loadFeedback}
     />
   );
 };
