@@ -6,24 +6,21 @@ import Airplane from "@material-ui/icons/AirplanemodeActive";
 import TakeoffIcon from "@material-ui/icons/FlightTakeoff";
 import LandIcon from "@material-ui/icons/FlightLand";
 
-import { zeroFill } from "../../_helpers";
-
 const Flights = ({ selected, flights, onClick }) => {
   return (
     <div>
       {flights &&
         flights.map((flight, index) => (
           <Button
-            onClick={() => (onClick ? onClick(index) : null)}
+            onClick={() => (onClick ? onClick(flight) : null)}
             style={{
-              backgroundColor: selected === index ? "#ff9999" : "white",
+              backgroundColor: selected === flight ? "#ff9999" : "white",
               display: "block",
             }}
             key={index}
           >
-            Voo <Airplane />{" "}
-            {zeroFill(`${Math.floor(Math.random() * 10000)}`, 4)}{" "}
-            <TakeoffIcon /> {flight.departure} : {flight.arrival} <LandIcon />
+            Voo <Airplane /> {flight.number} <TakeoffIcon /> {flight.departure}{" "}
+            : {flight.arrival} <LandIcon />
           </Button>
         ))}
     </div>

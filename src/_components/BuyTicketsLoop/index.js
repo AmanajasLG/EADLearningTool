@@ -6,6 +6,7 @@ import Email from "../Email";
 import Cities from "../Cities";
 import ScheduleTicket from "../ScheduleTicket";
 import { months } from "../../_helpers";
+import { format } from "date-fns";
 
 import initialState from "./initialState";
 
@@ -14,8 +15,13 @@ const BuyTicketsLoop = ({ data, onDone }) => {
 
   const ticketData = () => ({
     city: state.city,
+    days: Math.ceil((state.dates[1] - state.dates[0]) / (1000 * 60 * 60 * 24)),
+    dates: {
+      going: state.dates[0],
+      return: state.dates[1],
+    },
     tickets: state.tickets + 1,
-    flight: { ...data.flights[state.flight] },
+    flights: state.flights,
   });
 
   return (
@@ -52,14 +58,22 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           )}
           {state.window === "SCHEDULE" && (
             <ScheduleTicket
-              flight={state.flight[state.flightType]}
-              tickets={state.tickets}
-              flights={data.flights[state.flightType]}
-              flightSelected={(value) =>
+              date={data.date}
+              type={state.type}
+              typeUpdate={() =>
                 setState((s) => ({
                   ...s,
-                  flightType: "return",
-                  flight: { ...state.flight, [state.flightType]: value },
+                  type: s.type === "going" ? "return" : "going",
+                }))
+              }
+              dates={state.dates}
+              flightsSelected={state.flights}
+              tickets={state.tickets}
+              flights={data.flights}
+              flightSelected={(flight) =>
+                setState((s) => ({
+                  ...s,
+                  flights: { ...s.flights, [s.type]: flight },
                 }))
               }
               counterChange={(value) =>
@@ -67,6 +81,12 @@ const BuyTicketsLoop = ({ data, onDone }) => {
               }
               onConfirm={() =>
                 setState((s) => ({ ...s, window: "NONE", confirmWindow: true }))
+              }
+              dateSelected={(dates) =>
+                setState((s) => ({
+                  ...s,
+                  dates: [...dates],
+                }))
               }
             />
           )}
@@ -87,24 +107,31 @@ const BuyTicketsLoop = ({ data, onDone }) => {
             <div>
               {state.tickets + 1} passage{state.tickets === 0 ? "m" : "ns"}.
             </div>
-            <div>Destino: {data.cities[state.city].name}</div>
-            <div>Ida:
-              <div>Dia: {state.day} de {months[state.month]}</div>
+            <div>Destino: {state.city.name}</div>
+            <div>
+              Ida:
+              <div>Dia: {format(state.dates[0], "dd/MM")}</div>
               <div>
-                Horário: {data.flights.going[state.flight.going].takeOff} -{" "}
-                {data.flights.going[state.flight.going].land}
+                Horário: {state.flights.going.departure} -{" "}
+                {state.flights.going.arrival}
               </div>
             </div>
-
-            <div>Volta:
-              <div>Dia: {state.day} de {months[state.month]}</div>
+            <div>
+              Volta:
+              <div>Dia: {format(state.dates[1], "dd/MM")}</div>
               <div>
-                Horário: {data.flights.return[state.flight.return].takeOff} -{" "}
-                {data.flights.return[state.flight.return].land}
+                Horário: {state.flights.return.departure} -{" "}
+                {state.flights.return.arrival}
               </div>
             </div>
             <button
-              onClick={() => setState((s) => ({ ...s, confirmWindow: false }))}
+              onClick={() =>
+                setState((s) => ({
+                  ...s,
+                  confirmWindow: false,
+                  window: "SCHEDULE",
+                }))
+              }
             >
               Voltar
             </button>
@@ -118,14 +145,14 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           display: "flex",
           flexDirection: "column",
           width: "13%",
-          height: '70%',
+          height: "70%",
           position: "absolute",
           top: "5%",
-          right: '2%',
-          backgroundColor: '#336573',
-          padding: '1% 2% 1% 2%',
-          justifyContent: 'space-evenly',
-          borderRadius: '6%/2%'
+          right: "2%",
+          backgroundColor: "#336573",
+          padding: "1% 2% 1% 2%",
+          justifyContent: "space-evenly",
+          borderRadius: "6%/2%",
         }}
       >
         <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
