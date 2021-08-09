@@ -39,7 +39,16 @@ const BuyTicketsLoop = ({ data, onDone }) => {
         >
           {state.window === "EMAIL" && (
             <Email
-              email={data.email}
+              email={
+                data.email.message
+                  ? data.email
+                  : {
+                      ...data.email,
+                      message: data.messages.find(
+                        (message) => message.type === "init"
+                      ),
+                    }
+              }
               onReady={() => setState((s) => ({ ...s, window: "PLACES" }))}
             />
           )}
