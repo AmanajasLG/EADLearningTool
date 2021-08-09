@@ -10,6 +10,7 @@ import initialState from "./initialState";
 import { format } from "date-fns";
 import { months } from "../../_helpers";
 import Email from "../../_components/Email";
+import SendEmail from "../../_components/SendEmail";
 import { checkBookingError } from "./helpers";
 
 const Core = ({ exitGame, data, onEndGame }) => {
@@ -25,6 +26,33 @@ const Core = ({ exitGame, data, onEndGame }) => {
     `A viagem é de ${state.userAnswers.flights.going.period}`,
     `${state.userAnswers.tickets} pessoas vão viajar`,
   ];
+
+  const getMessage = () => {
+    return data.messages.find((message) => {
+      switch (state.emailType) {
+        case "flight":
+          return (
+            message.type === state.emailType &&
+            message.correctChoice ===
+              checkBookingError({
+                ...data,
+                userAnswers: { ...state.userAnswers },
+              })
+          );
+        case "hotel":
+          return (
+            message.type === state.emailType &&
+            message.correctChoice === state.userAnswers.hotel.correct
+          );
+        case "directions":
+          return (
+            message.type === state.emailType && message.order === state.order
+          );
+        default:
+          return {};
+      }
+    });
+  };
 
   return (
     <React.Fragment>
@@ -75,38 +103,32 @@ const Core = ({ exitGame, data, onEndGame }) => {
             <Email
               email={{
                 ...data.email,
-                message: data.messages.find((message) => {
-                  switch (state.emailType) {
-                    case "flight":
-                      return (
-                        message.type === state.emailType &&
-                        message.correctChoice ===
-                          checkBookingError({
-                            ...data,
-                            userAnswers: { ...state.userAnswers },
-                          })
-                      );
-                    case "hotel":
-                      return (
-                        message.type === state.emailType &&
-                        message.correctChoice ===
-                          state.userAnswers.hotel.correct
-                      );
-                    case "directions":
-                      return (
-                        message.type === state.emailType &&
-                        message.order === state.order
-                      );
-                    default:
-                      return {};
-                  }
-                }),
+                message: getMessage(),
               }}
               onReady={() =>
                 setState((s) => ({
                   ...s,
-                  window: "SEND_EMAIL",
-                  showMap: true,
+                  window: "MAP",
+                  showEmail: true,
+                }))
+              }
+            />
+          )}
+
+          {state.showEmail && (
+            <SendEmail
+              phrases={[getMessage().responseEmail]}
+              onConfirm={(sentences) =>
+                setState((s) => ({
+                  ...s,
+                  window: "CLIENT_RESPONSE",
+                  emailType: s.emailType === "flight" ? "hotel" : "directions",
+                  order: s.emailType === "directions" ? s.order + 1 : s.order,
+                  userAnswers: {
+                    ...s.userAnswers,
+                    sentences: [...s.userAnswers.sentences, ...sentences],
+                  },
+                  showEmail: false,
                 }))
               }
             />
@@ -114,7 +136,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
         </WindowScreen>
       )}
 
-      {state.showMap && (
+      {state.window === "MAP" && (
         <WindowScreen
           style={{
             position: "absolute",

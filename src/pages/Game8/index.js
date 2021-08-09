@@ -35,8 +35,11 @@ const Game8 = (props) => {
         responseEmail: {
           id: message.responseEmail.id,
           size: message.responseEmail.size,
-          partials: shuffle(
-            message.responseEmail.partials.map((partial) => partial.text)
+          words: shuffle(
+            message.responseEmail.partials.map((partial) => ({
+              text: partial.text,
+              picked: false,
+            }))
           ),
           rightOrder: message.responseEmail.partials
             .filter((partial) => partial.correct)
