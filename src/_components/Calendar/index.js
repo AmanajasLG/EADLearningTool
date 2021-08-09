@@ -71,11 +71,14 @@ const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) 
   const isDayInRange = num =>
     datesValue[0] && datesValue[1] &&
     (
-      (datesValue[0].month === monthValue && datesValue[0].day < num) ||
-      (datesValue[1].month === monthValue && num < datesValue[1].day) ||
-      (datesValue[0].month < monthValue && monthValue < datesValue[1].month) ||
       ((datesValue[0].month === monthValue && monthValue === datesValue[1].month) &&
-        datesValue[0].day < num && num < datesValue[1].day)
+        datesValue[0].day < num && num < datesValue[1].day) ||
+      (datesValue[0].month !== monthValue || monthValue !== datesValue[1].month) && 
+      (
+        (datesValue[0].month === monthValue && datesValue[0].day < num) ||
+        (datesValue[1].month === monthValue && num < datesValue[1].day) ||
+        (datesValue[0].month < monthValue && monthValue < datesValue[1].month)
+      )
     )
 
   const isDaySelected = num =>
