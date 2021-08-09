@@ -33,6 +33,9 @@ const ScheduleTicket = ({
     month: 0,
   });
 
+  const [calendarMonth, setMonth] = React.useState(0)
+  const [datesValue, setDates] = React.useState([null, null])
+
   const steps = [
     "Escolha a data",
     "Escolha o voo de ida",
@@ -68,13 +71,16 @@ const ScheduleTicket = ({
     if (counterChange) counterChange(value);
   };
 
-  const onCalendarChange = (dates) => {
-    setState((s) => ({
-      ...s,
-      dates: [...dates],
-    }));
-
-    dateSelected(dates);
+  const onCalendarChange = index => data => {
+    if(index === 0){
+      setMonth(data.month)
+      dateSelected(data);
+    }
+    if(index === 1){
+      let m = data.month - 1
+      setMonth( m === -1? 11 : m )
+    }
+    setDates([...data.dates])
   };
 
   return (
@@ -83,17 +89,20 @@ const ScheduleTicket = ({
         Agende o Voo! {steps.slice(0, state.step + 1).map((t) => ` > ${t}`)}
       </div>
       {state.step === 0 && (
-        <DateRangePicker
-          onChange={onCalendarChange}
-          value={
-            state.dates.length ? state.dates : [new Date(date), new Date(date)]
-          }
-          isOpen={true}
-          format={"dd/M/yyyy"}
-          className="teste"
-          calendarClassName="teste-1"
-          rangeDivider=" até "
-        />
+        <div style={{display: 'flex'}}>
+          <Calendar
+            noRight
+            month={calendarMonth}
+            dates={datesValue}
+            onChange={onCalendarChange(0)}
+          />
+          <Calendar
+            noLeft
+            month={(calendarMonth + 1) % 12}
+            dates={datesValue}
+            onChange={onCalendarChange(1)}
+          />
+        </div>
       )}
       {state.step === 1 && (
         <Flights

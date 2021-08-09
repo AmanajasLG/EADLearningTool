@@ -4,20 +4,35 @@ import Counter from '../Counter'
 import { months } from '../../_helpers'
 import './index.scss'
 
-const Calendar = ({noLeft, noRight, clear, month, valueIndex, onChange}) => {
+const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) => {
 
-  const [dates, setDates] = React.useState([])
+  const [datesValue, setDates] = React.useState(dates ? dates : [null, null])
   const [monthValue, setMonth] = React.useState(month ? month : 0)
   const dateSelect = num => {
-    let d = dates.slice(0)
-    if(valueIndex === null || valueIndex === undefined)
-      valueIndex = 0
-
-    if(valueIndex > dates.length - 1)
+    console.log('clicked:', num)
+    console.log('datesValue:', datesValue)
+    let d = datesValue.slice(0)
+    if(d[0] === null)
+      d[0] = {day: num, month: monthValue}
+    else if(d[1] === null)
     {
-      d = [...d, ...new Array( valueIndex - (dates.length - 1) )]
+      if(d[0].month < monthValue || (d[0].month === monthValue && num > d[0].day))
+      {
+        console.log('should enter here')
+        d[1] = {day: num, month: monthValue}
+      }
+      else if(num < d[0].day)
+      {
+        let temp = d[0]
+        d[0] = {day: num, month: monthValue}
+        d[1] = temp
+      }
     }
-    d[valueIndex] = {day: num, month: monthValue}
+    else{
+      d[0] = {day: num, month: monthValue}
+      d[1] = null
+    }
+    console.log('d', d)
     setDates(d)
   }
 
@@ -27,26 +42,45 @@ const Calendar = ({noLeft, noRight, clear, month, valueIndex, onChange}) => {
   }, [month])
 
   React.useEffect(() => {
-    console.log('monthValue changed')
-    if(onChange) onChange({month: monthValue, dates: dates})
-  }, [monthValue, dates])
+    console.log('received dates changed')
+    if(dates === datesValue || (dates[0] === datesValue[0] && dates[1] === datesValue[1]) ||
+      (dates[0] !== null && datesValue[0] !== null && dates[0].day === datesValue[0].day && dates[0].month === datesValue[0].month &&
+       dates[1] !== null && datesValue[1] !== null && dates[1].day === datesValue[1].day && dates[1].month === datesValue[1].month))
+      return
 
-  const onMonthChange = value => {
-    if(onChange) onChange({month: value, dates: dates})
-    setMonth(value)
-  }
+    setDates([...dates])
+  }, [dates])
+
+  React.useEffect(() => {
+
+    let obj = {month: monthValue, dates: datesValue}
+    console.log('monthValue changed', obj)
+    if(onChange) onChange(obj)
+  }, [monthValue, datesValue])
 
   const setColor = num => {
-    if(dates.length > 0){
-      if(num === dates[0].day || num === dates[dates.length - 1].day){
-        let side = num === dates[0].day ? 'right' : 'left'
+      if(isDaySelected(num)){
+        let side = num === datesValue[0].day && datesValue[0].month === monthValue ? 'right' : 'left'
         return `-webkit-linear-gradient(${side}, #ffeeee, #ffeeee 50%, transparent 50%, transparent 100%)`
       }
-      if(dates[0].day < num && num < dates[dates.length - 1].day)
+      if(isDayInRange(num))
         return '-webkit-linear-gradient(top, #ffeeee, #ffeeee 100%, transparent 100%, transparent 100%)'
-    }
     return null
   }
+
+  const isDayInRange = num =>
+    datesValue[0] && datesValue[1] &&
+    (
+      (datesValue[0].month === monthValue && datesValue[0].day < num) ||
+      (datesValue[1].month === monthValue && num < datesValue[1].day) ||
+      (datesValue[0].month < monthValue && monthValue < datesValue[1].month) ||
+      ((datesValue[0].month === monthValue && monthValue === datesValue[1].month) &&
+        datesValue[0].day < num && num < datesValue[1].day)
+    )
+
+  const isDaySelected = num =>
+    (datesValue[0] && num === datesValue[0].day && monthValue === datesValue[0].month) ||
+    (datesValue[datesValue.length - 1] && num === datesValue[datesValue.length - 1].day && monthValue === datesValue[datesValue.length - 1].month)
 
   return(
     <div style={{width: '100%', height: '100%', paddingLeft: '2%', paddingRight: '2%'}}>
@@ -70,7 +104,7 @@ const Calendar = ({noLeft, noRight, clear, month, valueIndex, onChange}) => {
             }}
             onClick={() => dateSelect(num)}>
             <p style={{borderRadius: '50%', textAlign: 'center', height: '100%', aspectRatio: '1', transform: 'translateY(20%)',
-                backgroundColor:  dates.length > 0 && (num === dates[0].day || num === dates[dates.length - 1].day) ? '#fdcccc' : null }}>
+                backgroundColor: isDaySelected(num) ? '#fdcccc' : null }}>
             {num}
           </p>
           </div>
