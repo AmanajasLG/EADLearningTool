@@ -2,6 +2,7 @@ import React from 'react'
 import Button from '@material-ui/core/Button'
 import Counter from '../Counter'
 import { months } from '../../_helpers'
+import './index.scss'
 
 const Calendar = ({noLeft, noRight, clear, month, valueIndex, onChange}) => {
 
@@ -48,27 +49,27 @@ const Calendar = ({noLeft, noRight, clear, month, valueIndex, onChange}) => {
   }
 
   return(
-    <div style={{width: '100%', height: '100%'}}>
-      <Counter noLeft={ noLeft } noRight={ noRight } value={ monthValue } list={ months } onChange={ value => setMonth(value) }/>
+    <div style={{width: '100%', height: '100%', paddingLeft: '2%', paddingRight: '2%'}}>
+      <Counter stretch noLeft={ noLeft } noRight={ noRight } value={ monthValue } list={ months } onChange={ value => setMonth(value) }/>
       <div style={{display: 'grid',
         gridTemplateColumns: `${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}%`,
         gridTemplateRows: `20% 20% 20% 20% 20% 20%`,
         rowGap: '3%',
-        padding: '5%',
         paddingTop: 0
       }}
       >
         {['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'].map( (value, index) =>
-          <p key={index} style={{textAlign: 'center'}}>{value}</p>
+          <p key={index} style={{textAlign: 'center', transform: 'translateY(50%)'}}>{value}</p>
         )}
         {Array.from({length: 31}, (_, i) => i + 1).map((num, index) =>
           <div key={index}
+            className='calendarButton'
             style={{cursor: 'pointer',
               backgroundImage: setColor(num),
               padding: '0 10% 0 10%',
             }}
             onClick={() => dateSelect(num)}>
-            <p style={{borderRadius: '50%', textAlign: 'center', height: '100%', aspectRatio: '1',
+            <p style={{borderRadius: '50%', textAlign: 'center', height: '100%', aspectRatio: '1', transform: 'translateY(20%)',
                 backgroundColor:  dates.length > 0 && (num === dates[0].day || num === dates[dates.length - 1].day) ? '#fdcccc' : null }}>
             {num}
           </p>
