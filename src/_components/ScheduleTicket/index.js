@@ -2,13 +2,19 @@ import React from "react";
 import Calendar from "../Calendar";
 import Flights from "../Flights";
 import Counter from "../Counter";
-import { Iniciar } from '../Button'
+import { Iniciar } from "../Button";
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import "./index.scss";
 
 const numberList = Array.from({ length: 9 }, (_, i) => i + 1);
 
 const ScheduleTicket = ({
+  date,
+  dates,
   step,
-  flight,
+  type,
+  typeUpdate,
+  flightsSelected,
   flights,
   tickets,
   onConfirm,
@@ -21,10 +27,10 @@ const ScheduleTicket = ({
     step: step ? step : 0,
     goingDate: null,
     returnDate: null,
-    flight: flight ? flight : null,
-    tickets: tickets ? tickets : null,
+    dates: dates ? [Date.parse(dates[0]), Date.parse(dates[1])] : [],
+    flights: { ...flightsSelected },
     calendarIndex: 0,
-    month: 0
+    month: 0,
   });
 
   const steps = [
@@ -35,23 +41,26 @@ const ScheduleTicket = ({
   ];
   const checkStep = () => {
     return (
-      (state.step === 0 && state.returnDate) ||
-      (state.step === 1 && state.flight) ||
-      (state.step === 2 && state.flight) ||
-      state.step === 3
+      (state.step === 0 && state.dates.length === 2) ||
+      (state.step === 1 && state.flights) ||
+      state.step === 2
     );
   };
 
-  const advance =
-    state.step < 3
-      ? () => setState((s) => ({ ...s, step: state.step + 1 }))
-      : onConfirm;
+  const advance = () => {
+    if (state.step === 1 && type === "going") typeUpdate();
+    else if (state.step < 2) {
+      setState((s) => ({ ...s, step: state.step + 1 }));
+    } else onConfirm();
+  };
 
-  const onFlightSelected = (index) => {
-    if (state.step === 1) setState((s) => ({ ...s, step: state.step + 1 }));
+  const onFlightSelected = (flight) => {
+    setState((s) => ({
+      ...s,
+      flights: { ...s.flights, [type]: flight },
+    }));
 
-    setState((s) => ({ ...s, flight: index }));
-    if (flightSelected) flightSelected(index);
+    flightSelected(flight);
   };
 
   const onCounterChange = (value) => {
@@ -59,33 +68,14 @@ const ScheduleTicket = ({
     if (counterChange) counterChange(value);
   };
 
-  const onCalendarChange = index => data =>
-  {
-    let updateData = {}
-    console.log(`${index} data.month:`, data.month)
-    updateData.month = data.month - index
-    updateData.month = updateData.month === -1 ? 11 : updateData.month
-    console.log(`${index} updateData.month:`, updateData.month)
+  const onCalendarChange = (dates) => {
+    setState((s) => ({
+      ...s,
+      dates: [...dates],
+    }));
 
-    if(data.dates.length === 0)
-    {
-      updateData.goingDate = null
-      updateData.returnDate = null
-      updateData.calendarIndex = 0
-    }
-    if(data.dates.length > 0)
-    {
-      updateData.goingDate = data.dates[0]
-      if(state.calendarIndex === 0)
-          updateData.calendarIndex = 1
-
-      if(data.dates.length > 1){
-        updateData.returnDate = data.dates[1]
-
-      }
-    }
-    setState( s => ({...s, ...updateData}))
-  }
+    dateSelected(dates);
+  };
 
   return (
     <React.Fragment>
@@ -93,49 +83,45 @@ const ScheduleTicket = ({
         Agende o Voo! {steps.slice(0, state.step + 1).map((t) => ` > ${t}`)}
       </div>
       {state.step === 0 && (
-        <React.Fragment>
-          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-around'}}>
-          <Calendar
-            noRight
-            valueIndex={state.calendarIndex}
-            month={ state.month }
-            onChange={onCalendarChange(0)}
-          />
-          <Calendar
-            noLeft
-            valueIndex={state.calendarIndex}
-            month={ (state.month + 1) % 12 }
-            onChange={onCalendarChange(1)}
-          />
-          </div>
-        </React.Fragment>
+        <DateRangePicker
+          onChange={onCalendarChange}
+          value={
+            state.dates.length ? state.dates : [new Date(date), new Date(date)]
+          }
+          isOpen={true}
+          format={"dd/M/yyyy"}
+          className="teste"
+          calendarClassName="teste-1"
+          rangeDivider=" até "
+        />
       )}
       {state.step === 1 && (
         <Flights
-          selected={flight}
-          flights={flights}
+          selected={state.flights[type]}
+          flights={flights[type]}
           onClick={onFlightSelected}
         />
       )}
       {state.step === 2 && (
-        <Flights
-          selected={flight}
-          flights={flights}
-          onClick={onFlightSelected}
-        />
-      )}
-      {state.step === 3 && (
         <Counter value={tickets} list={numberList} onChange={onCounterChange} />
       )}
 
       {state.step > 0 && (
         <button
-          onClick={() => setState((s) => ({ ...s, step: state.step - 1 }))}
+          onClick={() => {
+            if (state.step === 1 && type === "return") typeUpdate();
+            else setState((s) => ({ ...s, step: state.step - 1 }));
+          }}
         >
           Voltar
         </button>
       )}
-      <Iniciar style={{position: 'absolute', right: '5%', bottom: '-2.5%'}}disabled={!checkStep()} onClick={advance} label='Confirmar'/>
+      <Iniciar
+        style={{ position: "absolute", right: "5%", bottom: "-2.5%" }}
+        disabled={!checkStep()}
+        onClick={advance}
+        label="Confirmar"
+      />
     </React.Fragment>
   );
 };

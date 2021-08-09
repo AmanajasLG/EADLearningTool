@@ -1,11 +1,23 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { apiActions, gameActions, musicActions } from "../../_actions";
+import {
+  apiActions,
+  gameActions,
+  musicActions,
+  headerActions,
+} from "../../_actions";
+import { headerConstants } from "../../_constants";
 
 import Init from "../../_components/Init";
 
-const GameTemplate = ({ Core, Feedback, missionId, loadData }) => {
+const GameTemplate = ({
+  Core,
+  Feedback,
+  missionId,
+  loadData,
+  loadFeedback,
+}) => {
   const [state, setState] = React.useState({ scene: "INIT", back: false });
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.authentication.user.user.id);
@@ -63,8 +75,23 @@ const GameTemplate = ({ Core, Feedback, missionId, loadData }) => {
 
   const onStartGame = () => setState((s) => ({ ...s, scene: "GAME" }));
   const onBack = () => setState((s) => ({ ...s, back: true }));
-  const onEndGame = (data) =>
-    setState((s) => ({ ...s, scene: "ENDGAME", gameplayData: data }));
+  const onEndGame = (data) => {
+    dispatch(
+      headerActions.setAll(
+        mission.name,
+        mission.nameTranslate.find((name) => {
+          return name.language.id === lang;
+        }).name
+      )
+    );
+    dispatch(headerActions.setState(headerConstants.STATES.OVERLAY));
+
+    setState((s) => ({
+      ...s,
+      scene: "ENDGAME",
+      feedbackData: loadFeedback(data, missionId, userId),
+    }));
+  };
 
   return (
     <React.Fragment>
@@ -106,7 +133,16 @@ const GameTemplate = ({ Core, Feedback, missionId, loadData }) => {
             case "ENDGAME":
               return (
                 <React.Fragment>
-                  {React.createElement(Feedback, { data: state.gameplayData })}
+                  {React.createElement(Feedback, {
+                    data: state.feedbackData,
+                    restart: () => {
+                      setState({ scene: "INIT", back: false });
+                      dispatch(
+                        headerActions.setState(headerConstants.STATES.HIDDEN)
+                      );
+                    },
+                    leave: () => setState((s) => ({ ...s, back: true })),
+                  })}
                 </React.Fragment>
               );
             default:
