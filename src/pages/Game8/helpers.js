@@ -59,27 +59,63 @@ function checkErros(data) {
         .period,
     });
 
-  data.phrases.forEach((phrase, index) => {
-    let sentence = phrase.rightOrder
-      .map(function (word) {
-        return word.text;
-      })
-      .join(" ");
+  if (!data.userAnswers.reservation.hotel.correct)
+    errors.push({
+      type: "hotel errado",
+      userAnswer: data.userAnswers.reservation.hotel.name,
+      correctAnswer: data.locations.find((location) => location.correct).name,
+    });
 
-    if (
-      !phrase.rightOrder.reduce((rightWord, word, i) => {
-        console.log(word.text);
-        console.log(data.userAnswers.sentences[index][i]);
-        return rightWord && word.text === data.userAnswers.sentences[index][i];
-      }, true)
-    ) {
-      errors.push({
-        type: "frase",
-        userAnswer: data.userAnswers.sentences[index].join(" "),
-        correctAnswer: sentence,
-      });
-    }
-  });
+  if (data.userAnswers.days !== data.userAnswers.reservation.days)
+    errors.push({
+      type:
+        "número de dias da viagem diferente do número de dias reservados no hotel",
+      userAnswer: data.userAnswers.days.toString(),
+      correctAnswer: data.userAnswers.reservation.days.toString(),
+    });
+
+  if (data.userAnswers.reservation.people !== data.userAnswers.tickets)
+    errors.push({
+      type: "número de passagens diferente da reserva do hotel",
+      userAnswer: data.userAnswers.tickets.toString(),
+      correctAnswer: data.peopleCount.toString(),
+    });
+
+  console.log(
+    data.messages
+      .filter((message) => message.responseEmail)
+      .filter(
+        (message) =>
+          message.responseEmail.correctChoice || message.responseEmail.order
+      )
+  );
+
+  data.messages
+    .filter((message) => message.responseEmail)
+    .filter((message) => message.correctChoice || message.order)
+    .forEach((message, index) => {
+      let sentence = message.responseEmail.rightOrder
+        .map(function (word) {
+          return word.text;
+        })
+        .join(" ");
+
+      console.log(data.userAnswers.sentences);
+
+      if (
+        !message.responseEmail.rightOrder.reduce((rightWord, word, i) => {
+          return (
+            rightWord && word.text === data.userAnswers.sentences[index][i]
+          );
+        }, true)
+      ) {
+        errors.push({
+          type: "frase",
+          userAnswer: data.userAnswers.sentences[index].join(" "),
+          correctAnswer: sentence,
+        });
+      }
+    });
 
   return errors;
 }

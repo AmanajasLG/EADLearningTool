@@ -202,6 +202,8 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+const numberList = (max) => Array.from({ length: max }, (_, i) => i + 1);
+
 export {
   months,
   numberToMoney,
@@ -211,4 +213,5 @@ export {
   goRound,
   preventSingleWordBreak,
   capitalizeFirstLetter,
+  numberList,
 };

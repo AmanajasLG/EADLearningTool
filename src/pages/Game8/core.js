@@ -21,10 +21,10 @@ const Core = ({ exitGame, data, onEndGame }) => {
     `Você vai em ${
       months[parseInt(format(state.userAnswers.dates.going, "M")) - 1]
     }, no dia  ${format(state.userAnswers.dates.going, "dd")}.`,
-    `A viagem é de ${state.userAnswers.flights.going.period}`,
-    `Você volta no dia ${format(state.userAnswers.dates.return, "dd")}`,
-    `A viagem é de ${state.userAnswers.flights.going.period}`,
-    `${state.userAnswers.tickets} pessoas vão viajar`,
+    `A viagem é de ${state.userAnswers.flights.going.period}.`,
+    `Você volta no dia ${format(state.userAnswers.dates.return, "dd")}.`,
+    `A viagem é de ${state.userAnswers.flights.going.period}.`,
+    `${state.userAnswers.tickets} pessoas vão viajar.`,
   ];
 
   const getMessage = () => {
@@ -42,7 +42,8 @@ const Core = ({ exitGame, data, onEndGame }) => {
         case "hotel":
           return (
             message.type === state.emailType &&
-            message.correctChoice === state.userAnswers.hotel.correct
+            message.correctChoice ===
+              state.userAnswers.reservation.hotel.correct
           );
         case "directions":
           return (
@@ -62,40 +63,40 @@ const Core = ({ exitGame, data, onEndGame }) => {
           onDone={(buyTicketsData) =>
             setState((s) => ({
               ...s,
-              userAnswers: buyTicketsData,
+              userAnswers: { ...buyTicketsData, sentences: [] },
               window: "SEND_BOOKING_EMAIL",
             }))
           }
         />
       )}
 
-      {state.window !== "NONE" && (
+      {state.window !== "BUY_TICKETS" && (
         <WindowScreen
           style={{
             position: "absolute",
             left: "10%",
-            width: "70%",
-            height: "70%",
+            width: state.showEmail ? "30%" : "70%",
+            height: state.showEmail ? "30%" : "70%",
             margin: "10% auto 0 auto",
             fontSize: "3em",
           }}
         >
           {state.window === "SEND_BOOKING_EMAIL" && (
             <React.Fragment>
-              {createTexts().map((text, index) => (
-                <div key={index}>{text}</div>
-              ))}
-              <Button
-                onClick={() =>
+              <SendEmail
+                phrases={[]}
+                onConfirm={() =>
                   setState((s) => ({
                     ...s,
                     window: "CLIENT_RESPONSE",
                     emailType: "flight",
                   }))
                 }
-              >
-                Fechar
-              </Button>
+                email={{
+                  ...data.email,
+                  message: createTexts().join(" "),
+                }}
+              />
             </React.Fragment>
           )}
 
@@ -103,13 +104,13 @@ const Core = ({ exitGame, data, onEndGame }) => {
             <Email
               email={{
                 ...data.email,
-                message: getMessage(),
+                message: getMessage().text,
               }}
               onReady={() =>
                 setState((s) => ({
                   ...s,
                   window: "MAP",
-                  showEmail: true,
+                  showEmail: s.emailType !== "flight" ? true : false,
                 }))
               }
             />
@@ -118,19 +119,37 @@ const Core = ({ exitGame, data, onEndGame }) => {
           {state.showEmail && (
             <SendEmail
               phrases={[getMessage().responseEmail]}
-              onConfirm={(sentences) =>
-                setState((s) => ({
-                  ...s,
-                  window: "CLIENT_RESPONSE",
-                  emailType: s.emailType === "flight" ? "hotel" : "directions",
-                  order: s.emailType === "directions" ? s.order + 1 : s.order,
-                  userAnswers: {
-                    ...s.userAnswers,
-                    sentences: [...s.userAnswers.sentences, ...sentences],
-                  },
-                  showEmail: false,
-                }))
-              }
+              onConfirm={(sentences) => {
+                if (
+                  state.order ===
+                  data.messages.filter(
+                    (message) => message.type === "directions"
+                  ).length
+                )
+                  onEndGame({
+                    ...data,
+                    userAnswers: {
+                      ...state.userAnswers,
+                      sentences: [...state.userAnswers.sentences, ...sentences],
+                    },
+                  });
+                else
+                  setState((s) => ({
+                    ...s,
+                    window: "CLIENT_RESPONSE",
+                    emailType: "directions",
+                    order: s.order + 1,
+                    userAnswers: {
+                      ...s.userAnswers,
+                      sentences: [...s.userAnswers.sentences, ...sentences],
+                    },
+                    showEmail: false,
+                  }));
+              }}
+              email={{
+                ...data.email,
+                message: getMessage().responseEmail.message,
+              }}
             />
           )}
         </WindowScreen>
@@ -140,18 +159,30 @@ const Core = ({ exitGame, data, onEndGame }) => {
         <WindowScreen
           style={{
             position: "absolute",
-            left: "10%",
-            width: "70%",
-            height: "70%",
+            left: state.showEmail ? "40%" : "10%",
+            width: state.showEmail ? "50%" : "70%",
+            height: state.showEmail ? "50%" : "70%",
             margin: "10% auto 0 auto",
             fontSize: "3em",
           }}
         >
           <Map
-            data={data.locations}
-            onIconClick={data.locations.map((building) => (index) =>
-              console.log(`building:${index}`, building)
-            )}
+            locations={data.locations}
+            onConfirm={(reservation) => () =>
+              setState((s) => ({
+                ...s,
+                window: "CLIENT_RESPONSE",
+                emailType: "hotel",
+                userAnswers: {
+                  ...s.userAnswers,
+                  ...reservation,
+                },
+                showEmail: false,
+              }))}
+            mapImage={
+              state.userAnswers.city.map ? state.userAnswers.city.map : ""
+            }
+            showEmail={state.showEmail}
           />
         </WindowScreen>
       )}

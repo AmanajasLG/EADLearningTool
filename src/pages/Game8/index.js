@@ -32,25 +32,29 @@ const Game8 = (props) => {
         correctChoice: message.correctChoice,
         type: message.type,
         order: message.order,
-        responseEmail: {
-          id: message.responseEmail.id,
-          size: message.responseEmail.size,
-          words: shuffle(
-            message.responseEmail.partials.map((partial) => ({
-              text: partial.text,
-              picked: false,
-            }))
-          ),
-          rightOrder: message.responseEmail.partials
-            .filter((partial) => partial.correct)
-            .sort((a, b) => (a.order > b.order ? 1 : -1)),
-        },
+        responseEmail: message.responseEmail
+          ? {
+              id: message.responseEmail.id,
+              size: message.responseEmail.size,
+              message: message.responseEmail.message,
+              words: shuffle(
+                message.responseEmail.partials.map((partial) => ({
+                  text: partial.text,
+                  picked: false,
+                }))
+              ),
+              rightOrder: message.responseEmail.partials
+                .filter((partial) => partial.correct)
+                .sort((a, b) => (a.order > b.order ? 1 : -1)),
+            }
+          : null,
       }));
 
       let cities = missionData.cities.map((city) => ({
         id: city.id,
         name: city.name,
         image: city.image ? city.image.url : "",
+        map: city.map ? city.map.url : "",
         correct: city.correct,
       }));
 
@@ -72,13 +76,17 @@ const Game8 = (props) => {
         { going: [], return: [] }
       );
 
-      let locations = missionData.locations.locations.map((location) => ({
+      let locations = missionData.locations.map((location) => ({
         id: location.id,
         type: location.type,
         description: location.description,
         name: location.name,
-        positionX: location.positionX,
-        positionY: location.positionY,
+        positionX: location.positionX
+          ? location.positionX
+          : Math.floor(Math.random() * 1920),
+        positionY: location.positionY
+          ? location.positionY
+          : Math.floor(Math.random() * 1080),
         correct: location.correct,
         image: location.image ? location.image.url : "",
       }));
@@ -124,13 +132,15 @@ const Game8 = (props) => {
     };
   };
 
-  <GameTemplate
-    Core={Core}
-    Feedback={Feedback}
-    missionId={props.match.params.id}
-    loadData={load}
-    loadFeedback={loadFeedback}
-  />;
+  return (
+    <GameTemplate
+      Core={Core}
+      Feedback={Feedback}
+      missionId={props.match.params.id}
+      loadData={load}
+      loadFeedback={loadFeedback}
+    />
+  );
 };
 
 export default Game8;

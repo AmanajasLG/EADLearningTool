@@ -166,6 +166,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
           }}
         >
           <SendEmail
+            email={{ ...data.email, message: "" }}
             phrases={data.phrases}
             onConfirm={(sentences) =>
               onEndGame({ ...data, userAnswers: { ...state, sentences } })

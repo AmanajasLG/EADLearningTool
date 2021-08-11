@@ -1,76 +1,160 @@
 import React from "react";
 import "./index.scss";
-import houses from "./houses";
-const Map = ({ data, onIconClick }) => {
-  const [state, setState] = React.useState();
-  const onClick = (index) =>
-    onIconClick && onIconClick.length > index
-      ? onIconClick[index](index)
-      : null;
+import Button from "@material-ui/core/Button";
+import Counter from "../Counter";
+import { numberList } from "../../_helpers";
+import { SatelliteSharp } from "@material-ui/icons";
+
+const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
+  const [state, setState] = React.useState({
+    index: -1,
+    reservation: false,
+    days: 0,
+    people: 0,
+  });
+  const [height, setHeight] = React.useState(null);
+  const [width, setWidth] = React.useState(null);
+  const div = React.useCallback((node) => {
+    if (node !== null) {
+      setHeight(node.getBoundingClientRect().height);
+      setWidth(node.getBoundingClientRect().width);
+    }
+  }, []);
 
   return (
-    <svg
-      width="100%"
-      height="100%"
-      viewBox="0 0 1920 1080"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
+    <div
+      ref={div}
+      style={{
+        backgroundImage: `url("${mapImage}")`,
+        height: "100%",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
-      <g id="Frame 4">
-        <rect width="1920" height="1080" fill="#ccffcc" />
-        <g id="mapBackground">
-          <path id="Vector 4" d="M101 88V238H396.5V88H101Z" stroke="black" />
-          <path id="Vector 5" d="M501 88V238H796.5V88H501Z" stroke="black" />
-          <path id="Vector 6" d="M901 88V238H1196.5V88H901Z" stroke="black" />
-          <path id="Vector 7" d="M1301 88V238H1596.5V88H1301Z" stroke="black" />
-          <path id="Vector 8" d="M101 332V482H396.5V332H101Z" stroke="black" />
-          <g id="Vector 9">
-            <path d="M796.5 482V332H568.5L744 482H796.5Z" stroke="black" />
-            <path d="M501 383V482H611.5L501 383Z" stroke="black" />
-          </g>
-          <path
-            id="Vector 10"
-            d="M901 332V482H1196.5V332H901Z"
-            stroke="black"
-          />
-          <path
-            id="Vector 11"
-            d="M1301 332V482H1596.5V332H1301Z"
-            stroke="black"
-          />
-          <path id="Vector 12" d="M101 576V726H396.5V576H101Z" stroke="black" />
-          <path
-            id="Vector 13"
-            d="M501 576V726H796.5V651L707.5 576H501Z"
-            stroke="black"
-          />
-          <g id="Vector 14">
-            <path d="M1196.5 576H901V592L1085 726H1196.5V576Z" stroke="black" />
-            <path d="M901 665.5V726H973.5L901 665.5Z" stroke="black" />
-          </g>
-          <path
-            id="Vector 15"
-            d="M1301 576V726H1596.5V576H1301Z"
-            stroke="black"
-          />
-          <path id="Vector 16" d="M101 820V970H396.5V820H101Z" stroke="black" />
-          <path id="Vector 17" d="M501 820V970H796.5V820H501Z" stroke="black" />
-          <path
-            id="Vector 18"
-            d="M901 820V970H1196.5V895L1086.5 820H901Z"
-            stroke="black"
-          />
-          <path
-            id="Vector 19"
-            d="M1301 820V970H1596.5V820H1301Z"
-            stroke="black"
-          />
-        </g>
-        {houses.map((house, index) =>
-          house({ key: index, onClick: () => onClick(index) })
-        )}
-      </g>
-    </svg>
+      {locations.map((location, index) => (
+        <div
+          className="location"
+          key={location.id}
+          src={location.image}
+          alt={location.id}
+          style={{
+            width: "3em",
+            height: "3em",
+            backgroundImage: `url("${location.image}")`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            position: "absolute",
+            top:
+              String((location.positionX * (height / 1920) * 100) / height) +
+              "%",
+            left:
+              String((location.positionY * (width / 1080) * 100) / width) + "%",
+            transform: "translate(-50%, -15%)",
+            filter:
+              showEmail && location.correct
+                ? "drop-shadow(0px 0px 5px yellow)"
+                : state.index === index
+                ? "drop-shadow(0px 0px 5px red)"
+                : "",
+          }}
+          onClick={() => setState((s) => ({ ...s, index }))}
+        ></div>
+      ))}
+      {state.index !== -1 && (
+        <div
+          style={{
+            padding: 30,
+            bottom: -20,
+            position: "absolute",
+            left: "50%",
+            transform: "translate(-50%, 0)",
+            color: "white",
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "#535c89",
+            }}
+          >
+            <icon></icon>
+            <span>{locations[state.index].name}</span>
+            <span onClick={() => setState((s) => ({ ...s, index: -1 }))}>
+              x
+            </span>
+          </div>
+          {state.reservation ? (
+            <div
+              style={{
+                backgroundColor: "rgb(96 82 104 / 72%)",
+              }}
+            >
+              <div>
+                <Counter
+                  value={state.days}
+                  list={numberList(20)}
+                  onChange={(value) => {
+                    setState((s) => ({ ...s, days: value }));
+                  }}
+                />{" "}
+                Diárias
+              </div>
+              <div>
+                <Counter
+                  value={state.people}
+                  list={numberList(20)}
+                  onChange={(value) => {
+                    setState((s) => ({ ...s, people: value }));
+                  }}
+                />{" "}
+                Pessoas
+              </div>
+
+              <Button
+                onClick={() =>
+                  setState((s) => ({
+                    ...s,
+                    reservation: false,
+                    people: 0,
+                    days: 0,
+                  }))
+                }
+              >
+                Voltar
+              </Button>
+              <Button
+                onClick={onConfirm({
+                  reservation: {
+                    hotel: locations[state.index],
+                    days: state.days + 1,
+                    people: state.people + 1,
+                  },
+                })}
+              >
+                Confirmar reserva
+              </Button>
+            </div>
+          ) : (
+            <div
+              style={{
+                backgroundColor: "rgb(96 82 104 / 72%)",
+              }}
+            >
+              <p>{locations[state.index].description}</p>
+              {!showEmail && locations[state.index].type === "hotel" && (
+                <Button
+                  onClick={() => setState((s) => ({ ...s, reservation: true }))}
+                >
+                  Fazer reserva
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
