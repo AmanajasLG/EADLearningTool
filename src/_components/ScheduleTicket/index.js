@@ -112,8 +112,14 @@ const ScheduleTicket = ({
         />
       )}
       {state.step === 2 && (
-        <div style={{width: '100%', marginTop: '15%', paddingLeft: '40%', paddingRight: '40%', fontSize: '5em', fontFamily: 'Barlow', fontWeight: 'bold', color: '#59316D'}}>
-          <Counter stretch valueStyle={{backgroundColor: '#d6e3f4', aspectRatio: '1', borderRadius: '30%', paddingLeft: '20%', paddingRight: '20%', width: '80%'}} value={tickets} list={numberList} onChange={onCounterChange} />
+        <div style={{fontWeight: 'bold', color: '#59316D', marginTop: '10%'}}>
+          <p style={{fontSize: '2em', textAlign: 'center', marginBottom: '2.5%'}}>Quantas passagens?</p>
+          <div style={{width: '100%', paddingLeft: '40%', paddingRight: '40%'}}>
+            <Counter stretch value={tickets} list={numberList} onChange={onCounterChange} arrowColor='#59316D'
+              valueStyle={{width: '80%', backgroundColor: '#d6e3f4', fontSize: '5em', fontFamily: 'Barlow',
+                aspectRatio: '1', borderRadius: '30%', paddingLeft: '20%', paddingRight: '20%'}}
+            />
+          </div>
         </div>
       )}
 
