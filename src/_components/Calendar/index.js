@@ -1,115 +1,120 @@
-import React from "react";
-import Button from "@material-ui/core/Button";
-import Counter from "../Counter";
-import { months } from "../../_helpers";
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import Counter from '../Counter'
+import { months } from '../../_helpers'
+import './index.scss'
 
-const Calendar = ({
-  noLeft,
-  noRight,
-  clear,
-  month,
-  valueIndex,
-  onChange,
-  type,
-}) => {
-  const [dates, setDates] = React.useState({ going: null, return: null });
-  const [monthValue, setMonth] = React.useState(month ? month : 0);
-  const dateSelect = (num) => {
-    let d = dates.slice(0);
-    if (valueIndex === null || valueIndex === undefined) valueIndex = 0;
+const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) => {
 
-    if (valueIndex > dates.length - 1) {
-      d = [...d, ...new Array(valueIndex - (dates.length - 1))];
-    }
-    d[valueIndex] = { day: num, month: monthValue };
-    setDates(d);
-  };
-
-  React.useEffect(() => {
-    console.log("month changed");
-    setMonth(month);
-  }, [month]);
-
-  React.useEffect(() => {
-    console.log("monthValue changed");
-    if (onChange) onChange({ month: monthValue, dates: dates });
-  }, [monthValue, dates]);
-
-  const onMonthChange = (value) => {
-    if (onChange) onChange({ month: value, dates: dates });
-    setMonth(value);
-  };
-
-  const setColor = (num) => {
-    if (dates.length > 0) {
-      if (num === dates.going.day || num === dates.return.day) {
-        let side = num === dates.going.day ? "right" : "left";
-        return `-webkit-linear-gradient(${side}, #ffeeee, #ffeeee 50%, transparent 50%, transparent 100%)`;
+  const [datesValue, setDates] = React.useState(dates ? dates : [null, null])
+  const [monthValue, setMonth] = React.useState(month ? month : 0)
+  const dateSelect = num => {
+    console.log('clicked:', num)
+    console.log('datesValue:', datesValue)
+    let d = datesValue.slice(0)
+    if(d[0] === null)
+      d[0] = {day: num, month: monthValue}
+    else if(d[1] === null)
+    {
+      if(d[0].month < monthValue || (d[0].month === monthValue && num > d[0].day))
+      {
+        console.log('should enter here')
+        d[1] = {day: num, month: monthValue}
       }
-      if (dates.going.day < num && num < dates.return.day)
-        return "-webkit-linear-gradient(top, #ffeeee, #ffeeee 100%, transparent 100%, transparent 100%)";
+      else if(num < d[0].day)
+      {
+        let temp = d[0]
+        d[0] = {day: num, month: monthValue}
+        d[1] = temp
+      }
     }
-    return null;
-  };
+    else{
+      d[0] = {day: num, month: monthValue}
+      d[1] = null
+    }
+    console.log('d', d)
+    setDates(d)
+  }
 
-  return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <Counter
-        noLeft={noLeft}
-        noRight={noRight}
-        value={monthValue}
-        list={months}
-        onChange={(value) => setMonth(value)}
-      />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `${100 / 7}% ${100 / 7}% ${100 / 7}% ${
-            100 / 7
-          }% ${100 / 7}% ${100 / 7}% ${100 / 7}%`,
-          gridTemplateRows: `20% 20% 20% 20% 20% 20%`,
-          rowGap: "3%",
-          padding: "5%",
-          paddingTop: 0,
-        }}
+  React.useEffect(() => {
+    console.log('month changed')
+    setMonth(month)
+  }, [month])
+
+  React.useEffect(() => {
+    console.log('received dates changed')
+    if(dates === datesValue || (dates[0] === datesValue[0] && dates[1] === datesValue[1]) ||
+      (dates[0] !== null && datesValue[0] !== null && dates[0].day === datesValue[0].day && dates[0].month === datesValue[0].month &&
+       dates[1] !== null && datesValue[1] !== null && dates[1].day === datesValue[1].day && dates[1].month === datesValue[1].month))
+      return
+
+    setDates([...dates])
+  }, [dates])
+
+  React.useEffect(() => {
+
+    let obj = {month: monthValue, dates: datesValue}
+    console.log('monthValue changed', obj)
+    if(onChange) onChange(obj)
+  }, [monthValue, datesValue])
+
+  const setColor = num => {
+      if(isDaySelected(num)){
+        let side = num === datesValue[0].day && datesValue[0].month === monthValue ? 'right' : 'left'
+        return `-webkit-linear-gradient(${side}, #ffeeee, #ffeeee 50%, transparent 50%, transparent 100%)`
+      }
+      if(isDayInRange(num))
+        return '-webkit-linear-gradient(top, #ffeeee, #ffeeee 100%, transparent 100%, transparent 100%)'
+    return null
+  }
+
+  const isDayInRange = num =>
+    datesValue[0] && datesValue[1] &&
+    (
+      ((datesValue[0].month === monthValue && monthValue === datesValue[1].month) &&
+        datesValue[0].day < num && num < datesValue[1].day) ||
+      (datesValue[0].month !== monthValue || monthValue !== datesValue[1].month) && 
+      (
+        (datesValue[0].month === monthValue && datesValue[0].day < num) ||
+        (datesValue[1].month === monthValue && num < datesValue[1].day) ||
+        (datesValue[0].month < monthValue && monthValue < datesValue[1].month)
+      )
+    )
+
+  const isDaySelected = num =>
+    (datesValue[0] && num === datesValue[0].day && monthValue === datesValue[0].month) ||
+    (datesValue[datesValue.length - 1] && num === datesValue[datesValue.length - 1].day && monthValue === datesValue[datesValue.length - 1].month)
+
+  return(
+    <div style={{width: '100%', height: '100%', paddingLeft: '2%', paddingRight: '2%'}}>
+      <Counter stretch noLeft={ noLeft } noRight={ noRight } value={ monthValue } list={ months } onChange={ value => setMonth(value) }/>
+      <div style={{display: 'grid',
+        gridTemplateColumns: `${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}% ${100/7}%`,
+        gridTemplateRows: `20% 20% 20% 20% 20% 20%`,
+        rowGap: '3%',
+        paddingTop: 0
+      }}
       >
-        {["seg", "ter", "qua", "qui", "sex", "sab", "dom"].map(
-          (value, index) => (
-            <p key={index} style={{ textAlign: "center" }}>
-              {value}
-            </p>
-          )
+        {['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'].map( (value, index) =>
+          <p key={index} style={{textAlign: 'center', transform: 'translateY(50%)'}}>{value}</p>
         )}
-        {Array.from({ length: 31 }, (_, i) => i + 1).map((num, index) => (
-          <div
-            key={index}
-            style={{
-              cursor: "pointer",
+        {Array.from({length: 31}, (_, i) => i + 1).map((num, index) =>
+          <div key={index}
+            className='calendarButton'
+            style={{cursor: 'pointer',
               backgroundImage: setColor(num),
-              padding: "0 10% 0 10%",
+              padding: '0 10% 0 10%',
             }}
-            onClick={() => dateSelect(num)}
-          >
-            <p
-              style={{
-                borderRadius: "50%",
-                textAlign: "center",
-                height: "100%",
-                aspectRatio: "1",
-                backgroundColor:
-                  dates.length > 0 &&
-                  (num === dates.going.day || num === dates.return.day)
-                    ? "#fdcccc"
-                    : null,
-              }}
-            >
-              {num}
-            </p>
+            onClick={() => dateSelect(num)}>
+            <p style={{borderRadius: '50%', textAlign: 'center', height: '100%', aspectRatio: '1', transform: 'translateY(20%)',
+                backgroundColor: isDaySelected(num) ? '#fdcccc' : null }}>
+            {num}
+          </p>
           </div>
-        ))}
+        )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Calendar;
+export default Calendar

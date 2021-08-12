@@ -91,10 +91,10 @@ const BuyTicketsLoop = ({ data, onDone }) => {
               onConfirm={() =>
                 setState((s) => ({ ...s, window: "NONE", confirmWindow: true }))
               }
-              dateSelected={(dates) =>
+              dateSelected={(data) =>
                 setState((s) => ({
                   ...s,
-                  dates: [...dates],
+                  dates: [...data.dates],
                 }))
               }
             />
