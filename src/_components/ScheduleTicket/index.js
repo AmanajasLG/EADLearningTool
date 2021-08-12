@@ -44,7 +44,7 @@ const ScheduleTicket = ({
   ];
   const checkStep = () => {
     return (
-      (state.step === 0 && state.dates.length === 2) ||
+      (state.step === 0 && datesValue[0] && datesValue[1]) ||
       (state.step === 1 && state.flights) ||
       state.step === 2
     );
@@ -112,7 +112,9 @@ const ScheduleTicket = ({
         />
       )}
       {state.step === 2 && (
-        <Counter value={tickets} list={numberList} onChange={onCounterChange} />
+        <div style={{width: '100%', marginTop: '15%', paddingLeft: '40%', paddingRight: '40%', fontSize: '5em', fontFamily: 'Barlow', fontWeight: 'bold', color: '#59316D'}}>
+          <Counter stretch valueStyle={{backgroundColor: '#d6e3f4', aspectRatio: '1', borderRadius: '30%', paddingLeft: '20%', paddingRight: '20%', width: '80%'}} value={tickets} list={numberList} onChange={onCounterChange} />
+        </div>
       )}
 
       {state.step > 0 && (
