@@ -105,11 +105,13 @@ const ScheduleTicket = ({
         </div>
       )}
       {state.step === 1 && (
-        <Flights
-          selected={state.flights[type]}
-          flights={flights[type]}
-          onClick={onFlightSelected}
-        />
+        <div style={{padding: '3% 5% 3% 5%'}}>
+          <Flights
+            selected={state.flights[type]}
+            flights={flights[type]}
+            onClick={onFlightSelected}
+          />
+        </div>
       )}
       {state.step === 2 && (
         <div style={{fontWeight: 'bold', color: '#59316D', marginTop: '10%'}}>

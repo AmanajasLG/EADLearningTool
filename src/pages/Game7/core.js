@@ -16,6 +16,9 @@ const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState({ ...initialState() });
 
   const createTexts = (userData) => {
+    console.log('userData:', userData)
+    console.log('userData.dates.return:', userData.dates.return)
+    console.log('format(userData.dates.return, "M"):', userData.dates.return.month)
     data.phrases.map((phrase) => {
       phrase.extraFields.forEach((extraField, index) => {
         let periods = ["manhã", "tarde", "noite", "madrugada"];
@@ -46,18 +49,18 @@ const Core = ({ exitGame, data, onEndGame }) => {
           case "month":
             if (
               !phrase.words.includes(
-                months[parseInt(format(userData.dates.return, "M")) - 1]
+                months[userData.dates.return.month]
               )
             )
               phrase.words.push(
-                months[parseInt(format(userData.dates.return, "M")) - 1]
+                months[userData.dates.return.month]
               );
 
             phrase.rightOrder.map((word) => {
               if (!word.preset && word.type === extraField.type) {
                 word.preset = true;
                 word.text =
-                  months[parseInt(format(userData.dates.return, "M")) - 1];
+                  months[userData.dates.return.month];
               }
 
               return word;
@@ -70,14 +73,14 @@ const Core = ({ exitGame, data, onEndGame }) => {
             }
             break;
           case "day":
-            phrase.words.push(format(userData.dates.going, "dd"));
-            phrase.words.push(format(userData.dates.return, "dd"));
+            phrase.words.push(userData.dates.going.day);
+            phrase.words.push(userData.dates.return.day);
 
             phrase.rightOrder.map((word) => {
               if (!word.preset && word.type === extraField.type) {
                 word.preset = true;
-                if (index === 1) word.text = format(userData.dates.going, "dd");
-                else word.text = format(userData.dates.return, "dd");
+                if (index === 1) word.text = userData.dates.going.day;
+                else word.text = userData.dates.return.day;
               }
 
               return word;

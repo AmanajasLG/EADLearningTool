@@ -119,7 +119,7 @@ const BuyTicketsLoop = ({ data, onDone }) => {
             <div>Destino: {state.city.name}</div>
             <div>
               Ida:
-              <div>Dia: {state.dates[0].day}/{state.dates[0].month}</div>
+              <div>Dia: {state.dates[0].day}/{state.dates[0].month + 1}</div>
               <div>
                 Horário: {state.flights.going.departure} -{" "}
                 {state.flights.going.arrival}
@@ -127,7 +127,7 @@ const BuyTicketsLoop = ({ data, onDone }) => {
             </div>
             <div>
               Volta:
-              <div>Dia: {state.dates[1].day}/{state.dates[1].month}</div>
+              <div>Dia: {state.dates[1].day}/{state.dates[1].month + 1}</div>
               <div>
                 Horário: {state.flights.return.departure} -{" "}
                 {state.flights.return.arrival}

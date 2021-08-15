@@ -84,4 +84,14 @@ const PularTutorial = ({label, onClick, children, ...props}) => <Button
   {label??"Pular Tutorial"}
 </Button>;
 
-export {Button, ButtonConfigs, Iniciar, Voltar, PularTutorial};
+const Round = ({onClick, children, ...props}) => <Button
+  blink
+  colorScheme={COLOR_SCHEMES.COR_2}
+  onClick={onClick}
+  stayAsPill
+  {...props}
+>
+  {children}
+</Button>;
+
+export {Button, ButtonConfigs, Iniciar, Voltar, PularTutorial, Round};

@@ -1,29 +1,35 @@
 import React from "react";
 
-import Button from "@material-ui/core/Button";
+import { Round } from "../Button";
 
 import Airplane from "@material-ui/icons/AirplanemodeActive";
 import TakeoffIcon from "@material-ui/icons/FlightTakeoff";
 import LandIcon from "@material-ui/icons/FlightLand";
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 const Flights = ({ selected, flights, onClick }) => {
   return (
-    <div>
+    <React.Fragment>
       {flights &&
         flights.map((flight, index) => (
-          <Button
+          <Round
             onClick={() => (onClick ? onClick(flight) : null)}
             style={{
               backgroundColor: selected === flight ? "#ff9999" : "white",
-              display: "block",
+              display: "block", width: '100%', position: 'relative', textAlign: 'left'
             }}
             key={index}
           >
-            Voo <Airplane /> {flight.number} <TakeoffIcon /> {flight.departure}{" "}
-            : {flight.arrival} <LandIcon />
-          </Button>
+             <Airplane style={{position: 'absolute', left: '-2%'}}/>
+             <div style={{display: 'flex', justifyContent: 'space-between', padding: '0 2% 0 2%'}}>
+               <div>Voo {flight.number} </div>
+               <div>
+                 <span style={{fontWeight: '200'}}>saída</span> {flight.departure}{" "}<KeyboardArrowRightIcon /> <span style={{fontWeight: '200'}}>chegada</span> {flight.arrival}
+               </div>
+             </div>
+        </Round>
         ))}
-    </div>
+    </React.Fragment>
   );
 };
 
