@@ -9,6 +9,7 @@ import { months } from "../../_helpers";
 import { format } from "date-fns";
 
 import initialState from "./initialState";
+import {agendamento, emailIcon, destino} from '../../img'
 
 const BuyTicketsLoop = ({ data, onDone }) => {
   const [state, setState] = React.useState(initialState());
@@ -168,7 +169,7 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           <img
             style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "EMAIL" }))}
-            src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+            src={emailIcon}
             alt=""
           />
         </div>
@@ -176,7 +177,7 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           <img
             style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "PLACES" }))}
-            src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+            src={destino}
             alt=""
           />
         </div>
@@ -184,7 +185,7 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           <img
             style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-            src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+            src={agendamento}
             alt=""
           />
         </div>

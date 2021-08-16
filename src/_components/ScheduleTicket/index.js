@@ -2,9 +2,10 @@ import React from "react";
 import Calendar from "../Calendar";
 import Flights from "../Flights";
 import Counter from "../Counter";
-import { Iniciar } from "../Button";
+import { Iniciar, Voltar } from "../Button";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import "./index.scss";
+import { aviao, calendario, relogio } from '../../img'
 
 const numberList = Array.from({ length: 9 }, (_, i) => i + 1);
 
@@ -37,10 +38,8 @@ const ScheduleTicket = ({
   const [datesValue, setDates] = React.useState([null, null])
 
   const steps = [
-    "Escolha a data",
-    "Escolha o voo de ida",
-    "Escolha o voo de volta",
-    "Quantidade de passagens",
+    {icon: calendario, text: "Escolha a data"},
+    {icon: relogio, text: "Escolha o horario"}
   ];
   const checkStep = () => {
     return (
@@ -86,7 +85,7 @@ const ScheduleTicket = ({
   return (
     <React.Fragment>
       <div>
-        Agende o Voo! {steps.slice(0, state.step + 1).map((t) => ` > ${t}`)}
+        <img src={aviao} style={{width: '4%'}}/>Agende o Voo! {steps.slice(0, state.step + 1).map((t) => <React.Fragment> > <img src={t.icon} style={{width: '4%'}}/> {t.text} </React.Fragment>)}
       </div>
       {state.step === 0 && (
         <div style={{display: 'flex'}}>
@@ -126,14 +125,13 @@ const ScheduleTicket = ({
       )}
 
       {state.step > 0 && (
-        <button
+        <Voltar style={{ position: "absolute", left: "5%", bottom: "-2.5%" }}
           onClick={() => {
             if (state.step === 1 && type === "return") typeUpdate();
             else setState((s) => ({ ...s, step: state.step - 1 }));
           }}
         >
-          Voltar
-        </button>
+        </Voltar>
       )}
       <Iniciar
         style={{ position: "absolute", right: "5%", bottom: "-2.5%" }}

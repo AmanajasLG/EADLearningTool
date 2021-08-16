@@ -6,7 +6,7 @@ import Airplane from "@material-ui/icons/AirplanemodeActive";
 import TakeoffIcon from "@material-ui/icons/FlightTakeoff";
 import LandIcon from "@material-ui/icons/FlightLand";
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-
+import { aviao } from '../../img'
 const Flights = ({ selected, flights, onClick }) => {
   return (
     <React.Fragment>
@@ -20,7 +20,7 @@ const Flights = ({ selected, flights, onClick }) => {
             }}
             key={index}
           >
-             <Airplane style={{position: 'absolute', left: '-2%'}}/>
+             <img src={aviao} style={{position: 'absolute', left: '-2%', top:'10%', width: '7%'}}/>
              <div style={{display: 'flex', justifyContent: 'space-between', padding: '0 2% 0 2%'}}>
                <div>Voo {flight.number} </div>
                <div>

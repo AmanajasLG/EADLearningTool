@@ -65,6 +65,13 @@ import error from "./apagar.svg";
 import right from "./confirmar.svg";
 import trash from "./trash-can.svg";
 
+import agendamento from "./agendamento.svg"
+import aviao from "./avião.svg"
+import calendario from "./calendario.svg"
+import destino from "./destino.svg"
+import emailIcon from "./email.svg"
+import relogio from "./relogio.svg"
+
 export {
   smallPhoneBlank,
   trash,
@@ -121,4 +128,10 @@ export {
   hangerH,
   dressingBg,
   camera,
+  agendamento,
+  aviao,
+  calendario,
+  destino,
+  emailIcon,
+  relogio
 };
