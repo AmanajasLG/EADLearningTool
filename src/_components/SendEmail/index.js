@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import { capitalize } from "@material-ui/core";
 import marked from "marked";
 import parse from "html-react-parser";
+import { Round } from '../Button'
 
 const SendEmail = ({ phrases, onConfirm, email }) => {
   const [state, setState] = React.useState({
@@ -74,16 +75,20 @@ const SendEmail = ({ phrases, onConfirm, email }) => {
         </div>
       </div>
       {state.index < phrases.length ? (
-        <div>
-          <span>
-            {state.selected.length}/{phrases[state.index].size}
-          </span>
+        <div style={{padding: '5%'}}>
 
-          {state.selected.map((section, index) => (
-            <Button key={index} onClick={unselectOption(index)}>
-              {section}
-            </Button>
-          ))}
+
+          <Round blink={false} style={{ position: 'relative', width: '100%', pointerEvents: 'none'}}>
+            {state.selected.map((section, index) => (
+              <Round key={index} onClick={unselectOption(index)}
+                style={{backgroundColor: 'white', pointerEvents: 'all'}}>
+                {section}
+              </Round>
+            ))}
+            <div style={{position: 'absolute', top: '10%', right: '5%'}}>
+              {state.selected.length}/{phrases[state.index].size}
+            </div>
+          </Round>
 
           <Button
             style={{ display: "block" }}
@@ -93,15 +98,15 @@ const SendEmail = ({ phrases, onConfirm, email }) => {
             Escrever
           </Button>
 
-          <div>
+          <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
             {phrases[state.index].words.map((option, index) => (
-              <Button
+              <Round
                 key={index}
                 disabled={option.picked}
                 onClick={selectOption(index)}
               >
                 {option.text}
-              </Button>
+              </Round>
             ))}
           </div>
         </div>
