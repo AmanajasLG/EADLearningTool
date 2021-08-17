@@ -10,6 +10,7 @@ import { format } from "date-fns";
 
 import initialState from "./initialState";
 import {agendamento, emailIcon, destino} from '../../img'
+import { Voltar, Iniciar } from '../Button'
 
 const BuyTicketsLoop = ({ data, onDone }) => {
   const [state, setState] = React.useState(initialState());
@@ -104,37 +105,33 @@ const BuyTicketsLoop = ({ data, onDone }) => {
       )}
 
       {state.confirmWindow && (
-        <div style={{ position: "absolute", left: "50%", marginTop: "20%" }}>
+        <div style={{ position: "absolute", left: "25%", marginTop: "20%", fontSize: "3em", width: '80%'}}>
           <div
             style={{
-              fontSize: "3em",
-              position: "relative",
-              left: "-50%",
-              backgroundColor: "#eeeeff",
+              display: 'flex',
+              flexDirection: 'row'
             }}
           >
-            Terminou? Revise a seleção:
-            <div>
-              {state.tickets + 1} passage{state.tickets === 0 ? "m" : "ns"}.
+            <div style={{backgroundColor: '#fbbba3', fontSize: '1.2em', width: '40%', textAlign: 'center', paddingTop: '5%'}}>
+              <p><strong>Tem certeza que terminou?<br/>Revise suas escolhas:</strong></p>
+              <hr style={{width: '50%', margin: '5% auto', backgroundColor: 'white'}}/>
+              <p>Are you sure you're done?<br/>Review your choices:</p>
             </div>
-            <div>Destino: {state.city.name}</div>
-            <div>
-              Ida:
-              <div>Dia: {state.dates[0].day}/{state.dates[0].month + 1}</div>
+            <div style={{backgroundColor: '#fbbba3', borderRadius: '13%/10%', padding: '5% 3% 5% 3%', width: '25%'}}>
+              <div><strong>Cidade:</strong> {state.city.name}</div>
+              <div><strong>Pessoas:</strong> {state.tickets + 1}</div>
+              <div><strong>Partida dia:</strong> {state.dates[0].day}/{state.dates[0].month + 1}</div>
               <div>
-                Horário: {state.flights.going.departure} -{" "}
-                {state.flights.going.arrival}
+                <strong>Horário:</strong> {state.flights.going.departure} - {state.flights.going.arrival}
+              </div>
+              <div><strong>Volta dia:</strong> {state.dates[1].day}/{state.dates[1].month + 1}</div>
+              <div>
+                <strong>Horário:</strong> {state.flights.return.departure} - {state.flights.return.arrival}
               </div>
             </div>
-            <div>
-              Volta:
-              <div>Dia: {state.dates[1].day}/{state.dates[1].month + 1}</div>
-              <div>
-                Horário: {state.flights.return.departure} -{" "}
-                {state.flights.return.arrival}
-              </div>
-            </div>
-            <button
+          </div>
+          <div>
+            <Voltar
               onClick={() =>
                 setState((s) => ({
                   ...s,
@@ -142,10 +139,9 @@ const BuyTicketsLoop = ({ data, onDone }) => {
                   window: "SCHEDULE",
                 }))
               }
-            >
-              Voltar
-            </button>
-            <button onClick={() => onDone(ticketData())}>Avançar</button>
+              >
+            </Voltar>
+            <Iniciar label={"Continuar"} onClick={() => onDone(ticketData())}></Iniciar>
           </div>
         </div>
       )}
