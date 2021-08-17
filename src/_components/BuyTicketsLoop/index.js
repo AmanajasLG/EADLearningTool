@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import initialState from "./initialState";
 import {agendamento, emailIcon, destino} from '../../img'
 import { Voltar, Iniciar } from '../Button'
+import Blob from '../Blob'
 
 const BuyTicketsLoop = ({ data, onDone }) => {
   const [state, setState] = React.useState(initialState());
@@ -104,48 +105,6 @@ const BuyTicketsLoop = ({ data, onDone }) => {
         </WindowScreen>
       )}
 
-      {state.confirmWindow && (
-        <div style={{ position: "absolute", left: "25%", marginTop: "20%", fontSize: "3em", width: '80%'}}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row'
-            }}
-          >
-            <div style={{backgroundColor: '#fbbba3', fontSize: '1.2em', width: '40%', textAlign: 'center', paddingTop: '5%'}}>
-              <p><strong>Tem certeza que terminou?<br/>Revise suas escolhas:</strong></p>
-              <hr style={{width: '50%', margin: '5% auto', backgroundColor: 'white'}}/>
-              <p>Are you sure you're done?<br/>Review your choices:</p>
-            </div>
-            <div style={{backgroundColor: '#fbbba3', borderRadius: '13%/10%', padding: '5% 3% 5% 3%', width: '25%'}}>
-              <div><strong>Cidade:</strong> {state.city.name}</div>
-              <div><strong>Pessoas:</strong> {state.tickets + 1}</div>
-              <div><strong>Partida dia:</strong> {state.dates[0].day}/{state.dates[0].month + 1}</div>
-              <div>
-                <strong>Horário:</strong> {state.flights.going.departure} - {state.flights.going.arrival}
-              </div>
-              <div><strong>Volta dia:</strong> {state.dates[1].day}/{state.dates[1].month + 1}</div>
-              <div>
-                <strong>Horário:</strong> {state.flights.return.departure} - {state.flights.return.arrival}
-              </div>
-            </div>
-          </div>
-          <div>
-            <Voltar
-              onClick={() =>
-                setState((s) => ({
-                  ...s,
-                  confirmWindow: false,
-                  window: "SCHEDULE",
-                }))
-              }
-              >
-            </Voltar>
-            <Iniciar label={"Continuar"} onClick={() => onDone(ticketData())}></Iniciar>
-          </div>
-        </div>
-      )}
-
       <div
         style={{
           display: "flex",
@@ -186,6 +145,53 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           />
         </div>
       </div>
+
+      {state.confirmWindow && (
+        <React.Fragment>
+        <Blob style={{ position: 'absolute', backgroundColor: 'rgba(255,255,255,0.5)'}} fill='#f9afa1'/>
+        <div style={{ position: "absolute", margin: "15% auto", fontSize: "3em", width: '100%'}}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              padding: '0 22% 0 22%'
+            }}
+          >
+            <div style={{fontSize: '1.2em', width: '40%', textAlign: 'center', paddingTop: '5%'}}>
+              <p><strong>Tem certeza que terminou?<br/>Revise suas escolhas:</strong></p>
+              <hr style={{width: '50%', margin: '5% auto', backgroundColor: 'white'}}/>
+              <p>Are you sure you're done?<br/>Review your choices:</p>
+            </div>
+            <div style={{backgroundColor: '#fbbba3', borderRadius: '13%/10%', padding: '5% 3% 5% 3%'}}>
+              <div><strong>Cidade:</strong> {state.city.name}</div>
+              <div><strong>Pessoas:</strong> {state.tickets + 1}</div>
+              <div><strong>Partida dia:</strong> {state.dates[0].day}/{state.dates[0].month + 1}</div>
+              <div>
+                <strong>Horário:</strong> {state.flights.going.departure} - {state.flights.going.arrival}
+              </div>
+              <div><strong>Volta dia:</strong> {state.dates[1].day}/{state.dates[1].month + 1}</div>
+              <div>
+                <strong>Horário:</strong> {state.flights.return.departure} - {state.flights.return.arrival}
+              </div>
+            </div>
+          </div>
+          <div style={{display: 'flex', justifyContent: 'center', marginTop: '5%'}}>
+            <Voltar
+              onClick={() =>
+                setState((s) => ({
+                  ...s,
+                  confirmWindow: false,
+                  window: "SCHEDULE",
+                }))
+              }
+              >
+            </Voltar>
+            <Iniciar label={"Continuar"} onClick={() => onDone(ticketData())}></Iniciar>
+          </div>
+        </div>
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 };
