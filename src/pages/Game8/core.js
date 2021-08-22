@@ -15,14 +15,14 @@ import { checkBookingError } from "./helpers";
 
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState());
-
+  // {state.dates[0].day}/{state.dates[0].month + 1}
   const createTexts = () => [
     `Seu voo é para ${state.userAnswers.city.name}.`,
     `Você vai em ${
-      months[parseInt(format(state.userAnswers.dates.going, "M")) - 1]
-    }, no dia  ${format(state.userAnswers.dates.going, "dd")}.`,
+      months[parseInt(state.userAnswers.dates.going.month)]
+    }, no dia  ${state.userAnswers.dates.going.day}.`,
     `A viagem é de ${state.userAnswers.flights.going.period}.`,
-    `Você volta no dia ${format(state.userAnswers.dates.return, "dd")}.`,
+    `Você volta no dia ${state.userAnswers.dates.return.day}.`,
     `A viagem é de ${state.userAnswers.flights.going.period}.`,
     `${state.userAnswers.tickets} pessoas vão viajar.`,
   ];

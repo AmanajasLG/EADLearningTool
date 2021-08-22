@@ -85,7 +85,7 @@ const ScheduleTicket = ({
   return (
     <React.Fragment>
       <div>
-        <img src={aviao} style={{width: '4%'}}/>Agende o Voo! {steps.slice(0, state.step + 1).map((t) => <React.Fragment> > <img src={t.icon} style={{width: '4%'}}/> {t.text} </React.Fragment>)}
+        <img src={aviao} style={{width: '4%'}}/>Agende o Voo! {steps.slice(0, state.step + 1).map((t) => <React.Fragment> <img src={t.icon} style={{width: '4%'}}/> {t.text} </React.Fragment>)}
       </div>
       {state.step === 0 && (
         <div style={{display: 'flex'}}>
