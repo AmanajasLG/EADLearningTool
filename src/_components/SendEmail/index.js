@@ -1,10 +1,11 @@
 import React from "react";
 
 import Button from "@material-ui/core/Button";
+import { Iniciar } from "../Button";
 import { capitalize } from "@material-ui/core";
 import marked from "marked";
 import parse from "html-react-parser";
-import { Round } from '../Button'
+import Pill from '../Pill'
 
 const SendEmail = ({ phrases, onConfirm, email }) => {
   const [state, setState] = React.useState({
@@ -13,6 +14,9 @@ const SendEmail = ({ phrases, onConfirm, email }) => {
     sentences: [],
   });
   const selectOption = (index) => () => {
+    if(state.selected.length >= phrases[state.index].size)
+      return
+
     phrases[state.index].words[index].picked = true;
 
     setState((s) => ({
@@ -77,21 +81,22 @@ const SendEmail = ({ phrases, onConfirm, email }) => {
       {state.index < phrases.length ? (
         <div style={{padding: '5%'}}>
 
-
-          <Round blink={false} style={{ position: 'relative', width: '100%', pointerEvents: 'none'}}>
+          <Pill blink={false} style={{ position: 'relative', width: '100%', backgroundColor: '#d6e3f4'}}>
+            <span style={{fontWeight: 'thin'}}>Destino:</span>
             {state.selected.map((section, index) => (
-              <Round key={index} onClick={unselectOption(index)}
-                style={{backgroundColor: 'white', pointerEvents: 'all'}}>
+              <Pill key={index} onClick={unselectOption(index)}
+                blink
+                style={{backgroundColor: 'white', cursor: 'pointer'}}>
                 {section}
-              </Round>
+              </Pill>
             ))}
             <div style={{position: 'absolute', top: '10%', right: '5%'}}>
               {state.selected.length}/{phrases[state.index].size}
             </div>
-          </Round>
+          </Pill>
 
           <Button
-            style={{ display: "block" }}
+            style={{ display: "block", marginLeft: 'auto', marginRight: 0 }}
             onClick={nextSentence}
             disabled={state.selected.length !== phrases[state.index].size}
           >
@@ -100,20 +105,20 @@ const SendEmail = ({ phrases, onConfirm, email }) => {
 
           <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around'}}>
             {phrases[state.index].words.map((option, index) => (
-              <Round
+              <Pill
                 key={index}
                 disabled={option.picked}
                 onClick={selectOption(index)}
+                blink hoverable
+                style={{backgroundColor: 'white', cursor: 'pointer'}}
               >
                 {option.text}
-              </Round>
+              </Pill>
             ))}
           </div>
         </div>
       ) : (
-        <Button style={{ display: "block" }} onClick={sendData}>
-          Enviar
-        </Button>
+        <Iniciar style={{ display: "block", position: 'absolute', right: '10%', bottom: '-5%' }} onClick={sendData} label='Enviar' />
       )}
     </div>
   );
