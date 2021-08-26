@@ -73,9 +73,9 @@ const Core = ({ exitGame, data, onEndGame }) => {
         <WindowScreen
           style={{
             position: "absolute",
-            left: state.showEmail ? "55%" : "10%",
-            width: state.showEmail ? "40%" : "70%",
-            height: state.showEmail ? "40%" : "70%",
+            left: state.showEmail ? "43%" : "10%",
+            width: state.showEmail ? "55%" : "70%",
+            height: state.showEmail ? "55%" : "70%",
             margin: "10% auto 0 auto",
             fontSize: "3em",
           }}
@@ -106,10 +106,10 @@ const Core = ({ exitGame, data, onEndGame }) => {
           style={{
             position: "absolute",
             left: "2%",
-            width: state.showEmail ? "50%" : "70%",
+            width: state.showEmail ? "40%" : "70%",
             height: "70%",
             margin: "10% auto 0 auto",
-            fontSize: "3em",
+            fontSize: "2.5em",
           }}
         >
           {state.window === "SEND_BOOKING_EMAIL" && (

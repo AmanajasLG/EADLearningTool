@@ -95,7 +95,7 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
             transform: "translate(-50%)",
             color: "white",
             textAlign: "center",
-            width: showEmail ? "15em" : "24em",
+            width: showEmail ? "20em" : "24em",
             fontSize: showEmail ? ".8em" : "1.5em",
           }}
         >

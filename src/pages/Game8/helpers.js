@@ -129,17 +129,9 @@ function genFeedbackMessages(errors, city, senderName) {
   if (errors.length === 0) {
     // ACERTOU TUDO
     feedbackMessage.text =
-      "Parabéns! Você atendeu a todos os pedidos da sua cliente. Aposto que ela irá adorar sua visita à " +
-      city +
-      ". Suas orientações no e-mail foram claras e precisas. " +
-      senderName +
-      " não teve problemas e pegou seu vôo no dia e horário corretos e para a cidade que queria. Não há cliente mais satisfeita que ela!";
+      "Parabéns! Você atendeu a tudo o que seu cliente precisava, e sem cometer um único erro. Aposto que sua foto estará no quadro de Funcionário do Mês…";
     feedbackMessage.textTranslate =
-      "Congratulations! You fulfilled all of your client's requests. I bet she will love her visit to " +
-      city +
-      ". Your e-mail orientations were clear and precise. " +
-      senderName +
-      " had no problems and took her flight right on time and to the city she wanted to visit. There is no client more satisfied than her!";
+      "Congratulations! You have met all your clients' needs, and without making a single mistake. I bet your picture will be in the 'Employee of the Month' board...";
   } else if (
     errors.filter((error) => error.type === "frase").length === errors.length
   ) {
