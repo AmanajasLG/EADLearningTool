@@ -17,11 +17,21 @@ class PulseCircle{
 
   // ctx is a canvas.context;
   // dt is deltaTime between renders
+  keepInBounds(ctx, dt, canvas){
+    if(this.x > canvas.width || this.x < 0){
+      this.xIncrement *= -1
+      if(this.x > canvas.width) this.x = canvas.width
+      if(this.x < 0) this.x = 0
+    }
+
+    if(this.y > canvas.height || this.y < 0){
+      this.yIncrement *= -1
+      if(this.y > canvas.height) this.y = canvas.height
+      if(this.y < 0) this.y = 0
+    }
+  }
 
   move(ctx, dt, canvas){
-    if(this.x > canvas.width || this.x < 0) this.xIncrement *= -1
-    if(this.y > canvas.height|| this.y < 0) this.yIncrement *= -1
-
     this.x += this.xIncrement * this.speed * dt
     this.y += this.yIncrement * this.speed * dt
   }
@@ -40,6 +50,7 @@ class PulseCircle{
   draw(ctx, dt, canvas){
     this.pulse(ctx, dt, canvas)
     this.move(ctx, dt, canvas)
+    this.keepInBounds(ctx, dt, canvas)
 
     ctx.beginPath()
     ctx.arc(this.x, this.y, this.currRadius, 0, 2*Math.PI)
@@ -48,7 +59,7 @@ class PulseCircle{
 }
 
 const elements = [
-  new PulseCircle(10, 10, 1, 5, 5)
+  new PulseCircle(10, 10, 1, 5, 20)
 ]
 
 export default elements

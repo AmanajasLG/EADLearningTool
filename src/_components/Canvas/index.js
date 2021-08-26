@@ -18,8 +18,8 @@ const Canvas = ({ elements ,...props}) => {
 
     const render = () => {
       let time2 = Date.now()
-
-      draw(context, (time2 - time1)/1000, canvas)
+      let dt = (time2 - time1)/1000.0
+      draw(context, dt >= 1 ? 0 : dt, canvas)
       time1 = Date.now()
 
       animationFrameId = window.requestAnimationFrame(render)
