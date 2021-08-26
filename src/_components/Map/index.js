@@ -38,8 +38,22 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
           src={location.image}
           alt={location.id}
           style={{
-            width: state.index === index ? "3.5em" : "3em",
-            height: state.index === index ? "3.5em" : "3em",
+            width:
+              state.index === index
+                ? showEmail
+                  ? "2.5em"
+                  : "3.5em"
+                : showEmail
+                ? "2em"
+                : "3em",
+            height:
+              state.index === index
+                ? showEmail
+                  ? "2.5em"
+                  : "3.5em"
+                : showEmail
+                ? "2em"
+                : "3em",
             backgroundColor:
               showEmail && location.correct
                 ? "yellow"
@@ -64,8 +78,8 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
         >
           <img
             style={{
-              width: "2em",
-              height: "2em",
+              width: showEmail ? "1.5em" : "2em",
+              height: showEmail ? "1.5em" : "2em",
             }}
             src={location.image}
             alt=""
@@ -81,7 +95,8 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
             transform: "translate(-50%)",
             color: "white",
             textAlign: "center",
-            width: "24em",
+            width: showEmail ? "15em" : "24em",
+            fontSize: showEmail ? ".8em" : "1.5em",
           }}
         >
           <div
@@ -89,7 +104,7 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
               borderTopRightRadius: 10,
               borderTopLeftRadius: 10,
               backgroundColor: "#535c89",
-              height: "2.2em",
+              height: showEmail ? "1.5em" : "2.2em",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -105,8 +120,8 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
               style={{
                 position: "absolute",
                 right: ".3em",
-                top: "-.1em",
-                fontSize: "1.5em",
+                top: showEmail ? "-.08em" : "-.1em",
+                fontSize: showEmail ? "1em" : "1.5em",
               }}
               onClick={() => setState((s) => ({ ...s, index: -1 }))}
             >
@@ -195,13 +210,14 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
             <div
               style={{
                 backgroundColor: "rgb(96 82 104 / 72%)",
-                height: "6.4em",
+                height: showEmail ? "4em" : "6.4em",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 flexDirection: "column",
                 borderBottomRightRadius: 10,
                 borderBottomLeftRadius: 10,
+                padding: "1em",
               }}
             >
               <p>{locations[state.index].description}</p>
