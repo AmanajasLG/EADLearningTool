@@ -69,14 +69,45 @@ const Core = ({ exitGame, data, onEndGame }) => {
           }
         />
       )}
+      {state.window === "MAP" && (
+        <WindowScreen
+          style={{
+            position: "absolute",
+            left: state.showEmail ? "55%" : "10%",
+            width: state.showEmail ? "40%" : "70%",
+            height: state.showEmail ? "40%" : "70%",
+            margin: "10% auto 0 auto",
+            fontSize: "3em",
+          }}
+        >
+          <Map
+            locations={data.locations}
+            onConfirm={(reservation) => () =>
+              setState((s) => ({
+                ...s,
+                window: "CLIENT_RESPONSE",
+                emailType: "hotel",
+                userAnswers: {
+                  ...s.userAnswers,
+                  ...reservation,
+                },
+                showEmail: false,
+              }))}
+            mapImage={
+              state.userAnswers.city.map ? state.userAnswers.city.map : ""
+            }
+            showEmail={state.showEmail}
+          />
+        </WindowScreen>
+      )}
 
       {state.window !== "BUY_TICKETS" && (
         <WindowScreen
           style={{
             position: "absolute",
-            left: "10%",
-            width: state.showEmail ? "30%" : "70%",
-            height: state.showEmail ? "30%" : "70%",
+            left: "2%",
+            width: state.showEmail ? "50%" : "70%",
+            height: "70%",
             margin: "10% auto 0 auto",
             fontSize: "3em",
           }}
@@ -152,38 +183,6 @@ const Core = ({ exitGame, data, onEndGame }) => {
               }}
             />
           )}
-        </WindowScreen>
-      )}
-
-      {state.window === "MAP" && (
-        <WindowScreen
-          style={{
-            position: "absolute",
-            left: state.showEmail ? "40%" : "10%",
-            width: state.showEmail ? "50%" : "70%",
-            height: state.showEmail ? "50%" : "70%",
-            margin: "10% auto 0 auto",
-            fontSize: "3em",
-          }}
-        >
-          <Map
-            locations={data.locations}
-            onConfirm={(reservation) => () =>
-              setState((s) => ({
-                ...s,
-                window: "CLIENT_RESPONSE",
-                emailType: "hotel",
-                userAnswers: {
-                  ...s.userAnswers,
-                  ...reservation,
-                },
-                showEmail: false,
-              }))}
-            mapImage={
-              state.userAnswers.city.map ? state.userAnswers.city.map : ""
-            }
-            showEmail={state.showEmail}
-          />
         </WindowScreen>
       )}
 

@@ -81,7 +81,7 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
             transform: "translate(-50%)",
             color: "white",
             textAlign: "center",
-            width: "28em",
+            width: "24em",
           }}
         >
           <div
@@ -126,7 +126,12 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
                 borderBottomLeftRadius: 10,
               }}
             >
-              <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+                  padding: "1em",
+                }}
+              >
                 <Counter
                   value={state.days}
                   list={numberList(20)}
@@ -134,18 +139,31 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
                     setState((s) => ({ ...s, days: value }));
                   }}
                   arrowColor="#59316D"
-                />{" "}
-                Diárias
+                  valueStyle={{
+                    fontSize: "1em",
+                    fontFamily: "Barlow",
+                    paddingLeft: "20%",
+                    paddingRight: "20%",
+                  }}
+                />
+                <span style={{ marginLeft: "1.5em" }}>Diárias</span>
               </div>
-              <div style={{ display: "flex" }}>
+              <div style={{ display: "flex", padding: "1em" }}>
                 <Counter
                   value={state.people}
                   list={numberList(20)}
                   onChange={(value) => {
                     setState((s) => ({ ...s, people: value }));
                   }}
-                />{" "}
-                Pessoas
+                  arrowColor="#59316D"
+                  valueStyle={{
+                    fontSize: "1em",
+                    fontFamily: "Barlow",
+                    paddingLeft: "20%",
+                    paddingRight: "20%",
+                  }}
+                />
+                <span style={{ marginLeft: "1.5em" }}>Pessoas</span>
               </div>
               <div style={{ marginTop: "2em" }}>
                 <Button
