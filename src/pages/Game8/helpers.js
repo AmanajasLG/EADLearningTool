@@ -4,8 +4,8 @@ function checkBookingError(data) {
   return (
     data.userAnswers.city.correct &&
     data.userAnswers.days === data.days &&
-    format(data.userAnswers.dates.going, "M") === data.month.toString() &&
-    format(data.userAnswers.dates.return, "M") === data.month.toString() &&
+    data.userAnswers.dates.going.month === data.month.toString() &&
+    data.userAnswers.dates.return.month === data.month.toString() &&
     data.peopleCount === data.userAnswers.tickets &&
     data.userAnswers.flights.going.correct &&
     data.userAnswers.flights.return.correct
@@ -27,16 +27,16 @@ function checkErros(data) {
       userAnswer: data.userAnswers.days.toString(),
       correctAnswer: data.days.toString(),
     });
-  if (format(data.userAnswers.dates.going, "M") !== data.month.toString())
+  if (data.userAnswers.dates.going.month !== data.month.toString())
     errors.push({
       type: "mês de ida",
-      userAnswer: format(data.userAnswers.dates.going, "M"),
+      userAnswer: data.userAnswers.dates.going.month,
       correctAnswer: data.month.toString(),
     });
-  if (format(data.userAnswers.dates.return, "M") !== data.month.toString())
+  if (data.userAnswers.dates.return.month !== data.month.toString())
     errors.push({
       type: "mês de volta",
-      userAnswer: format(data.userAnswers.dates.return, "M"),
+      userAnswer: data.userAnswers.dates.return.month,
       correctAnswer: data.month.toString(),
     });
   if (data.peopleCount !== data.userAnswers.tickets)
@@ -80,15 +80,6 @@ function checkErros(data) {
       userAnswer: data.userAnswers.tickets.toString(),
       correctAnswer: data.peopleCount.toString(),
     });
-
-  console.log(
-    data.messages
-      .filter((message) => message.responseEmail)
-      .filter(
-        (message) =>
-          message.responseEmail.correctChoice || message.responseEmail.order
-      )
-  );
 
   data.messages
     .filter((message) => message.responseEmail)
@@ -144,7 +135,7 @@ function genFeedbackMessages(errors, city, senderName) {
       "Congratulations! You fulfilled all of your client's requests. She would certainly have been delighted if she had managed to catch the flight. You have written your e-mail so quickly you got some informations wrong.  Despite having made the reservations correctly, you ended up mistyping the information and " +
       senderName +
       " missed the trip. What a mess...";
-  } else if (errors.filter((error) => error.type === "frase").length === 0) {
+  } else if (errors.length === 13) {
     // ERROU O QUE TINHA QUE SELECIONAR
     feedbackMessage.text =
       "Você estava tão distraído no trabalho que acabou confundindo os detalhes da reserva. Na tentativa de ser rápido, acabou errando: " +

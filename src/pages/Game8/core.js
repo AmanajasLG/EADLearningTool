@@ -69,37 +69,6 @@ const Core = ({ exitGame, data, onEndGame }) => {
           }
         />
       )}
-      {state.window === "MAP" && (
-        <WindowScreen
-          style={{
-            position: "absolute",
-            left: state.showEmail ? "43%" : "10%",
-            width: state.showEmail ? "55%" : "70%",
-            height: state.showEmail ? "55%" : "70%",
-            margin: "10% auto 0 auto",
-            fontSize: "3em",
-          }}
-        >
-          <Map
-            locations={data.locations}
-            onConfirm={(reservation) => () =>
-              setState((s) => ({
-                ...s,
-                window: "CLIENT_RESPONSE",
-                emailType: "hotel",
-                userAnswers: {
-                  ...s.userAnswers,
-                  ...reservation,
-                },
-                showEmail: false,
-              }))}
-            mapImage={
-              state.userAnswers.city.map ? state.userAnswers.city.map : ""
-            }
-            showEmail={state.showEmail}
-          />
-        </WindowScreen>
-      )}
 
       {state.window !== "BUY_TICKETS" && (
         <WindowScreen
@@ -183,6 +152,38 @@ const Core = ({ exitGame, data, onEndGame }) => {
               }}
             />
           )}
+        </WindowScreen>
+      )}
+
+      {state.window === "MAP" && (
+        <WindowScreen
+          style={{
+            position: "absolute",
+            left: state.showEmail ? "43%" : "10%",
+            width: state.showEmail ? "55%" : "70%",
+            height: state.showEmail ? "55%" : "70%",
+            margin: "10% auto 0 auto",
+            fontSize: "3em",
+          }}
+        >
+          <Map
+            locations={data.locations}
+            onConfirm={(reservation) => () =>
+              setState((s) => ({
+                ...s,
+                window: "CLIENT_RESPONSE",
+                emailType: "hotel",
+                userAnswers: {
+                  ...s.userAnswers,
+                  ...reservation,
+                },
+                showEmail: false,
+              }))}
+            mapImage={
+              state.userAnswers.city.map ? state.userAnswers.city.map : ""
+            }
+            showEmail={state.showEmail}
+          />
         </WindowScreen>
       )}
 
