@@ -161,9 +161,11 @@ const GameContext = (props) => {
       </div>
       {state.back && <Redirect to="/userspace" />}
       {(process.env.NODE_ENV === 'development' && state.debug) &&
-        <CursorPoint />
+        <React.Fragment>
+          <CursorPoint />
+          <Canvas elements={elements}  width={window.innerWidth} height={window.innerHeigh} style={{ pointerEvents: 'none', position: 'absolute', top: 0, left: 0}}/>
+        </React.Fragment>
       }
-      <Canvas elements={elements}  width={window.innerWidth} height={window.innerHeigh} style={{position: 'absolute', top: 0, left: 0}}/>
     </React.Fragment>
   );
 };
