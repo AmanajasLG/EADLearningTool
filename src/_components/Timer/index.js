@@ -7,6 +7,8 @@ const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
     seconds: seconds,
     interval: null,
   });
+  const stateRef = React.useRef()
+  stateRef.current = state
 
   React.useEffect( () => {
     return () => clearInterval(state.interval);
@@ -14,10 +16,11 @@ const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
   }, [] );
 
   React.useEffect( () => {
+    console.log('seconds:', state.seconds)
     if( state.seconds !== seconds ) setState( s => ({...s, seconds: seconds}));
   // eslint-disable-next-line
   }, [seconds] )
-  
+
   React.useEffect( () => {
     if( run ) {
       if( state.seconds > 0 ) _startInterval();
@@ -28,16 +31,22 @@ const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
     }
   // eslint-disable-next-line
   }, [run]);
+  console.log('seconds:', state.seconds)
 
   const _startInterval = () => {
+    console.log('startInterval called')
     let interval = state.interval;
     if( !interval ) {
       interval = setInterval( () => {
-        if( state.seconds <= 1 ) {
+        console.log('interval function, state.seconds:', stateRef.current.seconds)
+        if( stateRef.current.seconds < 1 ) {
           _stopInterval();
           onEnd();
         } else {
-          setState( s => ({...s, seconds: s.seconds-1}) );
+          setState( s => {
+            console.log('seconds should be:', s.seconds - 1)
+            return ({...s, seconds: s.seconds-1})
+          });
         }
       }, 1000 );
       setState( s => ({...s, interval: interval}) );
