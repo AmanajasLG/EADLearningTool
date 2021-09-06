@@ -112,77 +112,110 @@ function checkErros(data) {
 }
 
 function genFeedbackMessages(errors, city, senderName) {
-  let feedbackMessage = {
-    text: "",
-    textTranslate: "",
-  };
+  let feedbackMessage;
 
   if (errors.length === 0) {
     // ACERTOU TUDO
-    feedbackMessage.text =
-      "Parabéns! Você atendeu a tudo o que seu cliente precisava, e sem cometer um único erro. Aposto que sua foto estará no quadro de Funcionário do Mês…";
-    feedbackMessage.textTranslate =
-      "Congratulations! You have met all your clients' needs, and without making a single mistake. I bet your picture will be in the 'Employee of the Month' board...";
-  } else if (
-    errors.filter((error) => error.type === "frase").length === errors.length
-  ) {
-    // ERROU SÓ AS FRASES
-    feedbackMessage.text =
-      "Parabéns! Você atendeu a todos os pedidos da sua cliente. Ela certamente teria ficado muito satisfeita se tivesse conseguido pegar o vôo. Você escreveu o e-mail de forma tão rápida que acabou confundindo as informações. Apesar de ter feito as reservas corretamente, acabou errando as informações e " +
-      senderName +
-      " perdeu sua viagem. Que bagunça…";
-    feedbackMessage.textTranslate =
-      "Congratulations! You fulfilled all of your client's requests. She would certainly have been delighted if she had managed to catch the flight. You have written your e-mail so quickly you got some informations wrong.  Despite having made the reservations correctly, you ended up mistyping the information and " +
-      senderName +
-      " missed the trip. What a mess...";
+    feedbackMessage = {
+      text:
+        "Parabéns! Você atendeu a tudo o que seu cliente precisava, e sem cometer um único erro. Aposto que sua foto estará no quadro de Funcionário do Mês…",
+      textTranslate:
+        "Congratulations! You have met all your clients' needs, and without making a single mistake. I bet your picture will be in the 'Employee of the Month' board...",
+      image: "",
+    };
   } else if (errors.length === 13) {
-    // ERROU O QUE TINHA QUE SELECIONAR
-    feedbackMessage.text =
-      "Você estava tão distraído no trabalho que acabou confundindo os detalhes da reserva. Na tentativa de ser rápido, acabou errando: " +
-      errors
-        .filter((error) => error.type !== "frase")
-        .map(function (error) {
-          return error.type;
-        })
-        .join(", ") +
-      ". Você escreveu o e-mail cuidadosamente, tentando não deixar nenhuma informação errada. Sua mensagem ficou perfeita. Minutos após enviar o e-mail, você recebe uma ligação furiosa de " +
-      senderName +
-      ", perguntando por que você decidiu alterar a viagem dos sonhos dela… Será que ainda é possível desfazer a confusão?";
-    feedbackMessage.textTranslate =
-      "You were so distracted at work that you confused your booking details. In an attempt to be quick, you ended up missing: " +
-      errors
-        .filter((error) => error.type !== "frase")
-        .map(function (error) {
-          return error.type;
-        })
-        .join(", ") +
-      ". You wrote your email carefully, trying not to leave any wrong information. Your text was perfect. Minutes after sending the email, you receive a furious call from " +
-      senderName +
-      ", asking why you decided to change her dream trip… Is it still possible to undo all the mess?";
+    // ERROU TUDO
+    feedbackMessage = [
+      {
+        text:
+          "Acho que o trabalho de agente de viagens não é para você. Que confusão você fez na viagem de " +
+          senderName +
+          "!",
+        textTranslate:
+          "I think the travel agent's work is not for you. What a mess you've made on " +
+          senderName +
+          "'s trip!",
+        image: "",
+      },
+      {
+        text:
+          "Você acabou confundindo o destino da viagem de " +
+          senderName +
+          " ele acabou passando as férias em um lugar diferente do que tinha imaginado. Ainda bem que ele tem um espírito aventureiro…",
+        textTranslate:
+          "You ended up confusing " +
+          senderName +
+          "'s trip destination and he spent his vacations in a place different than he imagined. Gladly, he has an adventurous soul...",
+        image: "",
+      },
+      {
+        text:
+          "Além disso, você acabou errando o dia, horário e n. de passagens para a viagem. Ele não ficou feliz, mas deu um jeito…",
+        textTranslate:
+          "Besides, you ended up confusing the day, time and n. of tickets for his trip. He was not happy about it, but managed to pull it off...",
+        image: "",
+      },
+      {
+        text:
+          senderName +
+          " teve certa dificuldade para encontrar os locais que procurava. As orientações que você passou para ele estavam completamente erradas… Mais cuidado da próxima vez, ok?",
+        textTranslate:
+          senderName +
+          " had some hard time trying to din the locations he was looking for. All directions you gave him were completely wrong... Be more careful next time, ok?",
+        image: "",
+      },
+    ];
   } else {
     // DERROTA
-    feedbackMessage.text =
-      "Você estava tão distraído no trabalho que acabou confundindo os detalhes da reserva. Na tentativa de ser rápido, acabou errando: " +
-      errors
-        .filter((error) => error.type !== "frase")
-        .map(function (error) {
-          return error.type;
-        })
-        .join(", ") +
-      ". Ainda por cima, você escreveu o e-mail de forma tão apressada que errou as informações da viagem. Seu chefe até agora está tentando entender o que aconteceu para causar tanta confusão. E " +
-      senderName +
-      ", obviamente, não está nem um pouco feliz…";
-    feedbackMessage.textTranslate =
-      "You were so distracted at work that you confused your booking details. In an attempt to be quick, you ended up missing: " +
-      errors
-        .filter((error) => error.type !== "frase")
-        .map(function (error) {
-          return error.type;
-        })
-        .join(", ") +
-      ". On top of that, you wrote the email so hastily that you ended up mistyping the informations. Your boss is still trying to figure out what happened to cause so much trouble. And, obviously, " +
-      senderName +
-      " is not happy at all…";
+    feedbackMessage = [
+      {
+        text:
+          "Parabéns! Você se confundiu em algumas coisas mas, no final, fez com que o cliente fizesse a sua viagem.",
+        textTranslate:
+          "Congratulations! You've confused some information but, in the end, made your client's trip possible.",
+        image: "",
+      },
+    ];
+
+    if (errors.find((error) => error.type === "cidade")) {
+      feedbackMessage.push({
+        text:
+          "Você acabou confundindo o destino da viagem de " +
+          senderName +
+          " ele acabou passando as férias em um lugar diferente do que tinha imaginado. Ainda bem que ele tem um espírito aventureiro… ",
+        textTranslate:
+          "You ended up confusing " +
+          senderName +
+          "'s trip destination and he spent his vacations in a place different than he imagined. Gladly, he has an adventurous soul...",
+        image: "",
+      });
+    }
+
+    if (
+      errors.filter(
+        (error) => error.type !== "cidade" && error.type !== "frase"
+      ).length !== 0
+    ) {
+      feedbackMessage.push({
+        text:
+          "Além disso, você acabou errando algumas informações necessárias para a viagem. Ele não ficou feliz, mas deu um jeito…",
+        textTranslate:
+          "Besides, you ended up confusing some information necessary for the trip. He was not happy about it, but managed to pull it off...",
+        image: "",
+      });
+    }
+
+    if (errors.filter((error) => error.type === "frase").length !== 0) {
+      feedbackMessage.push({
+        text:
+          senderName +
+          " teve certa dificuldade para encontrar os locais que procurava, das orientações que você passou para ele, algumas estavam erradas… Mais cuidado da próxima vez, ok?",
+        textTranslate:
+          senderName +
+          " had some hard time trying to din the locations he was looking for. Some directions you gave him were wrong... Be more careful next time, ok?",
+        image: "",
+      });
+    }
   }
 
   return feedbackMessage;

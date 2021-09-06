@@ -3,6 +3,21 @@ import "./index.scss";
 import Button from "@material-ui/core/Button";
 import Counter from "../Counter";
 import { numberList } from "../../_helpers";
+import InlineSVG from "../InlineSVG";
+import { Iniciar, Voltar } from "../Button";
+
+const iconColors = {
+  school: "#FFEACC",
+  hotel: "#FFCCA9",
+  hospital: "#D6E3F4",
+  drugstore: "#D6E3F4",
+  supermarket: "#FFDEA9",
+  park: "#F9AFA1",
+  restaurant: "#E8CAFF",
+  cityhall: "#F9AFA1",
+  touristic: "#F9AFA1",
+  shopping: "#FFDEA9",
+};
 
 const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
   const [state, setState] = React.useState({
@@ -20,14 +35,35 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
     }
   }, []);
 
+  const getTranslate = (location) => {
+    let translateY = "0";
+
+    if (location.positionY > 500) {
+      translateY = "-40%";
+    } else if (location.positionY < 100) {
+      translateY = "35%";
+    } else if (location.positionY > 400) {
+      translateY = "-30%";
+    } else if (location.positionY < 200) {
+      translateY = "20%";
+    } else if (location.positionY < 298) {
+      translateY = "10%";
+    } else {
+      translateY = "0";
+    }
+
+    return `translate(-50%,${translateY})`;
+  };
+
   return (
     <div
       ref={div}
       style={{
         backgroundImage: `url("${mapImage}")`,
         height: "100%",
+        width: "100%",
         backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         backgroundPosition: "center",
       }}
     >
@@ -41,25 +77,23 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
             width:
               state.index === index
                 ? showEmail
-                  ? "2.5em"
-                  : "3.5em"
+                  ? "2em"
+                  : "3em"
                 : showEmail
-                ? "2em"
-                : "3em",
+                ? "1.5em"
+                : "2.5em",
             height:
               state.index === index
                 ? showEmail
-                  ? "2.5em"
-                  : "3.5em"
+                  ? "2em"
+                  : "3em"
                 : showEmail
-                ? "2em"
-                : "3em",
+                ? "1.5em"
+                : "2.5em",
             backgroundColor:
               showEmail && location.correct
-                ? "yellow"
-                : state.index === index
-                ? "red"
-                : "blue",
+                ? "#d03333"
+                : iconColors[location.type],
             borderRadius: 100,
             borderBottomLeftRadius: 0,
             display: "flex",
@@ -67,19 +101,19 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
             alignItems: "center",
             position: "absolute",
             top:
-              String((location.positionX * (height / 1920) * 100) / height) +
+              String((location.positionY * (height / 596) * 100) / height) +
               "%",
             left:
-              String((location.positionY * (width / 1080) * 100) / width) + "%",
-            transform: "translate(-50%, -15%)",
+              String((location.positionX * (width / 1179) * 100) / width) + "%",
+            transform: getTranslate(location),
             opacity: state.index === -1 ? 1 : state.index === index ? 1 : 0.5,
           }}
           onClick={() => setState((s) => ({ ...s, index, reservation: false }))}
         >
           <img
             style={{
-              width: showEmail ? "1.5em" : "2em",
-              height: showEmail ? "1.5em" : "2em",
+              width: showEmail ? "1.2em" : "1.8em",
+              height: showEmail ? "1.2em" : "1.8em",
             }}
             src={location.image}
             alt=""
@@ -89,14 +123,14 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
       {state.index !== -1 && (
         <div
           style={{
-            bottom: 0,
+            bottom: 20,
             position: "absolute",
             left: "50%",
             transform: "translate(-50%)",
             color: "white",
             textAlign: "center",
-            width: showEmail ? "20em" : "24em",
-            fontSize: showEmail ? ".8em" : "1.5em",
+            width: showEmail ? "20em" : "20em",
+            fontSize: showEmail ? ".8em" : "1.3em",
           }}
         >
           <div
@@ -110,8 +144,14 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
               alignItems: "center",
             }}
           >
-            <img
-              style={{ width: "1.5em", height: "1.5em", marginRight: ".3em" }}
+            <InlineSVG
+              style={{
+                width: "1.5em",
+                height: "1.5em",
+                marginRight: ".3em",
+                filter:
+                  "invert(100%) sepia(42%) saturate(2%) hue-rotate(123deg) brightness(112%) contrast(101%)",
+              }}
               src={locations[state.index].image}
               alt=""
             />
@@ -181,7 +221,11 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
                 <span style={{ marginLeft: "1.5em" }}>Pessoas</span>
               </div>
               <div style={{ marginTop: "2em" }}>
-                <Button
+                <Voltar
+                  style={{
+                    fontSize: ".6em",
+                    marginRight: "0.6em",
+                  }}
                   onClick={() =>
                     setState((s) => ({
                       ...s,
@@ -190,10 +234,13 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
                       days: 0,
                     }))
                   }
-                >
-                  Voltar
-                </Button>
-                <Button
+                  label="Voltar"
+                />
+
+                <Iniciar
+                  style={{
+                    fontSize: ".6em",
+                  }}
                   onClick={onConfirm({
                     reservation: {
                       hotel: locations[state.index],
@@ -201,9 +248,8 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
                       people: state.people + 1,
                     },
                   })}
-                >
-                  Confirmar reserva
-                </Button>
+                  label="Confirmar reserva"
+                />
               </div>
             </div>
           ) : (
@@ -222,11 +268,14 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
             >
               <p>{locations[state.index].description}</p>
               {!showEmail && locations[state.index].type === "hotel" && (
-                <Button
+                <Iniciar
+                  style={{
+                    fontSize: ".6em",
+                    marginTop: "1em",
+                  }}
                   onClick={() => setState((s) => ({ ...s, reservation: true }))}
-                >
-                  Fazer reserva
-                </Button>
+                  label="Fazer reserva"
+                />
               )}
             </div>
           )}

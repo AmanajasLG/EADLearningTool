@@ -83,10 +83,10 @@ const Game8 = (props) => {
         name: location.name,
         positionX: location.positionX
           ? location.positionX
-          : Math.floor(Math.random() * 1920),
+          : Math.floor(Math.random() * 596),
         positionY: location.positionY
           ? location.positionY
-          : Math.floor(Math.random() * 1080),
+          : Math.floor(Math.random() * 1179),
         correct: location.correct,
         image: location.image ? location.image.url : "",
       }));

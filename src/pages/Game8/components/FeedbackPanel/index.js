@@ -3,12 +3,17 @@ import React from "react";
 import { preventSingleWordBreak } from "../../../../_helpers";
 import "./index.scss";
 
-const FeedbackPanel = ({ feedback, restart, leave }) => {
+const FeedbackPanel = ({ feedback, won, restart, leave }) => {
   return (
     <div style={{ position: "relative" }}>
       <div className="feedback-panel" id="feedback-panel">
-        <div className="feedback-panel-content">
-          <div className="feedback-panel-column">
+        {won ? (
+          <div className="feedback-panel-content">
+            <img
+              className="feedback-panel-img"
+              src={feedback.image}
+              alt="feedback-panel-icon"
+            />
             <div className="feedback-panel-text">
               <span lang="pt-br">{preventSingleWordBreak(feedback.text)}</span>
               <span
@@ -19,7 +24,33 @@ const FeedbackPanel = ({ feedback, restart, leave }) => {
               </span>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="feedback-panel-content">
+            {feedback.map((message, index) => (
+              <div
+                className="feedback-panel-column"
+                style={{ width: 100 / feedback.length + "%" }}
+              >
+                <img
+                  className="feedback-panel-img"
+                  src={message.image}
+                  alt="feedback-panel-icon"
+                />
+                <div className="feedback-panel-text">
+                  <span lang="pt-br">
+                    {preventSingleWordBreak(message.text)}
+                  </span>
+                  <span
+                    lang="en"
+                    className="purple-line-before line-before-margin-30-auto italic"
+                  >
+                    {preventSingleWordBreak(message.textTranslate)}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="jogo4-end-btns">
