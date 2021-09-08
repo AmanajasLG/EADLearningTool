@@ -1,11 +1,17 @@
 import { format } from "date-fns";
+import {
+  mapFeedbackIcon,
+  planeFeedbackIcon,
+  emailFeedbackIcon,
+  calendarFeedbackIcon,
+} from "../../img";
 
 function checkBookingError(data) {
   return (
     data.userAnswers.city.correct &&
     data.userAnswers.days === data.days &&
-    data.userAnswers.dates.going.month === data.month.toString() &&
-    data.userAnswers.dates.return.month === data.month.toString() &&
+    data.userAnswers.dates.going.month === data.month &&
+    data.userAnswers.dates.return.month === data.month &&
     data.peopleCount === data.userAnswers.tickets &&
     data.userAnswers.flights.going.correct &&
     data.userAnswers.flights.return.correct
@@ -27,16 +33,16 @@ function checkErros(data) {
       userAnswer: data.userAnswers.days.toString(),
       correctAnswer: data.days.toString(),
     });
-  if (data.userAnswers.dates.going.month !== data.month.toString())
+  if (data.userAnswers.dates.going.month !== data.month)
     errors.push({
       type: "mês de ida",
-      userAnswer: data.userAnswers.dates.going.month,
+      userAnswer: data.userAnswers.dates.going.month.toString(),
       correctAnswer: data.month.toString(),
     });
-  if (data.userAnswers.dates.return.month !== data.month.toString())
+  if (data.userAnswers.dates.return.month !== data.month)
     errors.push({
       type: "mês de volta",
-      userAnswer: data.userAnswers.dates.return.month,
+      userAnswer: data.userAnswers.dates.return.month.toString(),
       correctAnswer: data.month.toString(),
     });
   if (data.peopleCount !== data.userAnswers.tickets)
@@ -121,7 +127,7 @@ function genFeedbackMessages(errors, city, senderName) {
         "Parabéns! Você atendeu a tudo o que seu cliente precisava, e sem cometer um único erro. Aposto que sua foto estará no quadro de Funcionário do Mês…",
       textTranslate:
         "Congratulations! You have met all your clients' needs, and without making a single mistake. I bet your picture will be in the 'Employee of the Month' board...",
-      image: "",
+      image: mapFeedbackIcon,
     };
   } else if (errors.length === 13) {
     // ERROU TUDO
@@ -135,7 +141,7 @@ function genFeedbackMessages(errors, city, senderName) {
           "I think the travel agent's work is not for you. What a mess you've made on " +
           senderName +
           "'s trip!",
-        image: "",
+        image: mapFeedbackIcon,
       },
       {
         text:
@@ -146,14 +152,14 @@ function genFeedbackMessages(errors, city, senderName) {
           "You ended up confusing " +
           senderName +
           "'s trip destination and he spent his vacations in a place different than he imagined. Gladly, he has an adventurous soul...",
-        image: "",
+        image: planeFeedbackIcon,
       },
       {
         text:
           "Além disso, você acabou errando o dia, horário e n. de passagens para a viagem. Ele não ficou feliz, mas deu um jeito…",
         textTranslate:
           "Besides, you ended up confusing the day, time and n. of tickets for his trip. He was not happy about it, but managed to pull it off...",
-        image: "",
+        image: calendarFeedbackIcon,
       },
       {
         text:
@@ -162,7 +168,7 @@ function genFeedbackMessages(errors, city, senderName) {
         textTranslate:
           senderName +
           " had some hard time trying to din the locations he was looking for. All directions you gave him were completely wrong... Be more careful next time, ok?",
-        image: "",
+        image: emailFeedbackIcon,
       },
     ];
   } else {
@@ -173,7 +179,7 @@ function genFeedbackMessages(errors, city, senderName) {
           "Parabéns! Você se confundiu em algumas coisas mas, no final, fez com que o cliente fizesse a sua viagem.",
         textTranslate:
           "Congratulations! You've confused some information but, in the end, made your client's trip possible.",
-        image: "",
+        image: mapFeedbackIcon,
       },
     ];
 
@@ -187,7 +193,7 @@ function genFeedbackMessages(errors, city, senderName) {
           "You ended up confusing " +
           senderName +
           "'s trip destination and he spent his vacations in a place different than he imagined. Gladly, he has an adventurous soul...",
-        image: "",
+        image: planeFeedbackIcon,
       });
     }
 
@@ -201,7 +207,7 @@ function genFeedbackMessages(errors, city, senderName) {
           "Além disso, você acabou errando algumas informações necessárias para a viagem. Ele não ficou feliz, mas deu um jeito…",
         textTranslate:
           "Besides, you ended up confusing some information necessary for the trip. He was not happy about it, but managed to pull it off...",
-        image: "",
+        image: calendarFeedbackIcon,
       });
     }
 
@@ -213,7 +219,7 @@ function genFeedbackMessages(errors, city, senderName) {
         textTranslate:
           senderName +
           " had some hard time trying to din the locations he was looking for. Some directions you gave him were wrong... Be more careful next time, ok?",
-        image: "",
+        image: emailFeedbackIcon,
       });
     }
   }

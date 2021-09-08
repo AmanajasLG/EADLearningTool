@@ -7,6 +7,7 @@ const Feedback = ({ data, restart, leave }) => {
       <div className="feedback absolute-center">
         <FeedbackPanel
           feedback={data.messages}
+          won={data.won}
           restart={restart}
           leave={leave}
         />

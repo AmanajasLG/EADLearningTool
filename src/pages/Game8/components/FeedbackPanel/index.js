@@ -6,25 +6,25 @@ import "./index.scss";
 const FeedbackPanel = ({ feedback, won, restart, leave }) => {
   return (
     <div style={{ position: "relative" }}>
-      <div className="feedback-panel" id="feedback-panel">
-        {won ? (
-          <div className="feedback-panel-content">
-            <img
-              className="feedback-panel-img"
-              src={feedback.image}
-              alt="feedback-panel-icon"
-            />
-            <div className="feedback-panel-text">
-              <span lang="pt-br">{preventSingleWordBreak(feedback.text)}</span>
-              <span
-                lang="en"
-                className="purple-line-before line-before-margin-30-auto italic"
-              >
-                {preventSingleWordBreak(feedback.textTranslate)}
-              </span>
-            </div>
+      {won ? (
+        <div className="won-panel">
+          <img
+            className="feedback-panel-img-large"
+            src={feedback.image}
+            alt="feedback-panel-icon"
+          />
+          <div className="feedback-panel-text">
+            <span lang="pt-br">{preventSingleWordBreak(feedback.text)}</span>
+            <span
+              lang="en"
+              className="purple-line-before line-before-margin-30-auto italic"
+            >
+              {preventSingleWordBreak(feedback.textTranslate)}
+            </span>
           </div>
-        ) : (
+        </div>
+      ) : (
+        <div className="feedback-panel" id="feedback-panel">
           <div className="feedback-panel-content">
             {feedback.map((message, index) => (
               <div
@@ -50,8 +50,8 @@ const FeedbackPanel = ({ feedback, won, restart, leave }) => {
               </div>
             ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="jogo4-end-btns">
         <Voltar

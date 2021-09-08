@@ -44,7 +44,11 @@ import fireworks2 from "./fogos de artificio rosa.svg";
 import camera from "./camera fotografica.svg";
 import ariel from "./Game6/ariel.svg";
 import smallPhoneBlank from "./Game6/celular icone.svg";
-
+// GAME 8
+import calendarFeedbackIcon from "./Game8/calendar-feedback-icon.svg";
+import planeFeedbackIcon from "./Game8/plane-feedback-icon.svg";
+import emailFeedbackIcon from "./Game8/email-feedback-icon.svg";
+import mapFeedbackIcon from "./Game8/map-feedback-icon.svg";
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -73,6 +77,10 @@ import emailIcon from "./email.svg";
 import relogio from "./relogio.svg";
 
 export {
+  calendarFeedbackIcon,
+  emailFeedbackIcon,
+  planeFeedbackIcon,
+  mapFeedbackIcon,
   smallPhoneBlank,
   trash,
   ariel,

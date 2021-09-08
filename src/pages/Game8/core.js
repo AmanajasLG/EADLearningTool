@@ -212,44 +212,46 @@ const Core = ({ exitGame, data, onEndGame }) => {
         </WindowScreen>
       )}
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "10%",
-          height: "70%",
-          position: "absolute",
-          top: "10%",
-          right: "2%",
-          backgroundColor: "#336573",
-          padding: "1% 2% 1% 2%",
-          justifyContent: "space-evenly",
-          borderRadius: "6%/2%",
-        }}
-      >
-        <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
-          <img
-            style={{ cursor: "pointer" }}
-            onClick={() => setState((s) => ({ ...s, window: "EMAIL" }))}
-            src={emailIcon}
-            alt=""
-          />
+      {state.window !== "BUY_TICKETS" && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "10%",
+            height: "70%",
+            position: "absolute",
+            top: "10%",
+            right: "2%",
+            backgroundColor: "#336573",
+            padding: "1% 2% 1% 2%",
+            justifyContent: "space-evenly",
+            borderRadius: "6%/2%",
+          }}
+        >
+          <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
+            <img
+              style={{ cursor: "pointer" }}
+              onClick={() => setState((s) => ({ ...s, window: "EMAIL" }))}
+              src={emailIcon}
+              alt=""
+            />
+          </div>
+          <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
+            <img style={{ cursor: "pointer" }} src={aviao} alt="" />
+          </div>
+          <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
+            <img style={{ cursor: "pointer" }} src={agendamento} alt="" />
+          </div>
+          <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
+            <img
+              style={{ cursor: "pointer" }}
+              onClick={() => setState((s) => ({ ...s, window: "MAP" }))}
+              src={destino}
+              alt=""
+            />
+          </div>
         </div>
-        <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
-          <img style={{ cursor: "pointer" }} src={aviao} alt="" />
-        </div>
-        <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
-          <img style={{ cursor: "pointer" }} src={agendamento} alt="" />
-        </div>
-        <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
-          <img
-            style={{ cursor: "pointer" }}
-            onClick={() => setState((s) => ({ ...s, window: "MAP" }))}
-            src={destino}
-            alt=""
-          />
-        </div>
-      </div>
+      )}
 
       {process.env.NODE_ENV === "development" && (
         <div>

@@ -17,6 +17,24 @@
   box-shadow: #4447 0.8em 0.8em;
 }
 
+.won-panel {
+  height: calc(var(--gameHeight) * 0.7);
+  width: calc(var(--gameWidth) * 0.5);
+  position: relative;
+  margin-top: -5em;
+
+  font-family: "Barlow";
+  font-size: 3em;
+  line-height: 1.2em;
+  padding: 1em 3.2em;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Vertical */
+  justify-content: center; /* Horizontal */
+}
+
 .feedback-arrow {
   position: absolute;
   font-size: 1.9em;
@@ -57,6 +75,11 @@
 .feedback-panel-img {
   width: 5em;
   padding: 0.5em;
+}
+
+.feedback-panel-img-large {
+  width: 9em;
+  padding: 1em;
 }
 
 .feedback-panel-text {
