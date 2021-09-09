@@ -1,9 +1,10 @@
 const initialState = () => ({
   scene: 'TUTORIAL',
   completed: 0,
-  runTimer: true,
+  runTimer: false,
   takenRequests: [],
   results: {},
-  buildingDetailsIndex: null
+  buildingDetailsIndex: null,
+  tutorialStep: 0
 })
 export default initialState

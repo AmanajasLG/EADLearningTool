@@ -6,6 +6,8 @@ import Writer from '../../_components/Writer'
 import initialState from './initialState'
 import { agendamento } from '../../img'
 import { getRandomInt } from '../../_helpers'
+import tutorialTexts from './tutorialTexts'
+import { BlobBg } from '../../_components/Blob'
 
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState())
@@ -38,19 +40,11 @@ const Core = ({ exitGame, data, onEndGame }) => {
 
   return(
     <React.Fragment>
-      {state.scene === 'TUTORIAL' &&
-        <React.Fragment>
-          Tutorial
-          <Button onClick={ () => setState( s => ({...s, scene: 'TIMER', takenRequests: [getRandomInt(0, data.requests.length)]}))}>
-            Passar tutorial
-          </Button>
-        </React.Fragment>
-      }
       {state.scene === 'TIMER' &&
-        <TimerAnounce seconds={data.timer} onReady={() => setState(s => ({...s, scene: 'GAME'}) )}/>
+        <TimerAnounce seconds={data.timer} onReady={() => setState(s => ({...s, scene: 'GAME', runTimer: true, takenRequests: [getRandomInt(0, data.requests.length)]}) )}/>
       }
 
-      {state.scene === 'GAME' &&
+      {(state.scene === 'GAME' || state.scene === 'TUTORIAL') &&
         <React.Fragment>
           <div style={{position: 'absolute', width: '70%', height: '20%', right: 0, backgroundColor: "#aaffaa"}}>
             <img
@@ -114,6 +108,30 @@ const Core = ({ exitGame, data, onEndGame }) => {
               </Button>
             </React.Fragment>
           }
+        </React.Fragment>
+      }
+
+
+      {state.scene === 'TUTORIAL' &&
+        <React.Fragment>
+          <BlobBg blob={{fill:  '#f9afa1'}}
+            style={{position: 'absolute', right: '-20%', top: '-20%', width: '80%', height: '80%'}}>
+          </BlobBg>
+          <div style={{position: 'absolute', right: 0, width: '50%', height: '50%', backgroundColor: '#aafffa', opacity: '0.2'}}>
+            <div>
+              {tutorialTexts[state.tutorialStep].text}
+              <hr/>
+              {tutorialTexts[state.tutorialStep].translation}
+            </div>
+            <Button style={{position: 'absolute', bottom: '20%', left:'40%'}} onClick={() => setState(s =>
+                ({...s, tutorialStep: s.tutorialStep + 1, scene: s.tutorialStep + 1 === tutorialTexts.length ? 'TIMER' : 'TUTORIAL' })
+            )}>
+              Continue
+            </Button>
+          </div>
+          <Button onClick={ () => setState( s => ({...s, scene: 'TIMER'}) )}>
+            Passar tutorial
+          </Button>
         </React.Fragment>
       }
     </React.Fragment>
