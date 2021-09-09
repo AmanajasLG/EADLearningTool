@@ -1,6 +1,8 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import Timer from '../../_components/Timer'
+import TimerAnounce from '../../_components/TimerAnounce'
+import Writer from '../../_components/Writer'
 import initialState from './initialState'
 import { agendamento } from '../../img'
 import { getRandomInt } from '../../_helpers'
@@ -39,21 +41,17 @@ const Core = ({ exitGame, data, onEndGame }) => {
       {state.scene === 'TUTORIAL' &&
         <React.Fragment>
           Tutorial
-          <Button onClick={ () => setState( s => ({...s, scene: 'GAME', takenRequests: [getRandomInt(0, data.requests.length)]}))}>
+          <Button onClick={ () => setState( s => ({...s, scene: 'TIMER', takenRequests: [getRandomInt(0, data.requests.length)]}))}>
             Passar tutorial
           </Button>
         </React.Fragment>
       }
+      {state.scene === 'TIMER' &&
+        <TimerAnounce seconds={data.timer} onReady={() => setState(s => ({...s, scene: 'GAME'}) )}/>
+      }
 
       {state.scene === 'GAME' &&
         <React.Fragment>
-          <Timer style={{position: 'absolute'}}
-            seconds={data.timer}
-            run={state.runTimer}
-            onStop={ seconds => { setState( s => ({...s, results: {...s.results, secondsLeft: seconds}}))}} onEnd={onTimerEnd}
-          />
-        <Button style={{pointerEvents: 'none', position: 'absolute', top: '30%'}}>{state.completed}</Button>
-
           <div style={{position: 'absolute', width: '70%', height: '20%', right: 0, backgroundColor: "#aaffaa"}}>
             <img
               style={{position: 'absolute', height: '100%', backgroundColor: "#aaaaff", borderRadius: "50%"}}
@@ -81,14 +79,23 @@ const Core = ({ exitGame, data, onEndGame }) => {
             )}
           </div>
 
-          <div style={{position: 'absolute', left: 0, bottom: 0, width: '30%', height: '40%', backgroundColor: '#aaffaa'}}>
-            <div style={{fontSize: '3em'}}>Pedido {state.takenRequests[0]}
+          <div style={{position: 'absolute', left: '5%', bottom: 0, width: '90%', height: '25%', backgroundColor: '#aaffaa'}}>
+            <div style={{position: 'absolute', width: '55%', backgroundColor: '#ffaaff', height: '40%', left: '12%', top: '40%'}}>
+              <Writer text={`Pedido ${state.takenRequests[0]}`}
+                style={{width: '55%', backgroundColor: '#ffbbff', height: '40%', marginLeft: '25%', fontSize: '2em'}}
+              />
             </div>
             <img
-              style={{position: 'absolute', width: '50%', backgroundColor: "#aaaaff", borderRadius: "50%"}}
+              style={{position: 'absolute', bottom: 0, opacity: '30%', height: '150%', backgroundColor: "#aaaaff", borderRadius: "50%"}}
               onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
               src={agendamento}
               alt=""
+            />
+          <Button style={{position: 'absolute', right: '25%', top: '35%', pointerEvents: 'none', position: 'absolute', top: '30%'}}>{state.completed}</Button>
+            <Timer style={{position: 'absolute', right: 0, fontSize: '8em', right: '2.5%', top: '35%'}}
+              seconds={data.timer}
+              run={state.runTimer}
+              onStop={ seconds => { setState( s => ({...s, results: {...s.results, secondsLeft: seconds}}))}} onEnd={onTimerEnd}
             />
           </div>
 
