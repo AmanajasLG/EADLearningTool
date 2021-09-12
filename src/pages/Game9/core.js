@@ -7,7 +7,10 @@ import initialState from './initialState'
 import { agendamento } from '../../img'
 import { getRandomInt } from '../../_helpers'
 import tutorialTexts from './tutorialTexts'
-import { BlobBg } from '../../_components/Blob'
+import TutorialBlob from '../../_components/TutorialBlob'
+import Lamp from '../../_components/Lamp'
+import Map from '../../_components/Map'
+import charStub from './chef_animada.svg'
 
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState())
@@ -65,7 +68,6 @@ const Core = ({ exitGame, data, onEndGame }) => {
           </div>
 
           <div style={{pointerEvents: (state.endGame? 'none': 'all'), position: 'absolute', width: '70%', height: '65%', backgroundColor: '#aaaaff', right: 0, bottom: '10%'}}>
-            Mapa
             {data.buildings.map((building, index) =>
               <Button key={index} onMouseEnter={() => setState(s => ({...s, buildingDetailsIndex: index}))}>
                 {building.name}
@@ -73,23 +75,30 @@ const Core = ({ exitGame, data, onEndGame }) => {
             )}
           </div>
 
-          <div style={{position: 'absolute', left: '5%', bottom: 0, width: '90%', height: '25%', backgroundColor: '#aaffaa'}}>
-            <div style={{position: 'absolute', width: '55%', backgroundColor: '#ffaaff', height: '40%', left: '12%', top: '40%'}}>
+          <div style={{position: 'absolute', left: '5%', bottom: 0, width: '90%', height: '25%', backgroundColor: '#d6e3f4',
+            borderRadius: '3% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0,}}>
+            <div style={{position: 'absolute', width: '55%', backgroundColor: '#59316d', height: '40%', left: '12%', top: '40%',
+            borderRadius: '3% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0}}>
               <Writer text={`Pedido ${state.takenRequests[0]}`}
-                style={{width: '55%', backgroundColor: '#ffbbff', height: '40%', marginLeft: '25%', fontSize: '2em'}}
+                style={{width: '55%', height: '40%', fontSize: '3em'}}
               />
             </div>
             <img
-              style={{position: 'absolute', bottom: 0, opacity: '30%', height: '150%', backgroundColor: "#aaaaff", borderRadius: "50%"}}
+              style={{position: 'absolute', bottom: 0, height: '150%'}}
               onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-              src={agendamento}
+              src={charStub}
               alt=""
             />
-          <Button style={{position: 'absolute', right: '25%', top: '35%', pointerEvents: 'none', position: 'absolute', top: '30%'}}>{state.completed}</Button>
+          <Lamp id='' message={state.completed}
+              style={{position: 'absolute', right: '25%', top: '35%',
+                pointerEvents: 'none', height: '50%'
+              }}
+            />
             <Timer style={{position: 'absolute', right: 0, fontSize: '8em', right: '2.5%', top: '35%'}}
               seconds={data.timer}
               run={state.runTimer}
-              onStop={ seconds => { setState( s => ({...s, results: {...s.results, secondsLeft: seconds}}))}} onEnd={onTimerEnd}
+              onEnd={onTimerEnd}
+              onStop={ seconds => { setState( s => ({...s, results: {...s.results, secondsLeft: seconds}}))}}
             />
           </div>
 
@@ -114,21 +123,13 @@ const Core = ({ exitGame, data, onEndGame }) => {
 
       {state.scene === 'TUTORIAL' &&
         <React.Fragment>
-          <BlobBg blob={{fill:  '#f9afa1'}}
-            style={{position: 'absolute', right: '-20%', top: '-20%', width: '80%', height: '80%'}}>
-          </BlobBg>
-          <div style={{position: 'absolute', right: 0, width: '50%', height: '50%', backgroundColor: '#aafffa', opacity: '0.2'}}>
-            <div>
-              {tutorialTexts[state.tutorialStep].text}
-              <hr/>
-              {tutorialTexts[state.tutorialStep].translation}
-            </div>
-            <Button style={{position: 'absolute', bottom: '20%', left:'40%'}} onClick={() => setState(s =>
+          <TutorialBlob
+            text={tutorialTexts[state.tutorialStep].text}
+            translation={tutorialTexts[state.tutorialStep].translation}
+            onContinue={() => setState(s =>
                 ({...s, tutorialStep: s.tutorialStep + 1, scene: s.tutorialStep + 1 === tutorialTexts.length ? 'TIMER' : 'TUTORIAL' })
-            )}>
-              Continue
-            </Button>
-          </div>
+            )}
+          />
           <Button onClick={ () => setState( s => ({...s, scene: 'TIMER'}) )}>
             Passar tutorial
           </Button>
