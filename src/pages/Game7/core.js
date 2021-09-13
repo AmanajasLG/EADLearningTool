@@ -1,7 +1,5 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 // import { Link, Redirect } from "react-router-dom";
-import { Redirect } from "react-router-dom";
 import "./index.scss";
 
 import WindowScreen from "../../_components/WindowScreen";
@@ -9,7 +7,6 @@ import BuyTicketsLoop from "../../_components/BuyTicketsLoop";
 import SendEmail from "../../_components/SendEmail";
 
 import initialState from "./initialState";
-import { format } from "date-fns";
 import { months, shuffle } from "../../_helpers";
 
 const Core = ({ exitGame, data, onEndGame }) => {

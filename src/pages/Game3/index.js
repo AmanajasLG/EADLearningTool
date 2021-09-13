@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./index.scss";
 import styles from "./index.module.scss";
@@ -50,7 +50,6 @@ import {
   bigBlob,
 } from "../../img";
 import Recipe from "../../_components/Recipe";
-import zIndex from "@material-ui/core/styles/zIndex";
 
 const endGameLines = [
   {

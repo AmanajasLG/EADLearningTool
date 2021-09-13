@@ -145,4 +145,6 @@ export {
   destino,
   emailIcon,
   relogio,
+  fireworks1,
+  fireworks2
 };

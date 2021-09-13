@@ -5,7 +5,6 @@ import { Redirect } from "react-router-dom";
 import "./index.scss";
 
 import {
-  apiActions,
   gameActions,
   headerActions,
   musicActions,
@@ -20,8 +19,6 @@ import Button, {
   Iniciar,
   Voltar,
 } from "../../_components/Button";
-import { BlobBg } from "../../_components/Blob";
-import { renderToStaticMarkup } from "react-dom/server";
 import { tomato, dressingBg, camera } from "../../img";
 
 import initialState from "./initialState";
@@ -30,7 +27,6 @@ import Notification from "./components/Notification";
 import Lamp from "../../_components/Lamp";
 
 import FeedbackPanel from "./components/FeedbackPanel";
-import { ContactSupportOutlined, ErrorSharp } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
 import CellphoneOverlay from "./components/CellphoneOverlay";
 import Cellphone from "./components/Cellphone";
@@ -51,11 +47,11 @@ const Game6 = (props) => {
       : null
   );
   let missionData = mission ? mission.missionData : null;
-
+/*
   let currentPlaySession = useSelector((state) =>
     state.play_sessions ? state.play_sessions.items[0] : {}
   );
-  const { play_sessionsActions } = apiActions;
+  */
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 

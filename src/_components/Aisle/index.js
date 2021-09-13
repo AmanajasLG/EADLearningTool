@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./index.module.scss";
-import InlineSVG from './../../_components/InlineSVG'
 
 import { shelf } from "../../img";
 

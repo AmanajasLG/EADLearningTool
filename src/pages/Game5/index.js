@@ -1,11 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { Link, Redirect } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import "./index.scss";
 
 import {
-  apiActions,
   gameActions,
   headerActions,
   musicActions,
@@ -15,12 +13,8 @@ import { headerConstants } from "../../_constants";
 import Init from "../../_components/Init";
 import DressingCharacter from "../../_components/DressingCharacter";
 import Wardrobe from "../../_components/Wardrobe";
-import Button from "../../_components/Button";
-import { BlobBg } from "../../_components/Blob";
-import { renderToStaticMarkup } from "react-dom/server";
 import {
   tomato,
-  envelope,
   hanger,
   hangerH,
   dressingBg,
@@ -32,12 +26,10 @@ import Tutorial from "./components/Tutorial";
 import Notification from "./components/Notification";
 import Lamp from "../../_components/Lamp";
 
-import { Iniciar, Voltar } from "../../_components/Button";
+import { Voltar } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
-import { ContactSupportOutlined } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
 import Invitation from "./components/Invitation";
-import ChooseCharacter from "./components/ChooseCharacter";
 
 const Game5 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -56,12 +48,11 @@ const Game5 = (props) => {
       : null
   );
   let missionData = mission ? mission.missionData : null;
-
+/*
   let currentPlaySession = useSelector((state) =>
     state.play_sessions ? state.play_sessions.items[0] : {}
   );
-  const { play_sessionsActions } = apiActions;
-  // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
+  */
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {
@@ -619,7 +610,7 @@ const Game5 = (props) => {
 
                     {state.dressingContext && (
                       <React.Fragment>
-                        <img
+                        <img alt='bg'
                           src={dressingBg}
                           style={{ position: "absolute" }}
                         />

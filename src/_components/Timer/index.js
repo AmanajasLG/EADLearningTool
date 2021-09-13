@@ -7,7 +7,7 @@ const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
   const [running, setRunning] = React.useState(run)
 
   React.useEffect(() => {
-    if(run != running) setRunning(run)
+    if(run !== running) setRunning(run)
   }, [run])
 
   React.useEffect(() => {

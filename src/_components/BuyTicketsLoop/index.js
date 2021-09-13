@@ -1,12 +1,9 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 import WindowScreen from "../WindowScreen";
 import Email from "../Email";
 import Cities from "../Cities";
 import ScheduleTicket from "../ScheduleTicket";
-import { months } from "../../_helpers";
-import { format } from "date-fns";
 
 import initialState from "./initialState";
 import { agendamento, emailIcon, destino } from "../../img";

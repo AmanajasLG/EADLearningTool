@@ -1,6 +1,5 @@
 import React from 'react'
 import { BlobBg } from '../Blob'
-import Button from '@material-ui/core/Button'
 import { Iniciar } from '../../_components/Button'
 
 const TutorialBlob = ({text, translation, onContinue, style, ...props}) => {

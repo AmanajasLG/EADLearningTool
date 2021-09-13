@@ -3,11 +3,9 @@ import React from "react";
 import WindowScreen from "../../_components/WindowScreen";
 import BuyTicketsLoop from "../../_components/BuyTicketsLoop";
 
-import Button from "@material-ui/core/Button";
 import Map from "../../_components/Map";
 
 import initialState from "./initialState";
-import { format } from "date-fns";
 import { months } from "../../_helpers";
 import { agendamento, emailIcon, destino, aviao } from "../../img";
 import Email from "../../_components/Email";

@@ -7,11 +7,10 @@ import {
   palma,
   ariel,
 } from "../../../../img";
-import { Button, ButtonConfigs } from "../../../../_components/Button";
+import { Button } from "../../../../_components/Button";
 
 import "./index.scss";
 import FullscreenOverlay from "../../../../_components/FullscreenOverlay";
-import DialogHistory from "../../../../_components/DialogHistory";
 
 // const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const CellphoneOverlay = ({

@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 import {
-  apiActions,
   gameActions,
   musicActions,
   headerActions,
@@ -28,17 +27,18 @@ const GameTemplate = ({
   );
 
   let missionData = mission ? mission.missionData : null;
-
+  console.log('mission:', mission)
+  console.log('missionData:', missionData)
   const lang = useSelector(
     (state) => state.authentication.user.user.language.id
   );
-
+/*
   let currentPlaySession = useSelector((state) =>
     state.play_sessions ? state.play_sessions.items[0] : {}
   );
-  const { play_sessionsActions } = apiActions;
+  */
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
-  const timesPlayed = useSelector((state) => state.game.items.resultsCount);
+  //const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {
     if (mission) {
