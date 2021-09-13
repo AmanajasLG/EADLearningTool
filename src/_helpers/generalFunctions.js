@@ -119,7 +119,20 @@ function numberToMoney(n) {
   return words.join(" ");
 }
 
-const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+const months = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
 
 function goRound(value, max) {
   return value >= 0 ? value % max : max - (Math.abs(value) % max);
@@ -185,6 +198,10 @@ function preventSingleWordBreak(sentence) {
 //     : rect.top - element.offsetHeight;
 // }
 
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export {
   months,
   numberToMoney,
@@ -193,4 +210,5 @@ export {
   shuffle,
   goRound,
   preventSingleWordBreak,
+  capitalizeFirstLetter,
 };

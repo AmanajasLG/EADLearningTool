@@ -1,10 +1,11 @@
 const initialState = () => ({
-  window: 'EMAIL',
+  window: "EMAIL",
   place: null,
-  day: null,
-  month: 0,
-  flight: null,
+  schedule: [],
   tickets: 0,
-  confirmWindow: false
-})
-export default initialState
+  confirmWindow: false,
+  type: "going",
+  dates: null,
+  flights: { going: null, return: null },
+});
+export default initialState;

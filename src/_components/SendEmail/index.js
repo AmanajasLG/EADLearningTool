@@ -1,101 +1,90 @@
-import React from 'react'
+import React from "react";
 
-import Button from '@material-ui/core/Button'
+import Button from "@material-ui/core/Button";
+import { capitalize } from "@material-ui/core";
 
-import { shuffle } from '../../_helpers'
-
-const SendEmail = ({texts, places, place, onConfirm}) => {
-
-  const setOptions = index =>
-    shuffle([...places.filter(p => p.name !== place).map(p => p.name), ...texts[index].split(' ')]).map( o =>({text: o, show: true}))
-
-
+const SendEmail = ({ phrases, onConfirm }) => {
   const [state, setState] = React.useState({
     index: 0,
     selected: [],
-    options: setOptions(0),
     sentences: [],
-    totalTexts: texts[0].split(' ').length
-  })
+  });
+  const selectOption = (option) => () => {
+    phrases[state.index].words.map((word) => {
+      if (word.text === option) word.picked = true;
+      return word;
+    });
 
-  const selectOption = option => () => {
-    if(state.selected.length < texts[state.index].split(' ').length){
-      option.show = false
-      setState(s => ({...s,
-        selected: [...state.selected, {option: option, index: state.selected.length}]
-      }))
-    }
-  }
+    setState((s) => ({ ...s, selected: [...s.selected, option] }));
+  };
+  const unselectOption = (index) => () => {
+    let selected = [...state.selected];
+    let wordRemoved = selected.splice(index, 1)[0];
+    phrases[state.index].words.map((word) => {
+      if (word.text === wordRemoved) word.picked = false;
+      return word;
+    });
 
-  const unselectOption = (section, index) => () => {
-    section.option.show = true
-    setState(s => ({...s,
-      selected: state.selected.filter(obj => obj.index !== index)
-    }))
-  }
-
+    setState((s) => ({ ...s, selected }));
+  };
   const nextSentence = () => {
-    let updateState = {}
-    updateState.index = state.index + 1
-    updateState.sentences =[...state.sentences, state.selected.reduce((acc, sel, index) => acc + sel.option.text + (index === state.selected.length - 1? '' : ' ') , '')]
-    updateState.selected = []
-    updateState.options = []
-
-    if(updateState.index < texts.length){
-      updateState.options = setOptions(updateState.index)
-      updateState.totalTexts = texts[updateState.index].split(' ').length
-    }
-
-    setState(s => ({...s, ...updateState }))
-  }
-
+    setState((s) => ({
+      ...s,
+      index: s.index + 1,
+      selected: [],
+      sentences: [...s.sentences, [...s.selected]],
+    }));
+  };
   const sendData = () => {
-    onConfirm(texts.map((t, index) => ({correct: t, player: state.sentences[index]}) ))
-  }
+    onConfirm(state.sentences);
+  };
 
-  return(
+  return (
     <div>
       <div>
-        {state.sentences.map((sentence, index) =>
-          <div key={index}>{sentence}</div>
-        )}
+        {state.sentences.map((sentence, index) => (
+          <div key={index}>{capitalize(sentence.join(" "))}.</div>
+        ))}
       </div>
+      {state.index < phrases.length ? (
+        <div>
+          <span>
+            {state.selected.length}/{phrases[state.index].size}
+          </span>
 
+          {state.selected.map((section, index) => (
+            <Button key={index} onClick={unselectOption(index)}>
+              {section}
+            </Button>
+          ))}
 
-      {state.index < texts.length ?
-        <div>Local:
-          {state.selected
-            .map((section, index) =>
-              <Button key={index} onClick={unselectOption(section, index)}>
-                {section.option.text}
-              </Button>
-          )}
-
-          <span>{state.selected.length}/{state.totalTexts}</span>
-
-          <Button style={{display: 'block'}} onClick={nextSentence} disabled={state.selected.length !== state.totalTexts}>
+          <Button
+            style={{ display: "block" }}
+            onClick={nextSentence}
+            disabled={state.selected.length !== phrases[state.index].size}
+          >
             Escrever
           </Button>
+
+          <div>
+            {phrases[state.index].words.map((option, index) => (
+              <Button
+                key={index}
+                disabled={option.picked}
+                onClick={selectOption(option.text)}
+              >
+                {option.text}
+              </Button>
+            ))}
+          </div>
         </div>
-        :
-        <Button style={{display: 'block'}} onClick={sendData }>
+      ) : (
+        <Button style={{ display: "block" }} onClick={sendData}>
           Enviar
         </Button>
-      }
-
-      <div>
-        {state.options
-          .filter( section => section.show)
-          .map((option, index) =>
-            <Button key={index} onClick={selectOption(option)}>
-              {option.text}
-            </Button>
-        )}
-      </div>
-
-
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default SendEmail
+export default SendEmail;
