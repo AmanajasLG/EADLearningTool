@@ -76,7 +76,10 @@ import destino from "./destino.svg";
 import emailIcon from "./email.svg";
 import relogio from "./relogio.svg";
 
+import locationArrow from "./arrow.svg";
+
 export {
+  locationArrow,
   calendarFeedbackIcon,
   emailFeedbackIcon,
   planeFeedbackIcon,

@@ -5,6 +5,7 @@ import Counter from "../Counter";
 import { numberList } from "../../_helpers";
 import InlineSVG from "../InlineSVG";
 import { Iniciar, Voltar } from "../Button";
+import { locationArrow } from "../../img";
 
 const iconColors = {
   school: "#FFEACC",
@@ -19,7 +20,7 @@ const iconColors = {
   shopping: "#FFDEA9",
 };
 
-const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
+const Map = ({ locations, onConfirm, mapImage, showEmail, person }) => {
   const [state, setState] = React.useState({
     index: -1,
     reservation: false,
@@ -67,6 +68,27 @@ const Map = ({ locations, onConfirm, mapImage, showEmail }) => {
         backgroundPosition: "center",
       }}
     >
+      {showEmail && (
+        <img
+          style={{
+            width: "0.5em",
+            height: "0.5em",
+            position: "absolute",
+            top:
+              String((person.positionY * (height / 596) * 100) / height) + "%",
+            left:
+              String((person.positionX * (width / 1179) * 100) / width) + "%",
+            transform:
+              getTranslate(person) +
+              " rotate(" +
+              String(90 * person.direction) +
+              "deg)",
+            opacity: state.index === -1 ? 1 : 0.5,
+          }}
+          src={locationArrow}
+          alt=""
+        />
+      )}
       {locations.map((location, index) => (
         <div
           className="location"
