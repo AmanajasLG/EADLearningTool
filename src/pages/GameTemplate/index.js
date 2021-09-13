@@ -67,10 +67,12 @@ const GameTemplate = ({
 
   //fetch mission if doesn't already have
   React.useEffect(() => {
+    console.log('fetch mission')
     dispatch(gameActions.getById("missions", missionId));
   }, [missionId, dispatch]);
 
   React.useEffect(() => {
+    console.log('check loadData; state:', state)
     if (!state.data) loadData(missionData, lang, state, setState);
   }, [missionData, lang, loadData, state]);
 

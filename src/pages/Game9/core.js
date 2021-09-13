@@ -11,6 +11,7 @@ import TutorialBlob from '../../_components/TutorialBlob'
 import TaggedIcon from '../../_components/TaggedIcon'
 import Map from '../../_components/Map'
 import charStub from './chef_animada.svg'
+import FullscreenOverlay from '../../_components/FullscreenOverlay'
 
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState())
@@ -60,14 +61,14 @@ const Core = ({ exitGame, data, onEndGame }) => {
             )}
           </div>
 
-          <div style={{position: 'absolute', width: '70%', height: '20%', backgroundColor: "#aaffaa"}}>
-            <img
-              style={{position: 'absolute', height: '100%', backgroundColor: "#aaaaff", borderRadius: "50%"}}
-              onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-              src={agendamento}
-              alt=""
-            />
-            <div style={{position: 'absolute', padding: '2% 2% 2% 15%', left: '7%', bottom: 0, width: '80%', height: '80%', backgroundColor: "#ffaaaa"}}>
+          <div style={{position: 'absolute',
+            width: '70%', height: '15%', left: '15%',
+            }}
+          >
+            <div style={{position: 'absolute', padding: '2% 2% 2% 15%',
+              left: '7%', bottom: 0, width: '80%', height: '80%',
+              backgroundColor: "#ff8888"}}
+            >
               <div style={{backgroundColor: "#ff8888", width: '100%', height: '100%'}}>
                 Informações informações {state.buildingDetailsIndex != null ? `do ${data.buildings[state.buildingDetailsIndex].name}` : ''}
               </div>
@@ -76,6 +77,12 @@ const Core = ({ exitGame, data, onEndGame }) => {
                 <Button onClick={resolveRequest(state.buildingDetailsIndex)}>Escolher</Button>
               }
             </div>
+            <img
+              style={{position: 'absolute', height: '100%', backgroundColor: "#ff8888", borderRadius: "50%"}}
+              onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
+              src={agendamento}
+              alt=""
+            />
           </div>
 
           <div style={{position: 'absolute', left: '5%', bottom: 0, width: '90%', height: '25%', backgroundColor: '#d6e3f4',
@@ -105,21 +112,24 @@ const Core = ({ exitGame, data, onEndGame }) => {
             />
           </div>
 
-          {state.endRequests &&
-            <React.Fragment>
-              <Button onClick={callEndGame}>
-                Você completou todos os pedidos!
-              </Button>
-            </React.Fragment>
+          {state.endGame &&
+            <FullscreenOverlay onClickClose={()=>{}}>
+              <div style={{margin: '20% auto 0 auto', width: '20%'}}>
+                {state.endRequests &&
+                  <Button onClick={callEndGame}>
+                    Você completou todos os pedidos!
+                  </Button>
+                }
+                {state.timeUp &&
+                  <Button onClick={callEndGame}>
+                    Acabou o tempo!
+                  </Button>
+                }
+              </div>
+            </FullscreenOverlay>
           }
 
-          {state.timeUp &&
-            <React.Fragment>
-              <Button onClick={callEndGame}>
-                Acabou o tempo!
-              </Button>
-            </React.Fragment>
-          }
+
         </React.Fragment>
       }
 

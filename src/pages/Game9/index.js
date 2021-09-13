@@ -11,7 +11,14 @@ const Game9 = (props) => {
 
   const load = (missionData, lang, state, setState) => {
     console.log('load missionData:', missionData)
-    setState( s => ({...s, missionData: missionData, data: stub}))
+    if(missionData){
+      let data = {...stub,
+        buildings: [...missionData.locations, ...missionData.homes],
+        requests: [...missionData.requests]
+      }
+
+      setState( s => ({...s, data: data}))
+    }
   }
   const loadFeedback = () => {}
 

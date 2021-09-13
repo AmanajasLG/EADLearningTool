@@ -1,4 +1,5 @@
 const initialState = () => ({
+  missionData: null,
   scene: 'TUTORIAL',
   completed: 0,
   runTimer: false,
