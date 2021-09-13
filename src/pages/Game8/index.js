@@ -83,19 +83,30 @@ const Game8 = (props) => {
         name: location.name,
         positionX: location.positionX
           ? location.positionX
-          : Math.floor(Math.random() * 596),
+          : Math.floor(Math.random() * 1179),
         positionY: location.positionY
           ? location.positionY
-          : Math.floor(Math.random() * 1179),
+          : Math.floor(Math.random() * 596),
         correct: location.correct,
         image: location.image ? location.image.url : "",
       }));
+
+      let person = {
+        positionX: missionData.personPositionX
+          ? missionData.personPositionX
+          : Math.floor(Math.random() * 1179),
+        positionY: missionData.personPositionY
+          ? missionData.personPositionY
+          : Math.floor(Math.random() * 596),
+        direction: missionData.direction ?? Math.floor(Math.random() * 4),
+      };
 
       setState((s) => {
         return {
           ...s,
           data: {
             date: missionData.email.date,
+            person,
             email,
             messages,
             cities,

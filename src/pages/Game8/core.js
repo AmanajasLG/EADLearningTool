@@ -193,6 +193,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
         >
           <Map
             locations={data.locations}
+            person={data.person}
             onConfirm={(reservation) => () =>
               setState((s) => ({
                 ...s,
