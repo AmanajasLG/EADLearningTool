@@ -2,11 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import {
-  gameActions,
-  headerActions,
-  musicActions,
-} from "../../_actions";
+import { gameActions, headerActions, musicActions } from "../../_actions";
 
 import Init from "../../_components/Init";
 import Result from "../Game2/components/Result";
@@ -26,6 +22,7 @@ import "./index.scss";
 import "./feedback-screen.scss";
 import { Button } from "@material-ui/core";
 import { ButtonConfigs, Iniciar, Voltar } from "../../_components/Button";
+import { shuffle } from "../../_helpers";
 
 const Game1 = (props) => {
   const [state, setState] = React.useState(initialState());
@@ -67,123 +64,121 @@ const Game1 = (props) => {
   React.useEffect(() => {
     if (id && !missionData)
       dispatch(gameActions.getById("missions", props.match.params.id));
-    if (missionData) {
+    if (missionData && state.locations.length === 0) {
       let data = {};
 
       //distribute characters in locations
-      if (state.locations.length === 0) {
-        // data.locations = [...mission.locations]
-        data.locations = missionData.locations;
-      }
+
+      // data.locations = [...mission.locations]
+      data.locations = missionData.locations.map((location) => {
+        return {
+          ...location,
+          missionCharacters: shuffle(location.missionCharacters),
+        };
+      });
 
       //list of all available jobs
-      if (state.jobs.length === 0) {
-        data.jobs = [
-          ...new Set(
-            missionData.locations
-              .map((location) => {
-                return location.missionCharacters.reduce(
-                  (acc, missionCharacter) => {
-                    if (!acc.includes(missionCharacter.character.job))
-                      acc.push(missionCharacter.character.job);
-                    return acc;
-                  },
-                  []
-                );
-              })
-              .flat()
-              .sort()
-          ),
-        ];
-      }
+
+      data.jobs = [
+        ...new Set(
+          missionData.locations
+            .map((location) => {
+              return location.missionCharacters.reduce(
+                (acc, missionCharacter) => {
+                  if (!acc.includes(missionCharacter.character.job))
+                    acc.push(missionCharacter.character.job);
+                  return acc;
+                },
+                []
+              );
+            })
+            .flat()
+            .sort()
+        ),
+      ];
 
       //list of all available countries
-      if (state.countries.length === 0) {
-        data.countries = [
-          ...new Set(
-            missionData.locations
-              .map((location) => {
-                return location.missionCharacters.reduce(
-                  (acc, missionCharacter) => {
-                    if (!acc.includes(missionCharacter.character.country))
-                      acc.push(missionCharacter.character.country);
-                    return acc;
-                  },
-                  []
-                );
-              })
-              .flat()
-              .sort()
-          ),
-        ];
-      }
 
-      if (state.names.length === 0) {
-        data.names = [
-          ...new Set(
-            missionData.locations
-              .map((location) => {
-                return location.missionCharacters.reduce(
-                  (acc, missionCharacter) => {
-                    if (!acc.includes(missionCharacter.character.name))
-                      acc.push(missionCharacter.character.name);
-                    return acc;
-                  },
-                  []
-                );
-              })
-              .flat()
-              .sort()
-          ),
-        ];
-      }
+      data.countries = [
+        ...new Set(
+          missionData.locations
+            .map((location) => {
+              return location.missionCharacters.reduce(
+                (acc, missionCharacter) => {
+                  if (!acc.includes(missionCharacter.character.country))
+                    acc.push(missionCharacter.character.country);
+                  return acc;
+                },
+                []
+              );
+            })
+            .flat()
+            .sort()
+        ),
+      ];
+
+      data.names = [
+        ...new Set(
+          missionData.locations
+            .map((location) => {
+              return location.missionCharacters.reduce(
+                (acc, missionCharacter) => {
+                  if (!acc.includes(missionCharacter.character.name))
+                    acc.push(missionCharacter.character.name);
+                  return acc;
+                },
+                []
+              );
+            })
+            .flat()
+            .sort()
+        ),
+      ];
 
       //resume characters as contacts
-      if (state.contactsTemplate.length === 0) {
-        //create full contact template
-        data.contactsTemplate = missionData.locations
-          .map((location) => {
-            return location.missionCharacters.map((missionCharacter) => {
-              return {
-                id: missionCharacter.character.id,
-                name: missionCharacter.character.name,
-                country: missionCharacter.character.country,
-                job: missionCharacter.character.job,
-                //looks for mission configuration
-                showJob: missionCharacter.showJob,
-                showCountry: missionCharacter.showCountry,
-                showName: missionCharacter.showName,
-                hasEmptyField: !(
-                  missionCharacter.showJob &&
-                  missionCharacter.showCountry &&
-                  missionCharacter.showName
-                ),
-              };
-            });
-          })
-          .flat();
 
-        data.totalFields = 0;
-        //create contact state shown to/ manipulated by to player
-        data.contactsAtSession = data.contactsTemplate.map((contact) => {
-          data.totalFields +=
-            (!contact.showJob ? 1 : 0) +
-            (!contact.showCountry ? 1 : 0) +
-            (!contact.showName ? 1 : 0);
+      //create full contact template
+      data.contactsTemplate = missionData.locations
+        .map((location) => {
+          return location.missionCharacters.map((missionCharacter) => {
+            return {
+              id: missionCharacter.character.id,
+              name: missionCharacter.character.name,
+              country: missionCharacter.character.country,
+              job: missionCharacter.character.job,
+              //looks for mission configuration
+              showJob: missionCharacter.showJob,
+              showCountry: missionCharacter.showCountry,
+              showName: missionCharacter.showName,
+              hasEmptyField: !(
+                missionCharacter.showJob &&
+                missionCharacter.showCountry &&
+                missionCharacter.showName
+              ),
+            };
+          });
+        })
+        .flat();
 
-          return {
-            ...contact,
-            name: contact.showName ? contact.name : "",
-            job: contact.showJob ? contact.job : "",
-            country: contact.showCountry ? contact.country : "",
-          };
-        });
-      }
+      data.totalFields = 0;
+      //create contact state shown to/ manipulated by to player
+      data.contactsAtSession = data.contactsTemplate.map((contact) => {
+        data.totalFields +=
+          (!contact.showJob ? 1 : 0) +
+          (!contact.showCountry ? 1 : 0) +
+          (!contact.showName ? 1 : 0);
 
-      if (Object.keys(data).length > 0)
-        setState((state) => {
-          return { ...state, ...data };
-        });
+        return {
+          ...contact,
+          name: contact.showName ? contact.name : "",
+          job: contact.showJob ? contact.job : "",
+          country: contact.showCountry ? contact.country : "",
+        };
+      });
+
+      setState((state) => {
+        return { ...state, ...data };
+      });
     }
   }, [
     dispatch,
@@ -203,7 +198,7 @@ const Game1 = (props) => {
     mission = stub;
   }
 
-  const onStartGame = (e) => setState({ ...state, scene: "ROOM" })
+  const onStartGame = (e) => setState({ ...state, scene: "ROOM" });
 
   const setCurrentChar = (character) => () => {
     // if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
