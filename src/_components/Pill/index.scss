@@ -1,0 +1,31 @@
+.pill{
+  display: inline-block;
+  font-family: 'Barlow';
+  font-weight: 600;
+  color: #59316D;
+  border: none;
+  border-radius: 1000px;
+  font-size: inherit;
+  padding: 0.4em 0.8em;
+  transition: 100ms linear;
+}
+
+.hoverable:hover{
+  background-color: #f9afa1;
+  border: none
+}
+
+.hidden{
+  visibility: hidden
+}
+
+.blink:hover {
+  animation: inflate 200ms;
+}
+
+
+@keyframes inflate{
+  0% { transform: scale(1, 1); }
+  30% { transform: scale(1.15, 1.15); }
+  100% { transform: scale(1, 1); }
+}

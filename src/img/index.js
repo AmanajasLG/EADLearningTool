@@ -39,12 +39,16 @@ import hanger from "./cabide roxo.svg";
 import hangerH from "./cabide marrom.svg";
 import dressingBg from "./Game5/cenario.svg";
 // GAME 6
-import fireworks1 from './fogos de artificio azul.svg'
-import fireworks2 from './fogos de artificio rosa.svg'
+import fireworks1 from "./fogos de artificio azul.svg";
+import fireworks2 from "./fogos de artificio rosa.svg";
 import camera from "./camera fotografica.svg";
 import ariel from "./Game6/ariel.svg";
 import smallPhoneBlank from "./Game6/celular icone.svg";
-
+// GAME 8
+import calendarFeedbackIcon from "./Game8/calendar-feedback-icon.svg";
+import planeFeedbackIcon from "./Game8/plane-feedback-icon.svg";
+import emailFeedbackIcon from "./Game8/email-feedback-icon.svg";
+import mapFeedbackIcon from "./Game8/map-feedback-icon.svg";
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -65,7 +69,21 @@ import error from "./apagar.svg";
 import right from "./confirmar.svg";
 import trash from "./trash-can.svg";
 
+import agendamento from "./agendamento.svg";
+import aviao from "./avião.svg";
+import calendario from "./calendario.svg";
+import destino from "./destino.svg";
+import emailIcon from "./email.svg";
+import relogio from "./relogio.svg";
+
+import locationArrow from "./arrow.svg";
+
 export {
+  locationArrow,
+  calendarFeedbackIcon,
+  emailFeedbackIcon,
+  planeFeedbackIcon,
+  mapFeedbackIcon,
   smallPhoneBlank,
   trash,
   ariel,
@@ -121,4 +139,10 @@ export {
   hangerH,
   dressingBg,
   camera,
+  agendamento,
+  aviao,
+  calendario,
+  destino,
+  emailIcon,
+  relogio,
 };

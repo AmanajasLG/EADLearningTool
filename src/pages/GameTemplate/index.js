@@ -16,7 +16,7 @@ const GameTemplate = ({
   Feedback,
   missionId,
   loadData,
-  loadFeedback,
+  loadFeedback
 }) => {
   const [state, setState] = React.useState({ scene: "INIT", back: false });
   const dispatch = useDispatch();
@@ -26,6 +26,7 @@ const GameTemplate = ({
       ? state.game.items.missions.find((mission) => mission.id === missionId)
       : null
   );
+
   let missionData = mission ? mission.missionData : null;
 
   const lang = useSelector(

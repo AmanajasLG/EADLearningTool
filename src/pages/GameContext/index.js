@@ -9,7 +9,8 @@ import { settings } from "../../img";
 import "./index.scss";
 import { headerConstants } from "../../_constants";
 import CursorPoint from '../../_components/CursorPoint'
-
+import Canvas from '../../_components/Canvas'
+import elements from './elements.js'
 const dimensions = { width: 16, height: 9}
 const ALIGNMENTS = {
   TOP: "flex-start",
@@ -160,7 +161,10 @@ const GameContext = (props) => {
       </div>
       {state.back && <Redirect to="/userspace" />}
       {(process.env.NODE_ENV === 'development' && state.debug) &&
-        <CursorPoint />
+        <React.Fragment>
+          <CursorPoint />
+          <Canvas elements={elements}  width={window.innerWidth} height={window.innerHeigh} style={{ pointerEvents: 'none', position: 'absolute', top: 0, left: 0}}/>
+        </React.Fragment>
       }
     </React.Fragment>
   );

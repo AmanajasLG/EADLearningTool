@@ -1,8 +1,7 @@
-import { ErrorSharp, LaptopWindowsRounded } from "@material-ui/icons";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { apiActions, gameActions } from "../../_actions";
+import { gameActions } from "../../_actions";
 import { shuffle, zeroFill } from "../../_helpers";
 import GameTemplate from "../GameTemplate";
 import Core from "./core";

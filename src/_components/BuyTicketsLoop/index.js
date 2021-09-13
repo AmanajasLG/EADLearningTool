@@ -9,16 +9,19 @@ import { months } from "../../_helpers";
 import { format } from "date-fns";
 
 import initialState from "./initialState";
+import { agendamento, emailIcon, destino } from "../../img";
+import { Voltar, Iniciar } from "../Button";
+import Blob from "../Blob";
 
 const BuyTicketsLoop = ({ data, onDone }) => {
   const [state, setState] = React.useState(initialState());
 
   const ticketData = () => ({
     city: state.city,
-    days: Math.ceil((state.dates[1] - state.dates[0]) / (1000 * 60 * 60 * 24)),
+    days: state.dates[1].day - state.dates[0].day,
     dates: {
-      going: state.dates[0],
-      return: state.dates[1],
+      going: { ...state.dates[0], month: state.dates[0].month + 1 },
+      return: { ...state.dates[1], month: state.dates[1].month + 1 },
     },
     tickets: state.tickets + 1,
     flights: state.flights,
@@ -39,7 +42,16 @@ const BuyTicketsLoop = ({ data, onDone }) => {
         >
           {state.window === "EMAIL" && (
             <Email
-              email={data.email}
+              email={
+                data.email.message
+                  ? data.email
+                  : {
+                      ...data.email,
+                      message: data.messages.find(
+                        (message) => message.type === "init"
+                      ).text,
+                    }
+              }
               onReady={() => setState((s) => ({ ...s, window: "PLACES" }))}
             />
           )}
@@ -82,62 +94,15 @@ const BuyTicketsLoop = ({ data, onDone }) => {
               onConfirm={() =>
                 setState((s) => ({ ...s, window: "NONE", confirmWindow: true }))
               }
-              dateSelected={(dates) =>
+              dateSelected={(data) =>
                 setState((s) => ({
                   ...s,
-                  dates: [...dates],
+                  dates: [...data.dates],
                 }))
               }
             />
           )}
         </WindowScreen>
-      )}
-
-      {state.confirmWindow && (
-        <div style={{ position: "absolute", left: "50%", marginTop: "20%" }}>
-          <div
-            style={{
-              fontSize: "3em",
-              position: "relative",
-              left: "-50%",
-              backgroundColor: "#eeeeff",
-            }}
-          >
-            Terminou? Revise a seleção:
-            <div>
-              {state.tickets + 1} passage{state.tickets === 0 ? "m" : "ns"}.
-            </div>
-            <div>Destino: {state.city.name}</div>
-            <div>
-              Ida:
-              <div>Dia: {format(state.dates[0], "dd/MM")}</div>
-              <div>
-                Horário: {state.flights.going.departure} -{" "}
-                {state.flights.going.arrival}
-              </div>
-            </div>
-            <div>
-              Volta:
-              <div>Dia: {format(state.dates[1], "dd/MM")}</div>
-              <div>
-                Horário: {state.flights.return.departure} -{" "}
-                {state.flights.return.arrival}
-              </div>
-            </div>
-            <button
-              onClick={() =>
-                setState((s) => ({
-                  ...s,
-                  confirmWindow: false,
-                  window: "SCHEDULE",
-                }))
-              }
-            >
-              Voltar
-            </button>
-            <button onClick={() => onDone(ticketData())}>Avançar</button>
-          </div>
-        </div>
       )}
 
       <div
@@ -159,7 +124,7 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           <img
             style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "EMAIL" }))}
-            src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+            src={emailIcon}
             alt=""
           />
         </div>
@@ -167,7 +132,7 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           <img
             style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "PLACES" }))}
-            src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+            src={destino}
             alt=""
           />
         </div>
@@ -175,11 +140,120 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           <img
             style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-            src="https://res.cloudinary.com/learning-tool/image/upload/v1622937768/Leite_De_Vaca_c1fb94405c.svg"
+            src={agendamento}
             alt=""
           />
         </div>
       </div>
+
+      {state.confirmWindow && (
+        <React.Fragment>
+          <Blob
+            style={{
+              position: "absolute",
+              backgroundColor: "rgba(255,255,255,0.5)",
+            }}
+            fill="#f9afa1"
+          />
+          <div
+            style={{
+              position: "absolute",
+              margin: "15% auto",
+              fontSize: "3em",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                padding: "0 22% 0 22%",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "1.2em",
+                  width: "40%",
+                  textAlign: "center",
+                  paddingTop: "5%",
+                }}
+              >
+                <p>
+                  <strong>
+                    Tem certeza que terminou?
+                    <br />
+                    Revise suas escolhas:
+                  </strong>
+                </p>
+                <hr
+                  style={{
+                    width: "50%",
+                    margin: "5% auto",
+                    backgroundColor: "white",
+                  }}
+                />
+                <p>
+                  Are you sure you're done?
+                  <br />
+                  Review your choices:
+                </p>
+              </div>
+              <div
+                style={{
+                  backgroundColor: "#fbbba3",
+                  borderRadius: "13%/10%",
+                  padding: "5% 3% 5% 3%",
+                }}
+              >
+                <div>
+                  <strong>Cidade:</strong> {state.city.name}
+                </div>
+                <div>
+                  <strong>Pessoas:</strong> {state.tickets + 1}
+                </div>
+                <div>
+                  <strong>Partida dia:</strong> {state.dates[0].day}/
+                  {state.dates[0].month + 1}
+                </div>
+                <div>
+                  <strong>Horário:</strong> {state.flights.going.departure} -{" "}
+                  {state.flights.going.arrival}
+                </div>
+                <div>
+                  <strong>Volta dia:</strong> {state.dates[1].day}/
+                  {state.dates[1].month + 1}
+                </div>
+                <div>
+                  <strong>Horário:</strong> {state.flights.return.departure} -{" "}
+                  {state.flights.return.arrival}
+                </div>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "5%",
+              }}
+            >
+              <Voltar
+                onClick={() =>
+                  setState((s) => ({
+                    ...s,
+                    confirmWindow: false,
+                    window: "SCHEDULE",
+                  }))
+                }
+              ></Voltar>
+              <Iniciar
+                label={"Continuar"}
+                onClick={() => onDone(ticketData())}
+              ></Iniciar>
+            </div>
+          </div>
+        </React.Fragment>
+      )}
     </React.Fragment>
   );
 };

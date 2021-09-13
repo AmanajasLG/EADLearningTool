@@ -2,9 +2,10 @@ import React from "react";
 import Calendar from "../Calendar";
 import Flights from "../Flights";
 import Counter from "../Counter";
-import { Iniciar } from "../Button";
+import { Iniciar, Voltar } from "../Button";
 import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import "./index.scss";
+import { aviao, calendario, relogio } from '../../img'
 
 const numberList = Array.from({ length: 9 }, (_, i) => i + 1);
 
@@ -33,15 +34,16 @@ const ScheduleTicket = ({
     month: 0,
   });
 
+  const [calendarMonth, setMonth] = React.useState(0)
+  const [datesValue, setDates] = React.useState([null, null])
+
   const steps = [
-    "Escolha a data",
-    "Escolha o voo de ida",
-    "Escolha o voo de volta",
-    "Quantidade de passagens",
+    {icon: calendario, text: "Escolha a data"},
+    {icon: relogio, text: "Escolha o horario"}
   ];
   const checkStep = () => {
     return (
-      (state.step === 0 && state.dates.length === 2) ||
+      (state.step === 0 && datesValue[0] && datesValue[1]) ||
       (state.step === 1 && state.flights) ||
       state.step === 2
     );
@@ -68,53 +70,68 @@ const ScheduleTicket = ({
     if (counterChange) counterChange(value);
   };
 
-  const onCalendarChange = (dates) => {
-    setState((s) => ({
-      ...s,
-      dates: [...dates],
-    }));
-
-    dateSelected(dates);
+  const onCalendarChange = index => data => {
+    if(index === 0){
+      setMonth(data.month)
+      dateSelected(data);
+    }
+    if(index === 1){
+      let m = data.month - 1
+      setMonth( m === -1? 11 : m )
+    }
+    setDates([...data.dates])
   };
 
   return (
     <React.Fragment>
       <div>
-        Agende o Voo! {steps.slice(0, state.step + 1).map((t) => ` > ${t}`)}
+        <img src={aviao} style={{width: '4%'}}/>Agende o Voo! {steps.slice(0, state.step + 1).map((t) => <React.Fragment> <img src={t.icon} style={{width: '4%'}}/> {t.text} </React.Fragment>)}
       </div>
       {state.step === 0 && (
-        <DateRangePicker
-          onChange={onCalendarChange}
-          value={
-            state.dates.length ? state.dates : [new Date(date), new Date(date)]
-          }
-          isOpen={true}
-          format={"dd/M/yyyy"}
-          className="teste"
-          calendarClassName="teste-1"
-          rangeDivider=" até "
-        />
+        <div style={{display: 'flex'}}>
+          <Calendar
+            noRight
+            month={calendarMonth}
+            dates={datesValue}
+            onChange={onCalendarChange(0)}
+          />
+          <Calendar
+            noLeft
+            month={(calendarMonth + 1) % 12}
+            dates={datesValue}
+            onChange={onCalendarChange(1)}
+          />
+        </div>
       )}
       {state.step === 1 && (
-        <Flights
-          selected={state.flights[type]}
-          flights={flights[type]}
-          onClick={onFlightSelected}
-        />
+        <div style={{padding: '3% 5% 3% 5%'}}>
+          <Flights
+            selected={state.flights[type]}
+            flights={flights[type]}
+            onClick={onFlightSelected}
+          />
+        </div>
       )}
       {state.step === 2 && (
-        <Counter value={tickets} list={numberList} onChange={onCounterChange} />
+        <div style={{fontWeight: 'bold', color: '#59316D', marginTop: '10%'}}>
+          <p style={{fontSize: '2em', textAlign: 'center', marginBottom: '2.5%'}}>Quantas passagens?</p>
+          <div style={{width: '100%', paddingLeft: '40%', paddingRight: '40%'}}>
+            <Counter stretch value={tickets} list={numberList} onChange={onCounterChange} arrowColor='#59316D'
+              valueStyle={{width: '80%', backgroundColor: '#d6e3f4', fontSize: '5em', fontFamily: 'Barlow',
+                aspectRatio: '1', borderRadius: '30%', paddingLeft: '20%', paddingRight: '20%'}}
+            />
+          </div>
+        </div>
       )}
 
       {state.step > 0 && (
-        <button
+        <Voltar style={{ position: "absolute", left: "5%", bottom: "-2.5%" }}
           onClick={() => {
             if (state.step === 1 && type === "return") typeUpdate();
             else setState((s) => ({ ...s, step: state.step - 1 }));
           }}
         >
-          Voltar
-        </button>
+        </Voltar>
       )}
       <Iniciar
         style={{ position: "absolute", right: "5%", bottom: "-2.5%" }}

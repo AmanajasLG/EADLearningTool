@@ -2,7 +2,7 @@ import { format } from "date-fns";
 
 function checkErros(data) {
   let errors = [];
-
+  console.log('data:', data)
   if (!data.userAnswers.city.correct)
     errors.push({
       type: "cidade",
@@ -15,16 +15,16 @@ function checkErros(data) {
       userAnswer: data.userAnswers.days.toString(),
       correctAnswer: data.days.toString(),
     });
-  if (format(data.userAnswers.dates.going, "M") !== data.month.toString())
+  if (data.userAnswers.dates.going.month + 1 !== data.month)
     errors.push({
       type: "mês de ida",
-      userAnswer: format(data.userAnswers.dates.going, "M"),
+      userAnswer: data.userAnswers.dates.going.month,
       correctAnswer: data.month.toString(),
     });
-  if (format(data.userAnswers.dates.return, "M") !== data.month.toString())
+  if (data.userAnswers.dates.return.month + 1 !== data.month)
     errors.push({
       type: "mês de volta",
-      userAnswer: format(data.userAnswers.dates.return, "M"),
+      userAnswer: data.userAnswers.dates.return.month,
       correctAnswer: data.month.toString(),
     });
   if (data.peopleCount !== data.userAnswers.tickets)
