@@ -1,0 +1,22 @@
+#taggedIcon {
+	cursor: pointer;
+}
+
+#taggedIcon .icon {
+	width: 50%;
+	height: 100%;
+	position: absolute;
+}
+
+#taggedIcon span {
+	padding-left: 20%;
+	display: inline-block;
+	margin: 5% 25%;
+	font-size: 6em;
+	width: 30%;
+	transition: 100ms linear;
+	border-radius: 0 2em 2em 0;
+	color: #59316D;
+	background-color: #F9AFA100;
+	background-color: #F9AFA1;
+}

@@ -8,7 +8,7 @@ import { agendamento } from '../../img'
 import { getRandomInt } from '../../_helpers'
 import tutorialTexts from './tutorialTexts'
 import TutorialBlob from '../../_components/TutorialBlob'
-import Lamp from '../../_components/Lamp'
+import TaggedIcon from '../../_components/TaggedIcon'
 import Map from '../../_components/Map'
 import charStub from './chef_animada.svg'
 
@@ -49,7 +49,19 @@ const Core = ({ exitGame, data, onEndGame }) => {
 
       {(state.scene === 'GAME' || state.scene === 'TUTORIAL') &&
         <React.Fragment>
-          <div style={{position: 'absolute', width: '70%', height: '20%', right: 0, backgroundColor: "#aaffaa"}}>
+
+          <div style={{pointerEvents: (state.endGame? 'none': 'all'),
+            position: 'absolute', width: '100%', top: '10%',  height: '65%',
+            backgroundColor: '#aaaaff'}}>
+            <Map locations={[]} onConfirm={() => {}} mapImage={agendamento} showEmail={false}/>
+            {data.buildings.map((building, index) =>
+              <Button key={index} onMouseEnter={() => setState(s => ({...s, buildingDetailsIndex: index}))}>
+                {building.name}
+              </Button>
+            )}
+          </div>
+
+          <div style={{position: 'absolute', width: '70%', height: '20%', backgroundColor: "#aaffaa"}}>
             <img
               style={{position: 'absolute', height: '100%', backgroundColor: "#aaaaff", borderRadius: "50%"}}
               onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
@@ -67,14 +79,6 @@ const Core = ({ exitGame, data, onEndGame }) => {
             </div>
           </div>
 
-          <div style={{pointerEvents: (state.endGame? 'none': 'all'), position: 'absolute', width: '70%', height: '65%', backgroundColor: '#aaaaff', right: 0, bottom: '10%'}}>
-            {data.buildings.map((building, index) =>
-              <Button key={index} onMouseEnter={() => setState(s => ({...s, buildingDetailsIndex: index}))}>
-                {building.name}
-              </Button>
-            )}
-          </div>
-
           <div style={{position: 'absolute', left: '5%', bottom: 0, width: '90%', height: '25%', backgroundColor: '#d6e3f4',
             borderRadius: '3% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0,}}>
             <div style={{position: 'absolute', width: '55%', backgroundColor: '#59316d', height: '40%', left: '12%', top: '40%',
@@ -89,12 +93,12 @@ const Core = ({ exitGame, data, onEndGame }) => {
               src={charStub}
               alt=""
             />
-          <Lamp id='' message={state.completed}
-              style={{position: 'absolute', right: '25%', top: '35%',
-                pointerEvents: 'none', height: '50%'
+            <TaggedIcon icon={agendamento} message={state.completed}
+              style={{position: 'absolute', right: '6%', top: '35%',
+                pointerEvents: 'none', height: '50%', width: '30%'
               }}
             />
-            <Timer style={{position: 'absolute', right: 0, fontSize: '8em', right: '2.5%', top: '35%'}}
+            <Timer style={{position: 'absolute', right: 0, fontSize: '8em', right: '2.5%', top: '45%'}}
               seconds={data.timer}
               run={state.runTimer}
               onEnd={onTimerEnd}
