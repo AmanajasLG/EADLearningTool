@@ -1,26 +1,43 @@
-import React from 'react'
-import { BlobBg } from '../Blob'
-import Button from '@material-ui/core/Button'
-import { Iniciar } from '../../_components/Button'
+import React from "react";
+import { BlobBg } from "../Blob";
+import Button from "@material-ui/core/Button";
+import { Iniciar } from "../../_components/Button";
+import { preventSingleWordBreak } from "../../_helpers";
 
-const TutorialBlob = ({text, translation, onContinue, style, ...props}) => {
-  return(
-    <div style={{textAlign: 'center', ...style}} {...props}>
-      <BlobBg blob={{fill:  '#f9afa1'}}
-        style={{position: 'absolute', right: '-20%', top: '-20%', width: '80%', height: '80%'}}>
-      </BlobBg>
-      <div style={{position: 'absolute', margin: '5% 8%', right: 0, width: '25%', height: '30%'}}>
-        <div style={{fontSize: '3em'}}>
-          {text}
-          <hr/>
-          {translation}
+import "./index.scss";
+
+const TutorialBlob = ({
+  text,
+  translation,
+  position = "top-right",
+  onContinue,
+  endTutorial,
+  style,
+  ...props
+}) => {
+  return (
+    <div style={{ textAlign: "center", ...style }} {...props}>
+      <BlobBg
+        blob={{ fill: "#f9afa1" }}
+        className={"default-config-blob " + position + "-blob"}
+      ></BlobBg>
+      <div className={"default-config-txt " + position + "-txt"}>
+        <div style={{ fontSize: "3em" }}>
+          {preventSingleWordBreak(text)}
+          <hr />
+          {preventSingleWordBreak(translation)}
         </div>
 
-        <Iniciar style={{marginTop: '30%', fontSize: '3em'}} label='Continue' onClick={onContinue ? onContinue : null}>
-        </Iniciar>
+        {onContinue && (
+          <Iniciar
+            style={{ marginTop: "2em", fontSize: "3em" }}
+            label={endTutorial ? "Play" : "Continue"}
+            onClick={onContinue}
+          ></Iniciar>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TutorialBlob
+export default TutorialBlob;

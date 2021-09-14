@@ -20,6 +20,9 @@ const Phone = ({
   onFinish,
   shouldMinimize,
   onMinimize,
+  onTutorial,
+  nextTutorial,
+  active,
 }) => {
   const [state, setState] = React.useState({
     maximized: false,
@@ -43,10 +46,12 @@ const Phone = ({
   // }, [onMinimize])
 
   const _maximize = () => {
+    if (onTutorial) nextTutorial();
     setState({ ...state, maximized: true });
   };
 
   const _shouldMinimize = () => {
+    if (onTutorial) nextTutorial();
     setState({ ...state, shouldMinimize: true });
   };
 
@@ -92,6 +97,7 @@ const Phone = ({
             label={"Nome"}
             value={contact.name}
             optionList={names}
+            disabled={onTutorial}
           />
         )}
 
@@ -107,6 +113,7 @@ const Phone = ({
             label={"Profissão"}
             value={contact.job}
             optionList={jobs}
+            disabled={onTutorial}
           />
         )}
 
@@ -124,6 +131,7 @@ const Phone = ({
             label={"País"}
             value={contact.country}
             optionList={countries}
+            disabled={onTutorial}
           />
         )}
       </div>
@@ -174,21 +182,22 @@ const Phone = ({
               </div>
             </div>
             <div id="btn-terminei-wrapper">
-              { contacts.filter(
-                      (contact) =>
-                        contact.job === "" ||
-                        contact.country === "" ||
-                        contact.name === ""
-                    ).length === 0 &&
+              {(contacts.filter(
+                (contact) =>
+                  contact.job === "" ||
+                  contact.country === "" ||
+                  contact.name === ""
+              ).length === 0 ||
+                onTutorial) && (
                 <Button
                   blink
-                  onClick={_terminou}
+                  onClick={onTutorial ? null : _terminou}
                   direction={ButtonConfigs.BUTTON_DIRECTIONS.LEFT}
                   colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_5}
                 >
                   Terminei!
                 </Button>
-              }
+              )}
             </div>
           </div>
         </FullscreenOverlay>

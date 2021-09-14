@@ -23,6 +23,7 @@ import "./feedback-screen.scss";
 import { Button } from "@material-ui/core";
 import { ButtonConfigs, Iniciar, Voltar } from "../../_components/Button";
 import { shuffle } from "../../_helpers";
+import TutorialBlob from "../../_components/TutorialBlob";
 
 const Game1 = (props) => {
   const [state, setState] = React.useState(initialState());
@@ -198,7 +199,21 @@ const Game1 = (props) => {
     mission = stub;
   }
 
-  const onStartGame = (e) => setState({ ...state, scene: "ROOM" });
+  const onStartGame = (e) =>
+    setState({ ...state, scene: "ROOM", showTutorialBlob: true });
+
+  const tutorialControl = () => {
+    if (state.tutorialBlobCount < state.tutotialMessages.length - 1) {
+      setState((s) => ({
+        ...s,
+        tutorialBlobCount: s.tutorialBlobCount + 1,
+        tutorialShowButton:
+          s.tutorialBlobCount + 1 === 1 || s.tutorialBlobCount + 1 === 4,
+      }));
+    } else {
+      setState((s) => ({ ...s, showTutorialBlob: false }));
+    }
+  };
 
   const setCurrentChar = (character) => () => {
     // if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
@@ -551,6 +566,9 @@ const Game1 = (props) => {
                           setState({ ...state, shouldMinimize: false })
                         }
                         shouldMinimize={state.shouldMinimize}
+                        onTutorial={state.showTutorialBlob}
+                        nextTutorial={tutorialControl}
+                        active={state.tutorialBlobCount < 3}
                       />
                       {state.currentChar && (
                         <Conversa
@@ -685,6 +703,29 @@ const Game1 = (props) => {
                           <div>perguntas</div>
                         </div>
                       </div>
+
+                      {state.showTutorialBlob && (
+                        <TutorialBlob
+                          text={
+                            state.tutotialMessages[state.tutorialBlobCount].text
+                          }
+                          translation={
+                            state.tutotialMessages[state.tutorialBlobCount]
+                              .textTranslate
+                          }
+                          position={
+                            state.tutotialMessages[state.tutorialBlobCount]
+                              .position
+                          }
+                          endTutorial={
+                            state.tutorialBlobCount ===
+                            state.tutotialMessages.length - 1
+                          }
+                          onContinue={
+                            state.tutorialShowButton ? tutorialControl : null
+                          }
+                        />
+                      )}
                     </div>
                   );
                 case "ENDGAME":

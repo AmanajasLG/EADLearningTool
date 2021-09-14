@@ -1,0 +1,65 @@
+.default-config-blob {
+  position: absolute;
+  width: 120em;
+  height: 80em;
+}
+
+.default-config-txt {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 60em;
+  height: 40em;
+  margin: 5em;
+}
+
+.top-right-blob {
+  right: -30em;
+  top: -20em;
+}
+
+.top-right-txt {
+  right: 0;
+  top: 0;
+}
+
+.top-left-blob {
+  left: -30em;
+  top: -20em;
+}
+
+.top-left-txt {
+  left: 0;
+  top: 0;
+}
+
+.center-center-blob,
+.center-center-txt {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center-right-blob {
+  right: -30em;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.center-right-txt {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.bottom-left-blob {
+  left: -10em;
+  bottom: 0;
+}
+
+.bottom-left-txt {
+  left: 15em;
+  bottom: 15em;
+}
