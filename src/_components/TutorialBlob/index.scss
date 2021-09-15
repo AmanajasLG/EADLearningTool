@@ -12,7 +12,6 @@
   justify-content: center;
   width: 60em;
   height: 40em;
-  margin: 5em;
 }
 
 .top-right-blob {
@@ -21,8 +20,20 @@
 }
 
 .top-right-txt {
-  right: 0;
-  top: 0;
+  right: 5em;
+  top: 5em;
+}
+
+.top-center-blob {
+  left: 50%;
+  transform: translateX(-50%);
+  top: -20em;
+}
+
+.top-center-txt {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 5em;
 }
 
 .top-left-blob {
@@ -31,8 +42,8 @@
 }
 
 .top-left-txt {
-  left: 0;
-  top: 0;
+  left: 5em;
+  top: 5em;
 }
 
 .center-center-blob,
@@ -49,7 +60,7 @@
 }
 
 .center-right-txt {
-  right: 0;
+  right: 5em;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -60,6 +71,6 @@
 }
 
 .bottom-left-txt {
-  left: 15em;
-  bottom: 15em;
+  left: 18em;
+  bottom: 20em;
 }

@@ -31,7 +31,7 @@ const TutorialBlob = ({
         {onContinue && (
           <Iniciar
             style={{ marginTop: "2em", fontSize: "3em" }}
-            label={endTutorial ? "Play" : "Continue"}
+            label={endTutorial ? "Jogar / Play" : "Continue"}
             onClick={onContinue}
           ></Iniciar>
         )}

@@ -208,15 +208,22 @@ const Game1 = (props) => {
         ...s,
         tutorialBlobCount: s.tutorialBlobCount + 1,
         tutorialShowButton:
-          s.tutorialBlobCount + 1 === 1 || s.tutorialBlobCount + 1 === 4,
+          s.tutorialBlobCount + 1 === 1 ||
+          s.tutorialBlobCount + 1 === 4 ||
+          s.tutorialBlobCount + 1 === 5,
       }));
     } else {
-      setState((s) => ({ ...s, showTutorialBlob: false }));
+      setState((s) => ({ ...s, showTutorialBlob: false, currentChar: null }));
     }
   };
 
   const setCurrentChar = (character) => () => {
     // if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
+    if (state.showTutorialBlob && state.tutorialBlobCount === 3) {
+      tutorialControl();
+    } else if (state.showTutorialBlob) {
+      return;
+    }
 
     if (!state.dialogs.hasOwnProperty(character.character.name)) {
       let convOptions = character.answers.reduce((acc, convOption) => {
@@ -230,15 +237,15 @@ const Game1 = (props) => {
         return [...acc, option];
       }, []);
 
-      setState({
-        ...state,
+      setState((s) => ({
+        ...s,
         currentChar: character.character,
         convOptions: convOptions,
         dialogs: {
           ...state.dialogs,
           [character.character.name]: [],
         },
-      });
+      }));
     } else {
       let convOptions = [];
       if (
@@ -272,11 +279,11 @@ const Game1 = (props) => {
         }, []);
       }
 
-      setState({
-        ...state,
+      setState((s) => ({
+        ...s,
         currentChar: character.character,
         convOptions: convOptions,
-      });
+      }));
     }
   };
 
@@ -404,14 +411,14 @@ const Game1 = (props) => {
 
   const onGoNextRoom = () => {
     if (state.currentLocationIndex + 1 < state.locations.length)
-      setState({
-        ...state,
+      setState((s) => ({
+        ...s,
         shouldCloseDialog: true,
         currentLocationIndex: state.currentLocationIndex + 1,
         shouldMinimize: true,
         questionsAsked: 0,
         dialogs: {},
-      });
+      }));
     else {
       // CALCULATE RESULT WITH WRONG ITEM AND FIND THE MATRIC THE USER MISSED THE MOST
       let result = 0;
@@ -454,8 +461,8 @@ const Game1 = (props) => {
 
       const score = (result / state.totalFields).toFixed(2) * 100;
 
-      setState({
-        ...state,
+      setState((s) => ({
+        ...s,
         scene: "ENDGAME",
         result,
         score,
@@ -465,7 +472,7 @@ const Game1 = (props) => {
         feedback: missionData.feedbacks.find(
           (feedback) => feedback.minScore <= score && score <= feedback.maxScore
         ),
-      });
+      }));
 
       dispatch(
         gameActions.create("results", {
@@ -568,7 +575,11 @@ const Game1 = (props) => {
                         shouldMinimize={state.shouldMinimize}
                         onTutorial={state.showTutorialBlob}
                         nextTutorial={tutorialControl}
-                        active={state.tutorialBlobCount < 3}
+                        active={
+                          (state.showTutorialBlob &&
+                            state.tutorialBlobCount < 3) ||
+                          !state.showTutorialBlob
+                        }
                       />
                       {state.currentChar && (
                         <Conversa
@@ -683,6 +694,13 @@ const Game1 = (props) => {
                             ? "max"
                             : ""
                         }
+                        style={{
+                          zIndex:
+                            state.tutorialBlobCount ===
+                            state.tutotialMessages.length - 1
+                              ? 100000
+                              : 0,
+                        }}
                       >
                         <div id="question-counter-info">
                           <div>Você já fez</div>
@@ -723,6 +741,21 @@ const Game1 = (props) => {
                           }
                           onContinue={
                             state.tutorialShowButton ? tutorialControl : null
+                          }
+                          style={
+                            state.tutorialShowButton
+                              ? {
+                                  width: "100%",
+                                  height: "100%",
+                                  position: "absolute",
+                                  top: 0,
+                                  backgroundColor:
+                                    state.tutorialBlobCount ===
+                                    state.tutotialMessages.length - 1
+                                      ? "rgba(255,255,255,0.66)"
+                                      : "transparent",
+                                }
+                              : null
                           }
                         />
                       )}

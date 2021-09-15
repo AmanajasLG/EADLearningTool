@@ -145,7 +145,7 @@ const Phone = ({
         className={state.maximized ? "maximized" : null}
       >
         <div id="small-phone-inner-wrapper">
-          <div id="small-phone-content" onClick={_maximize}>
+          <div id="small-phone-content" onClick={active ? _maximize : null}>
             <div id="small-phone-floating-text">
               <span lang="pt-br">Adicione um novo contato</span>
               <span lang="default">Add a new contact</span>
