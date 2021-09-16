@@ -1,5 +1,5 @@
 const stub = {
-  timer: 100,
+  timer: 5,
   buildings: [
     {
       name: 'Condominio 1',

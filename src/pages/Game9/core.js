@@ -1,9 +1,16 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import Timer from '../../_components/Timer'
+import TimerAnounce from '../../_components/TimerAnounce'
+import Writer from '../../_components/Writer'
 import initialState from './initialState'
 import { agendamento } from '../../img'
 import { getRandomInt } from '../../_helpers'
+import tutorialTexts from './tutorialTexts'
+import TutorialBlob from '../../_components/TutorialBlob'
+import TaggedIcon from '../../_components/TaggedIcon'
+import Map from '../../_components/Map'
+import charStub from './chef_animada.svg'
 
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState())
@@ -36,25 +43,25 @@ const Core = ({ exitGame, data, onEndGame }) => {
 
   return(
     <React.Fragment>
-      {state.scene === 'TUTORIAL' &&
-        <React.Fragment>
-          Tutorial
-          <Button onClick={ () => setState( s => ({...s, scene: 'GAME', takenRequests: [getRandomInt(0, data.requests.length)]}))}>
-            Passar tutorial
-          </Button>
-        </React.Fragment>
+      {state.scene === 'TIMER' &&
+        <TimerAnounce seconds={data.timer} onReady={() => setState(s => ({...s, scene: 'GAME', runTimer: true, takenRequests: [getRandomInt(0, data.requests.length)]}) )}/>
       }
 
-      {state.scene === 'GAME' &&
+      {(state.scene === 'GAME' || state.scene === 'TUTORIAL') &&
         <React.Fragment>
-          <Timer style={{position: 'absolute'}}
-            seconds={data.timer}
-            run={state.runTimer}
-            onStop={ seconds => { setState( s => ({...s, results: {...s.results, secondsLeft: seconds}}))}} onEnd={onTimerEnd}
-          />
-        <Button style={{pointerEvents: 'none', position: 'absolute', top: '30%'}}>{state.completed}</Button>
 
-          <div style={{position: 'absolute', width: '70%', height: '20%', right: 0, backgroundColor: "#aaffaa"}}>
+          <div style={{pointerEvents: (state.endGame? 'none': 'all'),
+            position: 'absolute', width: '100%', top: '10%',  height: '65%',
+            backgroundColor: '#aaaaff'}}>
+            <Map locations={[]} onConfirm={() => {}} mapImage={agendamento} showEmail={false}/>
+            {data.buildings.map((building, index) =>
+              <Button key={index} onMouseEnter={() => setState(s => ({...s, buildingDetailsIndex: index}))}>
+                {building.name}
+              </Button>
+            )}
+          </div>
+
+          <div style={{position: 'absolute', width: '70%', height: '20%', backgroundColor: "#aaffaa"}}>
             <img
               style={{position: 'absolute', height: '100%', backgroundColor: "#aaaaff", borderRadius: "50%"}}
               onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
@@ -72,23 +79,30 @@ const Core = ({ exitGame, data, onEndGame }) => {
             </div>
           </div>
 
-          <div style={{pointerEvents: (state.endGame? 'none': 'all'), position: 'absolute', width: '70%', height: '65%', backgroundColor: '#aaaaff', right: 0, bottom: '10%'}}>
-            Mapa
-            {data.buildings.map((building, index) =>
-              <Button key={index} onMouseEnter={() => setState(s => ({...s, buildingDetailsIndex: index}))}>
-                {building.name}
-              </Button>
-            )}
-          </div>
-
-          <div style={{position: 'absolute', left: 0, bottom: 0, width: '30%', height: '40%', backgroundColor: '#aaffaa'}}>
-            <div style={{fontSize: '3em'}}>Pedido {state.takenRequests[0]}
+          <div style={{position: 'absolute', left: '5%', bottom: 0, width: '90%', height: '25%', backgroundColor: '#d6e3f4',
+            borderRadius: '3% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0,}}>
+            <div style={{position: 'absolute', width: '55%', backgroundColor: '#59316d', height: '40%', left: '12%', top: '40%',
+            borderRadius: '3% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0}}>
+              <Writer text={`Pedido ${state.takenRequests[0]}`}
+                style={{width: '55%', height: '40%', fontSize: '3em'}}
+              />
             </div>
             <img
-              style={{position: 'absolute', width: '50%', backgroundColor: "#aaaaff", borderRadius: "50%"}}
+              style={{position: 'absolute', bottom: 0, height: '150%'}}
               onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-              src={agendamento}
+              src={charStub}
               alt=""
+            />
+            <TaggedIcon icon={agendamento} message={state.completed}
+              style={{position: 'absolute', right: '6%', top: '35%',
+                pointerEvents: 'none', height: '50%', width: '30%'
+              }}
+            />
+            <Timer style={{position: 'absolute', right: 0, fontSize: '8em', right: '2.5%', top: '45%'}}
+              seconds={data.timer}
+              run={state.runTimer}
+              onEnd={onTimerEnd}
+              onStop={ seconds => { setState( s => ({...s, results: {...s.results, secondsLeft: seconds}}))}}
             />
           </div>
 
@@ -107,6 +121,22 @@ const Core = ({ exitGame, data, onEndGame }) => {
               </Button>
             </React.Fragment>
           }
+        </React.Fragment>
+      }
+
+
+      {state.scene === 'TUTORIAL' &&
+        <React.Fragment>
+          <TutorialBlob
+            text={tutorialTexts[state.tutorialStep].text}
+            translation={tutorialTexts[state.tutorialStep].translation}
+            onContinue={() => setState(s =>
+                ({...s, tutorialStep: s.tutorialStep + 1, scene: s.tutorialStep + 1 === tutorialTexts.length ? 'TIMER' : 'TUTORIAL' })
+            )}
+          />
+          <Button onClick={ () => setState( s => ({...s, scene: 'TIMER'}) )}>
+            Passar tutorial
+          </Button>
         </React.Fragment>
       }
     </React.Fragment>

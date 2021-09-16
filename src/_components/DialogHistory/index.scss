@@ -1,80 +1,96 @@
 #dialog-history-wrapper {
-	flex-grow: 1;
-	align-self: flex-end;
-	mask-image: linear-gradient(0deg, #FFFF 50%, #FFF0 100%);
-	// background-image: linear-gradient(0deg, #FFF 50%, #000 100%);
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end; /* Bug do flex-box: impossível ter scroll com flex-end */
-	margin: 20px 0;
-	// overflow: scroll;
-	overflow: hidden;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
+  flex-grow: 1;
+  align-self: flex-end;
+  // mask-image: linear-gradient(0deg, #ffff 50%, #fff0 100%);
+  // background-image: linear-gradient(0deg, #FFF 50%, #000 100%);
+  width: 100%;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* Bug do flex-box: impossível ter scroll com flex-end */
+  margin: 2em 0 20px;
+  // overflow: scroll;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
 
 #dialog-history-content {
-	margin-left: 200px;
-	flex: 1 1 0px;
-	max-width: 810px;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-	justify-content: flex-end;
-	// margin-top: auto; /* Workaround do bug do flex-box, mas âncora do elemento não fica na base */
+  margin-left: 10em;
+  padding: 2em;
+  // flex: 1 1 0px;
+  // display: flex;
+  // flex-direction: column;
+  // align-items: flex-end;
+  // justify-content: flex-end;
+  // width: 100%;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  // margin-top: auto; /* Workaround do bug do flex-box, mas âncora do elemento não fica na base */
 }
 
 #dialog-history-content > span {
-	flex-grow: 1;
+  flex-grow: 1;
 }
 
 #dialog-history-content * {
-	transition: 250ms ease-in-out;
+  transition: 250ms ease-in-out;
 }
 
 @keyframes slideFromLeft {
-	0% {
-		transform: translate(-20%, 50%);
-		opacity: 0;
-	}
-	100% {
-		transform: translate(0%, 0%);
-		opacity: 1;
-	}
+  0% {
+    transform: translate(-20%, 50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
 }
 
 @keyframes slideFromRight {
-	0% {
-		transform: translate(20%, 50%);
-		opacity: 0;
-	}
-	100% {
-		transform: translate(0%, 0%);
-		opacity: 1;
-	}
+  0% {
+    transform: translate(20%, 50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0%, 0%);
+    opacity: 1;
+  }
 }
 
-.mensagem0, .mensagem1 {
-	margin-bottom: 15px;
-	padding: 20px 40px;
-	min-width: 450px;
-	max-width: 650px;
-	font-size: 2em;
+.mensagem0,
+.mensagem1 {
+  margin-bottom: 15px;
+  padding: 20px 40px;
+  min-width: 10em;
+  max-width: 40em;
+  font-size: 2.5em;
 }
 
 .mensagem0 {
-	animation: slideFromRight 250ms ease-out forwards;
-	background-color: #535c89;
-	border-radius: 0.75em 0.75em 0 0.75em;
-	color: #FFFFFF;
+  background-color: #535c89;
+  border-radius: 0.75em 0.75em 0 0.75em;
+  color: #ffffff;
+  margin-left: auto;
+  position: relative;
+}
+
+.animate-mensagem0 {
+  animation: slideFromRight 250ms ease-out forwards;
 }
 
 .mensagem1 {
-	animation: slideFromLeft 250ms ease-out forwards;
-	background-color: #59316D;
-	border-radius: 0.75em 0.75em 0.75em 0;
-	color: #FFFFFF;
-	align-self: flex-start;
+  background-color: #59316d;
+  border-radius: 0.75em 0.75em 0.75em 0;
+  color: #ffffff;
+  align-self: flex-start;
+}
+
+.animate-mensagem1 {
+  animation: slideFromLeft 250ms ease-out forwards;
 }
