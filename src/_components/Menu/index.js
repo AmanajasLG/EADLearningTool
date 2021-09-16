@@ -5,8 +5,6 @@ const Menu = ({ buttonList, onButtonClick }) => {
   const columns = buttonList.length < 3 ? 1 : 3,
     rows = 2;
 
-  console.log(columns);
-
   return (
     <div id="Menu">
       <div

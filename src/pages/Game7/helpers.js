@@ -2,7 +2,6 @@ import { format } from "date-fns";
 
 function checkErros(data) {
   let errors = [];
-  console.log('data:', data)
   if (!data.userAnswers.city.correct)
     errors.push({
       type: "cidade",
@@ -56,8 +55,6 @@ function checkErros(data) {
 
     if (
       !phrase.rightOrder.reduce((rightWord, word, i) => {
-        console.log(word.text);
-        console.log(data.userAnswers.sentences[index][i]);
         return rightWord && word.text === data.userAnswers.sentences[index][i];
       }, true)
     ) {

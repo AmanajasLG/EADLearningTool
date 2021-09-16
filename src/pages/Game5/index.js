@@ -351,7 +351,6 @@ const Game5 = (props) => {
 
   const endGame = (saveResult = true) => {
     let wrongClothes = getWrongClothes();
-    console.log(wrongClothes);
     let clothesCount = Object.keys(state.clothes).reduce((acc, key) => {
       return acc + state.clothes[key].length;
     }, 0);

@@ -14,7 +14,6 @@ const initialState = (hasPlayed = false) => ({
   validQuestions: [],
   tutorialStep: 0,
   seeTutorial: true,
-  hasPlayed: hasPlayed,
   checkedPlayed: hasPlayed,
   tipsCount: 0,
   //DIALOG

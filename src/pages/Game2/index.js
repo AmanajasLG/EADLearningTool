@@ -247,9 +247,12 @@ const Game2 = (props) => {
     } else {
       setState((s) => ({
         ...s,
-        showTutorialBlob: false,
+        showConvo: false,
         currentChar: null,
+        tutorialShowButton: false,
+        showTutorialBlob: false,
         tutorialBlobCount: s.tutorialBlobCount + 1,
+        ...dialogInitialState,
       }));
     }
   };
@@ -779,6 +782,30 @@ const Game2 = (props) => {
                                 }
                               : { zIndex: 10000 }
                           }
+                        />
+                      )}
+
+                      {hasPlayed && state.showTutorialBlob && (
+                        <PularTutorial
+                          label="Skip tutorial"
+                          onClick={() =>
+                            setState((s) => ({
+                              ...s,
+                              showConvo: false,
+                              currentChar: null,
+                              tutorialShowButton: false,
+                              showTutorialBlob: false,
+                              tutorialBlobCount: 8,
+                              ...dialogInitialState,
+                            }))
+                          }
+                          style={{
+                            position: "absolute",
+                            bottom: "2em",
+                            left: "2em",
+                            fontSize: "2.3em",
+                            zIndex: 10001,
+                          }}
                         />
                       )}
                     </div>

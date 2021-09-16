@@ -20,8 +20,12 @@ import { bigPhone, dedao, palma, blobLowScore, blobLaranja } from "../../img";
 
 import "./index.scss";
 import "./feedback-screen.scss";
-import { Button } from "@material-ui/core";
-import { ButtonConfigs, Iniciar, Voltar } from "../../_components/Button";
+import {
+  ButtonConfigs,
+  Iniciar,
+  Voltar,
+  PularTutorial,
+} from "../../_components/Button";
 import { shuffle } from "../../_helpers";
 import TutorialBlob from "../../_components/TutorialBlob";
 
@@ -45,12 +49,33 @@ const Game1 = (props) => {
   const lang = useSelector(
     (state) => state.authentication.user.user.language.id
   );
+  const hasPlayed = useSelector((state) =>
+    state.game.items.resultsCount ? state.game.items.resultsCount > 0 : false
+  );
 
   // React.useEffect(()=>{
   // 	if(mission && Object.keys(actions).length !== 0 && !missionData){
   // 		dispatch(actions['missionData'].find({mission: mission.id}))
   // 	}
   // })
+
+  // check if user already played the game
+  React.useEffect(() => {
+    let updatedState = {};
+    if (mission && !state.checkedPlayed) {
+      dispatch(
+        gameActions.find("results/count", {
+          user: userId,
+          mission: mission.id,
+        })
+      );
+      updatedState.checkedPlayed = true;
+    }
+
+    if (hasPlayed) setState((s) => ({ ...s, ...updatedState, hasPlayed }));
+
+    // eslint-disable-next-line
+  }, [userId, mission, dispatch, hasPlayed]);
 
   React.useEffect(() => {
     if (mission)
@@ -218,7 +243,6 @@ const Game1 = (props) => {
   };
 
   const setCurrentChar = (character) => () => {
-    // if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
     if (state.showTutorialBlob && state.tutorialBlobCount === 3) {
       tutorialControl();
     } else if (state.showTutorialBlob) {
@@ -366,7 +390,6 @@ const Game1 = (props) => {
     let index = state.contactsAtSession.indexOf(
       state.contactsAtSession.find((c) => c.id === contact.id)
     );
-    // console.log('changing:', contact)
     setState({
       ...state,
       contactsAtSession: [
@@ -757,6 +780,28 @@ const Game1 = (props) => {
                                 }
                               : null
                           }
+                        />
+                      )}
+
+                      {hasPlayed && state.showTutorialBlob && (
+                        <PularTutorial
+                          label="Skip tutorial"
+                          onClick={() =>
+                            setState((s) => ({
+                              ...s,
+                              currentChar: null,
+                              showTutorialBlob: false,
+                              tutorialBlobCount: 7,
+                              shouldMinimize: true,
+                            }))
+                          }
+                          style={{
+                            position: "absolute",
+                            bottom: "2em",
+                            left: "2em",
+                            fontSize: "2.3em",
+                            zIndex: 10001,
+                          }}
                         />
                       )}
                     </div>
