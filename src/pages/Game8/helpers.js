@@ -97,8 +97,6 @@ function checkErros(data) {
         })
         .join(" ");
 
-      console.log(data.userAnswers.sentences);
-
       if (
         !message.responseEmail.rightOrder.reduce((rightWord, word, i) => {
           return (

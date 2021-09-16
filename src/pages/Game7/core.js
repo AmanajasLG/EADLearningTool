@@ -16,9 +16,6 @@ const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState({ ...initialState() });
 
   const createTexts = (userData) => {
-    console.log('userData:', userData)
-    console.log('userData.dates.return:', userData.dates.return)
-    console.log('format(userData.dates.return, "M"):', userData.dates.return.month)
     data.phrases.map((phrase) => {
       phrase.extraFields.forEach((extraField, index) => {
         let periods = ["manhã", "tarde", "noite", "madrugada"];
@@ -47,20 +44,13 @@ const Core = ({ exitGame, data, onEndGame }) => {
 
             break;
           case "month":
-            if (
-              !phrase.words.includes(
-                months[userData.dates.return.month]
-              )
-            )
-              phrase.words.push(
-                months[userData.dates.return.month]
-              );
+            if (!phrase.words.includes(months[userData.dates.return.month]))
+              phrase.words.push(months[userData.dates.return.month]);
 
             phrase.rightOrder.map((word) => {
               if (!word.preset && word.type === extraField.type) {
                 word.preset = true;
-                word.text =
-                  months[userData.dates.return.month];
+                word.text = months[userData.dates.return.month];
               }
 
               return word;

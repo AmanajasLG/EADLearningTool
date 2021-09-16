@@ -1,7 +1,8 @@
-const initialValue = () => ({
+const initialValue = (hasPlayed = false) => ({
   //METADATA
   back: false,
   //GAME STATE
+  checkedPlayed: hasPlayed,
   scene: "INIT",
   endGame: false,
   currentLocationIndex: 0,

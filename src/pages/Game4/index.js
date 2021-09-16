@@ -4,11 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { Link, Redirect } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 
-import {
-  gameActions,
-  headerActions,
-  musicActions,
-} from "../../_actions";
+import { gameActions, headerActions, musicActions } from "../../_actions";
 import { headerConstants } from "../../_constants";
 
 import Init from "../../_components/Init";
@@ -201,12 +197,6 @@ const Game4 = (props) => {
           };
         }),
       };
-
-      console.log(
-        state.ingredientsList.findIndex(
-          (ingredient) => ingredient.name === currentIngredient.name
-        )
-      );
 
       if (
         state.ingredientsList.findIndex(
@@ -567,7 +557,8 @@ const Game4 = (props) => {
                         zIndex: -1,
                         width: "100%",
                         height: "100%",
-                      }} alt=""
+                      }}
+                      alt=""
                     />
                     {state.showBlob && (
                       <Tutorial

@@ -1,10 +1,10 @@
-.btn{
+.btn {
   display: inline-block;
-  font-family: 'Barlow';
+  font-family: "Barlow";
   font-weight: 800;
-  color: #59316D;
+  color: #59316d;
   border: none;
-  background-color: #F9AFA1;
+  background-color: #f9afa1;
   border-radius: 1000px;
   cursor: pointer;
   font-size: inherit;
@@ -12,16 +12,28 @@
   transition: 100ms linear;
 }
 
-@keyframes inflate{
-  0% { transform: scale(1, 1); }
-  30% { transform: scale(1.15, 1.15); }
-  100% { transform: scale(1, 1); }
+@keyframes inflate {
+  0% {
+    transform: scale(1, 1);
+  }
+  30% {
+    transform: scale(1.15, 1.15);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
 }
 
-@keyframes jump{
-  0% { transform: translateY(-10%); }
-  30% { transform: translateY(-30%); }
-  100% { transform: translateY(-20%); }
+@keyframes jump {
+  0% {
+    transform: translateY(-10%);
+  }
+  30% {
+    transform: translateY(-30%);
+  }
+  100% {
+    transform: translateY(-20%);
+  }
 }
 
 .btn:hover {
