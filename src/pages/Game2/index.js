@@ -1,10 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  gameActions,
-  headerActions,
-  musicActions,
-} from "../../_actions";
+import { gameActions, headerActions, musicActions } from "../../_actions";
 import { headerConstants } from "../../_constants";
 
 import Init from "../../_components/Init";
@@ -20,6 +16,7 @@ import { Iniciar, PularTutorial } from "../../_components/Button";
 import { Redirect } from "react-router";
 import initialState from "./initialState";
 import Button from "@material-ui/core/Button";
+import TutorialBlob from "../../_components/TutorialBlob";
 
 import {
   iconVitoriaPers,
@@ -101,7 +98,7 @@ const Game2 = (props) => {
       updatedState.checkedPlayed = true;
     }
 
-    if (hasPlayed) setState({ ...state, ...updatedState, hasPlayed });
+    if (hasPlayed) setState((s) => ({ ...s, ...updatedState, hasPlayed }));
 
     // eslint-disable-next-line
   }, [userId, mission, dispatch, hasPlayed]);
@@ -228,27 +225,50 @@ const Game2 = (props) => {
         missionData.missionCharacters.filter((missionCharacter) => {
           return missionCharacter.tip;
         }).length + 1;
-      setState((state) => {
-        return { ...state, locations, tutorialRoom, tipsCount };
+      setState((s) => {
+        return { ...s, locations, tutorialRoom, tipsCount };
       });
     }
   }, [missionData, state.locations]);
 
-  const onStartGame = (e) =>  setState({ ...state, scene: "TUTORIAL" });
+  const onStartGame = (e) => setState((s) => ({ ...s, scene: "TUTORIAL" }));
+
+  const tutorialControl = () => {
+    if (state.tutorialBlobCount < state.tutotialMessages.length - 1) {
+      setState((s) => ({
+        ...s,
+        tutorialBlobCount: s.tutorialBlobCount + 1,
+        tutorialShowButton:
+          s.tutorialBlobCount + 1 === 1 ||
+          s.tutorialBlobCount + 1 === 2 ||
+          s.tutorialBlobCount + 1 === 3 ||
+          s.tutorialBlobCount + 1 === 7,
+      }));
+    } else {
+      setState((s) => ({
+        ...s,
+        showTutorialBlob: false,
+        currentChar: null,
+        tutorialBlobCount: s.tutorialBlobCount + 1,
+      }));
+    }
+  };
 
   const endTutorial = () => {
     let updateState = {
       showConvo: false,
       currentChar: null,
       scene: "ROOM",
+      showTutorialBlob: true,
+      tutorialShowButton: false,
       ...dialogInitialState,
     };
-    setState({ ...state, ...updateState });
+    setState((s) => ({ ...s, ...updateState }));
   };
 
   const setTutorialCharacter = (tutorialCharacter) => () => {
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       tutorialStep: state.tutorialStep + 1,
       showConvo: true,
       currentChar: tutorialCharacter.character,
@@ -258,30 +278,36 @@ const Game2 = (props) => {
           answer: answer.answer.split(";"),
         };
       }),
-    });
+    }));
   };
 
   //shows only selected questions
   const setCurrentCharacter = (character) => () => {
-    setState({
-      ...state,
+    if (state.showTutorialBlob && state.tutorialBlobCount === 0) {
+      tutorialControl();
+    } else if (state.showTutorialBlob) {
+      return;
+    }
+
+    setState((s) => ({
+      ...s,
       showConvo: true,
       currentChar: character,
       dialogStep: 0,
       convOptions: state.locations[state.currentRoom].missionCharacters
         .find((c) => c.character.id === character.character.id)
         .selectedQuestions.slice(0, state.questionsByStep),
-    });
+    }));
   };
 
   const closeDialog = (dialogHistory) => {
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       ...dialogInitialState,
       showConvo: false,
       shouldCloseConvo: false,
       currentChar: null,
-    });
+    }));
   };
 
   const afterWriter = () => {
@@ -289,7 +315,7 @@ const Game2 = (props) => {
       setTimeout(() => {
         setState({
           ...state,
-          tutorialStep: state.tutorialStep + 1,
+          tutorialShowButton: true,
         });
       }, 1500);
     } else {
@@ -350,19 +376,19 @@ const Game2 = (props) => {
         updateState.convOptions = [];
         updateState.shouldCloseConvo = true;
       }
-      setState({ ...state, ...updateState });
+      setState((s) => ({ ...s, ...updateState }));
     }
   };
 
   const onRefreshDialog = () => {
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       ...dialogInitialState,
       refreshDialog: null,
       convOptions: state.locations[state.currentRoom].missionCharacters
         .find((c) => c.character.id === state.currentChar.character.id)
         .selectedQuestions.slice(0, state.questionsByStep),
-    });
+    }));
   };
 
   const onMenuButtonClick = (answer) => {
@@ -416,12 +442,12 @@ const Game2 = (props) => {
       };
     }
 
-    setState({ ...state, ...updateState });
+    setState((s) => ({ ...s, ...updateState }));
   };
 
   const checkEnd = () => {
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       acusation: false,
       scene: "ENDGAME",
       gameEndState: state.currentChar.character.name === state.targetName,
@@ -430,7 +456,7 @@ const Game2 = (props) => {
           ? "rightAccusation"
           : "wrongAccusation",
       currentChar: null,
-    });
+    }));
 
     //aqui
     dispatch(
@@ -473,7 +499,7 @@ const Game2 = (props) => {
               <span lang="en">
                 Select someone to talk and help you find your guide.
               </span>
-              {hasPlayed ? (
+              {/* {hasPlayed ? (
                 <div>
                   <PularTutorial
                     label="Skip tutorial"
@@ -484,61 +510,51 @@ const Game2 = (props) => {
               //   className="btn btn-center"
               //   id="btn-tutorial"
               //   onClick={() => {
-              //     setState({ ...state, scene: "ROOM" });
+              //     setState((s) => ({ ...s, scene: "ROOM" });
               //   }}
               // >
               //   Skip tutorial
               // </button>
-              null}
+              null} */}
             </div>
           </div>
         </Sala>
         {state.showConvo && (
-          <Conversa
-            onExited={() => {
-              setState({
-                ...state,
-                showConvo: false,
-                tutorialStep: state.tutorialStep - 1,
-              });
-            }}
-            convOptions={state.convOptions.reduce((acc, convOption) => {
-              let option = {
-                ...convOption,
-                answers: convOption.answer,
-                question: convOption.question.question,
-              };
-              delete option.answer;
-              return [...acc, option];
-            }, [])}
-            currentChar={state.currentChar}
-            charFeeling={state.characterFeeling}
-            afterWriter={afterWriter}
-            onConvoChoiceMade={onMenuButtonClick}
-          />
-        )}
-        {id === 2 && (
-          <div id="tutorial-popup-2-wrapper">
-            <div id="tutorial-popup-2-content">
-              <span lang="pt-br">
-                <strong>Lembre-se:</strong> As pessoas estão ocupadas em seus
-                ambientes de trabalho, então tenha certeza de não gastar o tempo
-                delas com perguntas fora de contexto!
-              </span>
-              <span lang="en">
-                <strong>Remember:</strong> People are busy in their workplaces,
-                so be sure not to waste their times with question that are out
-                of yout context!
-              </span>
-              <Iniciar label="Continuar" onClick={endTutorial} />
-              {/* <button
-                className="btn btn-center"
-                id="btn-end-tutorial"
+          <div>
+            <Conversa
+              onExited={() => {
+                setState({
+                  ...state,
+                  showConvo: false,
+                  tutorialStep: state.tutorialStep - 1,
+                });
+              }}
+              convOptions={state.convOptions.reduce((acc, convOption) => {
+                let option = {
+                  ...convOption,
+                  answers: convOption.answer,
+                  question: convOption.question.question,
+                };
+                delete option.answer;
+                return [...acc, option];
+              }, [])}
+              currentChar={state.currentChar}
+              charFeeling={state.characterFeeling}
+              afterWriter={afterWriter}
+              onConvoChoiceMade={onMenuButtonClick}
+            />
+            {state.tutorialShowButton && (
+              <Iniciar
+                label="Continuar"
                 onClick={endTutorial}
-              >
-                Continuar
-              </button> */}
-            </div>
+                style={{
+                  position: "absolute",
+                  bottom: "2em",
+                  fontSize: "3em",
+                  right: "10em",
+                }}
+              ></Iniciar>
+            )}
           </div>
         )}
       </div>
@@ -559,7 +575,7 @@ const Game2 = (props) => {
       ) : (
         mission && (
           <div id="game2-content">
-            {/*<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e) => { setState({ ...state, tracking: e.target.checked }) }} /></div>*/}
+            {/*<div id="input-tracker">TrackInput: <input type="checkbox" onChange={(e) => { setState((s) => ({ ...s, tracking: e.target.checked }) }} /></div>*/}
             {(function renderScene() {
               // eslint-disable-next-line default-case
               switch (state.scene) {
@@ -580,7 +596,7 @@ const Game2 = (props) => {
                         }).description
                       }
                       onStart={onStartGame}
-                      onBack={() => setState({ ...state, back: true })}
+                      onBack={() => setState((s) => ({ ...s, back: true }))}
                       ready={state.tutorialRoom ? true : false}
                     />
                   );
@@ -594,17 +610,81 @@ const Game2 = (props) => {
                           (location, index) => index
                         )}
                         onChange={(num) => {
-                          setState({ ...state, currentRoom: num });
+                          if (!state.showTutorialBlob)
+                            setState((s) => ({ ...s, currentRoom: num }));
+                        }}
+                        style={{
+                          zIndex: state.tutorialBlobCount === 7 ? 10000 : 0,
                         }}
                       />
                       {/* //? Pq sala recebe a location inteira? Se ela só precisa saber a imagem de fundo,
 										//? pq passar tudo ao invés de só passar a string? Que aí poderia ser local ou na rede... */}
+
+                      <Sala
+                        roomData={state.locations[state.currentRoom].location}
+                        key={state.currentRoom}
+                      >
+                        {state.locations[
+                          state.currentRoom
+                        ].missionCharacters.map((missionCharacter, index) => (
+                          <Character
+                            key={index}
+                            zDepth={missionCharacter.zDepth}
+                            character={missionCharacter.character}
+                            onClick={setCurrentCharacter(missionCharacter)}
+                            // showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sob hover do mouse
+                          />
+                        ))}
+                      </Sala>
+
+                      {state.showConvo && (
+                        <Conversa
+                          shouldExit={state.shouldCloseConvo}
+                          prevDialogHistory={[]}
+                          onClearDialogHistory={state.refreshDialog}
+                          charPreSpeech={state.preSpeech}
+                          convOptions={state.convOptions.reduce(
+                            (acc, convOption) => {
+                              let option = {
+                                ...convOption,
+                                ...convOption.question,
+                                answers: convOption.answer,
+                              };
+                              delete option.answer;
+                              return [...acc, option];
+                            },
+                            []
+                          )}
+                          currentChar={state.currentChar.character}
+                          charFeeling={state.characterFeeling}
+                          afterWriter={afterWriter}
+                          onExited={closeDialog}
+                          onConvoChoiceMade={onMenuButtonClick}
+                          tutorialControl={
+                            state.showTutorialBlob ? tutorialControl : null
+                          }
+                        ></Conversa>
+                      )}
+
+                      {state.showConvo && (
+                        <Lamp
+                          onClick={() => {
+                            if (!state.showTutorialBlob)
+                              setState((s) => ({ ...s, acusation: true }));
+                          }}
+                          message="É você!"
+                          style={{
+                            zIndex: state.tutorialBlobCount === 3 ? 10000 : 0,
+                          }}
+                        />
+                      )}
+
                       {state.showTips ? (
                         <FullscreenOverlay
-                          style={{ zIndex: 100 }}
-                          onClickClose={() =>
-                            setState({ ...state, showTips: false })
-                          }
+                          onClickClose={() => {
+                            if (state.showTutorialBlob) tutorialControl();
+                            setState((s) => ({ ...s, showTips: false }));
+                          }}
                           bgRGBA={{ r: 249, g: 175, b: 161, a: 0.69 }}
                         >
                           <div id="big-note-wrapper">
@@ -638,64 +718,68 @@ const Game2 = (props) => {
                           </div>
                         </FullscreenOverlay>
                       ) : (
-                        <Button
-                          style={{ position: "absolute" }}
-                          onClick={() => setState({ ...state, showTips: true })}
-                        >
-                          <img
-                            style={{ width: 90 }}
-                            src={blocoButton}
-                            alt="tips"
-                          />
-                        </Button>
+                        <img
+                          id="tips-notepad"
+                          style={{
+                            width: "12em",
+                            position: "absolute",
+                            zIndex:
+                              state.tutorialBlobCount === 5
+                                ? 100000
+                                : state.showConvo
+                                ? -1
+                                : 0,
+                            cursor: "pointer",
+                            top: "5em",
+                            left: "5em",
+                          }}
+                          src={blocoButton}
+                          alt="tips"
+                          onClick={() => {
+                            if (state.showTutorialBlob) tutorialControl();
+                            setState((s) => ({ ...s, showTips: true }));
+                          }}
+                        />
                       )}
-                      <Sala
-                        roomData={state.locations[state.currentRoom].location}
-                        key={state.currentRoom}
-                      >
-                        {state.locations[
-                          state.currentRoom
-                        ].missionCharacters.map((missionCharacter, index) => (
-                          <Character
-                            key={index}
-                            zDepth={missionCharacter.zDepth}
-                            character={missionCharacter.character}
-                            onClick={setCurrentCharacter(missionCharacter)}
-                            // showNameOnHover={true} descomentar linha se quiser que os nomes dos personagens apareça sob hover do mouse
-                          />
-                        ))}
-                      </Sala>
-                      {state.showConvo && (
-                        <Conversa
-                          shouldExit={state.shouldCloseConvo}
-                          prevDialogHistory={[]}
-                          onClearDialogHistory={state.refreshDialog}
-                          charPreSpeech={state.preSpeech}
-                          convOptions={state.convOptions.reduce(
-                            (acc, convOption) => {
-                              let option = {
-                                ...convOption,
-                                ...convOption.question,
-                                answers: convOption.answer,
-                              };
-                              delete option.answer;
-                              return [...acc, option];
-                            },
-                            []
-                          )}
-                          currentChar={state.currentChar.character}
-                          charFeeling={state.characterFeeling}
-                          afterWriter={afterWriter}
-                          onExited={closeDialog}
-                          onConvoChoiceMade={onMenuButtonClick}
-                        >
-                          <Lamp
-                            onClick={() =>
-                              setState({ ...state, acusation: true })
-                            }
-                            message="É você!"
-                          />
-                        </Conversa>
+
+                      {state.showTutorialBlob && (
+                        <TutorialBlob
+                          text={
+                            state.tutotialMessages[state.tutorialBlobCount].text
+                          }
+                          translation={
+                            state.tutotialMessages[state.tutorialBlobCount]
+                              .textTranslate
+                          }
+                          position={
+                            state.tutotialMessages[state.tutorialBlobCount]
+                              .position
+                          }
+                          endTutorial={
+                            state.tutorialBlobCount ===
+                            state.tutotialMessages.length - 1
+                          }
+                          onContinue={
+                            state.tutorialShowButton ? tutorialControl : null
+                          }
+                          style={
+                            state.tutorialShowButton ||
+                            state.tutorialBlobCount === 5
+                              ? {
+                                  width: "100%",
+                                  height: "100%",
+                                  position: "absolute",
+                                  top: 0,
+                                  backgroundColor:
+                                    state.tutorialBlobCount === 7 ||
+                                    state.tutorialBlobCount === 5 ||
+                                    state.tutorialBlobCount === 3
+                                      ? "rgba(255,255,255,0.66)"
+                                      : "transparent",
+                                }
+                              : { zIndex: 10000 }
+                          }
+                        />
                       )}
                     </div>
                   );
@@ -797,7 +881,9 @@ const Game2 = (props) => {
                           <div id="endGame-action-btns">
                             <Button onClick={restart}>Tentar novamente</Button>
                             <Button
-                              onClick={() => setState({ ...state, back: true })}
+                              onClick={() =>
+                                setState((s) => ({ ...s, back: true }))
+                              }
                             >
                               Sair do jogo
                             </Button>
@@ -860,7 +946,9 @@ const Game2 = (props) => {
                           <div id="endGame-action-btns">
                             <Button onClick={restart}>Tentar novamente</Button>
                             <Button
-                              onClick={() => setState({ ...state, back: true })}
+                              onClick={() =>
+                                setState((s) => ({ ...s, back: true }))
+                              }
                             >
                               Sair do jogo
                             </Button>
@@ -920,7 +1008,7 @@ const Game2 = (props) => {
                     <div id="accusation-btns">
                       <Button
                         onClick={() =>
-                          setState({ ...state, closeAcusation: true })
+                          setState((s) => ({ ...s, closeAcusation: true }))
                         }
                       >
                         Não

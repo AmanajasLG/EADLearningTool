@@ -2,8 +2,10 @@ import React from "react";
 import Button from "../Button";
 
 const Menu = ({ buttonList, onButtonClick }) => {
-  const columns = 3,
+  const columns = buttonList.length < 3 ? 1 : 3,
     rows = 2;
+
+  console.log(columns);
 
   return (
     <div id="Menu">
@@ -40,7 +42,7 @@ const Menu = ({ buttonList, onButtonClick }) => {
                     style={{
                       // fontSize: "0.6rem",
                       // margin: ".5rem",
-                      width: "50%",
+                      width: "70%",
                       pointerEvents: button.hasOwnProperty("active")
                         ? button.active
                           ? "auto"

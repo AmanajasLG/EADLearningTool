@@ -841,12 +841,17 @@ const Game1 = (props) => {
                             )}
                           </div>
                           <div id="feedback-endGame-action-btns">
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
+                            <Voltar
+                              label={"Tentar novamente"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                              onClick={restart}
+                              style={{ marginRight: "2em" }}
+                            />
+                            <Iniciar
+                              label={"Sair do jogo"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                               onClick={() => setState({ ...state, back: true })}
-                            >
-                              Sair do jogo
-                            </Button>
+                            />
                           </div>
                         </div>
                       ) : (
@@ -878,9 +883,9 @@ const Game1 = (props) => {
                                 backgroundImage: "url(" + blobLowScore + ")",
                               }}
                             >
-                              <div className="feedback-painel-2-wrapper">
+                              <div className="feedback-painel-2-wrapper-defeat">
                                 <div
-                                  className="feedback-painel-2-content"
+                                  className="feedback-painel-2-content-defeat"
                                   style={{
                                     backgroundImage: "url(" + blobLaranja + ")",
                                   }}
@@ -893,8 +898,8 @@ const Game1 = (props) => {
                                   <div>items</div>
                                 </div>
                               </div>
-                              <div className="feedback-painel-2-wrapper">
-                                <div className="feedback-painel-2-content">
+                              <div className="feedback-painel-2-wrapper-defeat">
+                                <div className="feedback-painel-2-content-defeat">
                                   <div>
                                     <p lang="pt-br">
                                       Lembrar o(a){" "}
@@ -914,12 +919,17 @@ const Game1 = (props) => {
                             </div>
                           </div>
                           <div id="feedback-endGame-action-btns">
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
+                            <Voltar
+                              label={"Tentar novamente"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                              onClick={restart}
+                              style={{ marginRight: "2em" }}
+                            />
+                            <Iniciar
+                              label={"Sair do jogo"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                               onClick={() => setState({ ...state, back: true })}
-                            >
-                              Sair do jogo
-                            </Button>
+                            />
                           </div>
                         </div>
                       )}
