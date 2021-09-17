@@ -2,11 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import {
-  gameActions,
-  headerActions,
-  musicActions,
-} from "../../_actions";
+import { gameActions, headerActions, musicActions } from "../../_actions";
 
 import Init from "../../_components/Init";
 import Result from "../Game2/components/Result";
@@ -24,8 +20,14 @@ import { bigPhone, dedao, palma, blobLowScore, blobLaranja } from "../../img";
 
 import "./index.scss";
 import "./feedback-screen.scss";
-import { Button } from "@material-ui/core";
-import { ButtonConfigs, Iniciar, Voltar } from "../../_components/Button";
+import {
+  ButtonConfigs,
+  Iniciar,
+  Voltar,
+  PularTutorial,
+} from "../../_components/Button";
+import { shuffle } from "../../_helpers";
+import TutorialBlob from "../../_components/TutorialBlob";
 
 const Game1 = (props) => {
   const [state, setState] = React.useState(initialState());
@@ -47,12 +49,33 @@ const Game1 = (props) => {
   const lang = useSelector(
     (state) => state.authentication.user.user.language.id
   );
+  const hasPlayed = useSelector((state) =>
+    state.game.items.resultsCount ? state.game.items.resultsCount > 0 : false
+  );
 
   // React.useEffect(()=>{
   // 	if(mission && Object.keys(actions).length !== 0 && !missionData){
   // 		dispatch(actions['missionData'].find({mission: mission.id}))
   // 	}
   // })
+
+  // check if user already played the game
+  React.useEffect(() => {
+    let updatedState = {};
+    if (mission && !state.checkedPlayed) {
+      dispatch(
+        gameActions.find("results/count", {
+          user: userId,
+          mission: mission.id,
+        })
+      );
+      updatedState.checkedPlayed = true;
+    }
+
+    if (hasPlayed) setState((s) => ({ ...s, ...updatedState, hasPlayed }));
+
+    // eslint-disable-next-line
+  }, [userId, mission, dispatch, hasPlayed]);
 
   React.useEffect(() => {
     if (mission)
@@ -67,123 +90,121 @@ const Game1 = (props) => {
   React.useEffect(() => {
     if (id && !missionData)
       dispatch(gameActions.getById("missions", props.match.params.id));
-    if (missionData) {
+    if (missionData && state.locations.length === 0) {
       let data = {};
 
       //distribute characters in locations
-      if (state.locations.length === 0) {
-        // data.locations = [...mission.locations]
-        data.locations = missionData.locations;
-      }
+
+      // data.locations = [...mission.locations]
+      data.locations = missionData.locations.map((location) => {
+        return {
+          ...location,
+          missionCharacters: shuffle(location.missionCharacters),
+        };
+      });
 
       //list of all available jobs
-      if (state.jobs.length === 0) {
-        data.jobs = [
-          ...new Set(
-            missionData.locations
-              .map((location) => {
-                return location.missionCharacters.reduce(
-                  (acc, missionCharacter) => {
-                    if (!acc.includes(missionCharacter.character.job))
-                      acc.push(missionCharacter.character.job);
-                    return acc;
-                  },
-                  []
-                );
-              })
-              .flat()
-              .sort()
-          ),
-        ];
-      }
+
+      data.jobs = [
+        ...new Set(
+          missionData.locations
+            .map((location) => {
+              return location.missionCharacters.reduce(
+                (acc, missionCharacter) => {
+                  if (!acc.includes(missionCharacter.character.job))
+                    acc.push(missionCharacter.character.job);
+                  return acc;
+                },
+                []
+              );
+            })
+            .flat()
+            .sort()
+        ),
+      ];
 
       //list of all available countries
-      if (state.countries.length === 0) {
-        data.countries = [
-          ...new Set(
-            missionData.locations
-              .map((location) => {
-                return location.missionCharacters.reduce(
-                  (acc, missionCharacter) => {
-                    if (!acc.includes(missionCharacter.character.country))
-                      acc.push(missionCharacter.character.country);
-                    return acc;
-                  },
-                  []
-                );
-              })
-              .flat()
-              .sort()
-          ),
-        ];
-      }
 
-      if (state.names.length === 0) {
-        data.names = [
-          ...new Set(
-            missionData.locations
-              .map((location) => {
-                return location.missionCharacters.reduce(
-                  (acc, missionCharacter) => {
-                    if (!acc.includes(missionCharacter.character.name))
-                      acc.push(missionCharacter.character.name);
-                    return acc;
-                  },
-                  []
-                );
-              })
-              .flat()
-              .sort()
-          ),
-        ];
-      }
+      data.countries = [
+        ...new Set(
+          missionData.locations
+            .map((location) => {
+              return location.missionCharacters.reduce(
+                (acc, missionCharacter) => {
+                  if (!acc.includes(missionCharacter.character.country))
+                    acc.push(missionCharacter.character.country);
+                  return acc;
+                },
+                []
+              );
+            })
+            .flat()
+            .sort()
+        ),
+      ];
+
+      data.names = [
+        ...new Set(
+          missionData.locations
+            .map((location) => {
+              return location.missionCharacters.reduce(
+                (acc, missionCharacter) => {
+                  if (!acc.includes(missionCharacter.character.name))
+                    acc.push(missionCharacter.character.name);
+                  return acc;
+                },
+                []
+              );
+            })
+            .flat()
+            .sort()
+        ),
+      ];
 
       //resume characters as contacts
-      if (state.contactsTemplate.length === 0) {
-        //create full contact template
-        data.contactsTemplate = missionData.locations
-          .map((location) => {
-            return location.missionCharacters.map((missionCharacter) => {
-              return {
-                id: missionCharacter.character.id,
-                name: missionCharacter.character.name,
-                country: missionCharacter.character.country,
-                job: missionCharacter.character.job,
-                //looks for mission configuration
-                showJob: missionCharacter.showJob,
-                showCountry: missionCharacter.showCountry,
-                showName: missionCharacter.showName,
-                hasEmptyField: !(
-                  missionCharacter.showJob &&
-                  missionCharacter.showCountry &&
-                  missionCharacter.showName
-                ),
-              };
-            });
-          })
-          .flat();
 
-        data.totalFields = 0;
-        //create contact state shown to/ manipulated by to player
-        data.contactsAtSession = data.contactsTemplate.map((contact) => {
-          data.totalFields +=
-            (!contact.showJob ? 1 : 0) +
-            (!contact.showCountry ? 1 : 0) +
-            (!contact.showName ? 1 : 0);
+      //create full contact template
+      data.contactsTemplate = missionData.locations
+        .map((location) => {
+          return location.missionCharacters.map((missionCharacter) => {
+            return {
+              id: missionCharacter.character.id,
+              name: missionCharacter.character.name,
+              country: missionCharacter.character.country,
+              job: missionCharacter.character.job,
+              //looks for mission configuration
+              showJob: missionCharacter.showJob,
+              showCountry: missionCharacter.showCountry,
+              showName: missionCharacter.showName,
+              hasEmptyField: !(
+                missionCharacter.showJob &&
+                missionCharacter.showCountry &&
+                missionCharacter.showName
+              ),
+            };
+          });
+        })
+        .flat();
 
-          return {
-            ...contact,
-            name: contact.showName ? contact.name : "",
-            job: contact.showJob ? contact.job : "",
-            country: contact.showCountry ? contact.country : "",
-          };
-        });
-      }
+      data.totalFields = 0;
+      //create contact state shown to/ manipulated by to player
+      data.contactsAtSession = data.contactsTemplate.map((contact) => {
+        data.totalFields +=
+          (!contact.showJob ? 1 : 0) +
+          (!contact.showCountry ? 1 : 0) +
+          (!contact.showName ? 1 : 0);
 
-      if (Object.keys(data).length > 0)
-        setState((state) => {
-          return { ...state, ...data };
-        });
+        return {
+          ...contact,
+          name: contact.showName ? contact.name : "",
+          job: contact.showJob ? contact.job : "",
+          country: contact.showCountry ? contact.country : "",
+        };
+      });
+
+      setState((state) => {
+        return { ...state, ...data };
+      });
     }
   }, [
     dispatch,
@@ -203,10 +224,30 @@ const Game1 = (props) => {
     mission = stub;
   }
 
-  const onStartGame = (e) => setState({ ...state, scene: "ROOM" })
+  const onStartGame = (e) =>
+    setState({ ...state, scene: "ROOM", showTutorialBlob: true });
+
+  const tutorialControl = () => {
+    if (state.tutorialBlobCount < state.tutotialMessages.length - 1) {
+      setState((s) => ({
+        ...s,
+        tutorialBlobCount: s.tutorialBlobCount + 1,
+        tutorialShowButton:
+          s.tutorialBlobCount + 1 === 1 ||
+          s.tutorialBlobCount + 1 === 4 ||
+          s.tutorialBlobCount + 1 === 5,
+      }));
+    } else {
+      setState((s) => ({ ...s, showTutorialBlob: false, currentChar: null }));
+    }
+  };
 
   const setCurrentChar = (character) => () => {
-    // if (convOptions.length === 0) console.log("Couldn't find any questions to ask currentChar")
+    if (state.showTutorialBlob && state.tutorialBlobCount === 3) {
+      tutorialControl();
+    } else if (state.showTutorialBlob) {
+      return;
+    }
 
     if (!state.dialogs.hasOwnProperty(character.character.name)) {
       let convOptions = character.answers.reduce((acc, convOption) => {
@@ -220,15 +261,15 @@ const Game1 = (props) => {
         return [...acc, option];
       }, []);
 
-      setState({
-        ...state,
+      setState((s) => ({
+        ...s,
         currentChar: character.character,
         convOptions: convOptions,
         dialogs: {
           ...state.dialogs,
           [character.character.name]: [],
         },
-      });
+      }));
     } else {
       let convOptions = [];
       if (
@@ -262,11 +303,11 @@ const Game1 = (props) => {
         }, []);
       }
 
-      setState({
-        ...state,
+      setState((s) => ({
+        ...s,
         currentChar: character.character,
         convOptions: convOptions,
-      });
+      }));
     }
   };
 
@@ -349,7 +390,6 @@ const Game1 = (props) => {
     let index = state.contactsAtSession.indexOf(
       state.contactsAtSession.find((c) => c.id === contact.id)
     );
-    // console.log('changing:', contact)
     setState({
       ...state,
       contactsAtSession: [
@@ -394,14 +434,14 @@ const Game1 = (props) => {
 
   const onGoNextRoom = () => {
     if (state.currentLocationIndex + 1 < state.locations.length)
-      setState({
-        ...state,
+      setState((s) => ({
+        ...s,
         shouldCloseDialog: true,
         currentLocationIndex: state.currentLocationIndex + 1,
         shouldMinimize: true,
         questionsAsked: 0,
         dialogs: {},
-      });
+      }));
     else {
       // CALCULATE RESULT WITH WRONG ITEM AND FIND THE MATRIC THE USER MISSED THE MOST
       let result = 0;
@@ -444,8 +484,8 @@ const Game1 = (props) => {
 
       const score = (result / state.totalFields).toFixed(2) * 100;
 
-      setState({
-        ...state,
+      setState((s) => ({
+        ...s,
         scene: "ENDGAME",
         result,
         score,
@@ -455,7 +495,7 @@ const Game1 = (props) => {
         feedback: missionData.feedbacks.find(
           (feedback) => feedback.minScore <= score && score <= feedback.maxScore
         ),
-      });
+      }));
 
       dispatch(
         gameActions.create("results", {
@@ -556,6 +596,13 @@ const Game1 = (props) => {
                           setState({ ...state, shouldMinimize: false })
                         }
                         shouldMinimize={state.shouldMinimize}
+                        onTutorial={state.showTutorialBlob}
+                        nextTutorial={tutorialControl}
+                        active={
+                          (state.showTutorialBlob &&
+                            state.tutorialBlobCount < 3) ||
+                          !state.showTutorialBlob
+                        }
                       />
                       {state.currentChar && (
                         <Conversa
@@ -670,6 +717,13 @@ const Game1 = (props) => {
                             ? "max"
                             : ""
                         }
+                        style={{
+                          zIndex:
+                            state.tutorialBlobCount ===
+                            state.tutotialMessages.length - 1
+                              ? 100000
+                              : 0,
+                        }}
                       >
                         <div id="question-counter-info">
                           <div>Você já fez</div>
@@ -690,6 +744,66 @@ const Game1 = (props) => {
                           <div>perguntas</div>
                         </div>
                       </div>
+
+                      {state.showTutorialBlob && (
+                        <TutorialBlob
+                          text={
+                            state.tutotialMessages[state.tutorialBlobCount].text
+                          }
+                          translation={
+                            state.tutotialMessages[state.tutorialBlobCount]
+                              .textTranslate
+                          }
+                          position={
+                            state.tutotialMessages[state.tutorialBlobCount]
+                              .position
+                          }
+                          endTutorial={
+                            state.tutorialBlobCount ===
+                            state.tutotialMessages.length - 1
+                          }
+                          onContinue={
+                            state.tutorialShowButton ? tutorialControl : null
+                          }
+                          style={
+                            state.tutorialShowButton
+                              ? {
+                                  width: "100%",
+                                  height: "100%",
+                                  position: "absolute",
+                                  top: 0,
+                                  backgroundColor:
+                                    state.tutorialBlobCount ===
+                                    state.tutotialMessages.length - 1
+                                      ? "rgba(255,255,255,0.66)"
+                                      : "transparent",
+                                }
+                              : null
+                          }
+                        />
+                      )}
+
+                      {hasPlayed && state.showTutorialBlob && (
+                        <PularTutorial
+                          label="Skip tutorial"
+                          onClick={() =>
+                            setState((s) => ({
+                              ...s,
+                              currentChar: null,
+                              showTutorialBlob: false,
+                              tutorialBlobCount: 7,
+                              shouldMinimize: true,
+                            }))
+                          }
+                          style={{
+                            position: "absolute",
+                            bottom: "2em",
+                            left: "2em",
+                            fontSize: "2.3em",
+                            zIndex: 10001,
+                          }}
+                        />
+                      )}
                     </div>
                   );
                 case "ENDGAME":
@@ -772,12 +886,17 @@ const Game1 = (props) => {
                             )}
                           </div>
                           <div id="feedback-endGame-action-btns">
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
+                            <Voltar
+                              label={"Tentar novamente"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                              onClick={restart}
+                              style={{ marginRight: "2em" }}
+                            />
+                            <Iniciar
+                              label={"Sair do jogo"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                               onClick={() => setState({ ...state, back: true })}
-                            >
-                              Sair do jogo
-                            </Button>
+                            />
                           </div>
                         </div>
                       ) : (
@@ -809,9 +928,9 @@ const Game1 = (props) => {
                                 backgroundImage: "url(" + blobLowScore + ")",
                               }}
                             >
-                              <div className="feedback-painel-2-wrapper">
+                              <div className="feedback-painel-2-wrapper-defeat">
                                 <div
-                                  className="feedback-painel-2-content"
+                                  className="feedback-painel-2-content-defeat"
                                   style={{
                                     backgroundImage: "url(" + blobLaranja + ")",
                                   }}
@@ -824,8 +943,8 @@ const Game1 = (props) => {
                                   <div>items</div>
                                 </div>
                               </div>
-                              <div className="feedback-painel-2-wrapper">
-                                <div className="feedback-painel-2-content">
+                              <div className="feedback-painel-2-wrapper-defeat">
+                                <div className="feedback-painel-2-content-defeat">
                                   <div>
                                     <p lang="pt-br">
                                       Lembrar o(a){" "}
@@ -845,12 +964,17 @@ const Game1 = (props) => {
                             </div>
                           </div>
                           <div id="feedback-endGame-action-btns">
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
+                            <Voltar
+                              label={"Tentar novamente"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                              onClick={restart}
+                              style={{ marginRight: "2em" }}
+                            />
+                            <Iniciar
+                              label={"Sair do jogo"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                               onClick={() => setState({ ...state, back: true })}
-                            >
-                              Sair do jogo
-                            </Button>
+                            />
                           </div>
                         </div>
                       )}

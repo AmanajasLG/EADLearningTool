@@ -1,5 +1,4 @@
 #feedback-phone {
-  width: 250px;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -19,33 +18,35 @@
   // z-index: -10;
 }
 
+#feedback-endGame-screen > div {
+  margin-top: 15em;
+}
+
 #feedback-end-panels {
   position: absolute;
-  width: 54.5vw;
-  right: 7%;
-  height: 56.5vh;
-  bottom: 15%;
+  width: 120em;
+  right: 5em;
+  height: 70em;
+  bottom: 15em;
   margin-top: auto;
   margin-bottom: auto;
   background-color: #f9afa1;
   border-radius: 2.75em;
-  box-shadow: #44444440 25px 25px;
-  padding: 20px;
+  box-shadow: #44444440 1em 1em;
+  padding: 2em;
   z-index: 0;
 }
 
 #feedback-endGame-screen #CharacterPortrait {
-  width: 38.5vw;
-  height: 85vh;
   max-width: none;
 }
 
 #feedback-endgame-messages {
   position: relative;
   min-width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: row;
+  align-items: center; /* Vertical */
   flex-wrap: nowrap;
   overflow-x: scroll;
   -webkit-scroll-snap-type: mandatory;
@@ -66,9 +67,9 @@
   flex: 0 0 auto;
   width: 100%;
   height: 100%;
-  padding: 70px MIN(50px, calc(25vw - 200px));
+  padding: 9em 7em;
   scroll-snap-align: center;
-  line-height: 1.6rem;
+  line-height: 1.2;
   overflow: hidden;
   display: block;
   text-align: center;
@@ -100,7 +101,7 @@
 
 #feedback-painel-1-win span[lang="pt-br"] {
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 4.5em;
 }
 
 #feedback-painel-1-win span[lang="en"]::before {
@@ -108,13 +109,13 @@
   display: block;
   border: #59316d solid;
   border-width: 2px 0 0 0;
-  width: 100px;
-  margin: 30px auto;
+  width: 10em;
+  margin: 1.5em auto;
 }
 
 #feedback-painel-1-win span[lang="en"] {
   font-style: italic;
-  font-size: 1.8rem;
+  font-size: 3.5em;
 }
 
 #feedback-painel-1 span {
@@ -126,7 +127,7 @@
 
 #feedback-painel-1 span[lang="pt-br"] {
   font-weight: 600;
-  font-size: 1.3rem;
+  font-size: 3em;
 }
 
 #feedback-painel-1 span[lang="en"]::before {
@@ -134,37 +135,37 @@
   display: block;
   border: #59316d solid;
   border-width: 2px 0 0 0;
-  width: 100px;
-  margin: 30px auto;
+  width: 10em;
+  margin: 2em auto;
 }
 
 #feedback-painel-1 span[lang="en"] {
   font-style: italic;
-  font-size: 1.1rem;
+  font-size: 2.5em;
 }
 
 .feedback-painel .next-btn {
   position: absolute;
-  right: calc(75px / 2);
+  right: calc(2em / 2);
   right: 0;
 }
 
 .feedback-painel .prev-btn {
   position: absolute;
-  left: calc(75px / 2);
+  left: calc(2em / 2);
   left: 0;
 }
 
 .feedback-painel .next-btn,
 .feedback-painel .prev-btn {
   color: white;
-  font-size: 2rem;
+  font-size: 3em;
   text-decoration: none;
-  border-top: 0.5rem solid #00000000;
-  border-right: 1.2rem solid #00000000;
-  border-bottom: 0.6rem solid #00000000;
-  border-left: 1.2rem solid #00000000;
-  border-radius: 2rem;
+  border-top: 0.5em solid #00000000;
+  border-right: 0.5em solid #00000000;
+  border-bottom: 0.5em solid #00000000;
+  border-left: 0.5em solid #00000000;
+  border-radius: 5em;
   transition: 100ms linear;
   top: 50%;
   transform: translateY(-50%);
@@ -201,7 +202,7 @@
 
 .feedback-painel-2-wrapper:nth-child(2) {
   overflow-y: visible;
-  padding: 1px 0px;
+  padding: 0 0;
 }
 
 .feedback-painel-2-wrapper:first-child .feedback-painel-2-content {
@@ -210,12 +211,12 @@
   background-position: 50% 50%;
   -webkit-background-clip: border-box;
   background-clip: border-box;
-  padding: 50px 100px;
-  font-size: 2rem;
+  padding: 2.5em 2.5em;
+  font-size: 5em;
   color: #59316d;
   line-height: 1.2em;
   font-family: "Assistant";
-  margin-bottom: 20px;
+  margin-bottom: 0.5em;
 }
 
 .feedback-painel-2-wrapper:first-child .feedback-painel-2-content span {
@@ -225,16 +226,78 @@
 .feedback-painel-2-wrapper:first-child
   .feedback-painel-2-content
   span:first-child {
-  font-size: 1.5em;
+  font-size: 3em;
+}
+
+.feedback-painel-2-content p {
+  font-size: 1.3em;
 }
 
 .feedback-painel-2-wrapper:nth-child(2) .feedback-painel-2-content {
-  padding: 0 35px;
-  font-size: 1.5rem;
+  padding: 0 1.5em;
+  font-size: 3.5em;
   font-family: "Barlow";
   font-weight: 600;
-  line-height: 1.5rem;
-  // padding: 0 20px;
+}
+
+.feedback-painel-2-wrapper-defeat {
+  width: 100%;
+  max-height: 100%;
+}
+
+.feedback-painel-2-content-defeat {
+  position: relative;
+  text-align: center;
+}
+
+.feedback-painel-2-wrapper-defeat:first-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feedback-painel-2-wrapper-defeat:nth-child(2) {
+  overflow-y: visible;
+  padding: 0 0;
+}
+
+.feedback-painel-2-wrapper-defeat:first-child
+  .feedback-painel-2-content-defeat {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  padding: 1.5em 2em;
+  font-size: 4.5em;
+  color: #59316d;
+  line-height: 1.2em;
+  font-family: "Assistant";
+  margin-bottom: 0.5em;
+}
+
+.feedback-painel-2-wrapper-defeat:first-child
+  .feedback-painel-2-content-defeat
+  span {
+  font-family: "Abril Fatface";
+}
+
+.feedback-painel-2-wrapper-defeat:first-child
+  .feedback-painel-2-content-defeat
+  span:first-child {
+  font-size: 2em;
+}
+
+.feedback-painel-2-content-defeat p {
+  font-size: 0.9em;
+}
+
+.feedback-painel-2-wrapper-defeat:nth-child(2)
+  .feedback-painel-2-content-defeat {
+  padding: 0 1.5em;
+  font-size: 3.5em;
+  font-family: "Barlow";
+  font-weight: 600;
 }
 
 #feedback-endGame-action-btns {
@@ -242,70 +305,27 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-}
-
-#feedback-endGame-action-btns button {
-  text-transform: none;
-  font-family: "Barlow";
-  font-weight: 700;
-  font-size: 1.5rem;
-  margin: -15px 15px 0 15px;
-  border-radius: 3rem;
-  color: #59316d;
-  transition: 100ms linear;
-  min-width: 300px;
-  text-align: center;
-}
-
-#feedback-endGame-action-btns button:hover {
-  //Usei !important aqui pra não ter que escrever uma regra pra cada button abaixo com o hover pra mudar só isso
-  background-color: #59316d !important;
-  color: white;
-}
-
-#feedback-endGame-action-btns button:first-child::before {
-  content: "❮";
-  position: absolute;
-  left: 30px;
-}
-
-#feedback-endGame-action-btns button:first-child {
-  background-color: #ffdea9;
-  border-bottom-right-radius: 0;
-  padding: 12px 30px 12px 50px;
-}
-
-#feedback-endGame-action-btns button:nth-child(2) {
-  background-color: #ffcca9;
-  border-bottom-left-radius: 0;
-  padding: 12px 50px 12px 30px;
-}
-
-#feedback-endGame-action-btns button:nth-child(2)::after {
-  content: "❯";
-  position: absolute;
-  right: 30px;
+  font-size: 2.5em;
+  margin-top: 2em;
 }
 
 #feedback-painel-icon {
   position: absolute;
   width: 100%;
-  height: 20vh;
   overflow: visible;
   display: flex;
   justify-content: center;
-  margin-left: -20px;
+  margin-left: -2em;
+  margin-top: -19em;
 }
 
 #feedback-painel-icon > img {
+  height: 25em;
   position: relative;
-  top: -77.5%;
 }
 
 #feedback-endGame-wrong-wrapper {
-  width: 100vw;
-  height: 85vh;
-  margin-top: 10vh;
+  // margin-top: 5em;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -315,16 +335,14 @@
 #feedback-endGame-wrong-wrapper .feedback-painel {
   width: unset;
   height: unset;
-  flex: 1 1 0px;
-  padding: 20px;
+  flex: 1 10;
+  padding: 2em;
 }
 
 #feedback-endGame-wrong-wrapper > div:first-child {
   display: flex;
   flex-direction: row;
-  max-width: 100vw;
-  max-height: 100vh;
-  padding: 0px 10vw;
+  padding: 0 10em;
 }
 
 #feedback-endGame-screen p:nth-child(n + 2) {
@@ -332,20 +350,25 @@
 }
 
 #feedback-painel-icon-derrota {
-  height: 15vh;
-  margin-bottom: 50px;
+  height: 20em;
+  margin-bottom: 5em;
+}
+
+#feedback-painel-icon-derrota img {
+  height: 100%;
 }
 
 #feedback-painel-3 {
   background-color: #9999bb22;
   background-clip: content-box;
-  border-radius: 5rem;
+  border-radius: 5em;
 }
 
 #feedback-phone-div {
-  width: 38.5vw;
+  width: 89em;
   position: absolute;
+  left: -15em;
   bottom: 0;
-  height: 85vh;
+  height: 110em;
   pointer-events: none;
 }

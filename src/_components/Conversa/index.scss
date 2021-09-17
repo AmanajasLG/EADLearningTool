@@ -1,122 +1,123 @@
 @keyframes openConversa {
-	0% {
-		transform: translateY(5%);
-	}
-	100% {
-		transform: translateY(0%);
-	}
+  0% {
+    transform: translateY(5%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
 }
 
 @keyframes closeConversa {
-	0% {
-		transform: translateY(0%);
-	}
-	100% {
-		transform: translateY(5%);
-	}
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(5%);
+  }
 }
 
 #dialog-interact.ExitAnim {
-	animation: closeConversa 250ms ease-in forwards;
+  animation: closeConversa 250ms ease-in forwards;
 }
 
 #dialog-interact {
-	animation: openConversa 250ms ease-out forwards;
-	transition: 150ms ease-in-out;
-	height: 100%;
-	width: 100%;
-	max-width: 2000px;
-	margin-left: auto;
-	margin-right: auto;
+  animation: openConversa 250ms ease-out forwards;
+  transition: 150ms ease-in-out;
+  height: 100%;
+  width: 100%;
+  max-width: 2000px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #dialogos {
-	margin-left: auto;
-	margin: 0 10% 0px auto;
-	display: flex;
-	flex-direction: column;
-	width: calc(75% - 80px);
-	height: 100%;
+  margin-left: auto;
+  margin: 0 10% 0px auto;
+  display: flex;
+  flex-direction: column;
+  width: 135em;
+  height: 100%;
 }
 
 #dialog-box {
-	background-color: #535c89;
-	border-radius: 0 1.5em 0 0;
-	flex: 0 0 250px;
-	padding: 15px;
-	margin-bottom: 75px;
-	box-shadow: 7px 7px 0px 0px #77777750;
-	display: flex;
-	flex-direction: column;
-	justify-content: stretch;
-	transition: 50ms ease-in-out;
-	overflow: hidden;
+  max-height: 25%;
+  background-color: #535c89;
+  border-radius: 0 1.5em 0 0;
+  flex: 0 0 250px;
+  padding: 1em;
+  margin-bottom: 75px;
+  box-shadow: 7px 7px 0px 0px #77777750;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  transition: 50ms ease-in-out;
+  overflow: hidden;
 }
 
 #dialog-box.alternative {
-	background-color: #59316D;
+  background-color: #59316d;
 }
 
 #Menu,
 #Writer {
-	flex-grow: 1;
-	padding-left: 20%;
-	width: 100%;
-	height: 100%;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
 }
 
 #Menu {
-	overflow: auto;
+  overflow: auto;
+  padding-left: 9em;
 }
 
 #Writer {
-	font-size: 2em;
-	color: #FFFFFF;
-	padding-right: 20px;
+  padding-left: 4em;
+  font-size: 4em;
+  color: #ffffff;
+  padding-right: 20px;
 }
 
 #menu-options {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: stretch;
-	min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  height: 100%;
 }
 
-#menu-options > button {
-	flex: 1 1 0px;
-	min-height: 55px;
-	max-height: 115px;
-	border: 1px solid rgba(255, 255, 255, 0.2);
-	background-color: rgba(255, 255, 255, 0.15);
-	color: #FFFFFF;
-	margin: 7.5px;
-	margin-left: -20%;
-	font-size: 1.8em;
-	border-radius: 0.75em 0.75em 0 0.75em;
-	transition: 100ms linear;
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	cursor: pointer;
+#menu-options > div > button {
+  // flex: 1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  margin: 0.5em;
+  // margin-left: -20%;
+  font-size: 2em;
+  border-radius: 0.75em 0.75em 0 0.75em;
+  // transition: 100ms linear;
+  // display: flex;
+  // flex-direction: row;
+  // align-items: center;
+  cursor: pointer;
+  height: 5em;
 }
 
-#menu-options > button * {
-	min-height: 0px;
-	flex: 1 1 0px;
+#menu-options > div > button * {
+  min-height: 0px;
+  flex: 1 1 0px;
 }
 
-#menu-options > button > span {
-	justify-content: start;
-	text-transform: none;
-	text-align: start;
-	margin-left: 20%;
-	font-family: 'Barlow';
-	font-weight: 500;
+#menu-options > div > button > span {
+  justify-content: start;
+  text-transform: none;
+  text-align: start;
+  margin-left: 20%;
+  font-family: "Barlow";
+  font-weight: 500;
 }
 
-#menu-options > button:hover {
-	border: 1px solid #FFFFFF;
-	background-color: #FFFFFF;
-	color: #59316D;
+#menu-options > div > button:hover {
+  border: 1px solid #ffffff;
+  background-color: #ffffff;
+  color: #59316d;
 }

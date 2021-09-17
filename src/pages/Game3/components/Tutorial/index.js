@@ -5,7 +5,7 @@ import "./index.scss";
 import ChefDialog from "../ChefDialog";
 import Aisle from "../../../../_components/Aisle";
 // import Button from '../../../../_components/Button'
-import TimerAnounce from '../../../../_components/TimerAnounce'
+import TimerAnounce from "../../../../_components/TimerAnounce";
 import {
   cart,
   checkout,
@@ -69,7 +69,6 @@ const Tutorial = ({
   };
 
   const shopListNextLine = () => {
-    console.log(state.shopList);
     if (state.tutorialLine === 3 && !state.shopList)
       setState({ ...state, shopList: !state.shopList });
     else if (state.tutorialLine === 3 && state.shopList)
@@ -77,23 +76,44 @@ const Tutorial = ({
   };
 
   const tutorialText = [
-    ["Clique em qualquer item para <strong>adicioná-lo</strong> ao carrinho.", "Click on any item to <strong>add it</strong> to your cart."],
-    ["Clique em qualquer item do seu carrinho para <strong>retirá-lo</strong>.", "Click on any item from your cart to <strong>remove it</strong>."],
-    ["Use as setas para navegar pelas prateleiras.", "Use the arrows to move through shelves."],
-    ["<strong>Passe o mouse</strong> sobre o bloco de notas para ver a lista de compras.", "<strong>Hover the mouse</strong> over the notepad to see the shopping list."],
-    ["Clique no ícone de dinheiro para finalizar sua compra.", "Click on the cash icon to checkout."]
-  ].map( (line, index) => {return {ptbr: line[0], preferred: line[1]} } )
+    [
+      "Clique em qualquer item para <strong>adicioná-lo</strong> ao carrinho.",
+      "Click on any item to <strong>add it</strong> to your cart.",
+    ],
+    [
+      "Clique em qualquer item do seu carrinho para <strong>retirá-lo</strong>.",
+      "Click on any item from your cart to <strong>remove it</strong>.",
+    ],
+    [
+      "Use as setas para navegar pelas prateleiras.",
+      "Use the arrows to move through shelves.",
+    ],
+    [
+      "<strong>Passe o mouse</strong> sobre o bloco de notas para ver a lista de compras.",
+      "<strong>Hover the mouse</strong> over the notepad to see the shopping list.",
+    ],
+    [
+      "Clique no ícone de dinheiro para finalizar sua compra.",
+      "Click on the cash icon to checkout.",
+    ],
+  ].map((line, index) => {
+    return { ptbr: line[0], preferred: line[1] };
+  });
 
-  const blobPosition = (state.tutorialLine === 2 || state.tutorialLine === 3) ? tutorialStyles.blobRight : tutorialStyles.blobLeft;
+  const blobPosition =
+    state.tutorialLine === 2 || state.tutorialLine === 3
+      ? tutorialStyles.blobRight
+      : tutorialStyles.blobLeft;
 
   return (
-    <div id="room-itself" className={"tutorial tutorialStep" + state.tutorialLine}>
+    <div
+      id="room-itself"
+      className={"tutorial tutorialStep" + state.tutorialLine}
+    >
       {state.step === 0 && (
         <div id={tutorialStyles.tutorialGrid}>
-          <div
-            className={tutorialStyles.tutorialBlob + " " + blobPosition}
-          >
-            {(state.tutorialLine >= 0 && state.tutorialLine <= 4) && (
+          <div className={tutorialStyles.tutorialBlob + " " + blobPosition}>
+            {state.tutorialLine >= 0 && state.tutorialLine <= 4 && (
               <div>
                 <span lang="pt-br">
                   {htmlparse(tutorialText[state.tutorialLine].ptbr)}
@@ -137,10 +157,7 @@ const Tutorial = ({
                 </div>
               ))}
             </div>
-            <img
-              src={cart}
-              alt=""
-            />
+            <img src={cart} alt="" />
           </div>
           <Recipe
             ingredientsList={ingredientsList}
@@ -165,16 +182,29 @@ const Tutorial = ({
       )}
 
       {state.step === 1 && (
-        <div id="dialog-interact" style={{position: 'relative', width: '100%', height: '100%', fontSize: '0.75em'}}>
-          <ChefDialog chef={chef} onContinue={() => setState({...state, step: 2 }) }
+        <div
+          id="dialog-interact"
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            fontSize: "0.75em",
+          }}
+        >
+          <ChefDialog
+            chef={chef}
+            onContinue={() => setState({ ...state, step: 2 })}
             text="Agora você está pronto para começar as compras! Coloque tudo que está na lista no carrinho antes que o tempo acabe!"
-            translation={"Now you're ready to start shopping! Put everything on the list in the cart before time runs out!"}/>
+            translation={
+              "Now you're ready to start shopping! Put everything on the list in the cart before time runs out!"
+            }
+          />
         </div>
       )}
 
-      {state.step === 2 &&
-        <TimerAnounce seconds={seconds} onReady={goToMarket}/>
-      }
+      {state.step === 2 && (
+        <TimerAnounce seconds={seconds} onReady={goToMarket} />
+      )}
     </div>
   );
 };
