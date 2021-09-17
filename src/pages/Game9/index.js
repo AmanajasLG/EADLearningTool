@@ -6,15 +6,48 @@ import stub from './stub'
 
 import Core from './core.js'
 import Feedback from './feedback.js'
+import { agendamento, aviao } from '../../img'
 
 const Game9 = (props) => {
 
   const load = (missionData, lang, state, setState) => {
     console.log('load missionData:', missionData)
     if(missionData){
+
       let data = {...stub,
-        buildings: [...missionData.locations, ...missionData.homes],
-        requests: [...missionData.requests]
+        seconds: missionData.seconds,
+        buildings:
+        [
+          ...(missionData.locations.map( l =>
+              ({...l,
+                image: l.image
+                  ? l.image
+                  : agendamento,
+                positionX: l.positionX
+                  ? l.positionX
+                  : Math.floor(Math.random() * 1179),
+                positionY: l.positionY
+                  ? l.positionY
+                  : Math.floor(Math.random() * 596),
+               })
+             )),
+          ...(missionData.homes.map( h =>
+              ({...h,
+                type: 'Home',
+                image: h.image
+                  ? h.image
+                  : aviao,
+                positionX: h.positionX
+                  ? h.positionX
+                  : Math.floor(Math.random() * 1179),
+                positionY: h.positionY
+                  ? h.positionY
+                  : Math.floor(Math.random() * 596),
+              })
+             ))
+        ],
+        requests: [...missionData.requests],
+        characters: [...missionData.characters]
       }
 
       setState( s => ({...s, data: data}))
