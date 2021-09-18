@@ -11,7 +11,12 @@ import Lamp from "../../_components/Lamp";
 import Conversa from "../../_components/Conversa";
 import DialogCharacter from "../../_components/DialogCharacter";
 import FullscreenOverlay from "../../_components/FullscreenOverlay";
-import { Iniciar, PularTutorial } from "../../_components/Button";
+import {
+  Iniciar,
+  PularTutorial,
+  Voltar,
+  ButtonConfigs,
+} from "../../_components/Button";
 
 import { Redirect } from "react-router";
 import initialState from "./initialState";
@@ -231,6 +236,18 @@ const Game2 = (props) => {
     }
   }, [missionData, state.locations]);
 
+  React.useEffect(() => {
+    if (state.countNow && state.scene === "ROOM") {
+      setState((s) => ({ ...s, countNow: false }));
+
+      setTimeout(
+        () =>
+          setState((s) => ({ ...s, seconds: s.seconds + 1, countNow: true })),
+        1000
+      );
+    }
+  }, [state]);
+
   const onStartGame = (e) => setState((s) => ({ ...s, scene: "TUTORIAL" }));
 
   const tutorialControl = () => {
@@ -375,7 +392,7 @@ const Game2 = (props) => {
         ];
       }
       if (state.closeAfterWritter) {
-        delete state.closeAfterWritter;
+        updateState.closeAfterWritter = false;
         updateState.convOptions = [];
         updateState.shouldCloseConvo = true;
       }
@@ -402,9 +419,9 @@ const Game2 = (props) => {
 
     if (answer.refresh)
       updateState = { ...updateState, refreshDialog: onRefreshDialog };
-    else if (answer.close)
+    else if (answer.close) {
       updateState = { ...updateState, closeAfterWritter: true };
-    else {
+    } else {
       if (state.scene === "TUTORIAL") {
         updateState = {
           ...updateState,
@@ -417,13 +434,14 @@ const Game2 = (props) => {
           spokenCharacters: state.spokenCharacters,
           validQuestions: state.validQuestions,
           characterFeeling: null,
+          wrongDialogs: state.wrongDialogs,
         };
         if (
           updateState.spokenCharacters.indexOf(
-            state.currentChar.character.name
+            state.currentChar.character.id
           ) === -1
         )
-          updateState.spokenCharacters.push(state.currentChar.character.name);
+          updateState.spokenCharacters.push(state.currentChar.character.id);
 
         //change character face
         if (answer.correct) {
@@ -434,6 +452,12 @@ const Game2 = (props) => {
           }
           updateState.characterFeeling = "rightQuestion";
         } else {
+          updateState.wrongDialogs.push({
+            userAnswer: answer.question,
+            correctAnswer: state.convOptions.find(
+              (option) => option.question.question !== answer.question
+            ).question.question,
+          });
           updateState.characterFeeling = "wrongQuestion";
         }
       }
@@ -466,11 +490,13 @@ const Game2 = (props) => {
       gameActions.create("results", {
         user: userId,
         mission: mission.id,
-        score: state.score,
-        tipsCount: state.tips.length,
-        spokenCharactersCount: state.spokenCharacters.length,
-        won: state.gameEndState,
-        validQuestionsCount: Object.keys(state.validQuestions).length,
+        tips: JSON.stringify(state.tips.map((tip) => ({ text: tip }))),
+        won: state.currentChar.character.name === state.targetName,
+        seconds: state.seconds,
+        characters: [...state.spokenCharacters],
+        wrongDialogs: state.wrongDialogs.length
+          ? JSON.stringify(state.wrongDialogs)
+          : null,
       })
     );
 
@@ -906,14 +932,17 @@ const Game2 = (props) => {
                             </div>
                           </div>
                           <div id="endGame-action-btns">
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
-                              onClick={() =>
-                                setState((s) => ({ ...s, back: true }))
-                              }
-                            >
-                              Sair do jogo
-                            </Button>
+                            <Voltar
+                              label={"Tentar novamente"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                              onClick={restart}
+                              style={{ marginRight: "2em" }}
+                            />
+                            <Iniciar
+                              label={"Sair do jogo"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                              onClick={() => setState({ ...state, back: true })}
+                            />
                           </div>
                         </div>
                       ) : (
@@ -936,9 +965,9 @@ const Game2 = (props) => {
                               </span>
                             </div>
                             <div className="painel" id="painel-3">
-                              <div className="painel-2-wrapper">
+                              <div className="painel-2-wrapper-defeat">
                                 <div
-                                  className="painel-2-content"
+                                  className="painel-2-content-defeat"
                                   style={{
                                     backgroundImage: "url(" + blobLaranja + ")",
                                   }}
@@ -950,8 +979,8 @@ const Game2 = (props) => {
                                   <div>clues</div>
                                 </div>
                               </div>
-                              <div className="painel-2-wrapper">
-                                <div className="painel-2-content">
+                              <div className="painel-2-wrapper-defeat">
+                                <div className="painel-2-content-defeat">
                                   <div>
                                     <p>
                                       After talking to{" "}
@@ -971,14 +1000,17 @@ const Game2 = (props) => {
                             </div>
                           </div>
                           <div id="endGame-action-btns">
-                            <Button onClick={restart}>Tentar novamente</Button>
-                            <Button
-                              onClick={() =>
-                                setState((s) => ({ ...s, back: true }))
-                              }
-                            >
-                              Sair do jogo
-                            </Button>
+                            <Voltar
+                              label={"Tentar novamente"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                              onClick={restart}
+                              style={{ marginRight: "2em" }}
+                            />
+                            <Iniciar
+                              label={"Sair do jogo"}
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                              onClick={() => setState({ ...state, back: true })}
+                            />
                           </div>
                         </div>
                       )}
@@ -990,6 +1022,9 @@ const Game2 = (props) => {
                             }).character
                           }
                           feeling={"win"}
+                          style={{
+                            width: "85em",
+                          }}
                         />
                       )}
                     </div>

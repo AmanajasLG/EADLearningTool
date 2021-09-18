@@ -224,6 +224,18 @@ const Game1 = (props) => {
     mission = stub;
   }
 
+  React.useEffect(() => {
+    if (state.countNow && state.scene === "ROOM") {
+      setState((s) => ({ ...s, countNow: false }));
+
+      setTimeout(
+        () =>
+          setState((s) => ({ ...s, seconds: s.seconds + 1, countNow: true })),
+        1000
+      );
+    }
+  }, [state]);
+
   const onStartGame = (e) =>
     setState({ ...state, scene: "ROOM", showTutorialBlob: true });
 
@@ -345,6 +357,7 @@ const Game1 = (props) => {
     //	Aplicar lógica adicional de click nos botões do menu
     //
     let updatedState = {};
+    let wrongDialogs = [...state.wrongDialogs];
 
     if (state.dialogs[state.currentChar.name].length) {
       updatedState.questionsAsked = state.questionsAsked + 1;
@@ -362,6 +375,28 @@ const Game1 = (props) => {
       } else {
         updatedState.preSpeech = [];
         updatedState.convOptions = [];
+      }
+    }
+
+    if (!answer.correct) {
+      if (!wrongDialogs.length) {
+        wrongDialogs.push({
+          type: answer.hasOwnProperty("id") ? "Conversa" : "Cumprimento",
+          userAnswer: answer.question,
+          count: 1,
+        });
+      } else {
+        let index = wrongDialogs.findIndex(
+          (dialog) => dialog.userAnswer === answer.question
+        );
+
+        if (index !== -1) wrongDialogs[index].count += 1;
+        else
+          wrongDialogs.push({
+            type: answer.hasOwnProperty("id") ? "Conversa" : "Cumprimento",
+            userAnswer: answer.question,
+            count: 1,
+          });
       }
     }
 
@@ -383,6 +418,7 @@ const Game1 = (props) => {
           },
         ],
       },
+      wrongDialogs,
     });
   };
 
@@ -454,6 +490,7 @@ const Game1 = (props) => {
           count: 0,
         };
       });
+      let phoneErrors = [];
       state.contactsAtSession.forEach((contact) => {
         let gabarito = state.contactsTemplate.find((t) => t.id === contact.id);
 
@@ -464,6 +501,28 @@ const Game1 = (props) => {
               ? 1
               : 0) +
             (contact.name === gabarito.name && !gabarito.showName ? 1 : 0);
+
+          if (contact.job !== gabarito.job && !gabarito.showJob) {
+            phoneErrors.push({
+              type: "Profissão",
+              userAnswer: contact.job,
+              correctAnswer: gabarito.job,
+            });
+          }
+          if (contact.country !== gabarito.country && !gabarito.showCountry) {
+            phoneErrors.push({
+              type: "País",
+              userAnswer: contact.country,
+              correctAnswer: gabarito.country,
+            });
+          }
+          if (contact.name !== gabarito.name && !gabarito.showName) {
+            phoneErrors.push({
+              type: "Nome",
+              userAnswer: contact.name,
+              correctAnswer: gabarito.name,
+            });
+          }
 
           mainError.forEach((metric) => {
             if (metric.name === "Profissão") {
@@ -481,6 +540,8 @@ const Game1 = (props) => {
           });
         }
       });
+
+      console.log(phoneErrors);
 
       const score = (result / state.totalFields).toFixed(2) * 100;
 
@@ -503,6 +564,11 @@ const Game1 = (props) => {
           mission: mission.id,
           score: score,
           won: score > 80,
+          wrongDialogs: state.wrongDialogs.length
+            ? JSON.stringify(state.wrongDialogs)
+            : null,
+          phoneErrors: phoneErrors.length ? JSON.stringify(phoneErrors) : null,
+          seconds: state.seconds,
         })
       );
 
@@ -792,7 +858,6 @@ const Game1 = (props) => {
                               currentChar: null,
                               showTutorialBlob: false,
                               tutorialBlobCount: 7,
-                              shouldMinimize: true,
                             }))
                           }
                           style={{
