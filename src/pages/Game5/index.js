@@ -520,6 +520,10 @@ const Game5 = (props) => {
                       />
                     )}
 
+                    { /*
+                      FIXME Consertar esse flex aqui (seleção de personagem)
+                      ! e add o blob de fundo nele, com highlight dos personagens no hover
+                    */ }
                     {state.chooseCharacterScreen && (
                       <div
                         style={{
@@ -592,6 +596,11 @@ const Game5 = (props) => {
                   </React.Fragment>
                 );
               case "DRESS":
+                /*
+                  FIXME PÉS está shiftado para a direita, cortando um pouco
+                  ! Botão de estou pronto (cabide) precisa do BG salmão tbm
+                  ! layout de ver o convite de novo está cru
+                */
                 return (
                   <React.Fragment>
                     {state.showBlob && (
