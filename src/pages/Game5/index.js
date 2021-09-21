@@ -521,8 +521,9 @@ const Game5 = (props) => {
                     )}
 
                     { /*
-                      FIXME Consertar esse flex aqui (seleção de personagem)
-                      ! e add o blob de fundo nele, com highlight dos personagens no hover
+                      FIXME
+                      ! add o blob de fundo nele
+                      ! highlight dos personagens no hover
                     */ }
                     {state.chooseCharacterScreen && (
                       <div
@@ -538,7 +539,14 @@ const Game5 = (props) => {
                           <DressingCharacter
                             clothes={state.clothes}
                             character={character}
-                            style={{ height: "50%", cursor: "pointer" }}
+                            key={character.id}
+                            style={{ cursor: "pointer",
+                                     display: "grid",
+                                     gridTemplateRows: "100%",
+                                     gridTemplateColumns: "100%",
+                                     justifyItems: "center",
+                                     alignItems: "center"
+                            }}
                             onClick={() =>
                               setState((s) => ({
                                 ...s,
