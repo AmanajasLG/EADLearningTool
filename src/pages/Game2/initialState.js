@@ -1,6 +1,7 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 const initialState = (hasPlayed = false) => ({
   //GAME STATE
+  playSessionCreated: false,
   countNow: true,
   seconds: 0,
   scene: "INIT",

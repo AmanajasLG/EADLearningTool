@@ -2,6 +2,7 @@ const initialValue = (hasPlayed = false) => ({
   //METADATA
   back: false,
   //GAME STATE
+  playSessionCreated: false,
   countNow: true,
   seconds: 0,
   checkedPlayed: hasPlayed,

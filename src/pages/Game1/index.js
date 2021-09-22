@@ -2,7 +2,12 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { gameActions, headerActions, musicActions } from "../../_actions";
+import {
+  gameActions,
+  headerActions,
+  musicActions,
+  apiActions,
+} from "../../_actions";
 
 import Init from "../../_components/Init";
 import Result from "../Game2/components/Result";
@@ -52,6 +57,67 @@ const Game1 = (props) => {
   const hasPlayed = useSelector((state) =>
     state.game.items.resultsCount ? state.game.items.resultsCount > 0 : false
   );
+  let currentPlaySession = useSelector((state) =>
+    state.play_sessions ? state.play_sessions.items[0] : {}
+  );
+  const { play_sessionsActions } = apiActions;
+
+  React.useEffect(() => {
+    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
+      dispatch(
+        play_sessionsActions.create({
+          user: userId,
+          mission: mission.id,
+          data: { actions: [] },
+        })
+      );
+
+      setState((s) => ({ ...s, playSessionCreated: true }));
+    }
+  }, [dispatch, play_sessionsActions, mission, userId, state]);
+
+  React.useEffect(() => {
+    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
+
+    const getClickedObject = (e) => {
+      dispatch(
+        play_sessionsActions.update({
+          id: currentPlaySession.id,
+          data: {
+            actions: [
+              ...currentPlaySession.data.actions,
+              {
+                tag: e.target.nodeName,
+                src: e.target.src,
+                alt: e.target.alt,
+                className: e.target.className,
+                class: e.target.class,
+                id: e.target.id,
+                innerHTML: e.target.innerHTML.includes("<div")
+                  ? null
+                  : e.target.innerHTML,
+                clickTime: new Date(),
+              },
+            ],
+          },
+        })
+      );
+    };
+    document.addEventListener("mousedown", getClickedObject);
+
+    setState((s) => {
+      return { ...s, currentPlaySession, getClickedObject };
+    });
+    return () => {
+      document.removeEventListener("mousedown", getClickedObject);
+    };
+  }, [
+    dispatch,
+    currentPlaySession,
+    play_sessionsActions,
+    state.tracking,
+    mission,
+  ]);
 
   // React.useEffect(()=>{
   // 	if(mission && Object.keys(actions).length !== 0 && !missionData){
@@ -541,8 +607,6 @@ const Game1 = (props) => {
         }
       });
 
-      console.log(phoneErrors);
-
       const score = (result / state.totalFields).toFixed(2) * 100;
 
       setState((s) => ({
@@ -569,6 +633,16 @@ const Game1 = (props) => {
             : null,
           phoneErrors: phoneErrors.length ? JSON.stringify(phoneErrors) : null,
           seconds: state.seconds,
+        })
+      );
+
+      dispatch(
+        play_sessionsActions.update({
+          id: currentPlaySession.id,
+          data: {
+            actions: [...currentPlaySession.data.actions],
+          },
+          ended: true,
         })
       );
 
