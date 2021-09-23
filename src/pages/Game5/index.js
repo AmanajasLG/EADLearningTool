@@ -523,7 +523,6 @@ const Game5 = (props) => {
                     { /*
                       FIXME
                       ! add o blob de fundo nele
-                      ! highlight dos personagens no hover
                     */ }
                     {state.chooseCharacterScreen && (
                       <div

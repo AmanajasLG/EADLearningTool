@@ -10,7 +10,7 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
   }, false);
 
   return (
-    <div {...props} id={styles["char"]}>
+    <div {...props} className={props.onClick ? styles["clickable-char"] : null}>
       <InlineSVG
         src={character.image}
         alt="character"

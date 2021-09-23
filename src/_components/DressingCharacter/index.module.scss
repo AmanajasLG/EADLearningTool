@@ -1,4 +1,4 @@
-#char > svg:first-child {
+.clickable-char > svg:first-child {
 	filter: drop-shadow( 0em 0em 0em #ffbb99)
 			drop-shadow( 0em 0em 0em #ffbb99)
 			drop-shadow( 0em 0em 0em #ffbb99)
@@ -6,7 +6,7 @@
 	transition: 100ms ease-in-out;
 }
 
-#char:hover > svg:first-child {
+.clickable-char:hover > svg:first-child {
 	filter: drop-shadow( 0.4em  0.4em 0em #ffbb99)
 			drop-shadow(-0.4em  0.4em 0em #ffbb99)
 			drop-shadow(-0.4em -0.4em 0em #ffbb99)
