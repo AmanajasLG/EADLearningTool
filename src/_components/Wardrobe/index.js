@@ -1,5 +1,6 @@
 import React from "react";
 
+import styles from './index.module.scss'
 import Button from "../Button";
 
 const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
@@ -7,7 +8,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
   const columns = 3;
 
   return (
-    <div {...props}>
+    <div {...props} id={styles["wardrobe"]}>
       <div
         style={{
           height: "10%",
@@ -55,42 +56,36 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
             <div
               key={index}
               style={{
-                flexGrow: 1,
+                flex: "1 1 0px",
+                minHeight: 0,
                 flexDirection: "row",
                 display: "flex",
                 justifyContent: "space-around",
-                maxHeight: `${
-                  100 / (Math.floor(wardrobe[state].length / columns) + 1) - 3
-                }%`,
+                margin: "1em",
                 backgroundColor: "#fff7f2",
               }}
             >
               {wardrobe[state]
                 .slice(line * columns, columns + line * columns)
                 .map((item, index) => (
-                  <div
+                  <img
                     key={index}
                     style={{
-                      maxWidth: "30%",
-                      overflow: "hidden",
-                      textAlign: "center",
+                      cursor: "pointer",
                       pointerEvents: item.picked ? "none" : "auto",
                       opacity: item.picked ? 0.3 : 1,
+                      objectFit: "cover",
+                      minWidth: 0
                     }}
-                  >
-                    <img
-                      className="stretchIn"
-                      style={{ cursor: "pointer", height: "100%" }}
-                      onClick={onClothesClick(item)}
-                      src={
-                        item.wardrobeImage !== ""
-                          ? item.wardrobeImage
-                          : item.image
-                      }
-                      alt=""
-                    />
-                  </div>
-                ))}
+                    onClick={onClothesClick(item)}
+                    src={
+                      item.wardrobeImage !== ""
+                        ? item.wardrobeImage
+                        : item.image
+                    }
+                    alt=""
+                  />
+                  ))}
             </div>
           ))}
         </div>

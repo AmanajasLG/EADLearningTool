@@ -604,7 +604,8 @@ const Game5 = (props) => {
                 );
               case "DRESS":
                 /*
-                  FIXME PÉS está shiftado para a direita, cortando um pouco
+                  FIXME
+                  - Abas do guarda roupa precisam de melhorias
                   ! Botão de estou pronto (cabide) precisa do BG salmão tbm
                   ! layout de ver o convite de novo está cru
                 */
