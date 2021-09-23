@@ -37,6 +37,9 @@ import {
   error,
   tomato,
   kitchen,
+  notepad,
+  tableware,
+  chefHat,
 } from "../../img";
 import FeedbackPanel from "./components/FeedbackPanel";
 import Tutorial from "./components/Tutorial";
@@ -478,7 +481,7 @@ const Game4 = (props) => {
             : "You picked the right ingredients on your first try!",
         },
         {
-          image: tomato,
+          image: notepad,
           message: state.wrongIngredientNameOrder.length
             ? "Dar nomes aos ingredientes te deu algum trabalho!"
             : "Acertar os nomes foi moleza para você!",
@@ -487,7 +490,7 @@ const Game4 = (props) => {
             : "Getting the names right was a piece of cake for you!",
         },
         {
-          image: tomato,
+          image: tableware,
           message: state.wrongTablewarePairSelected.length
             ? "Você teve um pouco de dificuldade em ligar os utensílios aos seus nomes."
             : "Ligar os utensílios aos seus nomes foi fácil para você!",
@@ -496,7 +499,7 @@ const Game4 = (props) => {
             : "Matching the kitchen utensils with their names was pretty easy for you!",
         },
         {
-          image: tomato,
+          image: chefHat,
           message: state.wrongTablewareSelected.length
             ? "E você tem alguns problemas sobre como servir sua comida..."
             : "E você sabe exatamente onde servir sua comida!",
@@ -641,7 +644,7 @@ const Game4 = (props) => {
                           setState((s) => ({
                             ...s,
                             blobToShow: s.blobToShow + 1,
-                            showBlob: false,
+                            showBlob: s.blobToShow + 1 === 2 ? false : true,
                           }))
                         }
                       />
