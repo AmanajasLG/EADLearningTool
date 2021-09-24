@@ -25,6 +25,7 @@ import {
   hangerH,
   dressingBg,
   envelopeIcon,
+  blobLowScore,
 } from "../../img";
 
 import initialState from "./initialState";
@@ -519,21 +520,26 @@ const Game5 = (props) => {
                         }
                       />
                     )}
-
-                    { /*
-                      FIXME
-                      ! add o blob de fundo nele
-                    */ }
                     {state.chooseCharacterScreen && (
                       <div
                         style={{
+                          position: "relative",
                           display: "flex",
                           flexDirection: "row",
                           justifyContent: "space-evenly",
                           width: "100%",
-                          height: "100%",
+                          height: "100%"
                         }}
                       >
+                        <img
+                          src={blobLowScore}
+                          style={{
+                            position: "absolute",
+                            height: "100%",
+                            width: "100%",
+                            objectFit: "cover"
+                          }}
+                        />
                         {state.characters.map((character) => (
                           <DressingCharacter
                             clothes={state.clothes}
