@@ -4,7 +4,7 @@ import styles from './index.module.scss'
 import Button from "../Button";
 
 const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
-  const [state, setState] = React.useState(Object.keys(wardrobe)[0]);
+  const [state, setState] = React.useState({label: Object.keys(wardrobe)[0], idx: 0});
   const columns = 3;
 
   return (
@@ -20,11 +20,11 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
         {Object.keys(wardrobe).map((label, index) => (
           <Button
             key={index}
-            onClick={() => setState(label)}
+            onClick={() => setState({label: label, idx: index})}
             style={{
               borderRadius: "5% 5% 0 0",
               flex: "1 0 0px",
-              backgroundColor: state === label ? "#ffcca9" : "white",
+              backgroundColor: "hsl(24, 100%, "+(83+Math.abs(index - state.idx)*5)+"%)",
               fontSize: "3em",
             }}
           >
@@ -38,7 +38,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
           height: "90%",
           padding: "2%",
           backgroundColor: "#ffcca9",
-          borderRadius: "1%",
+          borderRadius: (state.idx===0?"0":"1")+"% "+(state.idx===3?"0":"1")+"% 1% 1%",
         }}
       >
         <div
@@ -50,7 +50,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
           }}
         >
           {Array.from(
-            new Array(Math.floor(wardrobe[state].length / columns) + 1),
+            new Array(Math.floor(wardrobe[state.label].length / columns) + 1),
             (item, index) => index
           ).map((line, index) => (
             <div
@@ -65,7 +65,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
                 backgroundColor: "#fff7f2",
               }}
             >
-              {wardrobe[state]
+              {wardrobe[state.label]
                 .slice(line * columns, columns + line * columns)
                 .map((item, index) => (
                   <img

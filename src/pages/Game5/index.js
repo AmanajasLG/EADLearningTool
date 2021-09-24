@@ -605,7 +605,6 @@ const Game5 = (props) => {
               case "DRESS":
                 /*
                   FIXME
-                  - Abas do guarda roupa precisam de melhorias
                   ! layout de ver o convite de novo está cru
                 */
                 return (
