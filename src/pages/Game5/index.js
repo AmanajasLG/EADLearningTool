@@ -606,7 +606,6 @@ const Game5 = (props) => {
                 /*
                   FIXME
                   - Abas do guarda roupa precisam de melhorias
-                  ! Botão de estou pronto (cabide) precisa do BG salmão tbm
                   ! layout de ver o convite de novo está cru
                 */
                 return (
@@ -713,6 +712,8 @@ const Game5 = (props) => {
                           style={{
                             top: "0.5%",
                             left: "1%",
+                            fontSize: "1.1em",
+                            fontWeight: "600",
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
                         />
