@@ -114,7 +114,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
             backgroundColor: '#aaaaff'}}>
             <div
               style={{
-                backgroundImage: `url("${data.map? data.map : agendamento}")`,
+                backgroundImage: `url("${data.map? data.map.url : agendamento}")`,
                 height: "100%",
                 width: "100%",
                 backgroundRepeat: "no-repeat",
