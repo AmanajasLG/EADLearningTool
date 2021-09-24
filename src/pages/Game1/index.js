@@ -2,7 +2,12 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { gameActions, headerActions, musicActions } from "../../_actions";
+import {
+  gameActions,
+  headerActions,
+  musicActions,
+  apiActions,
+} from "../../_actions";
 
 import Init from "../../_components/Init";
 import Result from "../Game2/components/Result";
@@ -52,6 +57,67 @@ const Game1 = (props) => {
   const hasPlayed = useSelector((state) =>
     state.game.items.resultsCount ? state.game.items.resultsCount > 0 : false
   );
+  let currentPlaySession = useSelector((state) =>
+    state.play_sessions ? state.play_sessions.items[0] : {}
+  );
+  const { play_sessionsActions } = apiActions;
+
+  React.useEffect(() => {
+    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
+      dispatch(
+        play_sessionsActions.create({
+          user: userId,
+          mission: mission.id,
+          data: { actions: [] },
+        })
+      );
+
+      setState((s) => ({ ...s, playSessionCreated: true }));
+    }
+  }, [dispatch, play_sessionsActions, mission, userId, state]);
+
+  React.useEffect(() => {
+    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
+
+    const getClickedObject = (e) => {
+      dispatch(
+        play_sessionsActions.update({
+          id: currentPlaySession.id,
+          data: {
+            actions: [
+              ...currentPlaySession.data.actions,
+              {
+                tag: e.target.nodeName,
+                src: e.target.src,
+                alt: e.target.alt,
+                className: e.target.className,
+                class: e.target.class,
+                id: e.target.id,
+                innerHTML: e.target.innerHTML.includes("<div")
+                  ? null
+                  : e.target.innerHTML,
+                clickTime: new Date(),
+              },
+            ],
+          },
+        })
+      );
+    };
+    document.addEventListener("mousedown", getClickedObject);
+
+    setState((s) => {
+      return { ...s, currentPlaySession, getClickedObject };
+    });
+    return () => {
+      document.removeEventListener("mousedown", getClickedObject);
+    };
+  }, [
+    dispatch,
+    currentPlaySession,
+    play_sessionsActions,
+    state.tracking,
+    mission,
+  ]);
 
   // React.useEffect(()=>{
   // 	if(mission && Object.keys(actions).length !== 0 && !missionData){
@@ -224,6 +290,18 @@ const Game1 = (props) => {
     mission = stub;
   }
 
+  React.useEffect(() => {
+    if (state.countNow && state.scene === "ROOM") {
+      setState((s) => ({ ...s, countNow: false }));
+
+      setTimeout(
+        () =>
+          setState((s) => ({ ...s, seconds: s.seconds + 1, countNow: true })),
+        1000
+      );
+    }
+  }, [state]);
+
   const onStartGame = (e) =>
     setState({ ...state, scene: "ROOM", showTutorialBlob: true });
 
@@ -345,6 +423,7 @@ const Game1 = (props) => {
     //	Aplicar lógica adicional de click nos botões do menu
     //
     let updatedState = {};
+    let wrongDialogs = [...state.wrongDialogs];
 
     if (state.dialogs[state.currentChar.name].length) {
       updatedState.questionsAsked = state.questionsAsked + 1;
@@ -362,6 +441,28 @@ const Game1 = (props) => {
       } else {
         updatedState.preSpeech = [];
         updatedState.convOptions = [];
+      }
+    }
+
+    if (!answer.correct) {
+      if (!wrongDialogs.length) {
+        wrongDialogs.push({
+          type: answer.hasOwnProperty("id") ? "Conversa" : "Cumprimento",
+          userAnswer: answer.question,
+          count: 1,
+        });
+      } else {
+        let index = wrongDialogs.findIndex(
+          (dialog) => dialog.userAnswer === answer.question
+        );
+
+        if (index !== -1) wrongDialogs[index].count += 1;
+        else
+          wrongDialogs.push({
+            type: answer.hasOwnProperty("id") ? "Conversa" : "Cumprimento",
+            userAnswer: answer.question,
+            count: 1,
+          });
       }
     }
 
@@ -383,6 +484,7 @@ const Game1 = (props) => {
           },
         ],
       },
+      wrongDialogs,
     });
   };
 
@@ -454,6 +556,7 @@ const Game1 = (props) => {
           count: 0,
         };
       });
+      let phoneErrors = [];
       state.contactsAtSession.forEach((contact) => {
         let gabarito = state.contactsTemplate.find((t) => t.id === contact.id);
 
@@ -464,6 +567,28 @@ const Game1 = (props) => {
               ? 1
               : 0) +
             (contact.name === gabarito.name && !gabarito.showName ? 1 : 0);
+
+          if (contact.job !== gabarito.job && !gabarito.showJob) {
+            phoneErrors.push({
+              type: "Profissão",
+              userAnswer: contact.job,
+              correctAnswer: gabarito.job,
+            });
+          }
+          if (contact.country !== gabarito.country && !gabarito.showCountry) {
+            phoneErrors.push({
+              type: "País",
+              userAnswer: contact.country,
+              correctAnswer: gabarito.country,
+            });
+          }
+          if (contact.name !== gabarito.name && !gabarito.showName) {
+            phoneErrors.push({
+              type: "Nome",
+              userAnswer: contact.name,
+              correctAnswer: gabarito.name,
+            });
+          }
 
           mainError.forEach((metric) => {
             if (metric.name === "Profissão") {
@@ -503,6 +628,21 @@ const Game1 = (props) => {
           mission: mission.id,
           score: score,
           won: score > 80,
+          wrongDialogs: state.wrongDialogs.length
+            ? JSON.stringify(state.wrongDialogs)
+            : null,
+          phoneErrors: phoneErrors.length ? JSON.stringify(phoneErrors) : null,
+          seconds: state.seconds,
+        })
+      );
+
+      dispatch(
+        play_sessionsActions.update({
+          id: currentPlaySession.id,
+          data: {
+            actions: [...currentPlaySession.data.actions],
+          },
+          ended: true,
         })
       );
 
@@ -792,7 +932,6 @@ const Game1 = (props) => {
                               currentChar: null,
                               showTutorialBlob: false,
                               tutorialBlobCount: 7,
-                              shouldMinimize: true,
                             }))
                           }
                           style={{

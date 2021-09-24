@@ -1,4 +1,5 @@
 const initialState = () => ({
+  playSessionCreated: false,
   scene: "INIT",
   back: false,
   colorTags: [],

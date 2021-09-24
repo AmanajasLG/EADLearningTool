@@ -1,5 +1,6 @@
 const initialState = (checkedPlayed = false) => {
   return {
+    playSessionCreated: false,
     scene: "INIT",
     runTimer: true,
     initTime: 0,

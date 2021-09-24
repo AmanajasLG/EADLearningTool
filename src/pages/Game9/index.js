@@ -25,10 +25,10 @@ const Game9 = (props) => {
                   : agendamento,
                 positionX: l.positionX
                   ? l.positionX
-                  : Math.floor(Math.random() * 1179),
+                  : Math.floor(Math.random() * 95),
                 positionY: l.positionY
                   ? l.positionY
-                  : Math.floor(Math.random() * 596),
+                  : Math.floor(Math.random() * 85),
                })
              )),
           ...(missionData.homes.map( h =>
@@ -39,10 +39,10 @@ const Game9 = (props) => {
                   : aviao,
                 positionX: h.positionX
                   ? h.positionX
-                  : Math.floor(Math.random() * 1179),
+                  : Math.floor(Math.random() * 95),
                 positionY: h.positionY
                   ? h.positionY
-                  : Math.floor(Math.random() * 596),
+                  : Math.floor(Math.random() * 85),
               })
              ))
         ],

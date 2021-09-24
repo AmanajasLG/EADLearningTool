@@ -5,7 +5,7 @@ import TimerAnounce from '../../_components/TimerAnounce'
 import Writer from '../../_components/Writer'
 import initialState from './initialState'
 import { agendamento } from '../../img'
-import { getRandomInt } from '../../_helpers'
+import { getRandomInt, numberList } from '../../_helpers'
 import tutorialTexts from './tutorialTexts'
 import TutorialBlob from '../../_components/TutorialBlob'
 import TaggedIcon from '../../_components/TaggedIcon'
@@ -29,20 +29,25 @@ const iconColors = {
 
 
 const Core = ({ exitGame, data, onEndGame }) => {
-  const [state, setState] = React.useState(initialState())
-  const resolveRequest = (buildingIndex) => () => {
+  const [state, setState] = React.useState(initialState(data.requests))
+  const resolveRequest = () => {
     let updateState = {}
+    let availableIndexes = numberList(data.requests.length).map(v => v - 1).filter( v => !state.takenRequests.includes(v))
+    console.log('availableIndexes:', availableIndexes)
+
     //evaluate request
     //if(buildingIndex == ok)
     updateState.completed = state.completed + 1
     //set next request
-    if(state.takenRequests.length < data.requests.length)
-      updateState.takenRequests =  [getRandomInt(0, data.requests.length), ...state.takenRequests]
+    if(availableIndexes.length > 0)
+      updateState.takenRequests =  [availableIndexes[getRandomInt(0, availableIndexes.length)], ...state.takenRequests]
     else {
       updateState.endGame = true
       updateState.endRequests = true
       updateState.runTimer = false
     }
+    updateState.selectedHome = null
+    updateState.character = data.characters[getRandomInt(0, data.characters.length)]
 
     setState( s => ({...s, ...updateState }))
   }
@@ -58,28 +63,47 @@ const Core = ({ exitGame, data, onEndGame }) => {
 
   const onMouseClickLocation = index => () => {
     if(data.buildings[index].type === "Home")//home has no type
-      setState(s => ({...s, locationConfirmationWindow: true, selectedHome: data.buildings[index]}))
+      setState(s => ({...s, selectedHome: data.buildings[index]}))
   }
 
   const onMouseEnterLocation = index => () => {
-    setState( s => ({...s, buildingDetailsIndex: index}))
+    setState( s => ({...s, buildingDetails: data.buildings[index]}))
   }
 
   const onMouseLeaveLocation = index => () => {
-    setState( s => ({...s, buildingDetailsIndex: null}))
+    setState( s => ({...s, buildingDetails: null}))
+  }
+
+  const chooseSelectedHome = () => {
+    setState(s => ({...s,
+      takenRequests: [getRandomInt(0, data.requests.length), ...state.takenRequests]})
+    )
+  }
+
+  const cancelSelectedHome = () => {
+    setState(s => ({...s, locationConfirmationWindow: false, selectedHome: null}))
   }
 
   const showName = () =>
-    state.buildingDetailsIndex === null ? ''
-            : `do ${data.buildings[state.buildingDetailsIndex].type === "Home"?
-                    data.buildings[state.buildingDetailsIndex].name
-                    : data.buildings[state.buildingDetailsIndex].type}`
+    !state.buildingDetails ? ''
+            : state.buildingDetails.type === "Home"?
+                state.buildingDetails.name
+                : state.buildingDetails.type
+
+  const gameStart = () => {
+    setState(s => ({...s,
+      scene: 'GAME', runTimer: true,
+      takenRequests: [getRandomInt(0, data.requests.length)],
+      character: data.characters[getRandomInt(0, data.characters.length)]
+    })
+    )
+  }
 
 
   return(
     <React.Fragment>
       {state.scene === 'TIMER' &&
-        <TimerAnounce seconds={data.seconds} onReady={() => setState(s => ({...s, scene: 'GAME', runTimer: true, takenRequests: [getRandomInt(0, data.requests.length)]}) )}/>
+        <TimerAnounce seconds={data.seconds} onReady={gameStart}/>
       }
 
       {(state.scene === 'GAME' || state.scene === 'TUTORIAL') &&
@@ -90,7 +114,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
             backgroundColor: '#aaaaff'}}>
             <div
               style={{
-                backgroundImage: `url("${agendamento}")`,
+                backgroundImage: `url("${data.map? data.map : agendamento}")`,
                 height: "100%",
                 width: "100%",
                 backgroundRepeat: "no-repeat",
@@ -114,18 +138,14 @@ const Core = ({ exitGame, data, onEndGame }) => {
                     justifyContent: "center",
                     alignItems: "center",
                     position: "absolute",
-                    left: location.positionX,
-                    top: location.positionY
+                    left: `${location.positionX}%`,
+                    top: `${location.positionY}%`
                   }}
                   onClick={onMouseClickLocation(index)}
                   onMouseEnter={onMouseEnterLocation(index)}
                   onMouseLeave={onMouseLeaveLocation(index)}
                 >
                   <img
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                    }}
                     src={location.image}
                     alt=""
                   />
@@ -143,35 +163,39 @@ const Core = ({ exitGame, data, onEndGame }) => {
               left: '7%', bottom: 0, width: '80%', height: '80%',
               backgroundColor: "#ff8888"}}
             >
-              <div style={{backgroundColor: "#ff8888", width: '100%', height: '100%'}}>
-                Informações {showName()}
+              <div style={{backgroundColor: "#ff8888", width: '100%', height: '100%', fontSize: '3em'}}>
+                {showName()}
+                {state.buildingDetails && state.buildingDetails.type === "Home" &&
+                  <div>
+                    <span>{state.buildingDetails.rooms} quartos</span>
+                    <span>{state.buildingDetails.baths} banheiros</span>
+                  </div>
+                }
               </div>
-              {state.buildingDetailsIndex !== null &&
-               data.buildings[state.buildingDetailsIndex].type === 'casa' &&
-                <Button onClick={resolveRequest(state.buildingDetailsIndex)}>Escolher</Button>
-              }
             </div>
-            <img
-              style={{position: 'absolute', height: '100%', backgroundColor: "#ff8888", borderRadius: "50%"}}
-              onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-              src={agendamento}
-              alt=""
-            />
+
+            <div style={{position: 'absolute', height: '100%', width: '13%', backgroundColor: "#ff8888", borderRadius: "50%"}}>
+              <img style={{height: '100%'}}
+                onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
+                src={ state.buildingDetails ? state.buildingDetails.image : null}
+                alt=""
+                />
+            </div>
           </div>
 
           {/* GAME INFO */}
           <div style={{position: 'absolute', left: '5%', bottom: 0, width: '90%', height: '25%', backgroundColor: '#d6e3f4',
             borderRadius: '3% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0,}}>
-            <div style={{position: 'absolute', width: '55%', backgroundColor: '#59316d', height: '40%', left: '12%', top: '40%',
+            <div style={{position: 'absolute', width: '55%', backgroundColor: '#59316d', height: '50%', left: '12%', top: '30%',
             borderRadius: '3% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0}}>
-              <Writer text={`Pedido ${state.takenRequests[0]}`}
-                style={{width: '55%', height: '40%', fontSize: '3em'}}
+              <Writer text={state.takenRequests.length > 0 ? data.requests[state.takenRequests[0]].dialog : ""}
+                style={{height: '40%', fontSize: '3em'}}
               />
             </div>
             <img
               style={{position: 'absolute', bottom: 0, height: '150%'}}
               onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-              src={charStub}
+              src={state.character? state.character.characterAssets[0].image.url : charStub}
               alt=""
             />
             <TaggedIcon icon={agendamento} message={state.completed}
@@ -187,6 +211,20 @@ const Core = ({ exitGame, data, onEndGame }) => {
             />
           </div>
 
+          {state.selectedHome &&
+            <FullscreenOverlay showCloseBtn={false}>
+              <div>
+                <div>
+                  <span>{state.selectedHome.rooms} quartos</span>
+                  <span>{state.selectedHome.baths} banheiros</span>
+                </div>
+                <div>
+                  <Button onClick={resolveRequest}>Escolher</Button>
+                  <Button onClick={cancelSelectedHome}>Cancelar</Button>
+                </div>
+              </div>
+            </FullscreenOverlay>
+          }
           {/* ENDGAME OVERLAY */}
           {state.endGame &&
             <FullscreenOverlay onClickClose={()=>{}}>

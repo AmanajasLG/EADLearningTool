@@ -70,7 +70,7 @@ const Writer = ({text, characterTime, onWritten, afterWrittenTime, ...props}) =>
 	return(
 		<div id="Writer" {...props}>
 			{/* { state.text.substring(0, state.index) } */}
-			{ parser(JSXindexer(parser(mkd_parser(state.text)), state.index)[0]) }
+			{ state.text !== "" && parser(JSXindexer(parser(mkd_parser(state.text)), state.index)[0]) }
 		</div>
 	)
 }

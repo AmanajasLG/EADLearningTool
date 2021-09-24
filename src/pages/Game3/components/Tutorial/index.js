@@ -17,6 +17,7 @@ import {
 // import { parser } from "marked";
 import htmlparse from "html-react-parser";
 import Recipe from "../../../../_components/Recipe";
+import { PularTutorial } from "../../../../_components/Button";
 
 const Tutorial = ({
   chef,
@@ -123,15 +124,6 @@ const Tutorial = ({
                 </span>
               </div>
             )}
-            {hasPlayed && (
-              <button
-                className="btn btn-center"
-                id={tutorialStyles.btnTutorial}
-                onClick={goToMarket}
-              >
-                Skip tutorial
-              </button>
-            )}
           </div>
           <Aisle
             products={aisle}
@@ -204,6 +196,20 @@ const Tutorial = ({
 
       {state.step === 2 && (
         <TimerAnounce seconds={seconds} onReady={goToMarket} />
+      )}
+
+      {hasPlayed && (
+        <PularTutorial
+          label="Skip tutorial"
+          onClick={goToMarket}
+          style={{
+            position: "absolute",
+            bottom: "2em",
+            left: "2em",
+            fontSize: "2em",
+            zIndex: 10001,
+          }}
+        />
       )}
     </div>
   );

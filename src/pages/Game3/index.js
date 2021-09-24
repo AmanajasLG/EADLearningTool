@@ -10,12 +10,14 @@ import {
   zeroFill,
   numberToMoney,
   shuffle,
+  preventSingleWordBreak,
 } from "../../_helpers";
 
 import {
   gameActions,
   headerActions,
   musicActions,
+  apiActions,
 } from "../../_actions";
 import { headerConstants } from "../../_constants";
 
@@ -32,7 +34,12 @@ import Tutorial from "./components/Tutorial";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
 import ShopCart from "./components/ShopCart";
-import { Button, Iniciar, Voltar } from "../../_components/Button"
+import {
+  Button,
+  Iniciar,
+  Voltar,
+  ButtonConfigs,
+} from "../../_components/Button";
 
 import {
   cart,
@@ -83,9 +90,69 @@ const Game3 = (props) => {
 
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
+  let currentPlaySession = useSelector((state) =>
+    state.play_sessions ? state.play_sessions.items[0] : {}
+  );
+  const { play_sessionsActions } = apiActions;
+
+  React.useEffect(() => {
+    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
+      dispatch(
+        play_sessionsActions.create({
+          user: userId,
+          mission: mission.id,
+          data: { actions: [] },
+        })
+      );
+
+      setState((s) => ({ ...s, playSessionCreated: true }));
+    }
+  }, [dispatch, play_sessionsActions, mission, userId, state]);
+
+  React.useEffect(() => {
+    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
+
+    const getClickedObject = (e) => {
+      dispatch(
+        play_sessionsActions.update({
+          id: currentPlaySession.id,
+          data: {
+            actions: [
+              ...currentPlaySession.data.actions,
+              {
+                tag: e.target.nodeName,
+                src: e.target.src,
+                alt: e.target.alt,
+                className: e.target.className,
+                class: e.target.class,
+                id: e.target.id,
+                innerHTML: e.target.innerHTML.includes("<div")
+                  ? null
+                  : e.target.innerHTML,
+                clickTime: new Date(),
+              },
+            ],
+          },
+        })
+      );
+    };
+    document.addEventListener("mousedown", getClickedObject);
+
+    setState((s) => {
+      return { ...s, currentPlaySession, getClickedObject };
+    });
+    return () => {
+      document.removeEventListener("mousedown", getClickedObject);
+    };
+  }, [
+    dispatch,
+    currentPlaySession,
+    play_sessionsActions,
+    state.tracking,
+    mission,
+  ]);
 
   const onStartGame = () => setState({ ...state, scene: "INTRO" });
-
 
   React.useEffect(() => {
     if (mission)
@@ -123,8 +190,7 @@ const Game3 = (props) => {
       state.ingredientsList.length === 0 &&
       timesPlayed !== undefined
     ) {
-      let initTime =
-        missionData.seconds - 30 * (timesPlayed > 2 ? 2 : timesPlayed);
+      let initTime = missionData.seconds;
       let remainingTime = initTime;
 
       let recipe =
@@ -392,6 +458,16 @@ const Game3 = (props) => {
     let wrongIngredients = getWrongItemsInCart();
 
     dispatch(
+      play_sessionsActions.update({
+        id: currentPlaySession.id,
+        data: {
+          actions: [...currentPlaySession.data.actions],
+        },
+        ended: true,
+      })
+    );
+
+    dispatch(
       gameActions.create("results", {
         user: userId,
         mission: mission.id,
@@ -476,7 +552,12 @@ const Game3 = (props) => {
                 return (
                   <React.Fragment>
                     <Timer
-                      style={{ position: "absolute", top: "5%", left: "50%", transform: "translateX(-50%)" }}
+                      style={{
+                        position: "absolute",
+                        top: "5%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                      }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) =>
@@ -550,12 +631,19 @@ const Game3 = (props) => {
                             <span lang="en">Are you sure that's all?</span>
                           </div>
                           <div className={styles.btns}>
-                            <Voltar onClick={() => setState({
-                              ...state,
-                              checkoutConfirm: false,
-                              runTimer: true,
-                            })}/>
-                            <Iniciar label={"Continuar"} onClick={moveToCheckout} />
+                            <Voltar
+                              onClick={() =>
+                                setState({
+                                  ...state,
+                                  checkoutConfirm: false,
+                                  runTimer: true,
+                                })
+                              }
+                            />
+                            <Iniciar
+                              label={"Continuar"}
+                              onClick={moveToCheckout}
+                            />
                           </div>
                         </div>
                         <img src={cart} alt="" />
@@ -593,8 +681,13 @@ const Game3 = (props) => {
                       alt=""
                     />
                     <Timer
-                      style={{ position: "absolute", top: "5%", left: "50%", transform: "translateX(-50%)" }}
-                      run={state.runTimer}
+                      style={{
+                        position: "absolute",
+                        top: "5%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                      }}
+                      run={false}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
                         setState((s) => ({
@@ -625,6 +718,31 @@ const Game3 = (props) => {
                       src={cashierTable}
                       alt=""
                     />
+                    {state.moneySelection && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "4em",
+                          width: "60em",
+                          textAlign: "center",
+                          zIndex: 10,
+                          backgroundColor: "#59316d",
+                          padding: "1.5em",
+                          left: "2.5em",
+                          borderRadius: "0 2em 2em 2em",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: "white",
+                            fontSize: "3em",
+                          }}
+                        >
+                          Sua compra deu <b>{numberToMoney(state.price)}</b>.
+                        </span>
+                      </div>
+                    )}
+
                     <div
                       style={{
                         position: "absolute",
@@ -637,21 +755,24 @@ const Game3 = (props) => {
                         flexDirection: "column",
                         justifyContent: "center",
                         textAlign: "center",
-                        color: "white"
+                        color: "white",
                       }}
                     >
                       <span
                         style={{
-                          fontSize: "2.2em"
+                          fontSize: "2.2em",
                         }}
                       >
-                        {state.price}
+                        {state.cashierValue}
                       </span>
                     </div>
                     {state.moneySelection && (
                       <Payment
                         moneyList={missionData.money}
                         onConfirm={(value) => () => doPayment(value)}
+                        updateCashierValue={(value) =>
+                          setState((s) => ({ ...s, cashierValue: value }))
+                        }
                       />
                     )}
                   </React.Fragment>
@@ -772,14 +893,17 @@ const Game3 = (props) => {
                       }}
                     >
                       <div id="feedback-endGame-action-btns">
-                        <Button onClick={restart}>Tentar novamente</Button>
-                        <Button
-                          onClick={() =>
-                            setState((s) => ({ ...s, back: true }))
-                          }
-                        >
-                          Sair do jogo
-                        </Button>
+                        <Voltar
+                          label={"Tentar novamente"}
+                          colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                          onClick={restart}
+                          style={{ marginRight: "2em" }}
+                        />
+                        <Iniciar
+                          label={"Sair do jogo"}
+                          colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                          onClick={() => setState({ ...state, back: true })}
+                        />
                       </div>
                     </div>
                   </div>

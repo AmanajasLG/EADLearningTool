@@ -1,5 +1,7 @@
 const initialState = (checkedPlayed) => {
   return {
+    cashierValue: "0.00",
+    playSessionCreated: false,
     scene: "INIT",
     cart: [],
     tutorialRoom: {},

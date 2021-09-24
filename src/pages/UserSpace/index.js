@@ -1,18 +1,17 @@
-import './index.scss'
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { gameActions } from '../../_actions'
+import "./index.scss";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { gameActions } from "../../_actions";
 
 const UserSpace = () => {
+  const user = useSelector((state) => state.authentication.user.user);
+  const game = useSelector((state) => state.game);
+  const dispatch = useDispatch();
 
-  const user = useSelector(state => state.authentication.user.user)
-  const game = useSelector( state => state.game)
-  const dispatch = useDispatch()
-
-  React.useEffect(()=>{
-    dispatch(gameActions.getAll('missions'))
-  }, [dispatch])
+  React.useEffect(() => {
+    dispatch(gameActions.getAll("missions"));
+  }, [dispatch]);
 
   // React.useEffect(()=>{
   //   dispatch(game_1_missionsActions.getAll())
@@ -22,11 +21,11 @@ const UserSpace = () => {
   //   dispatch(game_3_missionsActions.getAll())
   // }, [dispatch, game_3_missionsActions])
 
-  return(
+  return (
     <div id="userspace">
-      {!user.id ?
+      {!user.id ? (
         <div>Loading...</div>
-        :
+      ) : (
         <div>
           <p>Oi {user.username}!</p>
 
@@ -49,40 +48,53 @@ const UserSpace = () => {
           <div className="jogos">
             <p>Jogos:</p>
             <div id="missoes">
-              {game.loading ? <div>Loading...</div> :
-                game.items.missions && game.items.missions.map( (mission, index) =>
-                <div key={index} className="missao">
-                  <Link to={`/game${mission.gameType.game}/${mission.id}`}>
-                    <div id="imagem"></div>
-                    <div id="card-text-wrapper">
-                      <div id="nome-missao">{mission.name}</div>
-                      <div id="descricao">{mission.description}</div>
-                      <div id="recompensas">Recompensas</div>
+              {game.loading ? (
+                <div>Loading...</div>
+              ) : (
+                game.items.missions &&
+                game.items.missions
+                  .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+                  .map((mission, index) => (
+                    <div key={index} className="missao">
+                      <Link to={`/game${mission.gameType.game}/${mission.id}`}>
+                        <div id="imagem"></div>
+                        <div id="card-text-wrapper">
+                          <div id="descricao">JOGO {mission.gameType.game}</div>
+                          <div id="nome-missao">{mission.name}</div>
+
+                          {/* <div id="recompensas">Recompensas</div> */}
+                        </div>
+                      </Link>
                     </div>
-                  </Link>
-                </div>
+                  ))
               )}
             </div>
           </div>
-          {process.env.NODE_ENV === 'development' &&
+          {process.env.NODE_ENV === "development" && (
             <div>
               Development
               <div>
-                <Link to='/game4/0'>Game4 Stub</Link><br/>
-                <Link to='/game5/0'>Game5 Stub</Link><br/>
-                <Link to='/game6/0'>Game6 Stub</Link><br/>
-                <Link to='/game7/0'>Game7 Stub</Link><br/>
-                <Link to='/game8/0'>Game8 Stub</Link><br/>
-                <Link to='/game9/0'>Game9 Stub</Link><br/>
-                <Link to='/game10/0'>Game10 Stub</Link><br/>
-
+                <Link to="/game4/0">Game4 Stub</Link>
+                <br />
+                <Link to="/game5/0">Game5 Stub</Link>
+                <br />
+                <Link to="/game6/0">Game6 Stub</Link>
+                <br />
+                <Link to="/game7/0">Game7 Stub</Link>
+                <br />
+                <Link to="/game8/0">Game8 Stub</Link>
+                <br />
+                <Link to="/game9/0">Game9 Stub</Link>
+                <br />
+                <Link to="/game10/0">Game10 Stub</Link>
+                <br />
               </div>
             </div>
-          }
+          )}
         </div>
-      }
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default UserSpace
+export default UserSpace;

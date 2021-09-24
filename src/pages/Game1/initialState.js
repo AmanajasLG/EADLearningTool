@@ -2,6 +2,9 @@ const initialValue = (hasPlayed = false) => ({
   //METADATA
   back: false,
   //GAME STATE
+  playSessionCreated: false,
+  countNow: true,
+  seconds: 0,
   checkedPlayed: hasPlayed,
   scene: "INIT",
   endGame: false,
@@ -26,6 +29,7 @@ const initialValue = (hasPlayed = false) => ({
   characterFeeling: "init",
   showContacts: false,
   maxQuestions: 4,
+  wrongDialogs: [],
   // onMinimize: null,
   shouldMinimize: false,
   shouldCloseDialog: false,
