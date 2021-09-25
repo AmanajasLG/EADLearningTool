@@ -29,11 +29,14 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
             style={{
               borderRadius: "5% 5% 0 0",
               flex: "1 0 0px",
-              backgroundColor:
-                state.wardrobeKey === label ? "#ffcca9" : "white",
               fontSize: "1.8em",
               padding: "0.7em 0.5em",
+              backgroundColor:
+                "hsl(24, 100%, " +
+                (83 + Math.abs(index - state.page) * 5) +
+                "%)",
             }}
+            id="wardrobe-label-button"
           >
             {label}
           </Button>

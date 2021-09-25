@@ -20,15 +20,13 @@ import Button, {
   Iniciar,
   Voltar,
 } from "../../_components/Button";
-import { tomato, dressingBg, camera } from "../../img";
+import { tomato, dressingBg, camera, blobLowScore } from "../../img";
 
 import initialState from "./initialState";
-import Tutorial from "./components/Tutorial";
 import Notification from "./components/Notification";
 import Lamp from "../../_components/Lamp";
 
 import FeedbackPanel from "./components/FeedbackPanel";
-import TutorialWardrobe from "./components/TutorialWardrobe";
 import CellphoneOverlay from "./components/CellphoneOverlay";
 import Cellphone from "./components/Cellphone";
 
@@ -930,12 +928,27 @@ const Game6 = (props) => {
                           height: "100%",
                         }}
                       >
+                        <img
+                          src={blobLowScore}
+                          style={{
+                            position: "absolute",
+                            height: "100%",
+                            width: "100%",
+                            objectFit: "cover",
+                          }}
+                          alt="background-blob"
+                        />
                         {state.characters.map((character, index) => (
                           <DressingCharacter
                             key={index}
                             clothes={state.clothes}
                             character={character}
-                            style={{ height: "50%", cursor: "pointer" }}
+                            style={{
+                              height: "108em",
+                              width: "60em",
+                              cursor: "pointer",
+                              position: "relative",
+                            }}
                             onClick={() =>
                               setState((s) => ({
                                 ...s,
@@ -1366,11 +1379,6 @@ const Game6 = (props) => {
                     }
                   >
                     <div className="feedback absolute-center">
-                      <DressingCharacter
-                        character={state.choosenCharacter}
-                        clothes={state.clothes}
-                        className="feedback-dressing-character"
-                      />
                       <FeedbackPanel
                         feedback={state.feedbackMessages}
                         won={state.won}
@@ -1378,6 +1386,17 @@ const Game6 = (props) => {
                         leave={() => setState((s) => ({ ...s, back: true }))}
                       />
                     </div>
+                    <DressingCharacter
+                      character={state.choosenCharacter}
+                      clothes={state.clothes}
+                      style={{
+                        position: "absolute",
+                        left: "-10em",
+                        width: "60em",
+                        height: "80em",
+                        bottom: "-20em",
+                      }}
+                    />
                   </div>
                 );
               default:
