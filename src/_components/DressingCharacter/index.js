@@ -14,7 +14,12 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
       <InlineSVG
         src={character.image}
         alt="character"
-        style={{ height: "90em", position: "absolute" }}
+        style={{
+          height: "100%",
+          maxWidth: "100%",
+          objectPosition: "center",
+          position: "absolute",
+        }}
       />
       <InlineSVG
         key={"underware-bottom-" + character.id}
@@ -22,7 +27,9 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
         alt={"underware-bottom-" + character.id}
         style={{
           position: "absolute",
-          height: "90em",
+          height: "100%",
+          maxWidth: "100%",
+          objectPosition: "center",
           display:
             clothes["Pernas"].length !== 0
               ? "none"
@@ -37,7 +44,9 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
         alt={"underware-top-" + character.id}
         style={{
           position: "absolute",
-          height: "90em",
+          height: "100%",
+          maxWidth: "100%",
+          objectPosition: "center",
           display: clothes["Tronco"].length === 0 ? "block" : "none",
         }}
       />
@@ -51,7 +60,9 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
             style={{
               cursor: props.showRemove ? "pointer" : "default",
               position: "absolute",
-              height: "90em",
+              height: "100%",
+              maxWidth: "100%",
+              objectPosition: "center",
             }}
           />
         ))
