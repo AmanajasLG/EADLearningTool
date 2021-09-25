@@ -11,7 +11,7 @@ const ColorPanel = ({ colors, onColorClick, ...props }) => {
 
   return (
     <div {...props}>
-      <div className="grid-wrapper">
+      <div className="grid-wrapper" style={{ height: "21em" }}>
         <div className="grid-background">
           {state > 0 && (
             <span
@@ -33,9 +33,10 @@ const ColorPanel = ({ colors, onColorClick, ...props }) => {
                     .map((color, index) => (
                       <Button
                         style={{
-                          fontSize: "0.6rem",
-                          margin: ".5rem",
-                          width: "30%",
+                          fontSize: "1.9em",
+                          margin: ".6em",
+                          width: "40%",
+                          padding: ".5em",
                         }}
                         onClick={onColorClick(color)}
                       >

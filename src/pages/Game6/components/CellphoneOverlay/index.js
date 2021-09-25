@@ -26,6 +26,7 @@ const CellphoneOverlay = ({
   questions,
   addAnswerToDialog,
   autoLoad,
+  shouldOverlayAll = false,
 }) => {
   const [state, setState] = React.useState({
     maximized: startMaximized,
@@ -54,7 +55,7 @@ const CellphoneOverlay = ({
   // }, [onMinimize])
 
   const _maximize = () => {
-    setState({ ...state, maximized: true });
+    if (!shouldOverlayAll) setState({ ...state, maximized: true });
   };
 
   const _shouldMinimize = () => {
@@ -72,7 +73,13 @@ const CellphoneOverlay = ({
     <div id="phone">
       <div
         id="small-cellphone-wrapper"
-        className={state.maximized ? "maximized" : null}
+        className={
+          state.maximized
+            ? "maximized"
+            : null + shouldOverlayAll
+            ? "z-index-overlay-all"
+            : null
+        }
       >
         <div id="small-cellphone-inner-wrapper">
           <div id="small-cellphone-content" onClick={_maximize}>
@@ -81,6 +88,11 @@ const CellphoneOverlay = ({
               <span lang="default">Talk to Ariel</span>
             </div>
             <img src={smallPhone} alt="phone-small" />
+            <img
+              src={ariel}
+              id="cellphone-small-pic"
+              alt="cellphone-small-pic"
+            />
           </div>
         </div>
       </div>
@@ -145,8 +157,8 @@ const CellphoneOverlay = ({
                     style={{
                       position: "relative",
                       margin: "1em auto",
-                      width: "80%",
-                      fontSize: "1rem",
+                      width: "15em",
+                      fontSize: "2.5em",
                     }}
                     onClick={endConversation}
                   >
@@ -162,8 +174,8 @@ const CellphoneOverlay = ({
                         style={{
                           position: "relative",
                           margin: ".5em auto",
-                          width: "90%",
-                          fontSize: "1rem",
+                          width: "16em",
+                          fontSize: "2.2em",
                           display: "block",
                         }}
                         onClick={addAnswerToDialog(index)}

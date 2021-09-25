@@ -42,7 +42,7 @@ const Cellphone = ({
         <Notification
           blobMessage={{
             text:
-              "Essa ação irá remover TODAS ass roupas enviadas por você e reiniciar a conversa, é isso memso que deseja fazer?",
+              "Essa ação irá remover TODAS as roupas enviadas por você e reiniciar a conversa, é isso memso que deseja fazer?",
             textTranslate:
               "This action will remove ALL clothes sent by you and restart the conversation, is that what you want to do?",
           }}
@@ -139,8 +139,8 @@ const Cellphone = ({
                   style={{
                     position: "relative",
                     margin: "1em 1em",
-                    width: "30%",
-                    fontSize: "1.5em",
+                    width: "40%",
+                    fontSize: "2em",
                   }}
                   onClick={cancelButton}
                 >
@@ -150,8 +150,8 @@ const Cellphone = ({
                   style={{
                     position: "relative",
                     margin: "1em 1em",
-                    width: "30%",
-                    fontSize: "1.5em",
+                    width: "40%",
+                    fontSize: "2em",
                   }}
                   onClick={confirmationButton}
                 >
@@ -171,9 +171,9 @@ const Cellphone = ({
                     <Button
                       style={{
                         position: "relative",
-                        margin: "1em auto",
-                        width: "80%",
-                        fontSize: "1rem",
+                        margin: "0.5em auto",
+                        width: "15em",
+                        fontSize: "2em",
                       }}
                       onClick={confirmationButton}
                     >
@@ -185,14 +185,15 @@ const Cellphone = ({
                     <ColorPanel
                       colors={colors}
                       onColorClick={addAnswerToDialog}
+                      style={{ marginTop: "3em" }}
                     />
 
                     <Button
                       style={{
                         position: "relative",
-                        margin: ".5em auto",
+                        margin: "1em auto",
                         width: "80%",
-                        fontSize: "1rem",
+                        fontSize: "2em",
                       }}
                       onClick={cancelAddAnswerToDialog}
                     >
@@ -225,8 +226,7 @@ const Cellphone = ({
                               .map((cloting, index) => (
                                 <Button
                                   style={{
-                                    fontSize: "0.6rem",
-                                    margin: ".5rem",
+                                    fontSize: "1.5em",
                                     width: "50%",
                                   }}
                                   onClick={() => {
@@ -262,7 +262,7 @@ const Cellphone = ({
                     position: "relative",
                     margin: ".5em auto",
                     width: "80%",
-                    fontSize: "1rem",
+                    fontSize: "2em",
                   }}
                   onClick={() => {
                     addCancelRemoveDialog();

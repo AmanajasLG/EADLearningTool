@@ -19,7 +19,7 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
           display: "flex",
           flexDirection: "row",
           justifyContent: "space-around",
-          marginTop: "1em",
+          marginTop: "0.5em",
         }}
       >
         {Object.keys(wardrobe).map((label, index) => (
@@ -31,7 +31,8 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
               flex: "1 0 0px",
               backgroundColor:
                 state.wardrobeKey === label ? "#ffcca9" : "white",
-              fontSize: "1.3em",
+              fontSize: "1.8em",
+              padding: "0.7em 0.5em",
             }}
           >
             {label}
@@ -41,7 +42,7 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
 
       <div
         style={{
-          height: "6.2rem",
+          height: "20em",
           padding: "2%",
           backgroundColor: "#ffcca9",
           borderRadius: "1%",
@@ -89,9 +90,11 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
                     .map((item, index) => (
                       <Button
                         style={{
-                          fontSize: "0.6rem",
-                          margin: ".5rem",
+                          fontSize: "2em",
+                          margin: "0.5em 0.3em",
                           width: "50%",
+                          height: "3.6em",
+                          padding: "0.5em",
                           pointerEvents: item.picked ? "none" : "auto",
                           opacity: item.picked ? 0.3 : 1,
                         }}

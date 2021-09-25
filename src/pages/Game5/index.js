@@ -528,7 +528,7 @@ const Game5 = (props) => {
                           flexDirection: "row",
                           justifyContent: "space-evenly",
                           width: "100%",
-                          height: "100%"
+                          height: "100%",
                         }}
                       >
                         <img
@@ -537,20 +537,18 @@ const Game5 = (props) => {
                             position: "absolute",
                             height: "100%",
                             width: "100%",
-                            objectFit: "cover"
+                            objectFit: "cover",
                           }}
+                          alt="background-blob"
                         />
                         {state.characters.map((character) => (
                           <DressingCharacter
                             clothes={state.clothes}
                             character={character}
                             key={character.id}
-                            style={{ cursor: "pointer",
-                                     display: "grid",
-                                     gridTemplateRows: "100%",
-                                     gridTemplateColumns: "100%",
-                                     justifyItems: "center",
-                                     alignItems: "center"
+                            style={{
+                              cursor: "pointer",
+                              width: "70em",
                             }}
                             onClick={() =>
                               setState((s) => ({
@@ -650,12 +648,12 @@ const Game5 = (props) => {
                           showRemove
                           onRemoveClick={removeClothesFromBody}
                           style={{
-                            width: "25%",
-                            height: "80em",
+                            height: "90em",
+                            width: "100em",
                             zIndex: state.blobToShow === 2 ? 1000000 : 0,
-                            position: "absolute",
-                            bottom: "8%",
-                            left: "10%",
+                            position: "relative",
+                            bottom: "5em",
+                            left: "20em",
                           }}
                         />
 

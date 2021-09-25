@@ -32,6 +32,8 @@ import TutorialWardrobe from "./components/TutorialWardrobe";
 import CellphoneOverlay from "./components/CellphoneOverlay";
 import Cellphone from "./components/Cellphone";
 
+import TutorialBlob from "../../_components/TutorialBlob";
+
 const Game6 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
   const dispatch = useDispatch();
@@ -385,10 +387,10 @@ const Game6 = (props) => {
 
   // SELECT CLOTHES IN PHONE
   const addAnswerToDialogSend = (item) => () => {
-    if (state.showBlob) {
+    if (state.showTutorialBlob) {
       setState((s) => ({
         ...s,
-        blobToShow: s.blobToShow + 1,
+        tutorialBlobCount: s.tutorialBlobCount + 1,
       }));
     }
 
@@ -883,16 +885,38 @@ const Game6 = (props) => {
               case "INTRO":
                 return (
                   <React.Fragment>
-                    {state.showBlob && (
-                      <Tutorial
-                        blobMessage={state.tutorialBlobsText[state.blobToShow]}
-                        onClickToEnd={() =>
+                    {state.showTutorialBlob && (
+                      <TutorialBlob
+                        text={
+                          state.tutotialMessages[state.tutorialBlobCount].text
+                        }
+                        translation={
+                          state.tutotialMessages[state.tutorialBlobCount]
+                            .textTranslate
+                        }
+                        position={
+                          state.tutotialMessages[state.tutorialBlobCount]
+                            .position
+                        }
+                        endTutorial={
+                          state.tutorialBlobCount ===
+                          state.tutotialMessages.length - 1
+                        }
+                        onContinue={() =>
                           setState((s) => ({
                             ...s,
-                            blobToShow: s.blobToShow + 1,
-                            showBlob: false,
+                            tutorialBlobCount: s.tutorialBlobCount + 1,
+                            showTutorialBlob: false,
                           }))
                         }
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          position: "absolute",
+                          zIndex: 10,
+                          top: 0,
+                          backgroundColor: "rgba(255,255,255,0.66)",
+                        }}
                       />
                     )}
 
@@ -962,7 +986,7 @@ const Game6 = (props) => {
                             proceedToDressingConfirmation: false,
                             dressingContext: true,
                             showInvitation: false,
-                            showBlob: true,
+                            showTutorialBlob: true,
                           }))
                         }
                         backButtonLabel="Ver conversa/View conversation"
@@ -980,25 +1004,47 @@ const Game6 = (props) => {
               case "DRESS":
                 return (
                   <React.Fragment>
-                    {state.showBlob && (
-                      <TutorialWardrobe
-                        blobMessage={state.tutorialBlobsText[state.blobToShow]}
-                        onClickToEnd={() => {
+                    {state.showTutorialBlob && (
+                      <TutorialBlob
+                        text={
+                          state.tutotialMessages[state.tutorialBlobCount].text
+                        }
+                        translation={
+                          state.tutotialMessages[state.tutorialBlobCount]
+                            .textTranslate
+                        }
+                        position={
+                          state.tutotialMessages[state.tutorialBlobCount]
+                            .position
+                        }
+                        endTutorial={
+                          state.tutorialBlobCount ===
+                          state.tutotialMessages.length - 1
+                        }
+                        onContinue={() => {
                           if (
-                            state.blobToShow <
-                            state.tutorialBlobsText.length - 1
+                            state.tutorialBlobCount <
+                            state.tutotialMessages.length - 1
                           )
                             setState((s) => ({
                               ...s,
-                              blobToShow: s.blobToShow + 1,
+                              tutorialBlobCount: s.tutorialBlobCount + 1,
                             }));
                           else
                             setState((s) => ({
                               ...s,
-                              showBlob: false,
+                              tutorialBlobCount: s.tutorialBlobCount + 1,
+                              showTutorialBlob: false,
                             }));
                         }}
-                        index={state.blobToShow}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          zIndex: 10,
+                          position: "absolute",
+                          top: 0,
+                          backgroundColor: "rgba(255,255,255,0.66)",
+                        }}
                       />
                     )}
 
@@ -1017,7 +1063,7 @@ const Game6 = (props) => {
                           style={{
                             width: "25%",
                             height: "80em",
-                            zIndex: state.blobToShow === 2 ? 1000000 : 0,
+                            zIndex: state.tutorialBlobCount === 2 ? 1000000 : 0,
                             position: "absolute",
                             bottom: "8%",
                             left: "10%",
@@ -1026,7 +1072,7 @@ const Game6 = (props) => {
 
                         <Wardrobe
                           style={{
-                            zIndex: state.blobToShow === 1 ? 1000000 : 0,
+                            zIndex: state.tutorialBlobCount === 1 ? 1000000 : 0,
                             position: "absolute",
                             right: "5%",
                             top: "10%",
@@ -1034,30 +1080,36 @@ const Game6 = (props) => {
                             height: "80%",
                           }}
                           wardrobe={state.wardrobe}
-                          onClothesClick={addClothesToBody}
+                          onClothesClick={
+                            state.showTutorialBlob ? () => {} : addClothesToBody
+                          }
                         />
 
                         <Lamp
                           img={[camera]}
-                          onClick={() => {
-                            let ready =
-                              state.clothes["Tronco"].length > 0 &&
-                              (state.clothes["Tronco"].find(
-                                (clothing) => clothing.cover === "inteiro"
-                              ) ||
-                                state.clothes["Pernas"].length > 0);
-                            setState((s) => ({
-                              ...s,
-                              ready: ready,
-                              readyAlert: !ready,
-                              dressingContext: !ready,
-                            }));
-                          }}
+                          onClick={
+                            state.showTutorialBlob
+                              ? () => {}
+                              : () => {
+                                  let ready =
+                                    state.clothes["Tronco"].length > 0 &&
+                                    (state.clothes["Tronco"].find(
+                                      (clothing) => clothing.cover === "inteiro"
+                                    ) ||
+                                      state.clothes["Pernas"].length > 0);
+                                  setState((s) => ({
+                                    ...s,
+                                    ready: ready,
+                                    readyAlert: !ready,
+                                    dressingContext: !ready,
+                                  }));
+                                }
+                          }
                           message="Estou pronto!"
                           style={{
                             top: "0.5%",
                             left: "1%",
-                            zIndex: state.blobToShow === 4 ? 1000000 : 0,
+                            zIndex: state.tutorialBlobCount === 4 ? 1000000 : 0,
                           }}
                         />
 
@@ -1077,6 +1129,7 @@ const Game6 = (props) => {
                           }
                           questions={state.inviteQuestions}
                           addAnswerToDialog={addAnswerToDialogDress}
+                          shouldOverlayAll={state.tutorialBlobCount === 3}
                         />
                       </React.Fragment>
                     )}
@@ -1173,8 +1226,8 @@ const Game6 = (props) => {
                                 setState((s) => ({
                                   ...s,
                                   scene: "SEND",
-                                  showBlob: true,
-                                  blobToShow: 0,
+                                  showTutorialBlob: true,
+                                  tutorialBlobCount: 0,
                                 }))
                               }
                             />
@@ -1187,30 +1240,32 @@ const Game6 = (props) => {
               case "SEND":
                 return (
                   <React.Fragment>
-                    {state.showBlob && (
+                    {state.showTutorialBlob && (
                       <div className="tutorial-notification">
                         <div className="utorial-notification-content">
                           <div className="tutorial-notification-message blob-right">
                             <span lang="pt-br">
                               {
-                                state.tutorialPhoneBlobsText[state.blobToShow]
-                                  .text
+                                state.tutorialPhoneBlobsText[
+                                  state.tutorialBlobCount
+                                ].text
                               }
                             </span>
                             <span lang="en">
                               {
-                                state.tutorialPhoneBlobsText[state.blobToShow]
-                                  .textTranslate
+                                state.tutorialPhoneBlobsText[
+                                  state.tutorialBlobCount
+                                ].textTranslate
                               }
                             </span>
-                            {state.blobToShow === 2 && (
+                            {state.tutorialBlobCount === 2 && (
                               <Button
                                 blink
                                 colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                                 onClick={() =>
                                   setState((s) => ({
                                     ...s,
-                                    showBlob: false,
+                                    showTutorialBlob: false,
                                   }))
                                 }
                               >

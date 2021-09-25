@@ -20,7 +20,7 @@ const InlineSVG = ({ src, ...props }) => {
   }, [src]);
 
   return (
-    <svg className={styles["inline-svg-wrapper"]} {...props}>
+    <svg className="inline-svg-wrapper" {...props}>
       {!state.loaded ? (
         <svg className={styles["svg-temp"]}></svg>
       ) : (
