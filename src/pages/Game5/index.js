@@ -22,6 +22,7 @@ import {
   hangerH,
   dressingBg,
   envelopeIcon,
+  blobLowScore,
 } from "../../img";
 
 import initialState from "./initialState";
@@ -519,22 +520,38 @@ const Game5 = (props) => {
                         }
                       />
                     )}
-
                     {state.chooseCharacterScreen && (
                       <div
                         style={{
+                          position: "relative",
                           display: "flex",
                           flexDirection: "row",
                           justifyContent: "space-evenly",
                           width: "100%",
-                          height: "100%",
+                          height: "100%"
                         }}
                       >
+                        <img
+                          src={blobLowScore}
+                          style={{
+                            position: "absolute",
+                            height: "100%",
+                            width: "100%",
+                            objectFit: "cover"
+                          }}
+                        />
                         {state.characters.map((character) => (
                           <DressingCharacter
                             clothes={state.clothes}
                             character={character}
-                            style={{ height: "50%", cursor: "pointer" }}
+                            key={character.id}
+                            style={{ cursor: "pointer",
+                                     display: "grid",
+                                     gridTemplateRows: "100%",
+                                     gridTemplateColumns: "100%",
+                                     justifyItems: "center",
+                                     alignItems: "center"
+                            }}
                             onClick={() =>
                               setState((s) => ({
                                 ...s,
@@ -592,6 +609,10 @@ const Game5 = (props) => {
                   </React.Fragment>
                 );
               case "DRESS":
+                /*
+                  FIXME
+                  ! layout de ver o convite de novo está cru
+                */
                 return (
                   <React.Fragment>
                     {state.showBlob && (
@@ -696,6 +717,8 @@ const Game5 = (props) => {
                           style={{
                             top: "0.5%",
                             left: "1%",
+                            fontSize: "1.1em",
+                            fontWeight: "600",
                             zIndex: state.blobToShow === 4 ? 1000000 : 0,
                           }}
                         />

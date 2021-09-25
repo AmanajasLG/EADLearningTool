@@ -22,7 +22,7 @@ const Init = ({
           {icon ? (
             <img className="classImage" src={icon} alt="" />
           ) : (
-            <div style={{ height: "25vh" }}></div>
+            <div style={{ height: "15vh" }}></div>
           )}
 
           <h1 className="margin-half-top type-l type-display type-center">
