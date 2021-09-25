@@ -650,12 +650,12 @@ const Game5 = (props) => {
                           showRemove
                           onRemoveClick={removeClothesFromBody}
                           style={{
-                            width: "25%",
+                            width: "48em",
                             height: "80em",
                             zIndex: state.blobToShow === 2 ? 1000000 : 0,
                             position: "absolute",
-                            bottom: "8%",
-                            left: "10%",
+                            bottom: "8.5em",
+                            left: "19em",
                           }}
                         />
 
@@ -666,10 +666,10 @@ const Game5 = (props) => {
                           style={{
                             zIndex: state.blobToShow === 1 ? 1000000 : 0,
                             position: "absolute",
-                            right: "5%",
-                            top: "10%",
-                            width: "45%",
-                            height: "80%",
+                            right: "9.5em",
+                            top: "10.8em",
+                            width: "86em",
+                            height: "86em",
                           }}
                           wardrobe={state.wardrobe}
                           onClothesClick={addClothesToBody}
@@ -846,6 +846,7 @@ const Game5 = (props) => {
                 );
               case "END_GAME":
                 return (
+                  // ! Acho que isso deveria ser no GameContext pq a cor do bg tinha que pegar a tela inteira
                   <div
                     className={
                       state.won ? "blue-background" : "salmon-background"
