@@ -177,6 +177,7 @@ const CellphoneOverlay = ({
                           width: "16em",
                           fontSize: "2.2em",
                           display: "block",
+                          opacity: question.asked ? 0.3 : 1,
                         }}
                         onClick={addAnswerToDialog(index)}
                         disabled={question.asked}

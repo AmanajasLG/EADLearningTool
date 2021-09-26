@@ -80,11 +80,11 @@ const Game2 = (props) => {
     convOptions: [],
   };
   React.useEffect(() => {
-    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
-  }, [dispatch, playSessionControlActions, state.playSessionCreated]);
+  }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {
     if (mission)

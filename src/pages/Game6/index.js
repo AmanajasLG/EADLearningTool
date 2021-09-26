@@ -51,11 +51,11 @@ const Game6 = (props) => {
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {
-    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
-  }, [dispatch, playSessionControlActions, state.playSessionCreated]);
+  }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {
     if (mission)
@@ -252,6 +252,21 @@ const Game6 = (props) => {
       });
     }
   }, [missionData, state.wardrobe, timesPlayed, lang]);
+
+  React.useEffect(() => {
+    if (
+      state.countNow &&
+      (state.scene !== "INIT" || state.scene !== "END_GAME")
+    ) {
+      setState((s) => ({ ...s, countNow: false }));
+
+      setTimeout(
+        () =>
+          setState((s) => ({ ...s, seconds: s.seconds + 1, countNow: true })),
+        1000
+      );
+    }
+  }, [state]);
 
   const onStartGame = () => setState((s) => ({ ...s, scene: "INTRO" }));
 
@@ -849,6 +864,14 @@ const Game6 = (props) => {
             : null,
           inBodyNotInPhone: phoneBodyMatchErrors.inBodyNotInPhone,
           inPhoneNotInBody: phoneBodyMatchErrors.inPhoneNotInBody,
+          seconds: state.seconds,
+          inviteQuestionsMade: sawInvite
+            ? JSON.stringify(
+                state.inviteQuestions
+                  .filter((question) => question.asked)
+                  .map((question) => ({ text: question.question }))
+              )
+            : null,
         })
       );
   };
@@ -1074,12 +1097,12 @@ const Game6 = (props) => {
                           showRemove
                           onRemoveClick={removeClothesFromBody}
                           style={{
-                            width: "25%",
-                            height: "80em",
+                            width: "52em",
+                            height: "95em",
                             zIndex: state.tutorialBlobCount === 2 ? 1000000 : 0,
                             position: "absolute",
-                            bottom: "8%",
-                            left: "10%",
+                            bottom: "5em",
+                            left: "30em",
                           }}
                         />
 
@@ -1087,10 +1110,10 @@ const Game6 = (props) => {
                           style={{
                             zIndex: state.tutorialBlobCount === 1 ? 1000000 : 0,
                             position: "absolute",
-                            right: "5%",
-                            top: "10%",
-                            width: "45%",
-                            height: "80%",
+                            right: "9.5em",
+                            top: "10.8em",
+                            width: "86em",
+                            height: "86em",
                           }}
                           wardrobe={state.wardrobe}
                           onClothesClick={
@@ -1181,10 +1204,27 @@ const Game6 = (props) => {
                     {state.ready && (
                       <div className="confirm-screen">
                         <div className="character">
+                          <div
+                            id="shadow"
+                            style={{
+                              backgroundColor: "black",
+                              height: "8em",
+                              width: "30em",
+                              position: "absolute",
+                              right: "11em",
+                              bottom: "3em",
+                              borderRadius: "100%",
+                              opacity: 0.2,
+                            }}
+                          ></div>
                           <DressingCharacter
                             character={state.choosenCharacter}
                             clothes={state.clothes}
-                            style={{ height: "80em" }}
+                            style={{
+                              height: "100em",
+                              width: "50em",
+                              right: "20em",
+                            }}
                           />
                         </div>
 
@@ -1291,13 +1331,31 @@ const Game6 = (props) => {
                     )}
                     <div className="confirm-screen">
                       <div className="character">
+                        <div
+                          id="shadow"
+                          style={{
+                            backgroundColor: "black",
+                            height: "8em",
+                            width: "30em",
+                            position: "absolute",
+                            right: "11em",
+                            bottom: "3em",
+                            borderRadius: "100%",
+                            opacity: 0.2,
+                          }}
+                        ></div>
                         <DressingCharacter
                           character={state.choosenCharacter}
                           clothes={state.clothes}
-                          style={{ height: "80em" }}
+                          style={{
+                            height: "100em",
+                            width: "50em",
+                            right: "20em",
+                          }}
                         />
                       </div>
                       <Cellphone
+                        style={{ left: "10em" }}
                         // BOOLS
                         stopConversation={state.lastConfirmation}
                         showClothes={state.showPhoneClothes}
@@ -1391,10 +1449,10 @@ const Game6 = (props) => {
                       clothes={state.clothes}
                       style={{
                         position: "absolute",
-                        left: "-10em",
-                        width: "60em",
-                        height: "80em",
-                        bottom: "-20em",
+                        left: "-20em",
+                        width: "70em",
+                        height: "110em",
+                        bottom: "-50em",
                       }}
                     />
                   </div>

@@ -30,7 +30,7 @@ import Tutorial from "./components/Tutorial";
 import Notification from "./components/Notification";
 import Lamp from "../../_components/Lamp";
 
-import { Iniciar, Voltar } from "../../_components/Button";
+import { Iniciar, Voltar, ButtonConfigs } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
 import { ContactSupportOutlined } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
@@ -57,11 +57,11 @@ const Game5 = (props) => {
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {
-    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
-  }, [dispatch, playSessionControlActions, state.playSessionCreated]);
+  }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {
     if (mission)
@@ -178,6 +178,21 @@ const Game5 = (props) => {
       });
     }
   }, [missionData, state.wardrobe, timesPlayed, lang]);
+
+  React.useEffect(() => {
+    if (
+      state.countNow &&
+      (state.scene !== "INIT" || state.scene !== "END_GAME")
+    ) {
+      setState((s) => ({ ...s, countNow: false }));
+
+      setTimeout(
+        () =>
+          setState((s) => ({ ...s, seconds: s.seconds + 1, countNow: true })),
+        1000
+      );
+    }
+  }, [state]);
 
   const onStartGame = () => setState((s) => ({ ...state, scene: "INTRO" }));
 
@@ -474,6 +489,14 @@ const Game5 = (props) => {
             ];
           }, []),
           character: state.choosenCharacter.id,
+          seconds: state.seconds,
+          inviteQuestionsMade: sawInvite
+            ? JSON.stringify(
+                state.inviteQuestions
+                  .filter((question) => question.asked)
+                  .map((question) => ({ text: question.question }))
+              )
+            : null,
         })
       );
   };
@@ -523,7 +546,6 @@ const Game5 = (props) => {
                     {state.chooseCharacterScreen && (
                       <div
                         style={{
-                          position: "relative",
                           display: "flex",
                           flexDirection: "row",
                           justifyContent: "space-evenly",
@@ -547,8 +569,10 @@ const Game5 = (props) => {
                             character={character}
                             key={character.id}
                             style={{
+                              height: "108em",
+                              width: "60em",
                               cursor: "pointer",
-                              width: "70em",
+                              position: "relative",
                             }}
                             onClick={() =>
                               setState((s) => ({
@@ -640,6 +664,7 @@ const Game5 = (props) => {
                         <img
                           src={dressingBg}
                           style={{ position: "absolute" }}
+                          alt=""
                         />
 
                         <DressingCharacter
@@ -648,12 +673,12 @@ const Game5 = (props) => {
                           showRemove
                           onRemoveClick={removeClothesFromBody}
                           style={{
-                            width: "48em",
-                            height: "80em",
+                            width: "52em",
+                            height: "95em",
                             zIndex: state.blobToShow === 2 ? 1000000 : 0,
                             position: "absolute",
-                            bottom: "8.5em",
-                            left: "19em",
+                            bottom: "5em",
+                            left: "30em",
                           }}
                         />
 
@@ -670,19 +695,24 @@ const Game5 = (props) => {
                             height: "86em",
                           }}
                           wardrobe={state.wardrobe}
-                          onClothesClick={addClothesToBody}
+                          onClothesClick={
+                            state.showBlob ? () => {} : addClothesToBody
+                          }
                         />
                         {!state.showInvitation && (
                           <img
                             className="stretchIn"
                             src={envelopeIcon}
                             alt="invite-button"
-                            onClick={() =>
-                              setState((s) => ({
-                                ...s,
-                                showInvitation: true,
-                                showInviteQuestions: true,
-                              }))
+                            onClick={
+                              state.showBlob
+                                ? () => {}
+                                : () =>
+                                    setState((s) => ({
+                                      ...s,
+                                      showInvitation: true,
+                                      showInviteQuestions: true,
+                                    }))
                             }
                             style={{
                               cursor: "pointer",
@@ -697,20 +727,24 @@ const Game5 = (props) => {
 
                         <Lamp
                           img={[hanger, hangerH]}
-                          onClick={() => {
-                            let ready =
-                              state.clothes["Tronco"].length > 0 &&
-                              (state.clothes["Tronco"].find(
-                                (clothing) => clothing.cover === "inteiro"
-                              ) ||
-                                state.clothes["Pernas"].length > 0);
-                            setState((s) => ({
-                              ...s,
-                              ready: ready,
-                              readyAlert: !ready,
-                              dressingContext: !ready,
-                            }));
-                          }}
+                          onClick={
+                            state.showBlob
+                              ? () => {}
+                              : () => {
+                                  let ready =
+                                    state.clothes["Tronco"].length > 0 &&
+                                    (state.clothes["Tronco"].find(
+                                      (clothing) => clothing.cover === "inteiro"
+                                    ) ||
+                                      state.clothes["Pernas"].length > 0);
+                                  setState((s) => ({
+                                    ...s,
+                                    ready: ready,
+                                    readyAlert: !ready,
+                                    dressingContext: !ready,
+                                  }));
+                                }
+                          }
                           message="Estou pronto!"
                           style={{
                             top: "0.5%",
@@ -804,10 +838,27 @@ const Game5 = (props) => {
                     {state.ready && (
                       <div className="confirm-screen">
                         <div className="character">
+                          <div
+                            id="shadow"
+                            style={{
+                              backgroundColor: "black",
+                              height: "8em",
+                              width: "30em",
+                              position: "absolute",
+                              right: "11em",
+                              bottom: "3em",
+                              borderRadius: "100%",
+                              opacity: 0.2,
+                            }}
+                          ></div>
                           <DressingCharacter
                             character={state.choosenCharacter}
                             clothes={state.clothes}
-                            style={{ height: "80em" }}
+                            style={{
+                              height: "100em",
+                              width: "50em",
+                              right: "20em",
+                            }}
                           />
                         </div>
                         <div className="confirm-blob">
@@ -815,10 +866,8 @@ const Game5 = (props) => {
                             <span lang="pt-br">Pronto pra sair?</span>
                             <span lang="en">Ready to go outside?</span>
                           </div>
-                          <div className="btns">
-                            <button
-                              className="btn btn-center"
-                              id="btn-back"
+                          <div>
+                            <Voltar
                               onClick={() =>
                                 setState((s) => ({
                                   ...s,
@@ -826,16 +875,14 @@ const Game5 = (props) => {
                                   dressingContext: true,
                                 }))
                               }
-                            >
-                              Voltar
-                            </button>
-                            <button
-                              className="btn btn-center"
-                              id="btn-start"
+                              style={{ fontSize: "1.3em", marginRight: "1em" }}
+                            />
+                            <Iniciar
                               onClick={() => endGame()}
-                            >
-                              Continuar
-                            </button>
+                              style={{ fontSize: "1.3em" }}
+                              label="Continuar"
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                            />
                           </div>
                         </div>
                       </div>
@@ -851,11 +898,6 @@ const Game5 = (props) => {
                     }
                   >
                     <div className="feedback absolute-center">
-                      <DressingCharacter
-                        character={state.choosenCharacter}
-                        clothes={state.clothes}
-                        className="feedback-dressing-character"
-                      />
                       <FeedbackPanel
                         feedback={state.feedbackMessages}
                         won={state.won}
@@ -863,6 +905,17 @@ const Game5 = (props) => {
                         leave={() => setState({ ...state, back: true })}
                       />
                     </div>
+                    <DressingCharacter
+                      character={state.choosenCharacter}
+                      clothes={state.clothes}
+                      style={{
+                        position: "absolute",
+                        left: "-20em",
+                        width: "70em",
+                        height: "110em",
+                        bottom: "-50em",
+                      }}
+                    />
                   </div>
                 );
               default:

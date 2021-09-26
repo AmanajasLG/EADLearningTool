@@ -93,11 +93,11 @@ const Game3 = (props) => {
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {
-    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
-  }, [dispatch, playSessionControlActions, state.playSessionCreated]);
+  }, [dispatch, playSessionControlActions, state]);
 
   const onStartGame = () => setState({ ...state, scene: "INTRO" });
 

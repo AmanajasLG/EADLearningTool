@@ -1,4 +1,6 @@
 const initialState = () => ({
+  countNow: true,
+  seconds: 0,
   playSessionCreated: false,
   scene: "INIT",
   back: false,

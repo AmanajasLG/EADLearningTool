@@ -63,11 +63,11 @@ const Game4 = (props) => {
   let missionData = mission ? mission.missionData : null;
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
   React.useEffect(() => {
-    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
-  }, [dispatch, playSessionControlActions, state.playSessionCreated]);
+  }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {
     if (mission)

@@ -29,6 +29,7 @@ const Cellphone = ({
   removeAllClothes,
   addRemoveDialog,
   addCancelRemoveDialog,
+  ...props
 }) => {
   const [state, setState] = React.useState({
     removeItem: false,
@@ -63,7 +64,7 @@ const Cellphone = ({
           }
         />
       )}
-      <div id="big-cellphone-solo-wrapper">
+      <div id="big-cellphone-solo-wrapper" {...props}>
         <div id="big-cellphone-imgs">
           <img src={palma} alt="" />
           <img src={bigPhone} alt="" />
