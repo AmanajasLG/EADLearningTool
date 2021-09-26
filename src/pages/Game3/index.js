@@ -626,7 +626,7 @@ const Game3 = (props) => {
                         left: "50%",
                         transform: "translateX(-50%)",
                       }}
-                      run={false}
+                      run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
                         setState((s) => ({
@@ -720,27 +720,32 @@ const Game3 = (props) => {
                 return (
                   <div
                     style={{
+                      height: "100%",
+                      width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      padding: "12% 20%",
+                      // padding: "12% 20%",
                       backgroundColor: state.timeUp ? " #F9AFA1" : "#D6E3F4",
                     }}
                   >
                     <div
                       style={{
+                        position: "relative",
+                        marginTop: "30em",
+                        width: "70%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
                         display: "flex",
-                        width: "100%",
-                        height: "70%",
                         flexDirection: "row",
-                        justifyContent: "space-around",
+                        justifyContent: "center",
                       }}
                     >
                       <div style={{ position: "relative" }}>
                         <img
                           style={{
                             display: "block",
-                            height: 100,
-                            margin: "0 auto",
+                            height: "15em",
+                            margin: "2em auto",
                           }}
                           src={state.timeUp ? hourglassEmpty : hourglassFull}
                           alt=""
@@ -749,7 +754,7 @@ const Game3 = (props) => {
                           <div
                             style={{
                               textAlign: "center",
-                              fontSize: 36,
+                              fontSize: "4em",
                               fontFamily: "Abril fatface",
                               color: "rgb(89, 49, 109)",
                             }}
@@ -762,7 +767,7 @@ const Game3 = (props) => {
                           style={{
                             textAlign: "center",
                             fontFamily: "Barlow",
-                            fontSize: 24,
+                            fontSize: "4em",
                             color: "rgb(89, 49, 109)",
                           }}
                         >
@@ -771,8 +776,8 @@ const Game3 = (props) => {
                         <hr
                           style={{
                             display: "block",
-                            margin: "5% auto",
-                            width: "30%",
+                            margin: "1em auto",
+                            width: "5em",
                           }}
                         />
                         <p
@@ -791,18 +796,21 @@ const Game3 = (props) => {
 
                       <div
                         style={{
+                          marginLeft: "2em",
                           position: "relative",
-                          height: 300,
-                          width: "100%",
-                          paddingTop: 70,
-
+                          height: "4em",
+                          width: "5em",
                           backgroundImage: "url(" + blobLaranja + ")",
                           backgroundRepeat: "no-repeat",
                           backgroundPosition: "center center",
+                          backgroundSize: "contain",
                           textAlign: "center",
-                          fontSize: 92,
+                          fontSize: "10em",
                           fontFamily: "Abril fatface",
                           color: "rgb(89, 49, 109)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
                         {state.timeUp
@@ -828,7 +836,7 @@ const Game3 = (props) => {
                       style={{
                         display: "block",
                         margin: "0 auto",
-                        marginTop: "10%",
+                        marginTop: "5em",
                       }}
                     >
                       <div id="feedback-endGame-action-btns">

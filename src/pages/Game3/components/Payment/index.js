@@ -169,7 +169,7 @@ const Payment = ({ onConfirm, moneyList, updateCashierValue }) => {
           blink
           style={{
             position: "absolute",
-            left: "50%",
+            left: "40%",
             bottom: "2em",
             fontSize: "2.5em",
           }}
@@ -179,7 +179,7 @@ const Payment = ({ onConfirm, moneyList, updateCashierValue }) => {
               .toFixed(2)
           )}
         >
-          Continuar
+          Finalizar compra! / Checkout!
         </ButtonConfirm>
       )}
     </React.Fragment>
