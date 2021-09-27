@@ -1,4 +1,7 @@
 const initialState = () => ({
+  countNow: true,
+  seconds: 0,
+  playSessionCreated: false,
   scene: "INIT",
   chooseCharacterScreen: true,
   choosenCharacter: null,
@@ -46,6 +49,7 @@ const initialState = () => ({
   showInviteAnswer: false,
   showInviteQuestions: false,
   inviteAnswer: "",
+  inviteQuestionsMade: [],
 
   // NOTIFICATIONS
   showBlob: true,

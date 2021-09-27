@@ -2,7 +2,12 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
 
-import { gameActions, headerActions, musicActions } from "../../_actions";
+import {
+  gameActions,
+  headerActions,
+  musicActions,
+  playSessionControlActions,
+} from "../../_actions";
 
 import Init from "../../_components/Init";
 import Result from "../Game2/components/Result";
@@ -52,6 +57,13 @@ const Game1 = (props) => {
   const hasPlayed = useSelector((state) =>
     state.game.items.resultsCount ? state.game.items.resultsCount > 0 : false
   );
+
+  React.useEffect(() => {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
+      dispatch(playSessionControlActions.createNew(true));
+      setState((s) => ({ ...s, playSessionCreated: true }));
+    }
+  }, [dispatch, playSessionControlActions, state]);
 
   // React.useEffect(()=>{
   // 	if(mission && Object.keys(actions).length !== 0 && !missionData){
@@ -541,8 +553,6 @@ const Game1 = (props) => {
         }
       });
 
-      console.log(phoneErrors);
-
       const score = (result / state.totalFields).toFixed(2) * 100;
 
       setState((s) => ({
@@ -571,6 +581,8 @@ const Game1 = (props) => {
           seconds: state.seconds,
         })
       );
+
+      dispatch(playSessionControlActions.ended(true));
 
       dispatch(
         headerActions.setAll(

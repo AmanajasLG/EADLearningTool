@@ -1,6 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { gameActions, headerActions, musicActions } from "../../_actions";
+import {
+  gameActions,
+  headerActions,
+  musicActions,
+  playSessionControlActions,
+} from "../../_actions";
 import { headerConstants } from "../../_constants";
 
 import Init from "../../_components/Init";
@@ -74,6 +79,12 @@ const Game2 = (props) => {
     preSpeech: null,
     convOptions: [],
   };
+  React.useEffect(() => {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
+      dispatch(playSessionControlActions.createNew(true));
+      setState((s) => ({ ...s, playSessionCreated: true }));
+    }
+  }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {
     if (mission)
@@ -499,6 +510,8 @@ const Game2 = (props) => {
           : null,
       })
     );
+
+    dispatch(playSessionControlActions.ended(true));
 
     dispatch(
       headerActions.setAll(

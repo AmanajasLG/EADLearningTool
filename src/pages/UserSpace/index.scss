@@ -1,68 +1,69 @@
 #userspace {
-	margin: 50px;
+  margin: 50px;
 }
 
 #userspace > p {
-	text-align: center;
-	font-weight: bold;
-	font-size: 1.5em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
 }
 
 #userspace > div {
-	margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 .jogos {
-	margin: 0px;
-	margin-bottom: 10px;
+  margin: 0px;
+  margin-bottom: 10px;
 }
 
 .jogos p {
-	margin: 0px;
+  margin: 0px;
 }
 
 #missoes {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-content: flex-start;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
 }
 
 .missao {
-	border: 1px solid grey;
-	border-radius: 0.3em;
-	width: 250px;
-	overflow: hidden;
-	transition: 100ms linear;
+  margin: 1em;
+  border: 1px solid grey;
+  border-radius: 0.3em;
+  width: 250px;
+  overflow: hidden;
+  transition: 100ms linear;
 }
 
 .missao:hover {
-	box-shadow: 2px 5px 5px 2px #88888888;
+  box-shadow: 2px 5px 5px 2px #88888888;
 }
 
 .missao a {
-	text-decoration: none;
-	color: black;
+  text-decoration: none;
+  color: black;
 }
 
 #imagem {
-	height: 7rem;
-	background-color: #ffcca9;
+  height: 7rem;
+  background-color: #ffcca9;
 }
 
 #card-text-wrapper {
-	padding: 17px;
+  padding: 17px;
 }
 
 #nome-missao {
-	font-family: 'abril fatface';
-	color: #59316d;
-	font-size: 1.5rem;
+  font-family: "abril fatface";
+  color: #59316d;
+  font-size: 1.5rem;
 }
 
 #descricao {
-	font-family: 'assistant';
-	font-size: 0.9rem;
-	margin: 15px 0px;
+  font-family: "assistant";
+  font-size: 0.9rem;
+  margin: 15px 0px;
 }

@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import "./index.scss";
 
 import {
-  apiActions,
+  playSessionControlActions,
   gameActions,
   headerActions,
   musicActions,
@@ -20,20 +20,17 @@ import Button, {
   Iniciar,
   Voltar,
 } from "../../_components/Button";
-import { BlobBg } from "../../_components/Blob";
-import { renderToStaticMarkup } from "react-dom/server";
-import { tomato, dressingBg, camera } from "../../img";
+import { tomato, dressingBg, camera, blobLowScore } from "../../img";
 
 import initialState from "./initialState";
-import Tutorial from "./components/Tutorial";
 import Notification from "./components/Notification";
 import Lamp from "../../_components/Lamp";
 
 import FeedbackPanel from "./components/FeedbackPanel";
-import { ContactSupportOutlined, ErrorSharp } from "@material-ui/icons";
-import TutorialWardrobe from "./components/TutorialWardrobe";
 import CellphoneOverlay from "./components/CellphoneOverlay";
 import Cellphone from "./components/Cellphone";
+
+import TutorialBlob from "../../_components/TutorialBlob";
 
 const Game6 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -51,13 +48,14 @@ const Game6 = (props) => {
       : null
   );
   let missionData = mission ? mission.missionData : null;
-
-  let currentPlaySession = useSelector((state) =>
-    state.play_sessions ? state.play_sessions.items[0] : {}
-  );
-  const { play_sessionsActions } = apiActions;
-  // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
+
+  React.useEffect(() => {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
+      dispatch(playSessionControlActions.createNew(true));
+      setState((s) => ({ ...s, playSessionCreated: true }));
+    }
+  }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {
     if (mission)
@@ -255,6 +253,21 @@ const Game6 = (props) => {
     }
   }, [missionData, state.wardrobe, timesPlayed, lang]);
 
+  React.useEffect(() => {
+    if (
+      state.countNow &&
+      (state.scene !== "INIT" || state.scene !== "END_GAME")
+    ) {
+      setState((s) => ({ ...s, countNow: false }));
+
+      setTimeout(
+        () =>
+          setState((s) => ({ ...s, seconds: s.seconds + 1, countNow: true })),
+        1000
+      );
+    }
+  }, [state]);
+
   const onStartGame = () => setState((s) => ({ ...s, scene: "INTRO" }));
 
   // INTRO
@@ -387,10 +400,10 @@ const Game6 = (props) => {
 
   // SELECT CLOTHES IN PHONE
   const addAnswerToDialogSend = (item) => () => {
-    if (state.showBlob) {
+    if (state.showTutorialBlob) {
       setState((s) => ({
         ...s,
-        blobToShow: s.blobToShow + 1,
+        tutorialBlobCount: s.tutorialBlobCount + 1,
       }));
     }
 
@@ -823,6 +836,8 @@ const Game6 = (props) => {
     );
     dispatch(headerActions.setState(headerConstants.STATES.OVERLAY));
 
+    dispatch(playSessionControlActions.ended(true));
+
     if (saveResult)
       dispatch(
         gameActions.create("results", {
@@ -849,6 +864,14 @@ const Game6 = (props) => {
             : null,
           inBodyNotInPhone: phoneBodyMatchErrors.inBodyNotInPhone,
           inPhoneNotInBody: phoneBodyMatchErrors.inPhoneNotInBody,
+          seconds: state.seconds,
+          inviteQuestionsMade: sawInvite
+            ? JSON.stringify(
+                state.inviteQuestions
+                  .filter((question) => question.asked)
+                  .map((question) => ({ text: question.question }))
+              )
+            : null,
         })
       );
   };
@@ -883,16 +906,38 @@ const Game6 = (props) => {
               case "INTRO":
                 return (
                   <React.Fragment>
-                    {state.showBlob && (
-                      <Tutorial
-                        blobMessage={state.tutorialBlobsText[state.blobToShow]}
-                        onClickToEnd={() =>
+                    {state.showTutorialBlob && (
+                      <TutorialBlob
+                        text={
+                          state.tutotialMessages[state.tutorialBlobCount].text
+                        }
+                        translation={
+                          state.tutotialMessages[state.tutorialBlobCount]
+                            .textTranslate
+                        }
+                        position={
+                          state.tutotialMessages[state.tutorialBlobCount]
+                            .position
+                        }
+                        endTutorial={
+                          state.tutorialBlobCount ===
+                          state.tutotialMessages.length - 1
+                        }
+                        onContinue={() =>
                           setState((s) => ({
                             ...s,
-                            blobToShow: s.blobToShow + 1,
-                            showBlob: false,
+                            tutorialBlobCount: s.tutorialBlobCount + 1,
+                            showTutorialBlob: false,
                           }))
                         }
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          position: "absolute",
+                          zIndex: 10,
+                          top: 0,
+                          backgroundColor: "rgba(255,255,255,0.66)",
+                        }}
                       />
                     )}
 
@@ -906,12 +951,27 @@ const Game6 = (props) => {
                           height: "100%",
                         }}
                       >
+                        <img
+                          src={blobLowScore}
+                          style={{
+                            position: "absolute",
+                            height: "100%",
+                            width: "100%",
+                            objectFit: "cover",
+                          }}
+                          alt="background-blob"
+                        />
                         {state.characters.map((character, index) => (
                           <DressingCharacter
                             key={index}
                             clothes={state.clothes}
                             character={character}
-                            style={{ height: "50%", cursor: "pointer" }}
+                            style={{
+                              height: "108em",
+                              width: "60em",
+                              cursor: "pointer",
+                              position: "relative",
+                            }}
                             onClick={() =>
                               setState((s) => ({
                                 ...s,
@@ -962,7 +1022,7 @@ const Game6 = (props) => {
                             proceedToDressingConfirmation: false,
                             dressingContext: true,
                             showInvitation: false,
-                            showBlob: true,
+                            showTutorialBlob: true,
                           }))
                         }
                         backButtonLabel="Ver conversa/View conversation"
@@ -980,25 +1040,47 @@ const Game6 = (props) => {
               case "DRESS":
                 return (
                   <React.Fragment>
-                    {state.showBlob && (
-                      <TutorialWardrobe
-                        blobMessage={state.tutorialBlobsText[state.blobToShow]}
-                        onClickToEnd={() => {
+                    {state.showTutorialBlob && (
+                      <TutorialBlob
+                        text={
+                          state.tutotialMessages[state.tutorialBlobCount].text
+                        }
+                        translation={
+                          state.tutotialMessages[state.tutorialBlobCount]
+                            .textTranslate
+                        }
+                        position={
+                          state.tutotialMessages[state.tutorialBlobCount]
+                            .position
+                        }
+                        endTutorial={
+                          state.tutorialBlobCount ===
+                          state.tutotialMessages.length - 1
+                        }
+                        onContinue={() => {
                           if (
-                            state.blobToShow <
-                            state.tutorialBlobsText.length - 1
+                            state.tutorialBlobCount <
+                            state.tutotialMessages.length - 1
                           )
                             setState((s) => ({
                               ...s,
-                              blobToShow: s.blobToShow + 1,
+                              tutorialBlobCount: s.tutorialBlobCount + 1,
                             }));
                           else
                             setState((s) => ({
                               ...s,
-                              showBlob: false,
+                              tutorialBlobCount: s.tutorialBlobCount + 1,
+                              showTutorialBlob: false,
                             }));
                         }}
-                        index={state.blobToShow}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          zIndex: 10,
+                          position: "absolute",
+                          top: 0,
+                          backgroundColor: "rgba(255,255,255,0.66)",
+                        }}
                       />
                     )}
 
@@ -1015,49 +1097,55 @@ const Game6 = (props) => {
                           showRemove
                           onRemoveClick={removeClothesFromBody}
                           style={{
-                            width: "25%",
-                            height: "80em",
-                            zIndex: state.blobToShow === 2 ? 1000000 : 0,
+                            width: "52em",
+                            height: "95em",
+                            zIndex: state.tutorialBlobCount === 2 ? 1000000 : 0,
                             position: "absolute",
-                            bottom: "8%",
-                            left: "10%",
+                            bottom: "5em",
+                            left: "30em",
                           }}
                         />
 
                         <Wardrobe
                           style={{
-                            zIndex: state.blobToShow === 1 ? 1000000 : 0,
+                            zIndex: state.tutorialBlobCount === 1 ? 1000000 : 0,
                             position: "absolute",
-                            right: "5%",
-                            top: "10%",
-                            width: "45%",
-                            height: "80%",
+                            right: "9.5em",
+                            top: "10.8em",
+                            width: "86em",
+                            height: "86em",
                           }}
                           wardrobe={state.wardrobe}
-                          onClothesClick={addClothesToBody}
+                          onClothesClick={
+                            state.showTutorialBlob ? () => {} : addClothesToBody
+                          }
                         />
 
                         <Lamp
                           img={[camera]}
-                          onClick={() => {
-                            let ready =
-                              state.clothes["Tronco"].length > 0 &&
-                              (state.clothes["Tronco"].find(
-                                (clothing) => clothing.cover === "inteiro"
-                              ) ||
-                                state.clothes["Pernas"].length > 0);
-                            setState((s) => ({
-                              ...s,
-                              ready: ready,
-                              readyAlert: !ready,
-                              dressingContext: !ready,
-                            }));
-                          }}
+                          onClick={
+                            state.showTutorialBlob
+                              ? () => {}
+                              : () => {
+                                  let ready =
+                                    state.clothes["Tronco"].length > 0 &&
+                                    (state.clothes["Tronco"].find(
+                                      (clothing) => clothing.cover === "inteiro"
+                                    ) ||
+                                      state.clothes["Pernas"].length > 0);
+                                  setState((s) => ({
+                                    ...s,
+                                    ready: ready,
+                                    readyAlert: !ready,
+                                    dressingContext: !ready,
+                                  }));
+                                }
+                          }
                           message="Estou pronto!"
                           style={{
                             top: "0.5%",
                             left: "1%",
-                            zIndex: state.blobToShow === 4 ? 1000000 : 0,
+                            zIndex: state.tutorialBlobCount === 4 ? 1000000 : 0,
                           }}
                         />
 
@@ -1077,6 +1165,7 @@ const Game6 = (props) => {
                           }
                           questions={state.inviteQuestions}
                           addAnswerToDialog={addAnswerToDialogDress}
+                          shouldOverlayAll={state.tutorialBlobCount === 3}
                         />
                       </React.Fragment>
                     )}
@@ -1115,10 +1204,27 @@ const Game6 = (props) => {
                     {state.ready && (
                       <div className="confirm-screen">
                         <div className="character">
+                          <div
+                            id="shadow"
+                            style={{
+                              backgroundColor: "black",
+                              height: "8em",
+                              width: "30em",
+                              position: "absolute",
+                              right: "11em",
+                              bottom: "3em",
+                              borderRadius: "100%",
+                              opacity: 0.2,
+                            }}
+                          ></div>
                           <DressingCharacter
                             character={state.choosenCharacter}
                             clothes={state.clothes}
-                            style={{ height: "80em" }}
+                            style={{
+                              height: "100em",
+                              width: "50em",
+                              right: "20em",
+                            }}
                           />
                         </div>
 
@@ -1173,8 +1279,8 @@ const Game6 = (props) => {
                                 setState((s) => ({
                                   ...s,
                                   scene: "SEND",
-                                  showBlob: true,
-                                  blobToShow: 0,
+                                  showTutorialBlob: true,
+                                  tutorialBlobCount: 0,
                                 }))
                               }
                             />
@@ -1187,30 +1293,32 @@ const Game6 = (props) => {
               case "SEND":
                 return (
                   <React.Fragment>
-                    {state.showBlob && (
+                    {state.showTutorialBlob && (
                       <div className="tutorial-notification">
                         <div className="utorial-notification-content">
                           <div className="tutorial-notification-message blob-right">
                             <span lang="pt-br">
                               {
-                                state.tutorialPhoneBlobsText[state.blobToShow]
-                                  .text
+                                state.tutorialPhoneBlobsText[
+                                  state.tutorialBlobCount
+                                ].text
                               }
                             </span>
                             <span lang="en">
                               {
-                                state.tutorialPhoneBlobsText[state.blobToShow]
-                                  .textTranslate
+                                state.tutorialPhoneBlobsText[
+                                  state.tutorialBlobCount
+                                ].textTranslate
                               }
                             </span>
-                            {state.blobToShow === 2 && (
+                            {state.tutorialBlobCount === 2 && (
                               <Button
                                 blink
                                 colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                                 onClick={() =>
                                   setState((s) => ({
                                     ...s,
-                                    showBlob: false,
+                                    showTutorialBlob: false,
                                   }))
                                 }
                               >
@@ -1223,13 +1331,31 @@ const Game6 = (props) => {
                     )}
                     <div className="confirm-screen">
                       <div className="character">
+                        <div
+                          id="shadow"
+                          style={{
+                            backgroundColor: "black",
+                            height: "8em",
+                            width: "30em",
+                            position: "absolute",
+                            right: "11em",
+                            bottom: "3em",
+                            borderRadius: "100%",
+                            opacity: 0.2,
+                          }}
+                        ></div>
                         <DressingCharacter
                           character={state.choosenCharacter}
                           clothes={state.clothes}
-                          style={{ height: "80em" }}
+                          style={{
+                            height: "100em",
+                            width: "50em",
+                            right: "20em",
+                          }}
                         />
                       </div>
                       <Cellphone
+                        style={{ left: "10em" }}
                         // BOOLS
                         stopConversation={state.lastConfirmation}
                         showClothes={state.showPhoneClothes}
@@ -1311,11 +1437,6 @@ const Game6 = (props) => {
                     }
                   >
                     <div className="feedback absolute-center">
-                      <DressingCharacter
-                        character={state.choosenCharacter}
-                        clothes={state.clothes}
-                        className="feedback-dressing-character"
-                      />
                       <FeedbackPanel
                         feedback={state.feedbackMessages}
                         won={state.won}
@@ -1323,6 +1444,17 @@ const Game6 = (props) => {
                         leave={() => setState((s) => ({ ...s, back: true }))}
                       />
                     </div>
+                    <DressingCharacter
+                      character={state.choosenCharacter}
+                      clothes={state.clothes}
+                      style={{
+                        position: "absolute",
+                        left: "-20em",
+                        width: "70em",
+                        height: "110em",
+                        bottom: "-50em",
+                      }}
+                    />
                   </div>
                 );
               default:

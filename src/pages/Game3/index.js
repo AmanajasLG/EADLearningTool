@@ -10,12 +10,14 @@ import {
   zeroFill,
   numberToMoney,
   shuffle,
+  preventSingleWordBreak,
 } from "../../_helpers";
 
 import {
   gameActions,
   headerActions,
   musicActions,
+  playSessionControlActions,
 } from "../../_actions";
 import { headerConstants } from "../../_constants";
 
@@ -32,7 +34,12 @@ import Tutorial from "./components/Tutorial";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
 import ShopCart from "./components/ShopCart";
-import { Button, Iniciar, Voltar } from "../../_components/Button"
+import {
+  Button,
+  Iniciar,
+  Voltar,
+  ButtonConfigs,
+} from "../../_components/Button";
 
 import {
   cart,
@@ -85,8 +92,14 @@ const Game3 = (props) => {
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
-  const onStartGame = () => setState({ ...state, scene: "INTRO" });
+  React.useEffect(() => {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
+      dispatch(playSessionControlActions.createNew(true));
+      setState((s) => ({ ...s, playSessionCreated: true }));
+    }
+  }, [dispatch, playSessionControlActions, state]);
 
+  const onStartGame = () => setState({ ...state, scene: "INTRO" });
 
   React.useEffect(() => {
     if (mission)
@@ -124,8 +137,7 @@ const Game3 = (props) => {
       state.ingredientsList.length === 0 &&
       timesPlayed !== undefined
     ) {
-      let initTime =
-        missionData.seconds - 30 * (timesPlayed > 2 ? 2 : timesPlayed);
+      let initTime = missionData.seconds;
       let remainingTime = initTime;
 
       let recipe =
@@ -392,6 +404,8 @@ const Game3 = (props) => {
 
     let wrongIngredients = getWrongItemsInCart();
 
+    dispatch(playSessionControlActions.ended(true));
+
     dispatch(
       gameActions.create("results", {
         user: userId,
@@ -477,7 +491,12 @@ const Game3 = (props) => {
                 return (
                   <React.Fragment>
                     <Timer
-                      style={{ position: "absolute", top: "5%", left: "50%", transform: "translateX(-50%)" }}
+                      style={{
+                        position: "absolute",
+                        top: "5%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                      }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) =>
@@ -551,12 +570,19 @@ const Game3 = (props) => {
                             <span lang="en">Are you sure that's all?</span>
                           </div>
                           <div className={styles.btns}>
-                            <Voltar onClick={() => setState({
-                              ...state,
-                              checkoutConfirm: false,
-                              runTimer: true,
-                            })}/>
-                            <Iniciar label={"Continuar"} onClick={moveToCheckout} />
+                            <Voltar
+                              onClick={() =>
+                                setState({
+                                  ...state,
+                                  checkoutConfirm: false,
+                                  runTimer: true,
+                                })
+                              }
+                            />
+                            <Iniciar
+                              label={"Continuar"}
+                              onClick={moveToCheckout}
+                            />
                           </div>
                         </div>
                         <img src={cart} alt="" />
@@ -594,7 +620,12 @@ const Game3 = (props) => {
                       alt=""
                     />
                     <Timer
-                      style={{ position: "absolute", top: "5%", left: "50%", transform: "translateX(-50%)" }}
+                      style={{
+                        position: "absolute",
+                        top: "5%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                      }}
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
@@ -626,6 +657,31 @@ const Game3 = (props) => {
                       src={cashierTable}
                       alt=""
                     />
+                    {state.moneySelection && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: "4em",
+                          width: "60em",
+                          textAlign: "center",
+                          zIndex: 10,
+                          backgroundColor: "#59316d",
+                          padding: "1.5em",
+                          left: "2.5em",
+                          borderRadius: "0 2em 2em 2em",
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: "white",
+                            fontSize: "3em",
+                          }}
+                        >
+                          Sua compra deu <b>{numberToMoney(state.price)}</b>.
+                        </span>
+                      </div>
+                    )}
+
                     <div
                       style={{
                         position: "absolute",
@@ -638,21 +694,24 @@ const Game3 = (props) => {
                         flexDirection: "column",
                         justifyContent: "center",
                         textAlign: "center",
-                        color: "white"
+                        color: "white",
                       }}
                     >
                       <span
                         style={{
-                          fontSize: "2.2em"
+                          fontSize: "2.2em",
                         }}
                       >
-                        {state.price}
+                        {state.cashierValue}
                       </span>
                     </div>
                     {state.moneySelection && (
                       <Payment
                         moneyList={missionData.money}
                         onConfirm={(value) => () => doPayment(value)}
+                        updateCashierValue={(value) =>
+                          setState((s) => ({ ...s, cashierValue: value }))
+                        }
                       />
                     )}
                   </React.Fragment>
@@ -661,27 +720,32 @@ const Game3 = (props) => {
                 return (
                   <div
                     style={{
+                      height: "100%",
+                      width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      padding: "12% 20%",
+                      // padding: "12% 20%",
                       backgroundColor: state.timeUp ? " #F9AFA1" : "#D6E3F4",
                     }}
                   >
                     <div
                       style={{
+                        position: "relative",
+                        marginTop: "30em",
+                        width: "70%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
                         display: "flex",
-                        width: "100%",
-                        height: "70%",
                         flexDirection: "row",
-                        justifyContent: "space-around",
+                        justifyContent: "center",
                       }}
                     >
                       <div style={{ position: "relative" }}>
                         <img
                           style={{
                             display: "block",
-                            height: 100,
-                            margin: "0 auto",
+                            height: "15em",
+                            margin: "2em auto",
                           }}
                           src={state.timeUp ? hourglassEmpty : hourglassFull}
                           alt=""
@@ -690,7 +754,7 @@ const Game3 = (props) => {
                           <div
                             style={{
                               textAlign: "center",
-                              fontSize: 36,
+                              fontSize: "4em",
                               fontFamily: "Abril fatface",
                               color: "rgb(89, 49, 109)",
                             }}
@@ -703,7 +767,7 @@ const Game3 = (props) => {
                           style={{
                             textAlign: "center",
                             fontFamily: "Barlow",
-                            fontSize: 24,
+                            fontSize: "4em",
                             color: "rgb(89, 49, 109)",
                           }}
                         >
@@ -712,8 +776,8 @@ const Game3 = (props) => {
                         <hr
                           style={{
                             display: "block",
-                            margin: "5% auto",
-                            width: "30%",
+                            margin: "1em auto",
+                            width: "5em",
                           }}
                         />
                         <p
@@ -732,18 +796,21 @@ const Game3 = (props) => {
 
                       <div
                         style={{
+                          marginLeft: "2em",
                           position: "relative",
-                          height: 300,
-                          width: "100%",
-                          paddingTop: 70,
-
+                          height: "4em",
+                          width: "5em",
                           backgroundImage: "url(" + blobLaranja + ")",
                           backgroundRepeat: "no-repeat",
                           backgroundPosition: "center center",
+                          backgroundSize: "contain",
                           textAlign: "center",
-                          fontSize: 92,
+                          fontSize: "10em",
                           fontFamily: "Abril fatface",
                           color: "rgb(89, 49, 109)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
                         {state.timeUp
@@ -769,18 +836,21 @@ const Game3 = (props) => {
                       style={{
                         display: "block",
                         margin: "0 auto",
-                        marginTop: "10%",
+                        marginTop: "5em",
                       }}
                     >
                       <div id="feedback-endGame-action-btns">
-                        <Button onClick={restart}>Tentar novamente</Button>
-                        <Button
-                          onClick={() =>
-                            setState((s) => ({ ...s, back: true }))
-                          }
-                        >
-                          Sair do jogo
-                        </Button>
+                        <Voltar
+                          label={"Tentar novamente"}
+                          colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
+                          onClick={restart}
+                          style={{ marginRight: "2em" }}
+                        />
+                        <Iniciar
+                          label={"Sair do jogo"}
+                          colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                          onClick={() => setState({ ...state, back: true })}
+                        />
                       </div>
                     </div>
                   </div>

@@ -4,7 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 // import { Link, Redirect } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 
-import { gameActions, headerActions, musicActions } from "../../_actions";
+import {
+  gameActions,
+  headerActions,
+  musicActions,
+  playSessionControlActions,
+} from "../../_actions";
 import { headerConstants } from "../../_constants";
 
 import Init from "../../_components/Init";
@@ -32,6 +37,9 @@ import {
   error,
   tomato,
   kitchen,
+  notepad,
+  tableware,
+  chefHat,
 } from "../../img";
 import FeedbackPanel from "./components/FeedbackPanel";
 import Tutorial from "./components/Tutorial";
@@ -53,9 +61,13 @@ const Game4 = (props) => {
       : null
   );
   let missionData = mission ? mission.missionData : null;
-
-  // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
+  React.useEffect(() => {
+    if (mission.trackPlayerInput && !state.playSessionCreated) {
+      dispatch(playSessionControlActions.createNew(true));
+      setState((s) => ({ ...s, playSessionCreated: true }));
+    }
+  }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {
     if (mission)
@@ -414,7 +426,7 @@ const Game4 = (props) => {
             : "You picked the right ingredients on your first try!",
         },
         {
-          image: tomato,
+          image: notepad,
           message: state.wrongIngredientNameOrder.length
             ? "Dar nomes aos ingredientes te deu algum trabalho!"
             : "Acertar os nomes foi moleza para você!",
@@ -423,7 +435,7 @@ const Game4 = (props) => {
             : "Getting the names right was a piece of cake for you!",
         },
         {
-          image: tomato,
+          image: tableware,
           message: state.wrongTablewarePairSelected.length
             ? "Você teve um pouco de dificuldade em ligar os utensílios aos seus nomes."
             : "Ligar os utensílios aos seus nomes foi fácil para você!",
@@ -432,7 +444,7 @@ const Game4 = (props) => {
             : "Matching the kitchen utensils with their names was pretty easy for you!",
         },
         {
-          image: tomato,
+          image: chefHat,
           message: state.wrongTablewareSelected.length
             ? "E você tem alguns problemas sobre como servir sua comida..."
             : "E você sabe exatamente onde servir sua comida!",
@@ -452,6 +464,8 @@ const Game4 = (props) => {
       )
     );
     dispatch(headerActions.setState(headerConstants.STATES.OVERLAY));
+
+    dispatch(playSessionControlActions.ended(true));
 
     if (saveResult)
       dispatch(
@@ -567,7 +581,7 @@ const Game4 = (props) => {
                           setState((s) => ({
                             ...s,
                             blobToShow: s.blobToShow + 1,
-                            showBlob: false,
+                            showBlob: s.blobToShow + 1 === 2 ? false : true,
                           }))
                         }
                       />

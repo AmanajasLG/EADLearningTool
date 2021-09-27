@@ -32,6 +32,9 @@ import tomato from "./Game3/Tomate_lista.svg";
 // GAME 4
 import table from "./Game4/table.svg";
 import silverCloche from "./Game4/silver-cloche.svg";
+import notepad from "./Game4/escrita.svg";
+import tableware from "./Game4/utensilios.svg";
+import chefHat from "./Game4/chapeu chef.svg";
 //  GAME 5
 import envelope from "./envelope grande.svg";
 import envelopeIcon from "./Game5/envelope icone.svg";
@@ -79,6 +82,9 @@ import relogio from "./relogio.svg";
 import locationArrow from "./arrow.svg";
 
 export {
+  notepad,
+  tableware,
+  chefHat,
   locationArrow,
   calendarFeedbackIcon,
   emailFeedbackIcon,
