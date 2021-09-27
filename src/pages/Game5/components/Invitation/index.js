@@ -5,7 +5,7 @@ import Button from "../../../../_components/Button";
 const Invitation = ({invitation, onClick}) => {
   return(
     <React.Fragment>
-      <img src={envelope} style={{backgroundColor: '#F9AFA1'}}/>
+      <img src={envelope} style={{backgroundColor: '#F9AFA1'}} alt=""/>
       <div
         style={{
           position: "absolute",

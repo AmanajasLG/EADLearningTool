@@ -32,10 +32,9 @@ import Lamp from "../../_components/Lamp";
 
 import { Iniciar, Voltar, ButtonConfigs } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
-import { ContactSupportOutlined } from "@material-ui/icons";
 import TutorialWardrobe from "./components/TutorialWardrobe";
 import Invitation from "./components/Invitation";
-import ChooseCharacter from "./components/ChooseCharacter";
+// import ChooseCharacter from "./components/ChooseCharacter";
 
 const Game5 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -759,7 +758,7 @@ const Game5 = (props) => {
 
                     {state.showInvitation && (
                       <div id="invitation-content-wrapper">
-                        <img src={envelope} />
+                        <img src={envelope} alt="Rever convite"/>
                         <div id="invitation-content">
                           {state.showInviteQuestions && (
                             <div className="invitation-questions">
