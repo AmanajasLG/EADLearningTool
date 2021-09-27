@@ -28,6 +28,73 @@
   }
 }
 
+#invitation-content-wrapper {
+  position: absolute;
+  inset: 0 0 0 0;
+  background-color: #ffcca9cc;
+  text-align: center;
+  > img {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    left: 0;
+  }
+}
+
+#invitation-content {
+  position: absolute;
+  inset: 21em 60em 30em 60em;
+  > #invitation-voltar {
+    position: absolute;
+    bottom: -25em;
+    width: 100%;
+    > button {
+      font-size: 2.3em;
+    }
+  }
+  .invitation-questions{
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    > button {
+      flex-grow: 1;
+      background: #535c89;
+      color: white;
+      border: none;
+      font-family: 'Barlow';
+      font-weight: 600;
+      font-size: 3.4em;
+      margin: 0.3em 0;
+      border-radius: 0.6em;
+      cursor: pointer;
+      transition: 100ms ease-in-out;
+    }
+    > button:hover {
+      background: #59316d;
+    }
+    > button:disabled {
+      background: #949494;
+      pointer-events: none;
+      cursor: default;
+    }
+  }
+  #invitation-answer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow';
+    font-size: 5em;
+    font-weight: 600;
+    color: #59316d;
+  }
+}
+
 .confirm-blob {
   position: absolute;
   left: 5%;

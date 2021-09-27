@@ -758,49 +758,45 @@ const Game5 = (props) => {
                     )}
 
                     {state.showInvitation && (
-                      <div
-                        style={{
-                          position: "absolute",
-                          bottom: 0,
-                          width: "50%",
-                          height: "50%",
-                          left: "25%",
-                          backgroundColor: "var(--color-second)",
-                          textAlign: "center",
-                        }}
-                      >
-                        {state.showInviteQuestions && (
-                          <div>
-                            {state.inviteQuestions.map((question, index) => (
-                              <button
-                                key={index}
-                                onClick={showInviteAnswer(index)}
-                                disabled={question.asked}
-                              >
-                                <span>{question.question}</span>
-                              </button>
-                            ))}
-                          </div>
-                        )}
+                      <div id="invitation-content-wrapper">
+                        <img src={envelope} />
+                        <div id="invitation-content">
+                          {state.showInviteQuestions && (
+                            <div className="invitation-questions">
+                              {state.inviteQuestions.map((question, index) => (
+                                <button
+                                  key={index}
+                                  onClick={showInviteAnswer(index)}
+                                  disabled={question.asked}
+                                >
+                                  <span>{question.question}</span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
 
-                        {state.showInviteAnswer && (
-                          <span>{state.inviteAnswer}</span>
-                        )}
-                        <Voltar
-                          onClick={() => {
-                            if (state.showInviteQuestions)
-                              setState((s) => ({
-                                ...s,
-                                showInvitation: false,
-                              }));
-                            else
-                              setState((s) => ({
-                                ...s,
-                                showInviteQuestions: true,
-                                showInviteAnswer: false,
-                              }));
-                          }}
-                        />
+                          {state.showInviteAnswer && (
+                            <div id="invitation-answer">{state.inviteAnswer}</div>
+                          )}
+                          <div id="invitation-voltar">
+                            <Voltar
+                              colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                              onClick={() => {
+                                if (state.showInviteQuestions)
+                                  setState((s) => ({
+                                    ...s,
+                                    showInvitation: false,
+                                  }));
+                                else
+                                  setState((s) => ({
+                                    ...s,
+                                    showInviteQuestions: true,
+                                    showInviteAnswer: false,
+                                  }));
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     )}
 
