@@ -13,7 +13,7 @@ import {
 import { headerConstants } from "../../_constants";
 
 import Init from "../../_components/Init";
-import Intro from "../Game3/components/Intro";
+import Intro from "./components/Intro";
 import ChefDialog from "../Game3/components/ChefDialog";
 import Timer from "../../_components/Timer";
 import Recipe from "../../_components/Recipe";
@@ -63,7 +63,7 @@ const Game4 = (props) => {
   let missionData = mission ? mission.missionData : null;
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
   React.useEffect(() => {
-    if (mission.trackPlayerInput && !state.playSessionCreated) {
+    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
@@ -105,8 +105,7 @@ const Game4 = (props) => {
       state.ingredientsList.length === 0 &&
       timesPlayed !== undefined
     ) {
-      let initTime =
-        missionData.seconds - 60 * (timesPlayed > 2 ? 2 : timesPlayed);
+      let initTime = missionData.seconds;
       let remainingTime = initTime;
 
       // safe copies
@@ -977,11 +976,7 @@ const Game4 = (props) => {
                 );
               case "END_GAME":
                 return (
-                  <div
-                    className={
-                      state.timeUp ? "salmon-background" : "blue-background"
-                    }
-                  >
+                  <div>
                     <div className="game-4-feedback absolute-center">
                       {state.timeUp ? (
                         <div className="game-4-feedback-lose-wrapper">

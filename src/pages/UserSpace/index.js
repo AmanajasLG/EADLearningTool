@@ -27,31 +27,33 @@ const UserSpace = () => {
         <div>Loading...</div>
       ) : (
         <div>
-          <div
-            style={{
-              position: "relative",
-              border: "dashed 2px black",
-              borderRadius: "2em",
-              padding: "1em",
-              fontSize: "1.3em",
-              textAlign: "center",
-              marginBottom: "1.5em",
-              marginTop: "-3em",
-            }}
-          >
-            <p
+          {user.role.type === "aluno" && (
+            <div
               style={{
-                fontFamily: "abril fatfac",
-                fontWeight: 800,
-                color: "#59316d",
+                position: "relative",
+                border: "dashed 2px black",
+                borderRadius: "2em",
+                padding: "1em",
+                fontSize: "1.3em",
+                textAlign: "center",
+                marginBottom: "1.5em",
+                marginTop: "-3em",
               }}
             >
-              Hello, we would like to thank you, student, for taking the time to
-              help us test these games that aim to help you retain the content
-              learned in the Portuguese course at CCBF! We hope you enjoy them
-              :) have fun and good studies!
-            </p>
-          </div>
+              <p
+                style={{
+                  fontFamily: "abril fatfac",
+                  fontWeight: 800,
+                  color: "#59316d",
+                }}
+              >
+                Hello, we would like to thank you, student, for taking the time
+                to help us test these games that aim to help you retain the
+                content learned in the Portuguese course at CCBF! We hope you
+                enjoy them ^^ have fun and good studies!
+              </p>
+            </div>
+          )}
           <p>Oi {user.username}!</p>
 
           {/* user.role.type === "professor"  && <div id="area-criacao">

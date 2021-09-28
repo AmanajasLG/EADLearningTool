@@ -33,8 +33,9 @@ const GameContext = (props) => {
     gameConfig: false,
     back: false,
     config: false,
-    debug: true,
+    debug: process.env.NODE_ENV === "development",
     alignment: { vertical: ALIGNMENTS.CENTER, horizontal: ALIGNMENTS.CENTER },
+    gameEnded: false,
   });
 
   const { play_sessionsActions } = apiActions;
@@ -54,6 +55,9 @@ const GameContext = (props) => {
           (mission) => mission.id === props.match.params.id
         )
       : null
+  );
+  const userWon = useSelector((state) =>
+    state.game.items.results ? state.game.items.results.won : false
   );
 
   const userId = useSelector((state) => state.authentication.user.user.id);
@@ -79,6 +83,8 @@ const GameContext = (props) => {
         })
       );
 
+      setState((s) => ({ ...s, gameEnded: false }));
+
       dispatch(playSessionControlActions.createNew(false));
     }
   }, [
@@ -99,6 +105,8 @@ const GameContext = (props) => {
           ended: true,
         })
       );
+
+      setState((s) => ({ ...s, gameEnded: true }));
 
       dispatch(playSessionControlActions.ended(false));
     }
@@ -205,6 +213,11 @@ const GameContext = (props) => {
         style={{
           alignItems: state.alignment.vertical,
           justifyContent: state.alignment.horizontal,
+          backgroundColor: state.gameEnded
+            ? userWon
+              ? "#D6E3F4"
+              : "#F9AFA1"
+            : "transparent",
         }}
       >
         <div

@@ -122,6 +122,9 @@ const Payment = ({ onConfirm, moneyList, updateCashierValue }) => {
           >
             {moneyList
               .filter((money) => money.value <= 1)
+              .sort(function (a, b) {
+                return b.value - a.value;
+              })
               .map((money, index) => (
                 <img
                   key={index}
@@ -141,6 +144,7 @@ const Payment = ({ onConfirm, moneyList, updateCashierValue }) => {
           >
             {moneyList
               .filter((money) => money.value > 1)
+              .sort((a, b) => (a.valeu < b.value ? -1 : 1))
               .map((money, index) => (
                 <img
                   key={index}

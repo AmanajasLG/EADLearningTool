@@ -56,7 +56,7 @@ const Game5 = (props) => {
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {
-    if (mission.trackPlayerInput && !state.playSessionCreated) {
+    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
@@ -758,7 +758,7 @@ const Game5 = (props) => {
 
                     {state.showInvitation && (
                       <div id="invitation-content-wrapper">
-                        <img src={envelope} alt="Rever convite"/>
+                        <img src={envelope} alt="Rever convite" />
                         <div id="invitation-content">
                           {state.showInviteQuestions && (
                             <div className="invitation-questions">
@@ -775,7 +775,9 @@ const Game5 = (props) => {
                           )}
 
                           {state.showInviteAnswer && (
-                            <div id="invitation-answer">{state.inviteAnswer}</div>
+                            <div id="invitation-answer">
+                              {state.inviteAnswer}
+                            </div>
                           )}
                           <div id="invitation-voltar">
                             <Voltar
@@ -886,12 +888,8 @@ const Game5 = (props) => {
                 );
               case "END_GAME":
                 return (
-                  // ! Acho que isso deveria ser no GameContext pq a cor do bg tinha que pegar a tela inteira
-                  <div
-                    className={
-                      state.won ? "blue-background" : "salmon-background"
-                    }
-                  >
+                  // ! Acho que isso deveria ser no GameContext pq a cor do bg tinha que pegar a tela inteira -> FEITO!
+                  <div>
                     <div className="feedback absolute-center">
                       <FeedbackPanel
                         feedback={state.feedbackMessages}

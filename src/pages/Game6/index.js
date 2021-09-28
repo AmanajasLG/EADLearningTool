@@ -51,7 +51,7 @@ const Game6 = (props) => {
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {
-    if (mission.trackPlayerInput && !state.playSessionCreated) {
+    if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
@@ -1431,11 +1431,7 @@ const Game6 = (props) => {
                 );
               case "END_GAME":
                 return (
-                  <div
-                    className={
-                      state.won ? "blue-background" : "salmon-background"
-                    }
-                  >
+                  <div>
                     <div className="feedback absolute-center">
                       <FeedbackPanel
                         feedback={state.feedbackMessages}
