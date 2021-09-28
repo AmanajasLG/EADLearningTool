@@ -108,12 +108,14 @@ const Game1 = (props) => {
       //distribute characters in locations
 
       // data.locations = [...mission.locations]
-      data.locations = missionData.locations.map((location) => {
-        return {
-          ...location,
-          missionCharacters: shuffle(location.missionCharacters),
-        };
-      });
+      data.locations = missionData.locations
+        .sort((a, b) => (a.order > b.order ? 1 : -1))
+        .map((location) => {
+          return {
+            ...location,
+            missionCharacters: shuffle(location.missionCharacters),
+          };
+        });
 
       //list of all available jobs
 
