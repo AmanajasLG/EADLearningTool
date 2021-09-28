@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/EADLearningTool/static/css/main.7e72866b.chunk.css",
-    "main.js": "/EADLearningTool/static/js/main.1b478cef.chunk.js",
-    "main.js.map": "/EADLearningTool/static/js/main.1b478cef.chunk.js.map",
-    "runtime-main.js": "/EADLearningTool/static/js/runtime-main.b42afc31.js",
-    "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.b42afc31.js.map",
+    "main.css": "/EADLearningTool/static/css/main.a4492ea6.chunk.css",
+    "main.js": "/EADLearningTool/static/js/main.1ecf9a65.chunk.js",
+    "main.js.map": "/EADLearningTool/static/js/main.1ecf9a65.chunk.js.map",
+    "runtime-main.js": "/EADLearningTool/static/js/runtime-main.e0173998.js",
+    "runtime-main.js.map": "/EADLearningTool/static/js/runtime-main.e0173998.js.map",
     "static/css/2.742f79b1.chunk.css": "/EADLearningTool/static/css/2.742f79b1.chunk.css",
-    "static/js/2.0281161f.chunk.js": "/EADLearningTool/static/js/2.0281161f.chunk.js",
-    "static/js/2.0281161f.chunk.js.map": "/EADLearningTool/static/js/2.0281161f.chunk.js.map",
-    "static/js/3.75e5fdbb.chunk.js": "/EADLearningTool/static/js/3.75e5fdbb.chunk.js",
-    "static/js/3.75e5fdbb.chunk.js.map": "/EADLearningTool/static/js/3.75e5fdbb.chunk.js.map",
+    "static/js/2.7e8192ba.chunk.js": "/EADLearningTool/static/js/2.7e8192ba.chunk.js",
+    "static/js/2.7e8192ba.chunk.js.map": "/EADLearningTool/static/js/2.7e8192ba.chunk.js.map",
+    "static/js/3.cfdc66c3.chunk.js": "/EADLearningTool/static/js/3.cfdc66c3.chunk.js",
+    "static/js/3.cfdc66c3.chunk.js.map": "/EADLearningTool/static/js/3.cfdc66c3.chunk.js.map",
     "index.html": "/EADLearningTool/index.html",
     "static/css/2.742f79b1.chunk.css.map": "/EADLearningTool/static/css/2.742f79b1.chunk.css.map",
-    "static/css/main.7e72866b.chunk.css.map": "/EADLearningTool/static/css/main.7e72866b.chunk.css.map",
-    "static/js/2.0281161f.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.0281161f.chunk.js.LICENSE.txt",
+    "static/css/main.a4492ea6.chunk.css.map": "/EADLearningTool/static/css/main.a4492ea6.chunk.css.map",
+    "static/js/2.7e8192ba.chunk.js.LICENSE.txt": "/EADLearningTool/static/js/2.7e8192ba.chunk.js.LICENSE.txt",
     "static/media/Celular Base.794704d0.svg": "/EADLearningTool/static/media/Celular Base.794704d0.svg",
     "static/media/Celular Sala.f026f530.svg": "/EADLearningTool/static/media/Celular Sala.f026f530.svg",
     "static/media/Mão dedão.60615287.svg": "/EADLearningTool/static/media/Mão dedão.60615287.svg",
@@ -88,10 +88,10 @@
     "static/media/ícone_jogo1.244e8c29.svg": "/EADLearningTool/static/media/ícone_jogo1.244e8c29.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.b42afc31.js",
+    "static/js/runtime-main.e0173998.js",
     "static/css/2.742f79b1.chunk.css",
-    "static/js/2.0281161f.chunk.js",
-    "static/css/main.7e72866b.chunk.css",
-    "static/js/main.1b478cef.chunk.js"
+    "static/js/2.7e8192ba.chunk.js",
+    "static/css/main.a4492ea6.chunk.css",
+    "static/js/main.1ecf9a65.chunk.js"
   ]
 }
