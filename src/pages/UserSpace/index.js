@@ -50,7 +50,7 @@ const UserSpace = () => {
                 Hello, we would like to thank you, student, for taking the time
                 to help us test these games that aim to help you retain the
                 content learned in the Portuguese course at CCBF! We hope you
-                enjoy them ^^ have fun and good studies!
+                enjoy them {":)"} Have fun and good studies!
               </p>
             </div>
           )}
