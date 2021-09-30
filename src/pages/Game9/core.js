@@ -110,10 +110,12 @@ const Core = ({ exitGame, data, onEndGame }) => {
       {(state.scene === 'GAME' || state.scene === 'TUTORIAL') &&
         <React.Fragment>
           {/* BUILDING INFO */}
-          <div style={{position: 'absolute', backgroundColor: '#d6e3f4', width: '100%', height: '20%'}}>
+          <div style={{position: 'absolute', backgroundColor: '#d6e3f4', width: '100%', height: '20%', zIndex: state.tutorialState === 4? 110 : null}}>
             <div style={{position: 'absolute', padding: '0.8% 2% 0.5% 5%',
               right: '7%', top: '20%', width: '70%', height: '60%',
-              backgroundColor: "#59316d", borderRadius: '2% / 20%'}}
+              backgroundColor: "#59316d", borderRadius: '2% / 20%',
+              zIndex: state.tutorialStep === 4? 110 : null
+            }}
             >
               <div style={{display: 'flex', flexDirection: 'horizontal', justifyContent: 'flex-start',
                 width: '100%', height: '100%', color: 'white', fontSize: '3em'}}>
@@ -130,15 +132,15 @@ const Core = ({ exitGame, data, onEndGame }) => {
                   </React.Fragment>
                 }
               </div>
+              <div style={{position: 'absolute', top: '-15%', left: '-5%', height: '130%', width: '13%', backgroundColor: "#59316d", borderRadius: "50%"}}>
+                <img style={{height: '100%'}}
+                  onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
+                  src={ state.buildingDetails ? state.buildingDetails.image : null}
+                  alt=""
+                  />
+              </div>
             </div>
-            <div style={{position: 'absolute', top: '10%', left: '19%', height: '80%', width: '9%', backgroundColor: "#59316d", borderRadius: "50%"}}>
-              <img style={{height: '100%'}}
-                onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-                src={ state.buildingDetails ? state.buildingDetails.image : null}
-                alt=""
-                />
-            </div>
-            <Timer style={{position: 'absolute', fontSize: '8em', left: '5%', top: '35%'}}
+            <Timer style={{position: 'absolute', fontSize: '8em', left: '5%', top: '35%', zIndex: state.tutorialStep === 3? 110 : null}}
               seconds={data.seconds}
               run={state.runTimer}
               onEnd={onTimerEnd}
@@ -160,13 +162,16 @@ const Core = ({ exitGame, data, onEndGame }) => {
                 backgroundPosition: "center",
               }}
             >
-              {data.buildings.map((location, index) => (
+              {data.buildings
+                .filter( (building, index) => state.scene !== 'TUTORIAL' || (state.scene === 'TUTORIAL' && state.tutorialStep === 4 && index === data.buildings.length - 1))
+                .map((location, index) => (
                 <div
                   className="location"
                   key={location.id}
                   src={location.image}
                   alt={location.id}
                   style={{
+                    zIndex: state.tutorialStep === 4? 110 : null,
                     width:"5%",
                     height: "15%",
                     backgroundColor: iconColors[location.type],
@@ -179,7 +184,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
                     left: `${location.positionX}%`,
                     top: `${location.positionY}%`
                   }}
-                  onClick={onMouseClickLocation(index)}
+                  onClick={state.scene === 'TUTORIAL'? null : onMouseClickLocation(index)}
                   onMouseEnter={onMouseEnterLocation(index)}
                   onMouseLeave={onMouseLeaveLocation(index)}
                 >
@@ -196,21 +201,24 @@ const Core = ({ exitGame, data, onEndGame }) => {
           {/* GAME INFO */}
           <div style={{position: 'absolute', bottom: 0, width: '100%', height: '20%', backgroundColor: '#d6e3f4',
             borderBottomLeftRadius: 0, borderBottomRightRadius: 0,}}>
-            <div style={{position: 'absolute', width: '65%', backgroundColor: '#59316d', height: '50%', left: '12%', top: '30%',
-            borderRadius: '2% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0}}>
-              <Writer text={state.takenRequests.length > 0 ? data.requests[state.takenRequests[0]].dialog : ""}
-                style={{height: '40%', fontSize: '3em'}}
+            <div style={ state.tutorialStep === 1? {position: 'absolute', zIndex: 110, width: '100%', height: '100%'} : {}}>
+              <div style={{position: 'absolute', width: '65%', backgroundColor: '#59316d', height: '50%', left: '12%', top: '30%',
+              borderRadius: '2% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0}}>
+                <Writer text={state.takenRequests.length > 0 ? data.requests[state.takenRequests[0]].dialog : ""}
+                  style={{height: '40%', fontSize: '3em'}}
+                />
+              </div>
+              <img
+                style={{position: 'absolute', left: '5%', bottom: 0, height: '150%'}}
+                onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
+                src={state.character? state.character.characterAssets[0].image.url : charStub}
+                alt=""
               />
             </div>
-            <img
-              style={{position: 'absolute', left: '5%', bottom: 0, height: '150%'}}
-              onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-              src={state.character? state.character.characterAssets[0].image.url : charStub}
-              alt=""
-            />
             <TaggedIcon icon={agendamento} message={state.completed}
               style={{position: 'absolute', right: '8%', top: '27.5%',
-                pointerEvents: 'none', height: '50%', width: '10%'
+                pointerEvents: 'none', height: '50%', width: '10%',
+                zIndex: state.tutorialStep === 2? 110 : null
               }}
             />
           </div>
@@ -252,7 +260,9 @@ const Core = ({ exitGame, data, onEndGame }) => {
 
       {state.scene === 'TUTORIAL' &&
         <React.Fragment>
+          <FullscreenOverlay showCloseBtn={false} />
           <TutorialBlob
+            style={{position: 'relative', zIndex: 120}}
             text={tutorialTexts[state.tutorialStep].text}
             translation={tutorialTexts[state.tutorialStep].translation}
             onContinue={() => setState(s =>
