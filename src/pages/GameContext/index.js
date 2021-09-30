@@ -1,24 +1,29 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { headerActions, musicActions, apiActions } from "../../_actions";
+import {
+  headerActions,
+  musicActions,
+  apiActions,
+  playSessionControlActions,
+} from "../../_actions";
 import ConfigWindow from "../../_components/ConfigWindow";
 import GameConfig from "../../_components/GameConfig";
 import ReactAudioPlayer from "react-audio-player";
 import { settings } from "../../img";
 import "./index.scss";
 import { headerConstants } from "../../_constants";
-import CursorPoint from '../../_components/CursorPoint'
-import Canvas from '../../_components/Canvas'
-import elements from './elements.js'
-const dimensions = { width: 16, height: 9}
+import CursorPoint from "../../_components/CursorPoint";
+import Canvas from "../../_components/Canvas";
+import elements from "./elements.js";
+const dimensions = { width: 16, height: 9 };
 const ALIGNMENTS = {
   TOP: "flex-start",
   LEFT: "flex-start",
   CENTER: "center",
   RIGHT: "flex-end",
-  BOTTOM: "flex-end"
-}
+  BOTTOM: "flex-end",
+};
 
 const GameContext = (props) => {
   const [state, setState] = React.useState({
@@ -28,24 +33,31 @@ const GameContext = (props) => {
     gameConfig: false,
     back: false,
     config: false,
-    debug: true,
-    alignment: {vertical: ALIGNMENTS.CENTER, horizontal: ALIGNMENTS.CENTER}
+    debug: process.env.NODE_ENV === "development",
+    alignment: { vertical: ALIGNMENTS.CENTER, horizontal: ALIGNMENTS.CENTER },
+    gameEnded: false,
   });
 
-  const { play_sessionsActions } = apiActions
+  const { play_sessionsActions } = apiActions;
   const currentPlaySession = useSelector((state) =>
-    state.play_sessions ? state.play_sessions.items[state.play_sessions.items.length - 1] : {}
+    state.play_sessions
+      ? state.play_sessions.items[state.play_sessions.items.length - 1]
+      : {}
   );
 
   const dispatch = useDispatch();
-  const music = useSelector( state  => state.music)
-  let headerInfo = useSelector( state  => state.header)
+  const music = useSelector((state) => state.music);
+  const playSessionControl = useSelector((state) => state.playSessionControl);
+  let headerInfo = useSelector((state) => state.header);
   let mission = useSelector((state) =>
     state.game.items.missions
       ? state.game.items.missions.find(
           (mission) => mission.id === props.match.params.id
         )
       : null
+  );
+  const userWon = useSelector((state) =>
+    state.game.items.results ? state.game.items.results.won : false
   );
 
   const userId = useSelector((state) => state.authentication.user.user.id);
@@ -61,45 +73,75 @@ const GameContext = (props) => {
     };
   }, [dispatch]);
 
-  React.useEffect(()=>{
-    if (mission && mission.trackPlayerInput) {
-      console.log('create play session')
+  React.useEffect(() => {
+    if (playSessionControl.create_new) {
       dispatch(
         play_sessionsActions.create({
           user: userId,
           mission: mission.id,
-          data: {actions:[]}
+          data: { actions: [] },
         })
       );
+
+      setState((s) => ({ ...s, gameEnded: false }));
+
+      dispatch(playSessionControlActions.createNew(false));
     }
-  }, [dispatch, play_sessionsActions])
+  }, [
+    dispatch,
+    play_sessionsActions,
+    playSessionControl.create_new,
+    playSessionControlActions,
+  ]);
+
+  React.useEffect(() => {
+    if (playSessionControl.ended) {
+      dispatch(
+        play_sessionsActions.update({
+          id: currentPlaySession.id,
+          data: {
+            actions: [...currentPlaySession.data.actions],
+          },
+          ended: true,
+        })
+      );
+
+      setState((s) => ({ ...s, gameEnded: true }));
+
+      dispatch(playSessionControlActions.ended(false));
+    }
+  }, [
+    dispatch,
+    play_sessionsActions,
+    playSessionControl.ended,
+    playSessionControlActions,
+  ]);
 
   React.useEffect(() => {
     if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
 
     const getClickedObject = (e) => {
       dispatch(
-        play_sessionsActions.update(
-          { id: currentPlaySession.id,
-            data: {
-              actions:
-              [...currentPlaySession.data.actions,
-                {
-                  tag: e.target.nodeName,
-                  src: e.target.src,
-                  alt: e.target.alt,
-                  className: e.target.className,
-                  class: e.target.class,
-                  id: e.target.id,
-                  innerHTML: e.target.innerHTML.includes("<div")
-                    ? null
-                    : e.target.innerHTML,
-                  clickTime: new Date(),
-                }
-              ]
-            }
-          }
-        )
+        play_sessionsActions.update({
+          id: currentPlaySession.id,
+          data: {
+            actions: [
+              ...currentPlaySession.data.actions,
+              {
+                tag: e.target.nodeName,
+                src: e.target.src,
+                alt: e.target.alt,
+                className: e.target.className,
+                class: e.target.class,
+                id: e.target.id,
+                innerHTML: e.target.innerHTML.includes("<div")
+                  ? null
+                  : e.target.innerHTML,
+                clickTime: new Date(),
+              },
+            ],
+          },
+        })
       );
     };
     document.addEventListener("mousedown", getClickedObject);
@@ -110,7 +152,13 @@ const GameContext = (props) => {
     return () => {
       document.removeEventListener("mousedown", getClickedObject);
     };
-  }, [dispatch, currentPlaySession, play_sessionsActions, state.tracking, mission]);
+  }, [
+    dispatch,
+    currentPlaySession,
+    play_sessionsActions,
+    state.tracking,
+    mission,
+  ]);
 
   return (
     <React.Fragment>
@@ -135,13 +183,19 @@ const GameContext = (props) => {
       {state.gameConfig && (
         <GameConfig
           volume={music.volume}
-          onVolumeMute={() => dispatch(musicActions.volume(0)) }
-          onVolumeUp={() => dispatch(musicActions.volume(100)) }
-          onVolumeChange={(e, newValue) => dispatch(musicActions.volume(newValue)) }
+          onVolumeMute={() => dispatch(musicActions.volume(0))}
+          onVolumeUp={() => dispatch(musicActions.volume(100))}
+          onVolumeChange={(e, newValue) =>
+            dispatch(musicActions.volume(newValue))
+          }
           fontSize={state.fontSize}
-          onFontSizeChange={(e, newValue) => setState({ ...state, fontSize: newValue }) }
+          onFontSizeChange={(e, newValue) =>
+            setState({ ...state, fontSize: newValue })
+          }
           assistMode={state.assistMode}
-          onAssistModeChange={(e) => setState({ ...state, assistMode: e.target.checked }) }
+          onAssistModeChange={(e) =>
+            setState({ ...state, assistMode: e.target.checked })
+          }
           onAccessibilityLeft={() => {}}
           onAccessibilityRight={() => {}}
           onBack={() => setState({ ...state, gameConfig: false, config: true })}
@@ -154,18 +208,43 @@ const GameContext = (props) => {
         volume={music.volume / 100}
         loop={true}
       />
-      <div id="game-screen-wrapper" style={{alignItems: state.alignment.vertical, justifyContent: state.alignment.horizontal}}>
-        <div id="game-screen" style={{"--aspectRatio": dimensions.width / dimensions.height}} className={state.debug ? "debug" : null}>
+      <div
+        id="game-screen-wrapper"
+        style={{
+          alignItems: state.alignment.vertical,
+          justifyContent: state.alignment.horizontal,
+          backgroundColor: state.gameEnded
+            ? userWon
+              ? "#D6E3F4"
+              : "#F9AFA1"
+            : "transparent",
+        }}
+      >
+        <div
+          id="game-screen"
+          style={{ "--aspectRatio": dimensions.width / dimensions.height }}
+          className={state.debug ? "debug" : null}
+        >
           {children}
         </div>
       </div>
       {state.back && <Redirect to="/userspace" />}
-      {(process.env.NODE_ENV === 'development' && state.debug) &&
+      {process.env.NODE_ENV === "development" && state.debug && (
         <React.Fragment>
           <CursorPoint />
-          <Canvas elements={elements}  width={window.innerWidth} height={window.innerHeigh} style={{ pointerEvents: 'none', position: 'absolute', top: 0, left: 0}}/>
+          <Canvas
+            elements={elements}
+            width={window.innerWidth}
+            height={window.innerHeigh}
+            style={{
+              pointerEvents: "none",
+              position: "absolute",
+              top: 0,
+              left: 0,
+            }}
+          />
         </React.Fragment>
-      }
+      )}
     </React.Fragment>
   );
 };

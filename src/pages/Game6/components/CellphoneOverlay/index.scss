@@ -12,10 +12,12 @@
 //                             MINIMIZED
 //
 // ---------------------------------------------------------------------
-
+.z-index-overlay-all {
+  z-index: 1000;
+}
 #small-cellphone-wrapper {
   position: absolute;
-  bottom: 0;
+  bottom: 5em;
   right: 0;
   // margin-right: 10vw;
   margin-right: calc(var(--gameWidth) * 0.1);
@@ -50,6 +52,13 @@
 #small-cellphone-content svg {
   pointer-events: all;
   width: 100%;
+}
+
+#cellphone-small-pic {
+  position: absolute;
+  bottom: 2em;
+  right: 4.7em;
+  width: 10em !important;
 }
 
 #small-cellphone-content:hover {
@@ -222,14 +231,13 @@
 }
 
 .has-questions-buttons {
-  height: 59% !important;
+  height: 40em !important;
 }
 
 .cellphone-mensagem0,
 .cellphone-mensagem1 {
-  margin-bottom: 15px;
-  padding: 20px 40px;
-  max-width: 100%;
+  margin-bottom: 1em;
+  padding: 1em 1.5em;
   font-size: 2em;
   text-align: left;
 
@@ -250,6 +258,8 @@
   background-color: #535c89;
   border-radius: 0.75em 0.75em 0 0.75em;
   color: #ffffff;
+  margin-left: auto;
+  position: relative;
 }
 
 .cellphone-animate-mensagem0 {

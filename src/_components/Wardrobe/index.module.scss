@@ -1,0 +1,13 @@
+#wardrobe {
+	img {
+		transition: 100ms ease-in-out;
+	}
+
+	img:hover {
+		transform: scale(1.2);
+		filter: drop-shadow( 0.4em  0.4em 0px #ffbb99)
+				drop-shadow(-0.4em  0.4em 0px #ffbb99)
+				drop-shadow(-0.4em -0.4em 0px #ffbb99)
+				drop-shadow( 0.4em -0.4em 0px #ffbb99);
+	}
+}

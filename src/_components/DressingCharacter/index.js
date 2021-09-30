@@ -2,7 +2,7 @@ import React from "react";
 
 import { shorts, shirt } from "../../img";
 import InlineSVG from "../InlineSVG";
-import "./index.scss";
+import styles from "./index.module.scss";
 
 const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
   let hasInteiroCover = clothes["Tronco"].reduce((acc, clothing) => {
@@ -10,11 +10,16 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
   }, false);
 
   return (
-    <div {...props}>
+    <div {...props} className={props.onClick ? styles["clickable-char"] : null}>
       <InlineSVG
         src={character.image}
         alt="character"
-        style={{ height: "100%", position: "absolute" }}
+        style={{
+          height: "100%",
+          width: "100%",
+          objectPosition: "center",
+          position: "absolute",
+        }}
       />
       <InlineSVG
         key={"underware-bottom-" + character.id}
@@ -23,6 +28,8 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
         style={{
           position: "absolute",
           height: "100%",
+          width: "100%",
+          objectPosition: "center",
           display:
             clothes["Pernas"].length !== 0
               ? "none"
@@ -38,6 +45,8 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
         style={{
           position: "absolute",
           height: "100%",
+          width: "100%",
+          objectPosition: "center",
           display: clothes["Tronco"].length === 0 ? "block" : "none",
         }}
       />
@@ -52,6 +61,8 @@ const DressingCharacter = ({ character, clothes, onRemoveClick, ...props }) => {
               cursor: props.showRemove ? "pointer" : "default",
               position: "absolute",
               height: "100%",
+              width: "100%",
+              objectPosition: "center",
             }}
           />
         ))

@@ -17,7 +17,7 @@ import {
   gameActions,
   headerActions,
   musicActions,
-  apiActions,
+  playSessionControlActions,
 } from "../../_actions";
 import { headerConstants } from "../../_constants";
 
@@ -90,69 +90,15 @@ const Game3 = (props) => {
 
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
-  let currentPlaySession = useSelector((state) =>
-    state.play_sessions ? state.play_sessions.items[0] : {}
-  );
-  const { play_sessionsActions } = apiActions;
 
   React.useEffect(() => {
     if (mission && mission.trackPlayerInput && !state.playSessionCreated) {
-      dispatch(
-        play_sessionsActions.create({
-          user: userId,
-          mission: mission.id,
-          data: { actions: [] },
-        })
-      );
-
+      dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
-  }, [dispatch, play_sessionsActions, mission, userId, state]);
+  }, [dispatch, playSessionControlActions, state]);
 
-  React.useEffect(() => {
-    if ((mission && !mission.trackPlayerInput) || !currentPlaySession) return;
-
-    const getClickedObject = (e) => {
-      dispatch(
-        play_sessionsActions.update({
-          id: currentPlaySession.id,
-          data: {
-            actions: [
-              ...currentPlaySession.data.actions,
-              {
-                tag: e.target.nodeName,
-                src: e.target.src,
-                alt: e.target.alt,
-                className: e.target.className,
-                class: e.target.class,
-                id: e.target.id,
-                innerHTML: e.target.innerHTML.includes("<div")
-                  ? null
-                  : e.target.innerHTML,
-                clickTime: new Date(),
-              },
-            ],
-          },
-        })
-      );
-    };
-    document.addEventListener("mousedown", getClickedObject);
-
-    setState((s) => {
-      return { ...s, currentPlaySession, getClickedObject };
-    });
-    return () => {
-      document.removeEventListener("mousedown", getClickedObject);
-    };
-  }, [
-    dispatch,
-    currentPlaySession,
-    play_sessionsActions,
-    state.tracking,
-    mission,
-  ]);
-
-  const onStartGame = () => setState({ ...state, scene: "INTRO" });
+  const onStartGame = () => setState((s) => ({ ...s, scene: "INTRO" }));
 
   React.useEffect(() => {
     if (mission)
@@ -178,7 +124,7 @@ const Game3 = (props) => {
             mission: mission.id,
           })
         );
-        setState({ ...state, checkedPlayed: true });
+        setState((s) => ({ ...s, checkedPlayed: true }));
       }
     }
     // eslint-disable-next-line
@@ -256,9 +202,9 @@ const Game3 = (props) => {
         }, []);
       }
 
-      setState((state) => {
+      setState((s) => {
         return {
-          ...state,
+          ...s,
           recipe: resumeRecipe,
           aisles,
           ingredientsList,
@@ -278,10 +224,10 @@ const Game3 = (props) => {
     if (index >= 0) cartUpdate[index].count += 1;
     else cartUpdate.push({ name: product, count: 1 });
 
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       cart: cartUpdate,
-    });
+    }));
   };
   const removeProduct = (index) => () => {
     let cartUpdate = [...state.cart];
@@ -293,24 +239,24 @@ const Game3 = (props) => {
         ...state.cart.slice(index + 1),
       ];
 
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       cart: cartUpdate,
-    });
+    }));
   };
 
   const toPreviousAisle = () => {
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       currentAisle: goRound(state.currentAisle - 1, state.aisles.length),
-    });
+    }));
   };
 
   const toNextAisle = () => {
-    setState({
-      ...state,
+    setState((s) => ({
+      ...s,
       currentAisle: goRound(state.currentAisle + 1, state.aisles.length),
-    });
+    }));
   };
 
   const checkShoppingList = (ingredient) => {
@@ -369,26 +315,26 @@ const Game3 = (props) => {
     };
     updateState.cashierContinue = haveAllValue
       ? () =>
-          setState({
-            ...state,
+          setState((s) => ({
+            ...s,
             ...updateState,
             runTimer: true,
             moneySelection: true,
-          })
+          }))
       : () =>
-          setState({
-            ...state,
+          setState((s) => ({
+            ...s,
             ...updateState,
             scene: "MARKET",
             runTimer: true,
             checkoutConfirm: false,
-          });
-    setState({ ...state, ...updateState });
+          }));
+    setState((s) => ({ ...s, ...updateState }));
   };
 
   const doPayment = (value) => {
     let cashierLines;
-    let change = value - state.price;
+    let change = parseFloat(value) - parseFloat(state.price);
     if (change < 0)
       cashierLines = {
         text:
@@ -401,7 +347,7 @@ const Game3 = (props) => {
         text: "Bem... Obrigada pela gorjeta!",
         translation: "Well... Thanks for the tip!",
       };
-    //if( value === 0)
+    //
     else
       cashierLines = {
         text:
@@ -412,11 +358,11 @@ const Game3 = (props) => {
 
     setState((s) => ({
       ...s,
-      cashierContinue: () => endGame(false),
+      cashierContinue: () => endGame(false, change === 0),
       cashierLines: cashierLines,
-      change: change,
       moneySelection: false,
       runTimer: false,
+      change: change,
     }));
   };
 
@@ -438,13 +384,7 @@ const Game3 = (props) => {
     dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
   };
 
-  const endGame = (timeUp) => {
-    setState((s) => ({
-      ...s,
-      scene: "END_GAME",
-      timeUp: timeUp,
-    }));
-
+  const endGame = (timeUp, rightPayment) => {
     dispatch(
       headerActions.setAll(
         mission.name,
@@ -457,15 +397,7 @@ const Game3 = (props) => {
 
     let wrongIngredients = getWrongItemsInCart();
 
-    dispatch(
-      play_sessionsActions.update({
-        id: currentPlaySession.id,
-        data: {
-          actions: [...currentPlaySession.data.actions],
-        },
-        ended: true,
-      })
-    );
+    dispatch(playSessionControlActions.ended(true));
 
     dispatch(
       gameActions.create("results", {
@@ -475,12 +407,18 @@ const Game3 = (props) => {
           ? state.initTime + 1
           : state.initTime - state.remainingTime,
         recipe: state.recipe.id,
-        rightPayment: state.change === 0,
-        won: state.change === 0 && !timeUp && wrongIngredients.length === 0,
+        rightPayment: rightPayment,
+        won: !timeUp,
         wrongIngredients:
           wrongIngredients.length > 0 ? JSON.stringify(wrongIngredients) : null,
       })
     );
+
+    setState((s) => ({
+      ...s,
+      scene: "END_GAME",
+      timeUp: timeUp,
+    }));
   };
 
   //const { mission } = state
@@ -510,7 +448,7 @@ const Game3 = (props) => {
                       }).description
                     }
                     onStart={onStartGame}
-                    onBack={() => setState({ ...state, back: true })}
+                    onBack={() => setState((s) => ({ ...s, back: true }))}
                     ready={state.ingredientsList.length > 0}
                   />
                 );
@@ -521,7 +459,7 @@ const Game3 = (props) => {
                     chef={missionData.character}
                     ingredientsList={state.ingredientsList}
                     goToTutorial={() =>
-                      setState({ ...state, scene: "TUTORIAL" })
+                      setState((s) => ({ ...s, scene: "TUTORIAL" }))
                     }
                   />
                 );
@@ -539,12 +477,12 @@ const Game3 = (props) => {
                     toPreviousAisle={toPreviousAisle}
                     toNextAisle={toNextAisle}
                     goToMarket={() =>
-                      setState({
-                        ...state,
+                      setState((s) => ({
+                        ...s,
                         scene: "MARKET",
                         currentAisle: 0,
                         cart: [],
-                      })
+                      }))
                     }
                   />
                 );
@@ -561,9 +499,9 @@ const Game3 = (props) => {
                       run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) =>
-                        setState({ ...state, remainingTime: remaining })
+                        setState((s) => ({ ...s, remainingTime: remaining }))
                       }
-                      onEnd={() => endGame(true)}
+                      onEnd={() => endGame(true, false)}
                     />
                     <Recipe
                       ingredientsList={state.ingredientsList}
@@ -583,12 +521,12 @@ const Game3 = (props) => {
 
                         <img
                           onClick={() =>
-                            setState({
-                              ...state,
+                            setState((s) => ({
+                              ...s,
                               checkoutConfirm: true,
                               runTimer: false,
                               shopList: false,
-                            })
+                            }))
                           }
                           src={checkout}
                           alt=""
@@ -633,11 +571,11 @@ const Game3 = (props) => {
                           <div className={styles.btns}>
                             <Voltar
                               onClick={() =>
-                                setState({
-                                  ...state,
+                                setState((s) => ({
+                                  ...s,
                                   checkoutConfirm: false,
                                   runTimer: true,
-                                })
+                                }))
                               }
                             />
                             <Iniciar
@@ -687,7 +625,7 @@ const Game3 = (props) => {
                         left: "50%",
                         transform: "translateX(-50%)",
                       }}
-                      run={false}
+                      run={state.runTimer}
                       seconds={state.remainingTime}
                       onStop={(remaining) => {
                         setState((s) => ({
@@ -695,7 +633,7 @@ const Game3 = (props) => {
                           remainingTime: remaining,
                         }));
                       }}
-                      onEnd={() => endGame(true)}
+                      onEnd={() => endGame(true, false)}
                     />
                     <ChefDialog
                       chefStyles={{ width: "35%" }}
@@ -781,27 +719,31 @@ const Game3 = (props) => {
                 return (
                   <div
                     style={{
+                      height: "100%",
+                      width: "100%",
                       display: "flex",
                       flexDirection: "column",
-                      padding: "12% 20%",
-                      backgroundColor: state.timeUp ? " #F9AFA1" : "#D6E3F4",
+                      // padding: "12% 20%",
                     }}
                   >
                     <div
                       style={{
+                        position: "relative",
+                        marginTop: "30em",
+                        width: "70%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
                         display: "flex",
-                        width: "100%",
-                        height: "70%",
                         flexDirection: "row",
-                        justifyContent: "space-around",
+                        justifyContent: "center",
                       }}
                     >
                       <div style={{ position: "relative" }}>
                         <img
                           style={{
                             display: "block",
-                            height: 100,
-                            margin: "0 auto",
+                            height: "15em",
+                            margin: "2em auto",
                           }}
                           src={state.timeUp ? hourglassEmpty : hourglassFull}
                           alt=""
@@ -810,7 +752,7 @@ const Game3 = (props) => {
                           <div
                             style={{
                               textAlign: "center",
-                              fontSize: 36,
+                              fontSize: "4em",
                               fontFamily: "Abril fatface",
                               color: "rgb(89, 49, 109)",
                             }}
@@ -823,7 +765,7 @@ const Game3 = (props) => {
                           style={{
                             textAlign: "center",
                             fontFamily: "Barlow",
-                            fontSize: 24,
+                            fontSize: "4em",
                             color: "rgb(89, 49, 109)",
                           }}
                         >
@@ -832,8 +774,8 @@ const Game3 = (props) => {
                         <hr
                           style={{
                             display: "block",
-                            margin: "5% auto",
-                            width: "30%",
+                            margin: "1em auto",
+                            width: "5em",
                           }}
                         />
                         <p
@@ -852,18 +794,21 @@ const Game3 = (props) => {
 
                       <div
                         style={{
+                          marginLeft: "2em",
                           position: "relative",
-                          height: 300,
-                          width: "100%",
-                          paddingTop: 70,
-
+                          height: "4em",
+                          width: "5em",
                           backgroundImage: "url(" + blobLaranja + ")",
                           backgroundRepeat: "no-repeat",
                           backgroundPosition: "center center",
+                          backgroundSize: "contain",
                           textAlign: "center",
-                          fontSize: 92,
+                          fontSize: "10em",
                           fontFamily: "Abril fatface",
                           color: "rgb(89, 49, 109)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                         }}
                       >
                         {state.timeUp
@@ -889,7 +834,7 @@ const Game3 = (props) => {
                       style={{
                         display: "block",
                         margin: "0 auto",
-                        marginTop: "10%",
+                        marginTop: "5em",
                       }}
                     >
                       <div id="feedback-endGame-action-btns">
@@ -902,7 +847,9 @@ const Game3 = (props) => {
                         <Iniciar
                           label={"Sair do jogo"}
                           colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
-                          onClick={() => setState({ ...state, back: true })}
+                          onClick={() =>
+                            setState((s) => ({ ...s, back: true }))
+                          }
                         />
                       </div>
                     </div>
@@ -919,15 +866,15 @@ const Game3 = (props) => {
         <div>
           <button
             style={{ position: "absolute", bottom: 0 }}
-            onClick={() => setState({ ...state, scene: "MARKET" })}
+            onClick={() => setState((s) => ({ ...s, scene: "MARKET" }))}
           >
             Pula tutorial
           </button>
           <button
             style={{ position: "absolute", bottom: 0, left: 100 }}
             onClick={() => {
-              setState({
-                ...state,
+              setState((s) => ({
+                ...s,
                 scene: "CASHIER",
                 checkoutConfirm: false,
                 runTimer: false,
@@ -946,7 +893,7 @@ const Game3 = (props) => {
                     moneySelection: true,
                   })),
                 price: 48.05,
-              });
+              }));
             }}
           >
             Para o caixa: Compras certas

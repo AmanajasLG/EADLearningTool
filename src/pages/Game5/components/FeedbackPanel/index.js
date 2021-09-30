@@ -6,18 +6,18 @@ import "./index.scss";
 const FeedbackPanel = ({ feedback, won, restart, leave }) => {
   return (
     <div style={{ position: "relative" }}>
-      <div className="feedback-panel" id="feedback-panel">
-        <div className="feedback-panel-content">
+      <div className="feedback-panel-game-5" id="feedback-panel-game-5">
+        <div className="feedback-panel-game-5-content">
           <div
-            className="feedback-panel-column"
+            className="feedback-panel-game-5-column"
             style={{ width: 100 / feedback.length + "%" }}
           >
-            <img
-              className="feedback-panel-img"
+            {/* <img
+              className="feedback-panel-game-5-img"
               src={feedback[0].image}
-              alt="feedback-panel-icon"
-            />
-            <div className="feedback-panel-text">
+              alt="feedback-panel-game-5-icon"
+            /> */}
+            <div className="feedback-panel-game-5-text">
               <span lang="pt-br">
                 {preventSingleWordBreak(feedback[0].message)}
               </span>
@@ -30,15 +30,15 @@ const FeedbackPanel = ({ feedback, won, restart, leave }) => {
             </div>
           </div>
           <div
-            className="feedback-panel-column"
+            className="feedback-panel-game-5-column"
             style={{ width: 100 / feedback.length + "%" }}
           >
-            <img
-              className="feedback-panel-img"
+            {/* <img
+              className="feedback-panel-game-5-img"
               src={feedback[1].image}
-              alt="feedback-panel-icon"
-            />
-            <div className="feedback-panel-text">
+              alt="feedback-panel-game-5-icon"
+            /> */}
+            <div className="feedback-panel-game-5-text">
               <span lang="pt-br">
                 {preventSingleWordBreak(feedback[1].message)}
               </span>
@@ -52,15 +52,15 @@ const FeedbackPanel = ({ feedback, won, restart, leave }) => {
           </div>
           {!won && (
             <div
-              className="feedback-panel-column"
+              className="feedback-panel-game-5-column"
               style={{ width: 100 / feedback.length + "%" }}
             >
-              <img
-                className="feedback-panel-img"
+              {/* <img
+                className="feedback-panel-game-5-img"
                 src={feedback[2].image}
-                alt="feedback-panel-icon"
-              />
-              <div className="feedback-panel-text">
+                alt="feedback-panel-game-5-icon"
+              /> */}
+              <div className="feedback-panel-game-5-text">
                 <span lang="pt-br">
                   {preventSingleWordBreak(feedback[2].message)}
                 </span>

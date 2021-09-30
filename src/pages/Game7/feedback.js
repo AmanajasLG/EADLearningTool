@@ -3,7 +3,7 @@ import FeedbackPanel from "./components/FeedbackPanel";
 
 const Feedback = ({ data, restart, leave }) => {
   return (
-    <div className={data.won ? "blue-background" : "salmon-background"}>
+    <div>
       <div className="feedback absolute-center">
         <FeedbackPanel
           feedback={data.messages}
