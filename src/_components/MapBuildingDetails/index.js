@@ -1,10 +1,9 @@
 import React from 'react'
 import { numberList } from '../../_helpers'
 import { Iniciar, Voltar } from '../Button'
+import InlineSVG from '../InlineSVG'
 
-const MapBuildingDetails =
-({location,
-  style, ...props}) => {
+const MapBuildingDetails = ({location, children, onClose, style, ...props}) => {
   return(
     <div
       style={{
@@ -20,7 +19,7 @@ const MapBuildingDetails =
           borderTopRightRadius: 10,
           borderTopLeftRadius: 10,
           backgroundColor: "#535c89",
-          height: showEmail ? "1.5em" : "2.2em",
+          height: "2.2em",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -42,15 +41,15 @@ const MapBuildingDetails =
           style={{
             position: "absolute",
             right: ".3em",
-            top: showEmail ? "-.08em" : "-.1em",
-            fontSize: showEmail ? "1em" : "1.5em",
+            top: "-.1em",
+            fontSize: "1.5em",
           }}
           onClick={onClose? onClose : null}
         >
           x
         </span>
       </div>
-      {}
+      {children}
     </div>
   )
 }
