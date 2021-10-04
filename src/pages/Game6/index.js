@@ -400,7 +400,10 @@ const Game6 = (props) => {
 
   // SELECT CLOTHES IN PHONE
   const addAnswerToDialogSend = (item) => () => {
-    if (state.showTutorialBlob) {
+    if (
+      state.showTutorialBlob &&
+      state.tutorialBlobCount < state.tutorialPhoneBlobsText.length - 1
+    ) {
       setState((s) => ({
         ...s,
         tutorialBlobCount: s.tutorialBlobCount + 1,
