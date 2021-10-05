@@ -53,7 +53,7 @@ const Game9 = (props) => {
       setState( s => ({...s, data: data}))
     }
   }
-  const loadFeedback = () => {}
+  const loadFeedback = (data) => data
 
   return(
     <GameTemplate

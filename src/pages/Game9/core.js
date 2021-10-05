@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
+import { Iniciar } from '../../_components/Button'
 import Timer from '../../_components/Timer'
 import TimerAnounce from '../../_components/TimerAnounce'
 import Writer from '../../_components/Writer'
@@ -12,6 +13,9 @@ import TaggedIcon from '../../_components/TaggedIcon'
 import charStub from './chef_animada.svg'
 import FullscreenOverlay from '../../_components/FullscreenOverlay'
 import MapBuildingDetails from '../../_components/MapBuildingDetails'
+import Blob, { BlobBg } from '../../_components/Blob'
+import { hourglassFull } from '../../img'
+
 
 
 const iconColors = {
@@ -33,24 +37,58 @@ const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState(data.requests))
   const resolveRequest = () => {
     let updateState = {}
-    let availableIndexes = numberList(data.requests.length).map(v => v - 1).filter( v => !state.takenRequests.includes(v))
-    console.log('availableIndexes:', availableIndexes)
 
+    let request = state.takenRequests[0]
+    console.log('request:', request)
     //evaluate request
-    //if(buildingIndex == ok)
-    updateState.completed = state.completed + 1
+    let roomEvaluation = (!request.rooms || request.rooms === state.selectedHome.rooms)
+    let bathsEvaluation = (!request.baths || request.baths === state.selectedHome.baths)
+    let closeToEvaluation = (!request.closeTo || (!request.closeTo.includes(';') && state.selectedHome.closeTo.includes(request.closeTo)) || request.closeTo.split(';').every( value => value === '' || state.selectedHome.closeTo.includes(value)))
+    let farFromEvaluation = (!request.farFrom || (!request.farFrom.includes(';') && state.selectedHome.farFrom.includes(request.farFrom)) || request.farFrom.split(';').every( value => value === '' || state.selectedHome.farFrom.includes(value)))
+
+    if( roomEvaluation && bathsEvaluation &&
+        closeToEvaluation && farFromEvaluation)
+    {
+      updateState.completed = state.completed + 1
+      updateState.writerText = 'Yay! Obrigado!'
+    }
+    else
+    {
+      if(!roomEvaluation)
+        updateState.writerText = request.errorDialog.find( e => e.type === 'rooms').dialog
+      else if(!bathsEvaluation)
+        updateState.writerText = request.errorDialog.find( e => e.type === 'baths').dialog
+      else if(!closeToEvaluation)
+        updateState.writerText = request.errorDialog.find( e => e.type === 'closeTo').dialog
+      else if(!farFromEvaluation)
+        updateState.writerText = request.errorDialog.find( e => e.type === 'farFrom').dialog
+    }
+    if(state.takenRequests.length < data.requests.length)
+      updateState.showNextClientButton = true
+
+    updateState.selectedHome = null
+
+    setState( s => ({...s, ...updateState }))
+  }
+
+  const nextClient = () => {
+    let updateState = {}
+    let availableIndexes = numberList(data.requests.length).map(v => v - 1).filter( v => !state.takenRequests.includes(data.requests[v]))
+    console.log('availableIndexes:', availableIndexes)
     //set next request
-    if(availableIndexes.length > 0)
-      updateState.takenRequests =  [availableIndexes[getRandomInt(0, availableIndexes.length)], ...state.takenRequests]
-    else {
+    if(availableIndexes.length > 0){
+      updateState.character = data.characters[getRandomInt(0, data.characters.length)]
+      updateState.takenRequests = [data.requests[availableIndexes[getRandomInt(0, availableIndexes.length)]], ...state.takenRequests]
+      updateState.writerText = updateState.takenRequests[0].dialog
+    }
+    else{
       updateState.endGame = true
       updateState.endRequests = true
       updateState.runTimer = false
     }
-    updateState.selectedHome = null
-    updateState.character = data.characters[getRandomInt(0, data.characters.length)]
+    updateState.showNextClientButton = false
 
-    setState( s => ({...s, ...updateState }))
+    setState( s => ({...s, ...updateState}))
   }
 
   const onTimerEnd = () => {
@@ -59,11 +97,11 @@ const Core = ({ exitGame, data, onEndGame }) => {
   }
 
   const callEndGame = () => {
-    if(onEndGame) onEndGame({...data, results: state.results})
+    if(onEndGame) onEndGame({...data, results: {...state.results, completed: state.completed}})
   }
 
   const onMouseClickLocation = index => () => {
-    if(data.buildings[index].type === "Home")//home has no type
+    if(data.buildings[index].type === "Home")
       setState(s => ({...s, selectedHome: data.buildings[index]}))
   }
 
@@ -72,7 +110,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
   }
 
   const onMouseLeaveLocation = index => () => {
-    setState( s => ({...s, buildingDetails: null}))
+    setState( s => ({...s, buildingDetails: s.selectedHome}))
   }
 
   const chooseSelectedHome = () => {
@@ -92,10 +130,12 @@ const Core = ({ exitGame, data, onEndGame }) => {
                 : state.buildingDetails.type
 
   const gameStart = () => {
+    let requestIndex = getRandomInt(0, data.requests.length)
     setState(s => ({...s,
       scene: 'GAME', runTimer: true,
-      takenRequests: [getRandomInt(0, data.requests.length)],
-      character: data.characters[getRandomInt(0, data.characters.length)]
+      takenRequests: [data.requests[requestIndex]],
+      character: data.characters[getRandomInt(0, data.characters.length)],
+      writerText: data.requests[requestIndex].dialog
     })
     )
   }
@@ -146,6 +186,11 @@ const Core = ({ exitGame, data, onEndGame }) => {
               onEnd={onTimerEnd}
               onStop={ seconds => { setState( s => ({...s, results: {...s.results, secondsLeft: seconds}}))}}
             />
+            {state.selectedHome && (!state.buildingDetails || state.buildingDetails === state.selectedHome) &&
+              <Iniciar label={'Escolher'} showArrow={false} onClick={resolveRequest}
+                style={{position: 'absolute', fontSize:'2em', right: '8%', top: '35%'}}
+              />
+            }
           </div>
 
           {/* MAP */}
@@ -204,9 +249,14 @@ const Core = ({ exitGame, data, onEndGame }) => {
             <div style={ state.tutorialStep === 1? {position: 'absolute', zIndex: 110, width: '100%', height: '100%'} : {}}>
               <div style={{position: 'absolute', width: '65%', backgroundColor: '#59316d', height: '50%', left: '12%', top: '30%',
               borderRadius: '2% / 20%', borderBottomLeftRadius: 0, borderBottomRightRadius: 0}}>
-                <Writer text={state.takenRequests.length > 0 ? data.requests[state.takenRequests[0]].dialog : ""}
+                <Writer text={state.takenRequests.length > 0 ? state.writerText : ""}
                   style={{height: '40%', fontSize: '3em'}}
                 />
+              {state.showNextClientButton &&
+                  <Iniciar label={'Próximo'} onClick={nextClient}
+                    style={{position: 'absolute', fontSize: '2em', right: '5%', bottom: '-30%'}}
+                  />
+                }
               </div>
               <img
                 style={{position: 'absolute', left: '5%', bottom: 0, height: '150%'}}
@@ -223,7 +273,8 @@ const Core = ({ exitGame, data, onEndGame }) => {
             />
           </div>
 
-          {state.selectedHome &&
+          {/*HOME CONFIRMATION*/}
+          {state.showConfirmation &&
             <FullscreenOverlay showCloseBtn={false}>
               <div>
                 <div>
@@ -237,21 +288,26 @@ const Core = ({ exitGame, data, onEndGame }) => {
               </div>
             </FullscreenOverlay>
           }
+
+
+
           {/* ENDGAME OVERLAY */}
           {state.endGame &&
-            <FullscreenOverlay onClickClose={()=>{}}>
-              <MapBuildingDetails >
-                {state.endRequests &&
-                  <Button onClick={callEndGame}>
-                    Você completou todos os pedidos!
-                  </Button>
-                }
-                {state.timeUp &&
-                  <Button onClick={callEndGame}>
-                    Acabou o tempo!
-                  </Button>
-                }
-              </MapBuildingDetails>
+            <FullscreenOverlay showCloseBtn={false} onClickClose={()=>{}}>
+              <BlobBg style={{position: 'absolute', width: '80%', height: '80%', top: '10%', left: '10%'}}>
+                <img src={hourglassFull} style={{position: 'relative', top:'15%', left:'45%', transform:'rotate(15deg)'}}/>
+                <div style={{position: 'relative', top:'20%', left:'41%'}}>
+                  {state.endRequests &&
+                    <Button onClick={callEndGame}>
+                      Você completou todos os pedidos!
+                    </Button>
+                  }
+                  {state.timeUp &&
+                    <Iniciar label={'Acabou o tempo!'} onClick={callEndGame} showArrow={false}
+                      style={{fontSize: '3em'}}/>
+                  }
+                </div>
+              </BlobBg>
             </FullscreenOverlay>
           }
         </React.Fragment>
