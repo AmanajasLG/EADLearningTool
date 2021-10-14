@@ -52,6 +52,8 @@ import calendarFeedbackIcon from "./Game8/calendar-feedback-icon.svg";
 import planeFeedbackIcon from "./Game8/plane-feedback-icon.svg";
 import emailFeedbackIcon from "./Game8/email-feedback-icon.svg";
 import mapFeedbackIcon from "./Game8/map-feedback-icon.svg";
+import houseIcon from "./Game9/casa.svg";
+
 // GENERAL
 import avatar from "./avatar1.svg";
 import home from "./i-home.svg";
@@ -152,5 +154,6 @@ export {
   emailIcon,
   relogio,
   fireworks1,
-  fireworks2
+  fireworks2,
+  houseIcon
 };

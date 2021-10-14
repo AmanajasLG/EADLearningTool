@@ -6,7 +6,7 @@ import stub from './stub'
 
 import Core from './core.js'
 import Feedback from './feedback.js'
-import { agendamento, aviao } from '../../img'
+import { agendamento, houseIcon } from '../../img'
 
 const Game9 = (props) => {
 
@@ -36,7 +36,7 @@ const Game9 = (props) => {
                 type: 'Home',
                 image: h.image
                   ? h.image
-                  : aviao,
+                  : houseIcon,
                 positionX: h.positionX
                   ? h.positionX
                   : Math.floor(Math.random() * 95),

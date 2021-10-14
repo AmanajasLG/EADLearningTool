@@ -5,7 +5,6 @@ import Timer from '../../_components/Timer'
 import TimerAnounce from '../../_components/TimerAnounce'
 import Writer from '../../_components/Writer'
 import initialState from './initialState'
-import { agendamento } from '../../img'
 import { getRandomInt, numberList } from '../../_helpers'
 import tutorialTexts from './tutorialTexts'
 import TutorialBlob from '../../_components/TutorialBlob'
@@ -14,10 +13,9 @@ import charStub from './chef_animada.svg'
 import FullscreenOverlay from '../../_components/FullscreenOverlay'
 import MapBuildingDetails from '../../_components/MapBuildingDetails'
 import Blob, { BlobBg } from '../../_components/Blob'
-import { hourglassFull } from '../../img'
+
+import { houseIcon, hourglassFull } from '../../img'
 import './character.scss'
-
-
 
 const iconColors = {
   school: "#FFEACC",
@@ -201,7 +199,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
             backgroundColor: '#aaaaff'}}>
             <div
               style={{
-                backgroundImage: `url("${data.map? data.map.url : agendamento}")`,
+                backgroundImage: `url("${data.map? data.map.url : houseIcon}")`,
                 height: "100%",
                 width: "100%",
                 backgroundRepeat: "no-repeat",
@@ -272,7 +270,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
                 />
               }
             </div>
-            <TaggedIcon icon={agendamento} message={state.completed}
+            <TaggedIcon icon={houseIcon} message={state.completed}
               style={{position: 'absolute', right: '8%', top: '27.5%',
                 pointerEvents: 'none', height: '50%', width: '10%',
                 zIndex: state.tutorialStep === 2? 110 : null
