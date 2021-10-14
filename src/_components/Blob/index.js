@@ -74,12 +74,12 @@ const Blob = ({ duration, fill, stroke, strokeWidth, animation, ...props }) => {
 
 export default Blob;
 
-const BlobBg = ({ children, style, ...props }) => (
+const BlobBg = ({ children, style, blob, ...props }) => (
   <div
     {...props}
     style={{
-      background: `url("data:image/svg+xml,${encodeURIComponent(
-        renderToStaticMarkup(<Blob {...props.blob} />)
+      backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(
+        renderToStaticMarkup(<Blob {...blob} />)
       )}")`,
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",

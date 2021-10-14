@@ -1,0 +1,8 @@
+.character{
+  animation: goIn 0.5s;
+}
+
+@keyframes goIn{
+  0% { transform: translateX(-200%);}
+  100% { transform: translateX(0px);}
+}

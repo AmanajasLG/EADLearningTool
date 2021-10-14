@@ -15,6 +15,7 @@ import FullscreenOverlay from '../../_components/FullscreenOverlay'
 import MapBuildingDetails from '../../_components/MapBuildingDetails'
 import Blob, { BlobBg } from '../../_components/Blob'
 import { hourglassFull } from '../../img'
+import './character.scss'
 
 
 
@@ -31,8 +32,6 @@ const iconColors = {
   shopping: "#FFDEA9",
 };
 
-
-
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState(data.requests))
   const resolveRequest = () => {
@@ -41,10 +40,10 @@ const Core = ({ exitGame, data, onEndGame }) => {
     let request = state.takenRequests[0]
     console.log('request:', request)
     //evaluate request
-    let roomEvaluation = (!request.rooms || request.rooms === state.selectedHome.rooms)
-    let bathsEvaluation = (!request.baths || request.baths === state.selectedHome.baths)
-    let closeToEvaluation = (!request.closeTo || (!request.closeTo.includes(';') && state.selectedHome.closeTo.includes(request.closeTo)) || request.closeTo.split(';').every( value => value === '' || state.selectedHome.closeTo.includes(value)))
-    let farFromEvaluation = (!request.farFrom || (!request.farFrom.includes(';') && state.selectedHome.farFrom.includes(request.farFrom)) || request.farFrom.split(';').every( value => value === '' || state.selectedHome.farFrom.includes(value)))
+    let roomEvaluation = !request.rooms || request.rooms === state.selectedHome.rooms
+    let bathsEvaluation = !request.baths || request.baths === state.selectedHome.baths
+    let closeToEvaluation = !request.closeTo || (!request.closeTo.includes(';') ? state.selectedHome.closeTo.includes(request.closeTo) : request.closeTo.split(';').every( value => value === '' || state.selectedHome.closeTo.includes(value)))
+    let farFromEvaluation = !request.farFrom || (!request.farFrom.includes(';') ? !state.selectedHome.closeTo.includes(request.farFrom) : request.farFrom.split(';').every( value => value === '' || !state.selectedHome.closeTo.includes(value)))
 
     if( roomEvaluation && bathsEvaluation &&
         closeToEvaluation && farFromEvaluation)
@@ -54,6 +53,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
     }
     else
     {
+      updateState.completed = state.wrong + 1
       if(!roomEvaluation)
         updateState.writerText = request.errorDialog.find( e => e.type === 'rooms').dialog
       else if(!bathsEvaluation)
@@ -78,6 +78,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
     //set next request
     if(availableIndexes.length > 0){
       updateState.character = data.characters[getRandomInt(0, data.characters.length)]
+      updateState.animateCharacter = true
       updateState.takenRequests = [data.requests[availableIndexes[getRandomInt(0, availableIndexes.length)]], ...state.takenRequests]
       updateState.writerText = updateState.takenRequests[0].dialog
     }
@@ -135,6 +136,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
       scene: 'GAME', runTimer: true,
       takenRequests: [data.requests[requestIndex]],
       character: data.characters[getRandomInt(0, data.characters.length)],
+      characterKey: s.characterKey + 1,
       writerText: data.requests[requestIndex].dialog
     })
     )
@@ -258,12 +260,17 @@ const Core = ({ exitGame, data, onEndGame }) => {
                   />
                 }
               </div>
-              <img
-                style={{position: 'absolute', left: '5%', bottom: 0, height: '150%'}}
-                onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-                src={state.character? state.character.characterAssets[0].image.url : charStub}
-                alt=""
-              />
+              {state.character &&
+                <img
+                  className={state.animateCharacter ? 'character' : ''}
+                  onAnimationEnd={() => setState(s => ({...s, animateCharacter: false})) }
+                  key={state.characterKey}
+                  style={{position: 'absolute', left: '5%', bottom: 0, height: '150%'}}
+                  onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
+                  src={state.character.characterAssets[0].image.url}
+                  alt=""
+                />
+              }
             </div>
             <TaggedIcon icon={agendamento} message={state.completed}
               style={{position: 'absolute', right: '8%', top: '27.5%',

@@ -16,6 +16,14 @@ const blobTemplate = {
         min: 0,
         max: 10
       }
+    },
+    opacity: {
+      control: {
+        type: 'range',
+        step: 0.2,
+        min: 0,
+        max: 1
+      }
     }
   }
 }
