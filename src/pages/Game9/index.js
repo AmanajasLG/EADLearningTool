@@ -6,8 +6,43 @@ import stub from './stub'
 
 import Core from './core.js'
 import Feedback from './feedback.js'
-import { agendamento, houseIcon } from '../../img'
+import { agendamento,
+  houseIcon,
+  bancoIcon,
+  escolaIcon,
+  drugstoreIcon,
+  hospitalIcon,
+  bakeryIcon,
+  parkIcon,
+  restorantIcon,
+  shoppingIcon,
+  marketIcon
+ } from '../../img'
 
+const getImage = (type) => {
+  switch(type){
+    case 'Home':
+      return houseIcon
+    case 'Banco':
+      return bancoIcon
+    case 'Escola':
+      return escolaIcon
+    case 'Farmacia':
+      return drugstoreIcon
+    case 'Hospital':
+      return hospitalIcon
+    case 'Padaria':
+      return bakeryIcon
+    case 'Parque':
+      return parkIcon
+    case 'Restaurante':
+      return restorantIcon
+    case 'Shopping':
+      return shoppingIcon
+    case 'Supermercado':
+      return marketIcon
+  }
+}
 const Game9 = (props) => {
 
   const load = (missionData, lang, state, setState) => {
@@ -22,7 +57,7 @@ const Game9 = (props) => {
               ({...l,
                 image: l.image
                   ? l.image
-                  : agendamento,
+                  : getImage(l.type),
                 positionX: l.positionX
                   ? l.positionX
                   : Math.floor(Math.random() * 95),
@@ -36,7 +71,7 @@ const Game9 = (props) => {
                 type: 'Home',
                 image: h.image
                   ? h.image
-                  : houseIcon,
+                  : getImage('Home'),
                 positionX: h.positionX
                   ? h.positionX
                   : Math.floor(Math.random() * 95),

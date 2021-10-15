@@ -52,7 +52,18 @@ import calendarFeedbackIcon from "./Game8/calendar-feedback-icon.svg";
 import planeFeedbackIcon from "./Game8/plane-feedback-icon.svg";
 import emailFeedbackIcon from "./Game8/email-feedback-icon.svg";
 import mapFeedbackIcon from "./Game8/map-feedback-icon.svg";
-import houseIcon from "./Game9/casa.svg";
+// GAME 9
+import houseIconColors from "./Game9/casa.svg";
+import bancoIcon from './Game9/Banco.svg'
+import houseIcon from './Game9/CasaMap.svg'
+import escolaIcon from './Game9/Escola.svg'
+import drugstoreIcon from './Game9/Farmácia.svg'
+import hospitalIcon from './Game9/Hospital.svg'
+import bakeryIcon from './Game9/Padaria.svg'
+import parkIcon from './Game9/Parque.svg'
+import restorantIcon from './Game9/Restaurante.svg'
+import shoppingIcon from './Game9/Shopping.svg'
+import marketIcon from './Game9/Supermercado.svg'
 
 // GENERAL
 import avatar from "./avatar1.svg";
@@ -155,5 +166,15 @@ export {
   relogio,
   fireworks1,
   fireworks2,
-  houseIcon
+  houseIconColors,
+  bancoIcon,
+  houseIcon,
+  escolaIcon,
+  drugstoreIcon,
+  hospitalIcon,
+  bakeryIcon,
+  parkIcon,
+  restorantIcon,
+  shoppingIcon,
+  marketIcon
 };

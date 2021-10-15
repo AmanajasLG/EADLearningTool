@@ -14,7 +14,7 @@ import FullscreenOverlay from '../../_components/FullscreenOverlay'
 import MapBuildingDetails from '../../_components/MapBuildingDetails'
 import Blob, { BlobBg } from '../../_components/Blob'
 
-import { houseIcon, hourglassFull } from '../../img'
+import { houseIconColors, hourglassFull } from '../../img'
 import './character.scss'
 
 const iconColors = {
@@ -172,12 +172,14 @@ const Core = ({ exitGame, data, onEndGame }) => {
                   </React.Fragment>
                 }
               </div>
-              <div style={{position: 'absolute', top: '-15%', left: '-5%', height: '130%', width: '13%', backgroundColor: "#59316d", borderRadius: "50%"}}>
-                <img style={{height: '100%'}}
-                  onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-                  src={ state.buildingDetails ? state.buildingDetails.image : null}
-                  alt=""
-                  />
+              <div style={{position: 'absolute', textAlign: 'center', top: '-15%', left: '-5%', height: '130%', width: '13%', backgroundColor: "#59316d", borderRadius: "50%"}}>
+                { state.buildingDetails &&
+                  <img style={{backgroundColor: '#FDFDFD', borderRadius: '50%', width: '90%', height: '90%', marginTop:'5%'}}
+                    onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
+                    src={ state.buildingDetails ? state.buildingDetails.image : null}
+                    alt=""
+                    />
+                }
               </div>
             </div>
             <Timer style={{position: 'absolute', fontSize: '8em', left: '5%', top: '35%', zIndex: state.tutorialStep === 3? 110 : null}}
@@ -199,7 +201,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
             backgroundColor: '#aaaaff'}}>
             <div
               style={{
-                backgroundImage: `url("${data.map? data.map.url : houseIcon}")`,
+                backgroundImage: `url("${data.map? data.map.url : houseIconColors}")`,
                 height: "100%",
                 width: "100%",
                 backgroundRepeat: "no-repeat",
@@ -270,7 +272,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
                 />
               }
             </div>
-            <TaggedIcon icon={houseIcon} message={state.completed}
+            <TaggedIcon icon={houseIconColors} message={state.completed}
               style={{position: 'absolute', right: '8%', top: '27.5%',
                 pointerEvents: 'none', height: '50%', width: '10%',
                 zIndex: state.tutorialStep === 2? 110 : null
