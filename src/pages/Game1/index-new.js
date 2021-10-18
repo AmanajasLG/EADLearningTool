@@ -1,13 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import { gameActions } from "../../_actions";
-import { shuffle, zeroFill } from "../../_helpers";
 import GameTemplate from "../GameTemplate";
 import Core from "./core";
 import Feedback from "./feedback";
 
-import { checkErros, genFeedbackMessages } from "./helpers";
 
 const Game7 = (props) => {
   let dispatch = useDispatch();

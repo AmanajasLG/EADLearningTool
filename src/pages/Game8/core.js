@@ -3,11 +3,9 @@ import React from "react";
 import WindowScreen from "../../_components/WindowScreen";
 import BuyTicketsLoop from "../../_components/BuyTicketsLoop";
 
-import Button from "@material-ui/core/Button";
 import Map from "../../_components/Map";
 
 import initialState from "./initialState";
-import { format } from "date-fns";
 import { months } from "../../_helpers";
 import { agendamento, emailIcon, destino, aviao } from "../../img";
 import Email from "../../_components/Email";
@@ -16,7 +14,6 @@ import { checkBookingError } from "./helpers";
 
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState());
-  // {state.dates[0].day}/{state.dates[0].month + 1}
   const createTexts = () => [
     `Seu voo é para ${state.userAnswers.city.name}.`,
     `Você vai em ${

@@ -7,13 +7,11 @@ import {
   palma,
   ariel,
 } from "../../../../img";
-import { Button, ButtonConfigs } from "../../../../_components/Button";
+import { Button } from "../../../../_components/Button";
 
 import "./index.scss";
 import FullscreenOverlay from "../../../../_components/FullscreenOverlay";
-import DialogHistory from "../../../../_components/DialogHistory";
 
-// const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const CellphoneOverlay = ({
   startMaximized = false,
   showCloseButton = true,
@@ -32,7 +30,6 @@ const CellphoneOverlay = ({
     maximized: startMaximized,
     shouldMinimize: false,
   });
-  // const [newContact,setNewContact] = React.useState({name: '', job: '', country: ''})
 
   React.useEffect(() => {
     if (shouldMinimize) _shouldMinimize();
@@ -49,11 +46,6 @@ const CellphoneOverlay = ({
     //eslint-disable-next-line
   }, [dialogHistory]);
 
-  // React.useEffect( () => {
-  // 	if(onMinimize) _shouldMinimize()
-  // 	//eslint-disable-next-line
-  // }, [onMinimize])
-
   const _maximize = () => {
     if (!shouldOverlayAll) setState({ ...state, maximized: true });
   };
@@ -63,7 +55,6 @@ const CellphoneOverlay = ({
   };
 
   const _minimized = () => {
-    // setState({...state, shouldMinimize: false, maximized: false})
     state.shouldMinimize = false;
     state.maximized = false;
     if (typeof onMinimize === "function") onMinimize();

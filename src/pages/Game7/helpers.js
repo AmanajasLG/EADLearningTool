@@ -1,5 +1,3 @@
-import { format } from "date-fns";
-
 function checkErros(data) {
   let errors = [];
   if (!data.userAnswers.city.correct)

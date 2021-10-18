@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { Link, Redirect } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import "./index.scss";
 
@@ -34,7 +33,6 @@ import { Iniciar, Voltar, ButtonConfigs } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
 import TutorialWardrobe from "./components/TutorialWardrobe";
 import Invitation from "./components/Invitation";
-// import ChooseCharacter from "./components/ChooseCharacter";
 
 const Game5 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -630,10 +628,6 @@ const Game5 = (props) => {
                   </React.Fragment>
                 );
               case "DRESS":
-                /*
-                  FIXME
-                  ! layout de ver o convite de novo está cru
-                */
                 return (
                   <React.Fragment>
                     {state.showBlob && (

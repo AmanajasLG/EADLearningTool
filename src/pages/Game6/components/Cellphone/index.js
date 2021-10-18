@@ -1,7 +1,7 @@
 import React from "react";
 
 import { bigPhone, dedao, palma, trash } from "../../../../img";
-import { Button, ButtonConfigs } from "../../../../_components/Button";
+import { Button } from "../../../../_components/Button";
 import CellphoneWardrobe from "../CellphoneWardrobe";
 import ColorPanel from "../ColorPanel";
 
@@ -9,11 +9,9 @@ import parse from "html-react-parser";
 
 import "./index.scss";
 import { Dropdown } from "react-bootstrap";
-import { Icon } from "@material-ui/core";
 import Notification from "../Notification";
 import { ariel } from "../../../../img";
 
-// const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const Cellphone = ({
   stopConversation,
   dialogHistory,

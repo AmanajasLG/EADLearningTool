@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./index.scss";
 import styles from "./index.module.scss";
@@ -10,7 +10,6 @@ import {
   zeroFill,
   numberToMoney,
   shuffle,
-  preventSingleWordBreak,
 } from "../../_helpers";
 
 import {
@@ -21,8 +20,6 @@ import {
 } from "../../_actions";
 import { headerConstants } from "../../_constants";
 
-// import Button from "@material-ui/core/Button";
-
 import initialState from "./initialState";
 
 import Init from "../../_components/Init";
@@ -30,12 +27,10 @@ import Timer from "../../_components/Timer";
 import Aisle from "../../_components/Aisle";
 import Intro from "./components/Intro";
 import Tutorial from "./components/Tutorial";
-// import DialogCharacter from "../../_components/DialogCharacter";
 import ChefDialog from "./components/ChefDialog";
 import Payment from "./components/Payment";
 import ShopCart from "./components/ShopCart";
 import {
-  Button,
   Iniciar,
   Voltar,
   ButtonConfigs,
@@ -43,12 +38,7 @@ import {
 
 import {
   cart,
-  // ingredientsListBg,
-  // recipeBg,
-  // listCheck,
-  // listIcon,
   checkout,
-  // wallet,
   blobLaranja,
   hourglassFull,
   hourglassEmpty,
@@ -57,7 +47,6 @@ import {
   bigBlob,
 } from "../../img";
 import Recipe from "../../_components/Recipe";
-import zIndex from "@material-ui/core/styles/zIndex";
 
 const endGameLines = [
   {
@@ -89,7 +78,6 @@ const Game3 = (props) => {
   );
   let missionData = mission ? mission.missionData : null;
 
-  // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {

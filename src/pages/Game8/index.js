@@ -1,4 +1,3 @@
-import { LocationSearching } from "@material-ui/icons";
 import React from "react";
 import { useDispatch } from "react-redux";
 

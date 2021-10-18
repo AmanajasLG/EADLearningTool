@@ -1,6 +1,5 @@
 import React from "react";
 import { BlobBg } from "../Blob";
-import Button from "@material-ui/core/Button";
 import { Iniciar, ButtonConfigs } from "../../_components/Button";
 import { preventSingleWordBreak } from "../../_helpers";
 

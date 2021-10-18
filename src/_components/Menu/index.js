@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "../Button";
 
 const Menu = ({ buttonList, onButtonClick }) => {
   const columns = buttonList.length < 3 ? 1 : 3,

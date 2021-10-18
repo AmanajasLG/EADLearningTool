@@ -144,6 +144,8 @@ export {
   hanger,
   hangerH,
   dressingBg,
+  fireworks1,
+  fireworks2,
   camera,
   agendamento,
   aviao,
