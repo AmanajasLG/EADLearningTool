@@ -33,11 +33,14 @@ const GameTemplate = ({
     (state) => state.authentication.user.user.language.id
   );
 
+  // eslint-disable-next-line
   let currentPlaySession = useSelector((state) =>
     state.play_sessions ? state.play_sessions.items[0] : {}
   );
+  // eslint-disable-next-line
   const { play_sessionsActions } = apiActions;
   // const { missionsActions, play_sessionsActions, player_actionsActions, user_game_resultsActions } = apiActions
+  // eslint-disable-next-line
   const timesPlayed = useSelector((state) => state.game.items.resultsCount);
 
   React.useEffect(() => {

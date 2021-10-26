@@ -48,6 +48,7 @@ const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) 
       return
 
     setDates([...dates])
+  // eslint-disable-next-line
   }, [dates])
 
   React.useEffect(() => {
@@ -55,6 +56,7 @@ const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) 
     let obj = {month: monthValue, dates: datesValue}
     console.log('monthValue changed', obj)
     if(onChange) onChange(obj)
+    // eslint-disable-next-line
   }, [monthValue, datesValue])
 
   const setColor = num => {

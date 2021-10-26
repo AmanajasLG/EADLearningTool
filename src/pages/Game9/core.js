@@ -15,7 +15,7 @@ import charStub from './chef_animada.svg'
 const Core = ({ exitGame, data, onEndGame }) => {
   const [state, setState] = React.useState(initialState())
   const resolveRequest = (buildingIndex) => () => {
-    let request = data.requests[state.takenRequests[0]]
+    // let request = data.requests[state.takenRequests[0]]
     let updateState = {}
     //evaluate request
     //if(buildingIndex == ok)
@@ -38,7 +38,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
   }
 
   const callEndGame = () => {
-    {if(onEndGame) onEndGame({...data, results: state.results})}
+    if(onEndGame) onEndGame({...data, results: state.results})
   }
 
   return(
@@ -73,7 +73,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
                 Informações informações {state.buildingDetailsIndex != null ? `do ${data.buildings[state.buildingDetailsIndex].name}` : ''}
               </div>
               {state.buildingDetailsIndex != null &&
-               data.buildings[state.buildingDetailsIndex].type == 'casa' &&
+               data.buildings[state.buildingDetailsIndex].type === 'casa' &&
                 <Button onClick={resolveRequest(state.buildingDetailsIndex)}>Escolher</Button>
               }
             </div>
@@ -98,7 +98,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
                 pointerEvents: 'none', height: '50%', width: '30%'
               }}
             />
-            <Timer style={{position: 'absolute', right: 0, fontSize: '8em', right: '2.5%', top: '45%'}}
+            <Timer style={{position: 'absolute', fontSize: '8em', right: '2.5%', top: '45%'}}
               seconds={data.timer}
               run={state.runTimer}
               onEnd={onTimerEnd}

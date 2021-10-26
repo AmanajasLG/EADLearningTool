@@ -85,6 +85,7 @@ const Game3 = (props) => {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
+  // eslint-disable-next-line
   }, [dispatch, playSessionControlActions, state]);
 
   const onStartGame = () => setState((s) => ({ ...s, scene: "INTRO" }));

@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 
 import GameTemplate from "../GameTemplate";
 import Core from "./core";
@@ -7,7 +7,7 @@ import Feedback from "./feedback";
 
 
 const Game7 = (props) => {
-  let dispatch = useDispatch();
+  // let dispatch = useDispatch();
 
   const load = (missionData, lang, state, setState) => {
     if (missionData && !state.locations) {

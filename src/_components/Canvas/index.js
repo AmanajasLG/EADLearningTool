@@ -3,11 +3,11 @@ import React from 'react'
 const Canvas = ({ elements ,...props}) => {
   const canvasRef = React.useRef(null)
 
-  const draw = ( ctx, dt, canvas ) => {
+  const draw = React.useCallback( (ctx, dt, canvas) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.fillStyle = '#000000'
     if(elements) elements.map( el => el.draw(ctx, dt, canvas))
-  }
+  }, [elements])
 
   React.useEffect(() => {
     const canvas = canvasRef.current
