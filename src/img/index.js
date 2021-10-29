@@ -64,6 +64,7 @@ import parkIcon from './Game9/Parque.svg'
 import restorantIcon from './Game9/Restaurante.svg'
 import shoppingIcon from './Game9/Shopping.svg'
 import marketIcon from './Game9/Supermercado.svg'
+import mapGame9 from './Game9/Mapa.svg'
 
 // GENERAL
 import avatar from "./avatar1.svg";
@@ -176,5 +177,6 @@ export {
   parkIcon,
   restorantIcon,
   shoppingIcon,
-  marketIcon
+  marketIcon,
+  mapGame9
 };

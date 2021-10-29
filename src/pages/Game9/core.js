@@ -13,21 +13,22 @@ import charStub from './chef_animada.svg'
 import FullscreenOverlay from '../../_components/FullscreenOverlay'
 import MapBuildingDetails from '../../_components/MapBuildingDetails'
 import Blob, { BlobBg } from '../../_components/Blob'
+import MapBuildingPin from '../../_components/MapBuildingPin'
 
-import { houseIconColors, hourglassFull } from '../../img'
+import { houseIconColors, hourglassFull, mapGame9 } from '../../img'
 import './character.scss'
 
 const iconColors = {
-  school: "#FFEACC",
-  hotel: "#FFCCA9",
-  hospital: "#D6E3F4",
-  drugstore: "#D6E3F4",
-  supermarket: "#FFDEA9",
-  park: "#F9AFA1",
-  restaurant: "#E8CAFF",
-  cityhall: "#F9AFA1",
-  touristic: "#F9AFA1",
-  shopping: "#FFDEA9",
+  Home: "#f9afa1",
+  Banco: "#f5ef7d",
+  Escola: "#FFEACC",
+  Farmacia: "#D6E3F4",
+  Hospital: "#D6E3F4",
+  Padaria: "#ddb385",
+  Parque: "#a0e6a1",
+  Restaurante: "#E8CAFF",
+  Shopping: "#FFDEA9",
+  Supermercado: "#FFDEA9",
 };
 
 const Core = ({ exitGame, data, onEndGame }) => {
@@ -48,10 +49,12 @@ const Core = ({ exitGame, data, onEndGame }) => {
     {
       updateState.completed = state.completed + 1
       updateState.writerText = 'Yay! Obrigado!'
+      updateState.clientState = 'rightQuestion'
     }
     else
     {
-      updateState.completed = state.wrong + 1
+      updateState.wrong = state.wrong + 1
+      updateState.clientState = 'wrongQuestion'
       if(!roomEvaluation)
         updateState.writerText = request.errorDialog.find( e => e.type === 'rooms').dialog
       else if(!bathsEvaluation)
@@ -86,6 +89,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
       updateState.runTimer = false
     }
     updateState.showNextClientButton = false
+    updateState.clientState = 'rightQuestion'
 
     setState( s => ({...s, ...updateState}))
   }
@@ -135,7 +139,8 @@ const Core = ({ exitGame, data, onEndGame }) => {
       takenRequests: [data.requests[requestIndex]],
       character: data.characters[getRandomInt(0, data.characters.length)],
       characterKey: s.characterKey + 1,
-      writerText: data.requests[requestIndex].dialog
+      writerText: data.requests[requestIndex].dialog,
+      clientState: 'init',
     })
     )
   }
@@ -162,15 +167,17 @@ const Core = ({ exitGame, data, onEndGame }) => {
                 <div style={{margin: '0 1%', width: '20%'}}>
                   <strong>{showName()}</strong>
                 </div>
-                {state.buildingDetails && state.buildingDetails.type === "Home" &&
-                  <React.Fragment>
-                    <div style={{width: '0.2%', margin: '0 2%', height: '100%', backgroundColor: '#FFFFFF'}}></div>
-                    <div style={{margin: '0 2%'}}>
-                      <div>{state.buildingDetails.rooms} quartos</div>
-                      <div>{state.buildingDetails.baths} banheiros</div>
-                    </div>
-                  </React.Fragment>
+                {state.buildingDetails &&
+                    <React.Fragment>
+                      <div style={{width: '0.2%', margin: '0 2%', height: '100%', backgroundColor: '#FFFFFF'}}></div>
+                      <div style={{margin: '0 2%'}}>
+                        {state.buildingDetails.rooms && <div>{state.buildingDetails.rooms} quartos</div>}
+                        {state.buildingDetails.baths && <div>{state.buildingDetails.baths} banheiros</div>}
+                        {state.buildingDetails.description && <div>{state.buildingDetails.description}</div>}
+                      </div>
+                    </React.Fragment>
                 }
+
               </div>
               <div style={{position: 'absolute', textAlign: 'center', top: '-15%', left: '-5%', height: '130%', width: '13%', backgroundColor: "#59316d", borderRadius: "50%"}}>
                 { state.buildingDetails &&
@@ -201,7 +208,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
             backgroundColor: '#aaaaff'}}>
             <div
               style={{
-                backgroundImage: `url("${data.map? data.map.url : houseIconColors}")`,
+                backgroundImage: `url("${data.map? data.map.url : mapGame9}")`,
                 height: "100%",
                 width: "100%",
                 backgroundRepeat: "no-repeat",
@@ -212,34 +219,27 @@ const Core = ({ exitGame, data, onEndGame }) => {
               {data.buildings
                 .filter( (building, index) => state.scene !== 'TUTORIAL' || (state.scene === 'TUTORIAL' && state.tutorialStep === 4 && index === data.buildings.length - 1))
                 .map((location, index) => (
-                <div
-                  className="location"
-                  key={location.id}
-                  src={location.image}
-                  alt={location.id}
-                  style={{
-                    zIndex: state.tutorialStep === 4? 110 : null,
-                    width:"5%",
-                    height: "15%",
-                    backgroundColor: iconColors[location.type],
-                    borderRadius: 100,
-                    borderBottomLeftRadius: 0,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    position: "absolute",
-                    left: `${location.positionX}%`,
-                    top: `${location.positionY}%`
-                  }}
-                  onClick={state.scene === 'TUTORIAL'? null : onMouseClickLocation(index)}
-                  onMouseEnter={onMouseEnterLocation(index)}
-                  onMouseLeave={onMouseLeaveLocation(index)}
-                >
+                  <MapBuildingPin
+                    key={location.id}
+                    onClick={state.scene === 'TUTORIAL'? null : onMouseClickLocation(index)}
+                    onMouseEnter={onMouseEnterLocation(index)}
+                    onMouseLeave={onMouseLeaveLocation(index)}
+                    style={{
+                      zIndex: state.tutorialStep === 4? 110 : null,
+                      width:"5%",
+                      height: "15%",
+                      position: "absolute",
+                      left: `${location.positionX}%`,
+                      top: `${location.positionY}%`,
+                      backgroundColor: iconColors[location.type]
+                    }}
+                  >
                   <img
+                    style={{width: '80%', height: '80%'}}
                     src={location.image}
                     alt=""
                   />
-                </div>
+                </MapBuildingPin>
               ))}
             </div>
           </div>
@@ -267,7 +267,7 @@ const Core = ({ exitGame, data, onEndGame }) => {
                   key={state.characterKey}
                   style={{position: 'absolute', left: '5%', bottom: 0, height: '150%'}}
                   onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
-                  src={state.character.characterAssets[0].image.url}
+                  src={state.character.characterAssets.find(asset => asset.bodyPart === 'upperBody' && asset.type === state.clientState).image.url}
                   alt=""
                 />
               }
