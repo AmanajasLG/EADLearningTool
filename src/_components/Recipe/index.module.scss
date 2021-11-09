@@ -1,11 +1,14 @@
 .list-icon {
-  width: 9.1vw;
-  width: calc( var(--gameWidth) * 0.091);
+  width: 17.5em;
   top: 0;
   position: absolute;
-  margin: 4vh 0 0 8vh;
-  margin: calc( var(--gameHeight) * 0.04) 0 0 calc( var(--gameHeight) * 0.08);
+  margin: 5em 0 0 3em;
   z-index: var(--full-overlay);
+  transition: 100ms ease-in-out;
+}
+
+.list-icon:hover {
+  transform: scale(1.1) rotate(7.5deg);
 }
 
 .shop-list-div {
@@ -20,7 +23,7 @@
 }
 
 .overlay-shop-list {
-  padding-bottom: 15vh;
+  padding-bottom: 16em;
   flex: 1 1 0px;
   min-width: 0;
   background-color: rgba(250, 128, 114, 0.466);
@@ -50,6 +53,7 @@
   height: 11.11111%;
   width: 100%;
   font-size: 1.6em;
+  position: relative;
 }
 
 .shop-list-item {
@@ -62,7 +66,7 @@
 
     > * {
       max-height: 100%;
-      margin-right: 10px;
+      margin-right: 1em;
     }
 
     > .checkmark {

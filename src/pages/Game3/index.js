@@ -349,6 +349,7 @@ const Game3 = (props) => {
     setState((s) => ({
       ...s,
       cashierContinue: () => endGame(false, change === 0),
+      chefAwkward: (change < 0),
       cashierLines: cashierLines,
       moneySelection: false,
       runTimer: false,
@@ -630,7 +631,7 @@ const Game3 = (props) => {
                       chef={missionData.character}
                       hideDialog={state.moneySelection}
                       chefFeeling={
-                        state.change < 0 ? "wrongPayment" : "default"
+                        state.chefAwkward ? "wrongPayment" : null
                       }
                       text={state.cashierLines.text}
                       translation={state.cashierLines.translation}
@@ -728,12 +729,12 @@ const Game3 = (props) => {
                         justifyContent: "center",
                       }}
                     >
-                      <div style={{ position: "relative" }}>
+                      <div style={{ position: "relative", fontSize: "1.1em" }}>
                         <img
                           style={{
                             display: "block",
                             height: "15em",
-                            margin: "2em auto",
+                            margin: "0 auto 1em",
                           }}
                           src={state.timeUp ? hourglassEmpty : hourglassFull}
                           alt=""
@@ -742,8 +743,8 @@ const Game3 = (props) => {
                           <div
                             style={{
                               textAlign: "center",
-                              fontSize: "4em",
                               fontFamily: "Abril fatface",
+                              fontSize: "6em",
                               color: "rgb(89, 49, 109)",
                             }}
                           >
@@ -754,8 +755,8 @@ const Game3 = (props) => {
                           lang="pt-br"
                           style={{
                             textAlign: "center",
-                            fontFamily: "Barlow",
-                            fontSize: "4em",
+                            fontFamily: "Abril Fatface",
+                            fontSize: "6em",
                             color: "rgb(89, 49, 109)",
                           }}
                         >
@@ -763,9 +764,10 @@ const Game3 = (props) => {
                         </p>
                         <hr
                           style={{
-                            display: "block",
-                            margin: "1em auto",
-                            width: "5em",
+                            width: "33%",
+                            borderColor: "#F9AFA1",
+                            margin: "2em auto 1.5em",
+                            borderStyle: "solid"
                           }}
                         />
                         <p
@@ -775,7 +777,7 @@ const Game3 = (props) => {
                             fontFamily: "Barlow",
                             color: "rgb(89, 49, 109)",
                             fontStyle: "italic",
-                            fontSize: "3em",
+                            fontSize: "4em",
                           }}
                         >
                           {endGameLines[state.timeUp ? 0 : 1].translation}
@@ -784,7 +786,6 @@ const Game3 = (props) => {
 
                       <div
                         style={{
-                          marginLeft: "2em",
                           position: "relative",
                           height: "4em",
                           width: "5em",
@@ -793,7 +794,7 @@ const Game3 = (props) => {
                           backgroundPosition: "center center",
                           backgroundSize: "contain",
                           textAlign: "center",
-                          fontSize: "10em",
+                          fontSize: "11em",
                           fontFamily: "Abril fatface",
                           color: "rgb(89, 49, 109)",
                           display: "flex",
@@ -824,7 +825,7 @@ const Game3 = (props) => {
                       style={{
                         display: "block",
                         margin: "0 auto",
-                        marginTop: "5em",
+                        width: "100%"
                       }}
                     >
                       <div id="feedback-endGame-action-btns">
@@ -835,6 +836,7 @@ const Game3 = (props) => {
                           style={{ marginRight: "2em" }}
                         />
                         <Iniciar
+                          style={{width: "15%"}}
                           label={"Sair do jogo"}
                           colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                           onClick={() =>
