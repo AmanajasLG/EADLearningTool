@@ -24,11 +24,8 @@
 }
 
 #dialog-accusation {
-  width: 70vw;
-  min-height: 50vh;
-  max-width: 1200px;
-  max-height: 800px;
-  padding: 30px;
+  width: 35em;
+  padding: 1.3em;
   background-color: #f9afa1;
   flex-shrink: 1;
   display: flex;
@@ -59,6 +56,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 1em;
 }
 
 #accusation-infos > * {
@@ -95,6 +93,7 @@
 }
 
 #tips-received {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -104,7 +103,7 @@
   background-color: #fbbba3;
   border-radius: 1.5em;
   // padding: 60px 20px 20px 20px;
-  padding: 20px;
+  padding: 1em;
 }
 
 #tips-received > div:nth-child(n + 3) {
@@ -120,49 +119,12 @@
 #accusation-btns button {
   margin: 5px 15px;
   padding: 12px 30px;
-  text-transform: unset;
-  transition: 100ms linear;
-  border-radius: 2em;
-  font-family: "Barlow";
-  font-weight: 700;
-  font-size: 1em;
-}
-
-#accusation-btns button:first-child {
-  background-color: #ffcca9;
-  color: #59316d;
-  border-bottom-right-radius: 0;
-}
-
-#accusation-btns button:first-child::before {
-  content: "❮";
-  margin-right: 25px;
-}
-
-#accusation-btns button:last-child {
-  background-color: #d6e3f4;
-  color: #59316d;
-  border-bottom-left-radius: 0;
-}
-
-#accusation-btns button:last-child::after {
-  content: "❯";
-  margin-left: 25px;
-}
-
-#accusation-btns button:hover {
-  background-color: #59316d;
-  color: #ffffff;
-}
-
-#tips-received {
-  position: relative;
 }
 
 #accusation-icon {
   position: absolute;
   width: 100%;
-  height: 5vh;
+  height: 2.3em;
   left: 0;
   top: 0;
   display: flex;

@@ -25,7 +25,8 @@ import {
 
 import { Redirect } from "react-router";
 import initialState from "./initialState";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
+import Button from "../../_components/Button";
 import TutorialBlob from "../../_components/TutorialBlob";
 
 import {
@@ -1018,12 +1019,12 @@ const Game2 = (props) => {
                               label={"Tentar novamente"}
                               colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_6}
                               onClick={restart}
-                              style={{ marginRight: "2em" }}
                             />
                             <Iniciar
                               label={"Sair do jogo"}
                               colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                               onClick={() => setState({ ...state, back: true })}
+                              style={{width: "11em"}}
                             />
                           </div>
                         </div>
@@ -1082,14 +1083,18 @@ const Game2 = (props) => {
                       </div>
                     </div>
                     <div id="accusation-btns">
-                      <Button
+                      <Voltar
+                        label="Não"
                         onClick={() =>
                           setState((s) => ({ ...s, closeAcusation: true }))
                         }
-                      >
-                        Não
-                      </Button>
-                      <Button onClick={checkEnd}>Sim</Button>
+                        colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
+                      />
+                      <Iniciar
+                        label="Sim"
+                        onClick={checkEnd}
+                        colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_2}
+                      />
                     </div>
                   </div>
                 </div>

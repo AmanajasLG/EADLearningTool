@@ -25,14 +25,12 @@
   transition: 150ms ease-in-out;
   height: 100%;
   width: 100%;
-  max-width: 2000px;
   margin-left: auto;
   margin-right: auto;
 }
 
 #dialogos {
-  margin-left: auto;
-  margin: 0 10% 0px auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   width: 135em;
@@ -40,10 +38,9 @@
 }
 
 #dialog-box {
-  max-height: 25%;
   background-color: #535c89;
   border-radius: 0 1.5em 0 0;
-  flex: 0 0 250px;
+  flex: 0 0 27em;
   padding: 1em;
   margin-bottom: 75px;
   box-shadow: 7px 7px 0px 0px #77777750;
@@ -67,11 +64,11 @@
 
 #Menu {
   overflow: auto;
-  padding-left: 9em;
+  padding-left: 18em;
 }
 
 #Writer {
-  padding-left: 4em;
+  padding-left: 6em;
   font-size: 4em;
   color: #ffffff;
   padding-right: 20px;

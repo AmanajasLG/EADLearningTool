@@ -52,7 +52,8 @@
 .left.showArrow:before {
   content: "❮";
   display: inline;
-  margin-right: 1em;
+  margin-right: 0.7em;
+  margin-left: -0.3em;
 }
 
 .right:not(.stayAsPill) {
@@ -62,7 +63,8 @@
 .right.showArrow::after {
   content: "❯";
   display: inline;
-  margin-left: 1em;
+  margin-right: -0.3em;
+  margin-left: 0.7em;
 }
 
 .cor1 {
