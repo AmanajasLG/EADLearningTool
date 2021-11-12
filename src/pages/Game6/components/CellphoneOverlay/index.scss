@@ -207,14 +207,21 @@
   margin-bottom: 5%;
 }
 
-#cellphone-dialog-history-wrapper {
-  overflow: hidden;
-  margin-left: 1em;
-  margin-right: 1em;
-  // margin-bottom: 10px;
+#cellphone-dialog-screen-after-header {
   display: flex;
   flex-direction: column;
-  height: 90%;
+  height: 100%;
+  padding-bottom: 4em;
+}
+
+#cellphone-dialog-history-wrapper {
+  overflow: hidden;
+  margin-top: 2em;
+  margin-left: 1em;
+  margin-right: 1em;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 #cellphone-dialog-history-content {
@@ -226,13 +233,13 @@
   flex-direction: column-reverse;
 }
 
-.has-ready-button {
-  height: 80% !important;
-}
+// .has-ready-button {
+//   height: 83% !important;
+// }
 
-.has-questions-buttons {
-  height: 40em !important;
-}
+// .has-questions-buttons {
+//   height: 40em !important;
+// }
 
 .cellphone-mensagem0,
 .cellphone-mensagem1 {

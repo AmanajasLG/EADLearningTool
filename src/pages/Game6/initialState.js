@@ -98,6 +98,7 @@ const initialState = () => ({
   showPhoneClothes: true,
 
   // NOTIFICATIONS
+  endIntroDialog: false,
   showTutorialBlob: true,
   tutorialBlobCount: 0,
   chooseCharacterScreenNotification: true,

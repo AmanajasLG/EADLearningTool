@@ -7,6 +7,7 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
   const [state, setState] = React.useState({
     wardrobeKey: Object.keys(wardrobe)[0],
     page: 0,
+    idx: 0
   });
   const columns = 2,
     pageSize = 4;
@@ -25,7 +26,7 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
         {Object.keys(wardrobe).map((label, index) => (
           <Button
             key={index}
-            onClick={() => setState((s) => ({ wardrobeKey: label, page: 0 }))}
+            onClick={() => setState((s) => ({ wardrobeKey: label, page: 0, idx: index }))}
             style={{
               borderRadius: "5% 5% 0 0",
               flex: "1 0 0px",
@@ -33,7 +34,7 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
               padding: "0.7em 0.5em",
               backgroundColor:
                 "hsl(24, 100%, " +
-                (83 + Math.abs(index - state.page) * 5) +
+                (83 + Math.abs(index - state.idx) * 5) +
                 "%)",
             }}
             id="wardrobe-label-button"
@@ -94,9 +95,9 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
                       <Button
                         style={{
                           fontSize: "2em",
-                          margin: "0.5em 0.3em",
+                          margin: "0.5em",
                           width: "50%",
-                          height: "3.6em",
+                          height: "3.5em",
                           padding: "0.5em",
                           pointerEvents: item.picked ? "none" : "auto",
                           opacity: item.picked ? 0.3 : 1,

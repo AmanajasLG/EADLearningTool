@@ -274,12 +274,14 @@ const Game6 = (props) => {
   // INTRO
   const showIntroDialog = () => {
     let introDialog = [...state.introDialog];
-    if (introDialog.length !== 0) {
+    if (introDialog.length > 0) {
       let introDialogShow = [
         ...state.introDialogShow,
         ...introDialog.splice(0, 1),
       ];
       setState((s) => ({ ...s, introDialog, introDialogShow }));
+    } else {
+      setState((s) => ({ ...s, endIntroDialog: true }));
     }
   };
 
@@ -790,7 +792,7 @@ const Game6 = (props) => {
           messageTranslate:
             "Pay attention to the pieces of clothing you picked. In your outfit, you chose a total of " +
             wrongClothes.length +
-            " pieces that did not match the event :" +
+            " pieces that did not match the event: " +
             wrongClothes.map((clothes) => clothes.name).join(", "),
         }
       );
@@ -991,7 +993,7 @@ const Game6 = (props) => {
 
                     {state.showCellphone && (
                       <CellphoneOverlay
-                        autoLoad={state.introDialog.length > 0}
+                        autoLoad={state.introDialog.length > 0 || !state.endIntroDialog}
                         startMaximized={true}
                         showCloseButton={false}
                         dialogHistory={state.introDialogShow}
@@ -999,7 +1001,7 @@ const Game6 = (props) => {
                           setState((s) => ({ ...s, shouldMinimize: false }))
                         }
                         shouldMinimize={state.shouldMinimize}
-                        stopConversation={state.introDialog.length === 0}
+                        stopConversation={state.endIntroDialog}
                         nextMessage={showIntroDialog}
                         endConversation={() =>
                           setState((s) => ({

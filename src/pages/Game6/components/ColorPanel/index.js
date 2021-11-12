@@ -33,10 +33,10 @@ const ColorPanel = ({ colors, onColorClick, ...props }) => {
                     .map((color, index) => (
                       <Button
                         style={{
+                          margin: "0.5em",
+                          padding: "0.5em",
                           fontSize: "1.9em",
-                          margin: ".6em",
                           width: "40%",
-                          padding: ".5em",
                         }}
                         onClick={onColorClick(color)}
                       >
