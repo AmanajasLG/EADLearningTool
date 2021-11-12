@@ -6,8 +6,6 @@ import Writer from "../../../../_components/Writer";
 import "./index.scss";
 import parser from "html-react-parser";
 
-// import { LineWeight } from '@material-ui/icons'
-
 const msPerCharacter = 30;
 const waitAfterWritten = 1000;
 
@@ -31,7 +29,7 @@ const ChefDialog = ({
 
   React.useEffect( () => {
     setState( s => { s.writerDone = false; return s} );
-  }, [text, translation])
+  }, [text])
 
   if (props.chefStyles) chefStyles = { ...chefStyles, ...props.chefStyles };
 

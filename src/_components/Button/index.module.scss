@@ -49,11 +49,18 @@
   border-bottom-right-radius: 0px;
 }
 
+.left.showArrow {
+  padding-left: 1.3em;
+}
+
+.right.showArrow {
+  padding-right: 1.3em;
+}
+
 .left.showArrow:before {
   content: "❮";
   display: inline;
   margin-right: 0.7em;
-  margin-left: -0.3em;
 }
 
 .right:not(.stayAsPill) {
@@ -63,7 +70,6 @@
 .right.showArrow::after {
   content: "❯";
   display: inline;
-  margin-right: -0.3em;
   margin-left: 0.7em;
 }
 

@@ -836,7 +836,6 @@ const Game3 = (props) => {
                           style={{ marginRight: "2em" }}
                         />
                         <Iniciar
-                          style={{width: "15%"}}
                           label={"Sair do jogo"}
                           colorScheme={ButtonConfigs.COLOR_SCHEMES.COR_3}
                           onClick={() =>
