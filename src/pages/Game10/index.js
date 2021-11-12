@@ -1,51 +1,33 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 import Init from '../../_components/Init'
-
+import GameTemplate from '../GameTemplate'
+import Feedback from './feedback'
+import Core from './core'
 
 import initialState from './initialState'
 import stub from './stub'
 
-const Game10 = () => {
-  const [state, setState] = React.useState(initialState())
-  const mission = stub;
-  const onStartGame = () => setState( s => ({...s, scene: 'GAME'}) )
+const Game10 = (props) => {
+  const load = (missionData, lang, state, setState) => {
+    if(missionData){
+      const introText = `Olá! Eu sou ${missionData.character.name}! Para planejar a festa, você vai precisar:`
+      const introTextTranslation = `Hello! I am ${missionData.character.name}! In order to plan the party, you will need:`
+      const dishText = `Acho que seria legal servir... Uma feijoada!`
+      setState(s => ({...s, data: {...stub, introText, introTextTranslation, dishText, ...missionData}}))
+    }
+  }
+
+  const loadFeedback = (data) => data
 
   return(
-    <React.Fragment>
-      {!mission.id ? <div>Loading...</div>
-        :
-        (function scene(){
-        switch(state.scene){
-          case 'INIT':
-            return(
-              <Init
-                name={mission.name}
-                description={mission.description}
-                nameTranslate={ mission.nameTranslate }
-                descriptionTranslate={ mission.descriptionTranslate }
-                onStart={onStartGame}
-                onBack={() => setState(s => ({ ...s, back: true })) }
-                ready={mission.id}
-              />
-            )
-          case 'GAME':
-            return(
-              <React.Fragment>
-                Game 10
-              </React.Fragment>
-            )
-          case 'END':
-            return(
-              <React.Fragment>
-              </React.Fragment>
-            )
-          default:
-            return (<div>Invalid GameScene</div>)
-        }
-      }())}
-      {state.back && <Redirect to="/userspace" />}
-    </React.Fragment>
+    <GameTemplate
+      Core={Core}
+      Feedback={Feedback}
+      missionId={props.match.params.id}
+      loadData={load}
+      loadFeedback={loadFeedback}
+    />
   )
 }
 
