@@ -695,7 +695,7 @@ const Game5 = (props) => {
                         />
                         {!state.showInvitation && (
                           <img
-                            className="stretchIn"
+                            className="invitationIcon"
                             src={envelopeIcon}
                             alt="invite-button"
                             onClick={
@@ -709,12 +709,7 @@ const Game5 = (props) => {
                                     }))
                             }
                             style={{
-                              cursor: "pointer",
-                              zIndex: state.blobToShow === 3 ? 1000000 : 0,
-                              position: "absolute",
-                              bottom: "3%",
-                              right: "2%",
-                              width: "10%",
+                              zIndex: state.blobToShow === 3 ? 1000000 : 0
                             }}
                           />
                         )}
