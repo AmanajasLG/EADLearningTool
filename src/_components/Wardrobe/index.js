@@ -22,8 +22,9 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
             key={index}
             onClick={() => setState({label: label, idx: index})}
             style={{
-              borderRadius: "5% 5% 0 0",
+              borderRadius: "0.5em 0.5em 0 0",
               flex: "1 0 0px",
+              padding: "0.8em 1.8em",
               backgroundColor: "hsl(24, 100%, "+(83+Math.abs(index - state.idx)*5)+"%)",
               fontSize: "3em",
             }}
@@ -52,9 +53,9 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
           {Array.from(
             new Array(Math.floor(wardrobe[state.label].length / columns) + 1),
             (item, index) => index
-          ).map((line, index) => (
+          ).map((line, rowIndex) => (
             <div
-              key={index}
+              key={(state.idx+1)*10+rowIndex}
               style={{
                 flex: "1 1 0px",
                 minHeight: 0,
@@ -67,9 +68,9 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
             >
               {wardrobe[state.label]
                 .slice(line * columns, columns + line * columns)
-                .map((item, index) => (
+                .map((item, itemIndex) => (
                   <img
-                    key={index}
+                    key={((state.idx+1)*10+rowIndex)*100+itemIndex}
                     style={{
                       cursor: "pointer",
                       pointerEvents: item.picked ? "none" : "auto",

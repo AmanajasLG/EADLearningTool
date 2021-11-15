@@ -180,7 +180,6 @@ const Tutorial = ({
             position: "relative",
             width: "100%",
             height: "100%",
-            fontSize: "0.75em",
           }}
         >
           <ChefDialog

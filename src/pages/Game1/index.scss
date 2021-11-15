@@ -66,16 +66,18 @@
 
 .next-room-text span[lang="pt-br"] {
   font-weight: 600;
-  // padding: 0 30px;
-  margin-bottom: 10px;
 }
 
 .next-room-text span[lang="en"]::before {
   content: "";
   display: block;
-  border-top: 2px solid white;
-  margin: 20px auto;
+  border-bottom: 0.1em solid var(--color-fourth);
+  margin: 1.15em auto 1em;
   width: 40%;
+}
+
+.next-room-text span[lang="en"] {
+  font-style: italic;
 }
 
 #popup-btns {

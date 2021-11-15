@@ -87,11 +87,11 @@ const GameContext = (props) => {
 
       dispatch(playSessionControlActions.createNew(false));
     }
+  // eslint-disable-next-line
   }, [
     dispatch,
     play_sessionsActions,
     playSessionControl.create_new,
-    playSessionControlActions,
   ]);
 
   React.useEffect(() => {
@@ -110,11 +110,11 @@ const GameContext = (props) => {
 
       dispatch(playSessionControlActions.ended(false));
     }
+  // eslint-disable-next-line
   }, [
     dispatch,
     play_sessionsActions,
     playSessionControl.ended,
-    playSessionControlActions,
   ]);
 
   React.useEffect(() => {

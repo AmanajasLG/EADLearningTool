@@ -17,7 +17,7 @@ const Flights = ({ selected, flights, onClick }) => {
             }}
             key={index}
           >
-             <img src={aviao} style={{position: 'absolute', left: '-2%', top:'10%', width: '7%'}} alt="voo"/>
+             <img src={aviao} style={{position: 'absolute', left: '-2%', top:'10%', width: '7%'}} alt=""/>
              <div style={{display: 'flex', justifyContent: 'space-between', padding: '0 2% 0 2%'}}>
                <div>Voo {flight.number} </div>
                <div>

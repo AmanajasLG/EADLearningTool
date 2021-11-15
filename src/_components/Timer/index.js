@@ -11,6 +11,7 @@ const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
       if(!run && running && onStop) onStop(sec)
       setRunning(run)
     }
+  // eslint-disable-next-line
   }, [run])
 
   React.useEffect(() => {
@@ -25,6 +26,7 @@ const Timer = ({ seconds, onEnd, onStop, run = true , ...props}) => {
 
     return () => { if(timer) clearTimeout(timer) }
 
+  // eslint-disable-next-line
   }, [sec, running])
 
   return (

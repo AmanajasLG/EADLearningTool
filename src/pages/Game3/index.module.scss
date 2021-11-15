@@ -7,15 +7,20 @@
 
 .listIcon,
 .moneyIcon {
-  width: 150px;
+  width: 20em;
   position: absolute;
-  margin: 15px;
+  margin: 2em;
 }
 
 .moneyIcon {
-  top: 4vh;
-  right: 8vw;
+  top: 3em;
+  right: 16em;
   cursor: pointer;
+  transition: 100ms ease-in-out;
+}
+
+.moneyIcon:hover {
+  transform: scale(1.125) rotate(10deg);
 }
 
 .cart {
@@ -23,22 +28,22 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 60%;
+  margin-top: 22em;
 }
 
 .cart > img {
-  max-width: 80%;
+  width: 80%;
   align-self: center;
-  margin-top: -26%;
+  margin-top: -10em;
 }
 
 .cartItems {
-  height: 80%;
+  height: 65%;
   background-color: #cbe7de;
-  border-radius: 20px 0px 0px 20px;
-  padding: 2vh 2vw;
+  border-radius: 1.8em 0px 0px 1.8em;
+  padding: 1.3em;
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: 33% 33% 33%;
   grid-template-rows: 25% 25% 25% 25%;
   font-size: 1.6em;
 }
@@ -56,16 +61,16 @@
   left: 3%;
   bottom: 3%;
   background-color: #F9AFA1;
-  border-radius: 100px;
+  border-radius: 9em;
   width: 1.5em;
   text-align: center;
-  box-shadow: 2px 2px #AAA7;
+  box-shadow: 0.2em 0.2em #AAA7;
 }
 
 .cartItem:hover .cartItemImg {
   // box-shadow: 5px 5px #F9AFA1;
   animation: inflate .15s ease-out forwards;
-  filter: drop-shadow(5px 5px #F9AFA1);
+  filter: drop-shadow(0.3em 0.3em #F9AFA1);
 }
 
 @keyframes inflate{

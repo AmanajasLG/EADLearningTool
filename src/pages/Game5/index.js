@@ -1,6 +1,5 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { Link, Redirect } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import "./index.scss";
 
@@ -34,7 +33,6 @@ import { Iniciar, Voltar, ButtonConfigs } from "../../_components/Button";
 import FeedbackPanel from "./components/FeedbackPanel";
 import TutorialWardrobe from "./components/TutorialWardrobe";
 import Invitation from "./components/Invitation";
-// import ChooseCharacter from "./components/ChooseCharacter";
 
 const Game5 = (props) => {
   const [state, setState] = React.useState({ ...initialState() });
@@ -60,6 +58,7 @@ const Game5 = (props) => {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
+  // eslint-disable-next-line
   }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {
@@ -630,10 +629,6 @@ const Game5 = (props) => {
                   </React.Fragment>
                 );
               case "DRESS":
-                /*
-                  FIXME
-                  ! layout de ver o convite de novo está cru
-                */
                 return (
                   <React.Fragment>
                     {state.showBlob && (
@@ -700,7 +695,7 @@ const Game5 = (props) => {
                         />
                         {!state.showInvitation && (
                           <img
-                            className="stretchIn"
+                            className="invitationIcon"
                             src={envelopeIcon}
                             alt="invite-button"
                             onClick={
@@ -714,12 +709,7 @@ const Game5 = (props) => {
                                     }))
                             }
                             style={{
-                              cursor: "pointer",
-                              zIndex: state.blobToShow === 3 ? 1000000 : 0,
-                              position: "absolute",
-                              bottom: "3%",
-                              right: "2%",
-                              width: "10%",
+                              zIndex: state.blobToShow === 3 ? 1000000 : 0
                             }}
                           />
                         )}

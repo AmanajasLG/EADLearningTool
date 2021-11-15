@@ -1,6 +1,5 @@
 import React from "react";
 import { BlobBg } from "../Blob";
-import Button from "@material-ui/core/Button";
 import { Iniciar, ButtonConfigs } from "../../_components/Button";
 import { preventSingleWordBreak } from "../../_helpers";
 
@@ -25,9 +24,15 @@ const TutorialBlob = ({
       ></BlobBg>
       <div className={"default-config-txt " + position + "-txt"}>
         <div style={{ fontSize: "3em" }}>
-          {parse(marked(preventSingleWordBreak(text)))}
-          <hr />
-          {parse(marked(preventSingleWordBreak(translation)))}
+          <div style={{ fontWeight: 700 }}>{parse(marked(preventSingleWordBreak(text)))}</div>
+          <hr style={{
+              borderWidth: "0 0 0.1em 0",
+              borderStyle: "solid",
+              width: "33%",
+              margin: "0.75em auto",
+              color: "var(--color-fourth)",
+            }}/>
+          <div style={{ fontStyle: "italic" }}>{parse(marked(preventSingleWordBreak(translation)))}</div>
         </div>
 
         {onContinue && (

@@ -13,6 +13,7 @@ const initialState = (checkedPlayed) => {
     onPayment: false,
     payment: [],
     change: -1,
+    chefAwkward: false,
     runTimer: true,
     remainingTime: 0,
     initTime: 0,

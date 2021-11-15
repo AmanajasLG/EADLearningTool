@@ -63,6 +63,7 @@ const Game1 = (props) => {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
+  // eslint-disable-next-line
   }, [dispatch, playSessionControlActions, state]);
 
   // React.useEffect(()=>{
@@ -254,7 +255,7 @@ const Game1 = (props) => {
     setState({ ...state, scene: "ROOM", showTutorialBlob: true });
 
   const tutorialControl = () => {
-    if (state.tutorialBlobCount < state.tutotialMessages.length - 1) {
+    if (state.tutorialBlobCount < state.tutotialMessages.length) {
       setState((s) => ({
         ...s,
         tutorialBlobCount: s.tutorialBlobCount + 1,
@@ -263,8 +264,9 @@ const Game1 = (props) => {
           s.tutorialBlobCount + 1 === 4 ||
           s.tutorialBlobCount + 1 === 5,
       }));
-    } else {
-      setState((s) => ({ ...s, showTutorialBlob: false, currentChar: null }));
+      if (state.tutorialBlobCount === state.tutotialMessages.length - 1) {
+        setState((s) => ({ ...s, showTutorialBlob: false, currentChar: null }));
+      }
     }
   };
 

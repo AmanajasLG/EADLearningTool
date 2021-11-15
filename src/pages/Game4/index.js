@@ -67,6 +67,7 @@ const Game4 = (props) => {
       dispatch(playSessionControlActions.createNew(true));
       setState((s) => ({ ...s, playSessionCreated: true }));
     }
+  // eslint-disable-next-line
   }, [dispatch, playSessionControlActions, state]);
 
   React.useEffect(() => {

@@ -6,8 +6,6 @@ import Writer from "../../../../_components/Writer";
 import "./index.scss";
 import parser from "html-react-parser";
 
-// import { LineWeight } from '@material-ui/icons'
-
 const msPerCharacter = 30;
 const waitAfterWritten = 1000;
 
@@ -29,6 +27,10 @@ const ChefDialog = ({
     width: "43%",
   };
 
+  React.useEffect( () => {
+    setState( s => { s.writerDone = false; return s} );
+  }, [text])
+
   if (props.chefStyles) chefStyles = { ...chefStyles, ...props.chefStyles };
 
   return (
@@ -47,7 +49,7 @@ const ChefDialog = ({
               {state.writerDone && (
                 <hr
                   className="stretchIn"
-                  style={{ width: "10%", borderColor: "#F9AFA1" }}
+                  style={{ width: "33%", borderColor: "#F9AFA1", margin: "0.8em auto 0.25em" }}
                 />
               )}
               {state.writerDone && (
@@ -65,8 +67,8 @@ const ChefDialog = ({
               style={{
                 fontSize: "2.5em",
                 position: "absolute",
-                right: "30px",
-                bottom: "-20px",
+                right: "2em",
+                bottom: "-1.3em",
                 fontWeight: 800,
                 padding: "0.72em 1.43em",
               }}
@@ -76,7 +78,7 @@ const ChefDialog = ({
           )}
         </DialogBox>
       )}
-      <DialogCharacter character={chef} feeling="init" style={chefStyles} />
+      <DialogCharacter character={chef} feeling={props.chefFeeling ?? "init"} style={chefStyles} />
     </React.Fragment>
   );
 };

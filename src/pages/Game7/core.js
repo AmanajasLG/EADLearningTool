@@ -1,5 +1,4 @@
 import React from "react";
-// import { Link, Redirect } from "react-router-dom";
 import "./index.scss";
 
 import WindowScreen from "../../_components/WindowScreen";

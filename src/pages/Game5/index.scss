@@ -28,6 +28,20 @@
   }
 }
 
+.invitationIcon {
+  cursor: pointer;
+  position: absolute;
+  bottom: 3%;
+  right: 2%;
+  width: 10%;
+  transition: 100ms ease-in-out;
+  transform: scale(1.2);
+}
+
+.invitationIcon:hover {
+  transform: scale(1.38) rotate(5deg);
+}
+
 #invitation-content-wrapper {
   position: absolute;
   inset: 0 0 0 0;

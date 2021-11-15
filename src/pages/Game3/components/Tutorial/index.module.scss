@@ -1,5 +1,6 @@
 .tutorialBlob {
-  width: 40%;
+  font-size: 1.3em;
+  top: 4em;
   position: absolute;
   background-color: #f9afa1;
   border-radius: 3em;
@@ -55,11 +56,11 @@
 }
 
 .blobLeft {
-  left: 30px;
+  left: 3em;
 }
 
 .blobRight {
-  right: 30px;
+  right: 3em;
 }
 
 #btnTutorial {

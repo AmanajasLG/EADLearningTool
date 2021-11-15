@@ -12,7 +12,6 @@ import { Dropdown } from "react-bootstrap";
 import Notification from "../Notification";
 import { ariel } from "../../../../img";
 
-// const Phone = ({children, modifyContact, contactsTemplate, contacts, jobs, countries, onAddContact, onFinish, onMinimize}) => {
 const Cellphone = ({
   stopConversation,
   dialogHistory,

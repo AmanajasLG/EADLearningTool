@@ -8,7 +8,7 @@ const FeedbackPanel = ({ feedback, restart, leave }) => {
   const [showBtns, setShowBtns] = React.useState(false);
   React.useEffect(() => {
     if (state === 3) setShowBtns(true);
-  });
+  }, [state]);
 
   return (
     <div style={{ position: "relative" }}>

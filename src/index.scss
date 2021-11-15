@@ -224,11 +224,12 @@ button:focus {
 
 .stretchIn {
   transform-origin: center;
-}
-
-.stretchIn:hover {
   animation: stretchIn 0.2s forwards;
 }
+
+// .stretchIn:hover {
+//   animation: stretchIn 0.2s forwards;
+// }
 
 @keyframes stretchIn {
   from {
