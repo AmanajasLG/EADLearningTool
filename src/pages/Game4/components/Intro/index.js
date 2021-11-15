@@ -8,6 +8,7 @@ import { kitchen, recipeBgRound } from "../../../../img";
 import ChefDialog from "../../../Game3/components/ChefDialog";
 import IngredientList from "../../../Game3/components/IngredientList";
 import ListedIngredient from "../../../Game3/components/ListedIngredient";
+import RotationFocus from '../../../../_components/RotationFocus'
 
 const instructionText = (recipeName, recipeNameTranslate) => ({
   en: `Get the ingredients on the list ready before time runs out! In today's episode, we will be challenged to make
@@ -49,37 +50,8 @@ const Intro = ({ chef, recipe, ingredientsList, goToTutorial }) => {
           id="dialog-interact"
           style={{ position: "relative", width: "100%", height: "100%" }}
         >
-          <div style={{ position: "relative", overflow: "visible" }}>
-            <img
-              className="rotate backwards"
-              style={{
-                position: "absolute",
-                width: "60%",
-                left: "25%",
-                top: "-130px",
-                opacity: "60%",
-              }}
-              src={recipeBgRound}
-              alt=""
-            />
-            <img
-              className="rotate"
-              style={{
-                position: "absolute",
-                width: "60%",
-                left: "25%",
-                top: "-130px",
-              }}
-              src={recipeBgRound}
-              alt=""
-            />
-            <img
-              className="dishPresentation"
-              style={{ position: "absolute", right: "30%", width: "30%" }}
-              src={recipe.image}
-              alt=""
-            />
-          </div>
+          <RotationFocus imageUrl={recipe.image} />
+          
           <ChefDialog
             chef={chef}
             onContinue={() => setState({ screen: 2 })}

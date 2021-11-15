@@ -3,6 +3,7 @@ import initialState from './initialState.js'
 import Writer from '../../_components/Writer'
 import { Iniciar } from '../../_components/Button'
 import Blob, { BlobBg } from '../../_components/Blob'
+import RotationFocus from '../../_components/RotationFocus'
 
 const dishPositions = [
   {top: 4, left: 35},
@@ -62,7 +63,7 @@ const Core = ({data}) => {
             return(
               <React.Fragment>
                 {state.dishConfirmed ?
-                  <div>Yay</div>
+                  <RotationFocus imageUrl={state.selectedDish.image? state.selectedDish.image.url : 'https://res.cloudinary.com/learning-tool/image/upload/v1626714616/Feijoada_b154e2d6f2.svg'} />
                   : <BlobBg style={{position: 'absolute', width: '100%', height: '100%'}}/>
                 }
                 <div style={{position: 'absolute', bottom: '10%', left: '10%', width: '85%', height: '15%',
@@ -81,33 +82,37 @@ const Core = ({data}) => {
                 <img src={data.character.characterAssets[2].image.url}
                   style={{position: 'absolute', bottom: '-30%', left: '-5%', maxWidth: '35%'}}
                 />
-                {!state.dishConfirmed &&
-                  <React.Fragment>
-                    {state.hoveredDish &&
-                      <div style={{zIndex: 99, pointerEvents: 'none',
-                        position: 'absolute', width: '20%', top: `${state.hoveredDish.top + 19}%`, left: `${state.hoveredDish.left + 14}%`,
-                        padding: '2.5%',
-                        backgroundColor: '#F9AFA1', fontSize: '3em', fontWeight: '5', borderRadius: '5%'}}
-                      >
-                        <strong>Ingredientes:</strong>
-                        {state.hoveredDish.ingredients.map((ingredient, index) =>
-                          <div key={index} style={{fontStyle: 'italic'}}>
-                            {ingredient.name}
-                          </div>
-                        )}
-                      </div>
-                    }
-                    {data.dishes.map((dish, index) =>
-                      <img key={index}
-                        onClick={() => setState(s => ({...s, selectedDish: dish}))}
-                        onMouseEnter={(e) => setState( s => ({...s, hoveredDish: {...dish, ...dishPositions[index], index} }))}
-                        onMouseLeave={(e) => setState( s => ({...s, hoveredDish: null}))}
-                        src={dish.image? dish.image.url : 'https://res.cloudinary.com/learning-tool/image/upload/v1626714616/Feijoada_b154e2d6f2.svg'} alt={dish.name}
-                        style={{position: 'absolute', top: `${dishPositions[index].top}%`, left: `${dishPositions[index].left}%`,
-                          maxWidth: '20%', zIndex: state.hoveredDish && state.hoveredDish.index === index? 100 : 0 }}
-                      />
-                    )}
-                  </React.Fragment>
+              {state.dishConfirmed?
+                <React.Fragment>
+                  Escolheu o prato
+                </React.Fragment>
+                :
+                <React.Fragment>
+                  {state.hoveredDish &&
+                    <div style={{zIndex: 99, pointerEvents: 'none',
+                      position: 'absolute', width: '20%', top: `${state.hoveredDish.top + 19}%`, left: `${state.hoveredDish.left + 14}%`,
+                      padding: '2.5%',
+                      backgroundColor: '#F9AFA1', fontSize: '3em', fontWeight: '5', borderRadius: '5%'}}
+                    >
+                      <strong>Ingredientes:</strong>
+                      {state.hoveredDish.ingredients.map((ingredient, index) =>
+                        <div key={index} style={{fontStyle: 'italic'}}>
+                          {ingredient.name}
+                        </div>
+                      )}
+                    </div>
+                  }
+                  {data.dishes.map((dish, index) =>
+                    <img key={index}
+                      onClick={() => setState(s => ({...s, selectedDish: dish}))}
+                      onMouseEnter={(e) => setState( s => ({...s, hoveredDish: {...dish, ...dishPositions[index], index} }))}
+                      onMouseLeave={(e) => setState( s => ({...s, hoveredDish: null}))}
+                      src={dish.image? dish.image.url : 'https://res.cloudinary.com/learning-tool/image/upload/v1626714616/Feijoada_b154e2d6f2.svg'} alt={dish.name}
+                      style={{position: 'absolute', top: `${dishPositions[index].top}%`, left: `${dishPositions[index].left}%`,
+                        maxWidth: '20%', zIndex: state.hoveredDish && state.hoveredDish.index === index? 100 : 0 }}
+                    />
+                  )}
+                </React.Fragment>
                 }
               </React.Fragment>
             )
