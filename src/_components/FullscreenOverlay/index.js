@@ -26,7 +26,7 @@ const FullscreenOverlay = ({
 		style = {}
 	}) => {
 
-	if( showCloseBtn && onClickClose == null ) throw Error("Invalid callback for click on close button.")
+	if( showCloseBtn && onClickClose == null ) throw Error("Invalid callback for onClickClose prop button.")
 	if( shouldExit && onReadyToExit == null ) throw Error("Invalid callback for when finishing the exit animation.")
 
 	const _readyToExit = (event) => {
