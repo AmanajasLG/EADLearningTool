@@ -8,6 +8,8 @@ const InlineSVG = ({ src, ...props }) => {
   });
 
   React.useEffect(() => {
+    if(!src) return
+
     fetch(src, { headers: { "Content-Type": "text/html" } }).then(
       (response) => {
         if (response.ok)

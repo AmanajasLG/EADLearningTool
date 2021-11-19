@@ -101,7 +101,7 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
           }}
         >
           {[0, 1, 2].map((value) => (
-            <div
+            <div key={value}
               style={{
                 backgroundColor: "#ffbc8f",
                 height: "100%",
