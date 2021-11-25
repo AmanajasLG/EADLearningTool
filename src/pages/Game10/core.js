@@ -13,6 +13,7 @@ import Wardrobe from '../../_components/Wardrobe'
 import Lamp from '../../_components/Lamp'
 import CellphoneOverlay from '../Game6/components/CellphoneOverlay'
 import Notification from '../Game6/components/Notification'
+import MusicCard from '../../_components/MusicCard'
 
 const dishPositions = [
   {top: 4, left: 35},
@@ -133,29 +134,13 @@ const Core = ({data}) => {
                   backgroundColor: '#59316d',
                   borderTopRightRadius: '2% 7%',
                   boxShadow: '3px 3px rgb(0 0 0 / 0.3)'}}>
-                  <Writer text={data.introText} style={{height: '10%'}}/>
-                  <div style={{display: 'flex', flexDirection: 'row', padding: '0 0 0 12%'}}>
-                    <span style={{fontSize: '3.5em'}}>1. </span>
-                    <Writer text={'disso'} style={{padding: 0, margin: 0, height: '10%', width: '50%', display: 'inline'}}/>
-                  </div>
-                  <div style={{display: 'flex', flexDirection: 'row', padding: '0 0 0 12%'}}>
-                    <span style={{fontSize: '3.5em'}}>2. </span>
-                    <Writer text={'disso'} style={{padding: 0, margin: 0, height: '10%', width: '50%', display: 'inline'}}/>
-                  </div>
-                  <div style={{display: 'flex', flexDirection: 'row', padding: '0 0 0 12%'}}>
-                    <span style={{fontSize: '3.5em'}}>3. </span>
-                    <Writer text={'disso'} style={{padding: 0, margin: 0, height: '10%', width: '50%', display: 'inline'}}/>
-                  </div>
+                  <Writer text={data.introText} style={{height: '60%'}} onWritten={() => setState(s => ({...s, introTextShown: true}))}/>
                   <hr/>
-                  <p style={{fontSize: '3.5em', padding: '1% 5% 0 12%'}}>
-                    {data.introTextTranslation}<br/>
-                    <span>1. </span>
-                    <span>{'this'}</span><br/>
-                    <span>2. </span>
-                    <span>{'this'}</span><br/>
-                    <span>3. </span>
-                    <span>{'this'}</span>
-                  </p>
+                  {state.introTextShown &&
+                    <div style={{fontSize: '3.5em', padding: '1% 5% 0 12%'}}>
+                      {data.introTextTranslation}
+                    </div>
+                  }
                   <Iniciar style={{position: 'absolute', bottom: '-7%', right: '10%', fontSize: '2.5em'}}
                     label='Continue' onClick={() => setState(s => ({...s, scene: 'CHOOSE_PLATE'}))}/>
                 </div>
@@ -517,11 +502,49 @@ const Core = ({data}) => {
             )
           case 'CHOOSE_MUSIC_INTRO':
             return(
-              <div>Escolha a música</div>
+              <React.Fragment>
+                <BlobBg blob={{fill: '#f79e8f'}} style={{position: 'absolute', width: '100%', height: '100%', backgroundColor: '#f9afa1'}}/>
+                <DressingCharacter
+                  character={state.choosenCharacter}
+                  clothes={state.clothes}
+                  style={{
+                    position: 'absolute',
+                    height: '200%',
+                    width: '60%',
+                    right: '-10%',
+                    transform: 'scaleX(-1)'
+                  }}
+                />
+                <div style={{position: 'absolute', bottom: '10%', left: '10%', width: '75%', height: '25%',
+                  padding: '2% 5% 2% 15%',
+                  backgroundColor: '#59316d',
+                  borderTopRightRadius: '2% 7%',
+                  boxShadow: '3px 3px rgb(0 0 0 / 0.3)'}}>
+                  <Writer text={'Agora, vamos escolher a música!'} style={{height: '10%'}}/>
+                  <Iniciar style={{position: 'absolute', bottom: '-20%', right: '10%', fontSize: '2.5em'}}
+                    label='Continue' onClick={() => setState(s =>  ({...s, scene: 'CHOOSE_MUSIC'}) )}
+                  />
+                </div>
+                <img src={data.character.characterAssets[1].image.url}
+                  style={{position: 'absolute', bottom: '-30%', left: '-10%', maxWidth: '50%'}}
+                />
+              </React.Fragment>
             )
           case 'CHOOSE_MUSIC':
             return(
-              <div>Escolha a música</div>
+              <React.Fragment>
+                <BlobBg blob={{fill: '#ffebcb'}} style={{position: 'absolute', width: '100%', height: '100%', backgroundColor: '#fff7ea', zIndex: -1}}/>
+                <div style={{position: 'absolute', top: '12.5%', left: '20%', width: '60%', height: '70%'}}>
+                  <div style={{fontSize: '4em', textAlign: 'center', marginBottom: '8%', color: '#59316d'}}>
+                    Escolha a Trilha!
+                  </div>
+                  <div style={{display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', height: '45%', rowGap: '20%'}}>
+                    {data.musics.map((music, index) =>
+                      <MusicCard key={index} music={music} style={{width: '30%', height: '50%'}}/>
+                    )}
+                  </div>
+                </div>
+              </React.Fragment>
             )
           default:
             return(
