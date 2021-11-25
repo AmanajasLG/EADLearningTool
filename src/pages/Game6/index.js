@@ -171,12 +171,12 @@ const Game6 = (props) => {
         { question: "Qual data?", answer: invitation.date, asked: false },
         {
           question: "A que horas?",
-          answer: invitation.time.toLowerCase(),
+          answer: invitation.time,
           asked: false,
         },
         {
           question: "Qual estação?",
-          answer: invitation.season.toLowerCase(),
+          answer: invitation.season,
           asked: false,
         },
         {
@@ -402,7 +402,7 @@ const Game6 = (props) => {
   };
 
   // SELECT CLOTHES IN PHONE
-  const addAnswerToDialogSend = (item) => () => {
+  const addAnswerToDialogSend = (item, wardrobeTab) => () => {
     if (
       state.showTutorialBlob &&
       state.tutorialBlobCount < state.tutorialPhoneBlobsText.length - 1
@@ -446,6 +446,7 @@ const Game6 = (props) => {
       setState((s) => ({
         ...s,
         phoneWardrobe,
+        wardrobeTab: wardrobeTab ?? s.wardrobeTab,
         phoneClothes,
         sendDialogShow,
         showPhoneClothes: false,
@@ -1372,6 +1373,7 @@ const Game6 = (props) => {
                             : state.sendDialogShow
                         }
                         wardrobe={state.phoneWardrobe}
+                        wardrobeTab={state.wardrobeTab}
                         phoneClothes={state.phoneClothes}
                         colors={state.colorTags}
                         // FUCTIONS

@@ -18,6 +18,7 @@ const Cellphone = ({
   showClothes,
   addAnswerToDialog,
   wardrobe,
+  wardrobeTab,
   colors,
   confirmationButton,
   cancelButton,
@@ -166,6 +167,7 @@ const Cellphone = ({
                         wardrobe={wardrobe}
                         onClothesClick={addAnswerToDialog}
                         showImage={false}
+                        startingIdx={wardrobeTab}
                       />
 
                       <Button

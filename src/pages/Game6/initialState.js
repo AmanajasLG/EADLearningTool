@@ -22,6 +22,7 @@ const initialState = () => ({
   rightTags: [],
   invitation: {},
   wardrobe: {},
+  wardrobeTab: 0,
   phoneWardrobe: {},
   characters: [],
   clothes: {

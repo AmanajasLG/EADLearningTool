@@ -3,11 +3,12 @@ import React from "react";
 import Button from "../../../../_components/Button";
 import "./index.scss";
 
-const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
+const CellphoneWardrobe = ({ wardrobe, startingIdx, onClothesClick, ...props }) => {
+  let clampedStartingIdx = Math.min(Math.max(0, startingIdx ?? 0), Object.keys(wardrobe).length-1);
   const [state, setState] = React.useState({
-    wardrobeKey: Object.keys(wardrobe)[0],
+    wardrobeKey: Object.keys(wardrobe)[clampedStartingIdx],
     page: 0,
-    idx: 0
+    idx: clampedStartingIdx
   });
   const columns = 2,
     pageSize = 4;
@@ -102,7 +103,7 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
                           pointerEvents: item.picked ? "none" : "auto",
                           opacity: item.picked ? 0.3 : 1,
                         }}
-                        onClick={onClothesClick(item)}
+                        onClick={onClothesClick(item, state.idx)}
                       >
                         {item.name}
                       </Button>
