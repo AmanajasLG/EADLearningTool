@@ -218,21 +218,21 @@ const Cellphone = ({
                       )}
                       <div className="grid-content-wrapper">
                         {Array.from(new Array(2), (item, index) => index).map(
-                          (line, index) => (
-                            <div key={index} className="grid-content-row">
+                          (line, lineIndex) => (
+                            <div key={lineIndex} className="grid-content-row">
                               {phoneClothes
                                 .slice(
                                   line * 2 + page * 4,
                                   2 + line * 2 + page * 4
                                 )
-                                .map((cloting, index) => (
+                                .map((cloting, clothesIndex) => (
                                   <Button
                                     style={{
                                       fontSize: "1.5em",
                                       width: "50%",
                                     }}
                                     onClick={() => {
-                                      removeClothingFromList(index);
+                                      removeClothingFromList(clothesIndex + lineIndex * 2 + page * 4);
                                       setState((s) => ({
                                         ...s,
                                         removeItem: false,
