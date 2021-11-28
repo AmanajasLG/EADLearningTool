@@ -12,9 +12,9 @@ const Game10 = (props) => {
   const load = (missionData, lang, state, setState) => {
 
     if(missionData){
-      const introText = '<div>Olá! Eu sou ' + missionData.character.name + '! Para planejar a festa, você vai precisar: \n Disso \n Disso \n Disso</div>'
+      const introText = '<div>Olá! Eu sou ' + missionData.character.name + '! Para planejar a festa, você vai precisar: <ol> <li>Servir um prato; </li><li>Se vestir para a festa; e</li><li>Escolher uma trilha sonora!</li></ol></div>'
 
-      const introTextTranslation = <div>Hello! I am {missionData.character.name}! In order to plan the party, you will need:<ol><li>this</li><li>this</li><li>this</li></ol></div>
+      const introTextTranslation = <div>Hello! I am {missionData.character.name}! In order to plan the party, you will need:<ol><li>Serve a dish;</li><li>Dress to the party; and</li><li>Chosse a soundtrack!</li></ol></div>
       const dishText = `Acho que seria legal servir... Uma feijoada!`
       let clothes =
       {

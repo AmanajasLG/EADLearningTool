@@ -1,4 +1,6 @@
 export const musicConstants = {
 	SET:	'SET',
-	VOLUME: 'VOLUME'
+	VOLUME: 'VOLUME',
+	PLAY: 'PLAY',
+	PAUSE: 'PAUSE'
 }

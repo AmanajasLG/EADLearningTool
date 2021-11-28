@@ -38,6 +38,8 @@ const GameContext = (props) => {
     gameEnded: false,
   });
 
+  const audioElement = React.useRef()
+
   const { play_sessionsActions } = apiActions;
   const currentPlaySession = useSelector((state) =>
     state.play_sessions
@@ -47,6 +49,7 @@ const GameContext = (props) => {
 
   const dispatch = useDispatch();
   const music = useSelector((state) => state.music);
+
   const playSessionControl = useSelector((state) => state.playSessionControl);
   let headerInfo = useSelector((state) => state.header);
   let mission = useSelector((state) =>
@@ -64,6 +67,16 @@ const GameContext = (props) => {
 
   let { children } = props;
   children = { ...children, props: { ...props } };
+
+  React.useEffect(() => {
+    if(!audioElement.current)
+      return
+
+    if(music.playing)
+      audioElement.current.audioEl.current.play()
+    else
+      audioElement.current.audioEl.current.pause()
+  }, [music.playing])
 
   React.useEffect(() => {
     dispatch(headerActions.setState(headerConstants.STATES.HIDDEN));
@@ -203,10 +216,13 @@ const GameContext = (props) => {
         />
       )}
       <ReactAudioPlayer
+        style={{display: 'none'}}
+        controls
         src={music.url}
         autoPlay
         volume={music.volume / 100}
         loop={true}
+        ref={ element => audioElement.current = element }
       />
       <div
         id="game-screen-wrapper"

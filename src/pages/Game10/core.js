@@ -8,12 +8,17 @@ import HandPhone from '../../_components/HandPhone'
 import FullscreenOverlay from '../../_components/FullscreenOverlay'
 import TutorialBlob from '../../_components/TutorialBlob'
 import DressingCharacter from '../../_components/DressingCharacter'
-import { blobLowScore, dressingBg, hanger } from '../../img'
+import { blobLowScore, dressingBg, hanger, partyBG } from '../../img'
 import Wardrobe from '../../_components/Wardrobe'
 import Lamp from '../../_components/Lamp'
 import CellphoneOverlay from '../Game6/components/CellphoneOverlay'
 import Notification from '../Game6/components/Notification'
 import MusicCard from '../../_components/MusicCard'
+import SmallPhone from '../../_components/SmallPhone'
+
+import { useDispatch, useSelector } from 'react-redux'
+import { musicActions } from '../../_actions'
+import Speller from '../../_components/Speller'
 
 const dishPositions = [
   {top: 4, left: 35},
@@ -22,9 +27,9 @@ const dishPositions = [
   {top: 39, left: 35},
   {top: 38, left: 60}
 ]
-const Core = ({data}) => {
+const Core = ({data, onEndGame}) => {
   const [state, setState] = React.useState(initialState(data))
-
+  const dispatch = useDispatch()
   const addClothesToBody = (item) => () => {
     const wardrobeBody = ["Tronco", "Pernas", "Pés"];
     const covers = ["inteiro", "default"];
@@ -130,22 +135,22 @@ const Core = ({data}) => {
               <React.Fragment>
                 <BlobBg style={{position: 'absolute', width: '100%', height: '100%'}}/>
                 <div style={{position: 'absolute', bottom: '10%', left: '10%', width: '85%', height: '45%',
-                  padding: '2% 5% 2% 15%',
+                  padding: '1.5% 5% 2% 24%',
                   backgroundColor: '#59316d',
                   borderTopRightRadius: '2% 7%',
                   boxShadow: '3px 3px rgb(0 0 0 / 0.3)'}}>
-                  <Writer text={data.introText} style={{height: '60%'}} onWritten={() => setState(s => ({...s, introTextShown: true}))}/>
+                  <Writer text={data.introText} style={{height: '50%', fontSize: '3em', paddingLeft: '10%'}} onWritten={() => setState(s => ({...s, introTextShown: true}))}/>
                   <hr/>
                   {state.introTextShown &&
-                    <div style={{fontSize: '3.5em', padding: '1% 5% 0 12%'}}>
+                    <div style={{fontSize: '3em', padding: '1.5% 5% 2% 10%'}}>
                       {data.introTextTranslation}
                     </div>
                   }
                   <Iniciar style={{position: 'absolute', bottom: '-7%', right: '10%', fontSize: '2.5em'}}
                     label='Continue' onClick={() => setState(s => ({...s, scene: 'CHOOSE_PLATE'}))}/>
                 </div>
-                <img src={data.character.characterAssets[0].image.url}
-                  style={{position: 'absolute', bottom: '-30%', left: '-12%', maxWidth: '45%'}}/>
+                <img src={data.character.characterAssets[2].image.url}
+                  style={{position: 'absolute', top: '30%', left: '-9%', maxWidth: '52%'}}/>
               </React.Fragment>
             )
           case 'CHOOSE_PLATE':
@@ -403,6 +408,21 @@ const Core = ({data}) => {
                       zIndex: state.tutorialBlobCount === 4 ? 1000000 : 0,
                     }}
                   />
+                <SmallPhone style={{position: 'absolute', right: '10%', bottom: 0, width: '10%'}} onClick={() => setState(s => ({...s, viewPartyInfo: true})) }/>
+                {state.viewPartyInfo &&
+                  <FullscreenOverlay style={{backgroundColor: '#f9afa1'}}showCloseBtn={false}>
+                    <BlobBg blob={{fill: '#f79e8f'}}style={{position: 'absolute', width: '100%', height: '100%'}}/>
+                    <HandPhone screenBackgroundColor={'#d6e3f4'}>
+                      <div style={{fontSize: '4em', color: 'rgb(90 50 110)', textAlign: 'center', paddingTop: '50%'}}>
+                        {data.invite.message}
+                      </div>
+                      <Iniciar style={{fontSize: '2.5em', position: 'absolute', bottom: '15%', left: '25%' }}
+                        label='Voltar' onClick={() => setState(s => ({...s, viewPartyInfo: false}))}
+                      />
+                    </HandPhone>
+                  </FullscreenOverlay>
+
+                }
                 </React.Fragment>
 
                 {state.showClothingSpaceTakenErrorNotification && (
@@ -540,10 +560,69 @@ const Core = ({data}) => {
                   </div>
                   <div style={{display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap', height: '45%', rowGap: '20%'}}>
                     {data.musics.map((music, index) =>
-                      <MusicCard key={index} music={music} style={{width: '30%', height: '50%'}}/>
+                      <div key={index} style={{padding: '0.5% 1%', width: '33%', height: '51%'}}
+                      >
+                        <MusicCard onClick={() => setState(s => ({...s, selectedMusic: music}) )}
+                           music={music}
+                          style={{cursor: 'pointer', margin: '1%',
+                            opacity: (typeof(state.hoveredMusic) === 'number'? (state.hoveredMusic === index? 1 : 0.6): 1),
+                            border: (state.selectedMusic === music? 'outset 3px #cf1bcf' : 'none')
+                          }}
+                          onMouseEnter={() => setState(s => ({...s, hoveredMusic: index}))}
+                          onMouseLeave={() => setState(s => ({...s, hoveredMusic: null}))}
+                          onClickPlay={() => dispatch(musicActions.pause()) }
+                          onClickPause={() => dispatch(musicActions.play()) }
+                        />
+                      </div>
                     )}
                   </div>
                 </div>
+                {state.selectedMusic &&
+                  <Iniciar style={{position: 'absolute', bottom: '7%', right: '7.5%', fontSize: '3em'}}
+                    label='Continue' onClick={() => setState(s => ({...s, scene: 'SET_MUSIC_NAME'})) }
+                  />
+                }
+              </React.Fragment>
+            )
+          case 'SET_MUSIC_NAME':
+            return(
+              <React.Fragment>
+                <BlobBg blob={{fill: '#ffebcb'}} style={{position: 'absolute', width: '100%', height: '100%', backgroundColor: '#fff7ea', zIndex: -1}}/>
+                <div style={{position: 'absolute', top: '10%', textAlign: 'center', width: '100%', fontSize: '3em'}}>
+                  A música escolhida é de qual tipo?
+                </div>
+                <Speller word={state.selectedMusic.genre}/>
+                <div style={{position: 'absolute', bottom: '10%', width: '100%', zIndex: '10'}}>
+                  <MusicCard music={state.selectedMusic} style={{width: '20%', margin: '0 auto'}}/>
+                </div>
+                <Iniciar style={{position: 'absolute', bottom: '7%', right: '7.5%', fontSize: '3em'}}
+                  label='Hora da festa!' onClick={() => {
+                    dispatch(musicActions.set(state.selectedMusic.url))
+                    setInterval(() => onEndGame({...state}), 5000)
+                    setState(s => ({...s, scene: 'PARTY' }))
+                  }}
+                />
+              </React.Fragment>
+            )
+          case 'PARTY':
+            return(
+              <React.Fragment>
+                <img src={partyBG}/>
+                <DressingCharacter
+                  character={state.choosenCharacter}
+                  clothes={state.clothes}
+                  style={{
+                    position: 'absolute',
+                    height: '200%',
+                    width: '63%',
+                    right: '-15%',
+                    transform: 'scaleX(-1)',
+                    top: 0
+                  }}
+                />
+                <img src={data.character.characterAssets[1].image.url}
+                  style={{position: 'absolute', bottom: '-30%', left: '-10%', maxWidth: '50%'}}
+                />
               </React.Fragment>
             )
           default:
