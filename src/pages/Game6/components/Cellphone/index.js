@@ -206,7 +206,7 @@ const Cellphone = ({
                 </div>
               ) : (
                 <div>
-                  <div className="grid-wrapper">
+                  <div className="grid-wrapper" style={{height: "20em"}}>
                     <div className="grid-background">
                       {page > 0 && (
                         <span
@@ -228,8 +228,11 @@ const Cellphone = ({
                                 .map((cloting, clothesIndex) => (
                                   <Button
                                     style={{
-                                      fontSize: "1.5em",
+                                      fontSize: "2em",
+                                      margin: "0.5em",
                                       width: "50%",
+                                      height: "3.5em",
+                                      padding: "0.5em",
                                     }}
                                     onClick={() => {
                                       removeClothingFromList(clothesIndex + lineIndex * 2 + page * 4);
