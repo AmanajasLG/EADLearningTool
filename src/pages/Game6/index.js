@@ -775,12 +775,14 @@ const Game6 = (props) => {
           message: sawInvite
             ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
               wrongClothes.length +
-              " peça(s) ficou(ficaram) estranha(s)... Tomara que Ariel não passe tanta vergonha..."
-            : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
-          messageTranslate: sawInvite
-            ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
+              (wrongClothes.length === 1 ? " peça ficou estranha..." : " peças ficaram estranhas...") +
+              " Tomara que Ariel não passe tanta vergonha..."
+              : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
+              messageTranslate: sawInvite
+              ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
               wrongClothes.length +
-              " piece(s) of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
+              (wrongClothes.length === 1 ? " piece of clothing were weird..." : " pieces of clothing were weird...") +
+              " Let's hope Ariel doesn't get too embarrassed..."
             : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
         },
         {
@@ -788,12 +790,14 @@ const Game6 = (props) => {
           message:
             "Preste atenção nas peças que você escolheu. Em seu look, você escolheu um total de " +
             wrongClothes.length +
-            " peças que não combinam com o evento: " +
+            (wrongClothes.length === 1 ? " peça" : " peças") +
+            " que não combinam com o evento: " +
             wrongClothes.map((clothes) => clothes.name).join(", "),
           messageTranslate:
             "Pay attention to the pieces of clothing you picked. In your outfit, you chose a total of " +
+            (wrongClothes.length === 1 ? " piece" : " pieces") +
             wrongClothes.length +
-            " pieces that did not match the event: " +
+            " that did not match the event: " +
             wrongClothes.map((clothes) => clothes.name).join(", "),
         }
       );
