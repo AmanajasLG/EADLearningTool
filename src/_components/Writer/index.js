@@ -30,7 +30,19 @@ const JSXindexer = (jsx, index) => {
 	} else if(typeof(jsx) === 'object') {
 		let children = jsx.props.children;
 		let [result, used] = JSXindexer(children, index);
-		return [ `<${jsx.type}>${result}</${jsx.type}>`, used];
+		let style = "";
+		let styleObj = jsx.props.style;
+		if( styleObj ) {
+			style = " style=\"";
+			Object.keys(styleObj).forEach( (value) => {
+				style +=
+					value.replace(/([A-Z])/g, '-$1').toLowerCase() +
+					": " +
+					styleObj[value] + ";";
+			})
+			style += "\"";
+		}
+		return [ `<${jsx.type}${style}>${result}</${jsx.type}>`, used];
 	}
 }
 
