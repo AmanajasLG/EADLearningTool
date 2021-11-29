@@ -1,0 +1,16 @@
+.apps {
+	background-color: #aaaaff;
+	border-radius: 50%;
+	transition: 150ms ease-in-out;
+}
+
+.apps:not(#selected):hover {
+	background-color: #f9afa1;
+	padding: 1.5em;
+	margin: -1.5em;
+	cursor: pointer;
+}
+
+#selected {
+	background-color: #f9afa1;
+}
