@@ -33,6 +33,7 @@ const initialState = () => ({
   },
   phoneClothes: [],
   readyAlert: false,
+  timeout: null,
 
   tutotialMessages: [
     {

@@ -63,7 +63,7 @@ const Cellphone = ({
           }
         />
       )}
-      <div id="big-cellphone-solo-wrapper" {...props}>
+      <div id="big-cellphone-solo-wrapper" style={props.style}>
         <div id="big-cellphone-imgs">
           <img src={palma} alt="" />
           <img src={bigPhone} alt="" />
@@ -166,7 +166,6 @@ const Cellphone = ({
                       <CellphoneWardrobe
                         wardrobe={wardrobe}
                         onClothesClick={addAnswerToDialog}
-                        showImage={false}
                         startingIdx={wardrobeTab}
                       />
 
@@ -234,6 +233,7 @@ const Cellphone = ({
                                       height: "3.5em",
                                       padding: "0.5em",
                                     }}
+                                    key={clothesIndex + lineIndex * 2 + page * 4}
                                     onClick={() => {
                                       removeClothingFromList(clothesIndex + lineIndex * 2 + page * 4);
                                       setState((s) => ({

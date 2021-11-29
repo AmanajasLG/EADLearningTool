@@ -10,7 +10,7 @@ const ColorPanel = ({ colors, onColorClick, ...props }) => {
     pageSize = 6;
 
   return (
-    <div {...props}>
+    <div style={props.style}>
       <div className="grid-wrapper" style={{ height: "21em" }}>
         <div className="grid-background">
           {state > 0 && (
@@ -23,15 +23,16 @@ const ColorPanel = ({ colors, onColorClick, ...props }) => {
           )}
           <div className="grid-content-wrapper">
             {Array.from(new Array(rows), (item, index) => index).map(
-              (line, index) => (
-                <div key={index} className="grid-content-row">
+              (line, lineIndex) => (
+                <div key={lineIndex} className="grid-content-row">
                   {colors
                     .slice(
                       line * columns + state * pageSize,
                       columns + line * columns + state * pageSize
                     )
-                    .map((color, index) => (
+                    .map((color, btnIndex) => (
                       <Button
+                        key={state*pageSize + lineIndex*columns + btnIndex}
                         style={{
                           margin: "0.5em",
                           padding: "0.5em",

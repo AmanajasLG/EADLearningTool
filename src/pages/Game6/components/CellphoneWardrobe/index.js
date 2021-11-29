@@ -14,7 +14,7 @@ const CellphoneWardrobe = ({ wardrobe, startingIdx, onClothesClick, ...props }) 
     pageSize = 4;
 
   return (
-    <div {...props}>
+    <div style={props.style}>
       <div
         style={{
           height: "10%",
@@ -94,6 +94,7 @@ const CellphoneWardrobe = ({ wardrobe, startingIdx, onClothesClick, ...props }) 
                     )
                     .map((item, index) => (
                       <Button
+                        key={index}
                         style={{
                           fontSize: "2em",
                           margin: "0.5em",

@@ -259,14 +259,17 @@ const Game6 = (props) => {
       state.countNow &&
       (state.scene !== "INIT" || state.scene !== "END_GAME")
     ) {
-      setState((s) => ({ ...s, countNow: false }));
-
-      setTimeout(
-        () =>
+      
+      setState((s) => ({ ...s,
+        countNow: false,
+        timeout: setTimeout(
+          () =>
           setState((s) => ({ ...s, seconds: s.seconds + 1, countNow: true })),
-        1000
-      );
+          1000
+        )
+      }));
     }
+    return () => {if(state.timeout) clearTimeout(state.timeout);}
   }, [state]);
 
   const onStartGame = () => setState((s) => ({ ...s, scene: "INTRO" }));
@@ -1381,12 +1384,6 @@ const Game6 = (props) => {
                         phoneClothes={state.phoneClothes}
                         colors={state.colorTags}
                         // FUCTIONS
-                        endConversation={() =>
-                          setState((s) => ({
-                            ...s,
-                            lastConfirmation: true,
-                          }))
-                        }
                         addAnswerToDialog={addAnswerToDialogSend}
                         addRemoveDialog={() => {
                           setState((s) => ({
