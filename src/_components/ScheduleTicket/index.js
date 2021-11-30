@@ -2,8 +2,10 @@ import React from "react";
 import Calendar from "../Calendar";
 import Flights from "../Flights";
 import Counter from "../Counter";
+import ArrowRightIcon from '@material-ui/icons/ArrowForwardIos';
 import { Iniciar, Voltar } from "../Button";
 import "./index.scss";
+import styles from "./index.module.scss";
 import { aviao, calendario, relogio } from '../../img'
 
 const numberList = Array.from({ length: 9 }, (_, i) => i + 1);
@@ -83,8 +85,16 @@ const ScheduleTicket = ({
 
   return (
     <React.Fragment>
-      <div>
-        <img src={aviao} style={{width: '4%'}} alt=""/>Agende o Voo! {steps.slice(0, state.step + 1).map((t) => <React.Fragment> <img src={t.icon} style={{width: '4%'}} alt=""/> {t.text} </React.Fragment>)}
+      <div id={styles["breadcrumbs"]}>
+        <img src={aviao} alt=""/>
+        <span>Agende o Voo!</span>
+        { steps.slice(0, state.step + 1).map((t) =>
+          <React.Fragment>
+            <ArrowRightIcon/>
+            <img src={t.icon} alt=""/>
+            <span>{t.text}</span>
+          </React.Fragment>
+        )}
       </div>
       {state.step === 0 && (
         <div style={{display: 'flex'}}>
@@ -124,7 +134,7 @@ const ScheduleTicket = ({
       )}
 
       {state.step > 0 && (
-        <Voltar style={{ position: "absolute", left: "5%", bottom: "-2.5%" }}
+        <Voltar style={{ position: "absolute", left: "5%", bottom: "-2.5%", fontSize: "0.7em" }}
           onClick={() => {
             if (state.step === 1 && type === "return") typeUpdate();
             else setState((s) => ({ ...s, step: state.step - 1 }));
@@ -133,7 +143,7 @@ const ScheduleTicket = ({
         </Voltar>
       )}
       <Iniciar
-        style={{ position: "absolute", right: "5%", bottom: "-2.5%" }}
+        style={{ position: "absolute", right: "5%", bottom: "-2.5%", fontSize: "0.7em" }}
         disabled={!checkStep()}
         onClick={advance}
         label="Confirmar"
