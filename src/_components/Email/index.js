@@ -31,13 +31,14 @@ const Email = ({ email, onReady }) => {
       <div style={{ paddingTop: "5%" }}>
         {parse(marked(email.message.replace("\n", "</br>")))}
       </div>
+      <br/>
       <div>Atenciosamente,</div>
       <div>{email.senderName}</div>
       <Iniciar
         label="Estou pronto!"
         onClick={onReady}
         style={{
-          fontSize: "0.8rem",
+          fontSize: "0.7em",
           position: "absolute",
           right: "5%",
           bottom: "-2%",
