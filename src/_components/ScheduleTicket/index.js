@@ -88,8 +88,8 @@ const ScheduleTicket = ({
       <div id={styles["breadcrumbs"]}>
         <img src={aviao} alt=""/>
         <span>Agende o Voo!</span>
-        { steps.slice(0, state.step + 1).map((t) =>
-          <React.Fragment>
+        { steps.slice(0, state.step + 1).map((t, index) =>
+          <React.Fragment key={index}>
             <ArrowRightIcon/>
             <img src={t.icon} alt=""/>
             <span>{t.text}</span>
