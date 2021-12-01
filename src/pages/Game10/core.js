@@ -1,7 +1,7 @@
 import React from 'react'
 import initialState from './initialState.js'
 import Writer from '../../_components/Writer'
-import { Iniciar, Voltar } from '../../_components/Button'
+import { Iniciar, Voltar, PularTutorial } from '../../_components/Button'
 import Blob, { BlobBg } from '../../_components/Blob'
 import RotationFocus from '../../_components/RotationFocus'
 import HandPhone from '../../_components/HandPhone'
@@ -157,7 +157,12 @@ const Core = ({data, onEndGame}) => {
             return(
               <React.Fragment>
                 {state.dishConfirmed ?
-                  <RotationFocus imageUrl={state.selectedDish.image? state.selectedDish.image.url : 'https://res.cloudinary.com/learning-tool/image/upload/v1626714616/Feijoada_b154e2d6f2.svg'} />
+                  <RotationFocus
+                    style={{position: 'absolute', left: '-2.5%', top: '15%', width: '100%', height: '100%'}}
+                    imageUrl={state.selectedDish.image?
+                      state.selectedDish.image.url :
+                      'https://res.cloudinary.com/learning-tool/image/upload/v1626714616/Feijoada_b154e2d6f2.svg'}
+                  />
                   :
                   <React.Fragment>
                     <BlobBg style={{position: 'absolute', width: '100%', height: '100%'}}/>
@@ -201,7 +206,7 @@ const Core = ({data, onEndGame}) => {
                   }
                 </div>
                 <img src={data.character.characterAssets[2].image.url}
-                  style={{position: 'absolute', bottom: '-30%', left: '-5%', maxWidth: '35%'}}
+                  style={{position: 'absolute', bottom: '-55%', left: '-5%', maxWidth: '35%'}}
                 />
               </React.Fragment>
             )
@@ -382,7 +387,7 @@ const Core = ({data, onEndGame}) => {
                   />
 
                   <Lamp
-                    img={hanger}
+                    img={[hanger]}
                     onClick={
                       state.showTutorialBlob
                         ? () => {}
@@ -413,11 +418,37 @@ const Core = ({data, onEndGame}) => {
                   <FullscreenOverlay style={{backgroundColor: '#f9afa1'}}showCloseBtn={false}>
                     <BlobBg blob={{fill: '#f79e8f'}}style={{position: 'absolute', width: '100%', height: '100%'}}/>
                     <HandPhone screenBackgroundColor={'#d6e3f4'}>
-                      <div style={{fontSize: '4em', color: 'rgb(90 50 110)', textAlign: 'center', paddingTop: '50%'}}>
-                        {data.invite.message}
+                      <div style={{fontSize: '2.5em', color: 'rgb(90 50 110)', textAlign: 'center', paddingTop: '50%'}}>
+                        {!state.hideCellphoneOptions &&
+                          <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                            <PularTutorial label='Que horas?'  showArrow={false} onClick={() => setState(s => ({...s, showPartyTime: true, hideCellphoneOptions: true}))} />
+                            <PularTutorial label='Qual estação?'  showArrow={false} onClick={() => setState(s => ({...s, showPartySeason: true, hideCellphoneOptions: true}))}/>
+                            <PularTutorial label='Como vai estar o tempo?'  showArrow={false} onClick={() => setState(s => ({...s, showPartyWeather: true, hideCellphoneOptions: true}))}/>
+                          </div>
+                        }
+                        {state.showPartyTime &&
+                          <PularTutorial label={data.invite.time} style={{pointerEvents: 'none'}} showArrow={false}/>
+                        }
+                        {state.showPartySeason &&
+                          <PularTutorial label={data.invite.season} style={{pointerEvents: 'none'}} showArrow={false}/>
+                        }
+                        {state.showPartyWeather &&
+                          <PularTutorial label={data.invite.weather} style={{pointerEvents: 'none'}} showArrow={false}/>
+                        }
                       </div>
-                      <Iniciar style={{fontSize: '2.5em', position: 'absolute', bottom: '15%', left: '25%' }}
-                        label='Voltar' onClick={() => setState(s => ({...s, viewPartyInfo: false}))}
+                      <Voltar style={{fontSize: '2.5em', position: 'absolute', bottom: '15%', left: '25%' }}
+                        label='Voltar' onClick={() => {
+                          let updateState = {}
+                          if(!(state.showPartyTime || state.showPartySeason || state.showPartyWeather)){
+                            updateState.viewPartyInfo = false
+                          }
+                          updateState.showPartyTime = false
+                          updateState.showPartySeason = false
+                          updateState.showPartyWeather = false
+                          updateState.hideCellphoneOptions = false
+
+                          setState(s => ({...s, ...updateState}))
+                        }}
                       />
                     </HandPhone>
                   </FullscreenOverlay>
@@ -541,6 +572,12 @@ const Core = ({data, onEndGame}) => {
                   borderTopRightRadius: '2% 7%',
                   boxShadow: '3px 3px rgb(0 0 0 / 0.3)'}}>
                   <Writer text={'Agora, vamos escolher a música!'} style={{height: '10%'}}/>
+                  <div style={{position: 'absolute', top: '50%', paddingLeft: '16.5%'}}>
+                    <hr/>
+                    <div style={{fontSize: '3em', fontStyle: 'italic', marginTop: '5%'}}>
+                      Now, let's choose the music!
+                    </div>
+                  </div>
                   <Iniciar style={{position: 'absolute', bottom: '-20%', right: '10%', fontSize: '2.5em'}}
                     label='Continue' onClick={() => setState(s =>  ({...s, scene: 'CHOOSE_MUSIC'}) )}
                   />
@@ -588,20 +625,21 @@ const Core = ({data, onEndGame}) => {
             return(
               <React.Fragment>
                 <BlobBg blob={{fill: '#ffebcb'}} style={{position: 'absolute', width: '100%', height: '100%', backgroundColor: '#fff7ea', zIndex: -1}}/>
-                <div style={{position: 'absolute', top: '10%', textAlign: 'center', width: '100%', fontSize: '3em'}}>
-                  A música escolhida é de qual tipo?
+                <div style={{position: 'absolute', top: '10%', textAlign: 'center', width: '100%', fontSize: '4em', color: '#59316D'}}>
+                  Qual o gênero musical escolhido?
                 </div>
-                <Speller word={state.selectedMusic.genre}/>
+                <Speller word={state.selectedMusic.genre} onWordChange={ word => setState(s => ({...s, formedWord: word}) )}/>
                 <div style={{position: 'absolute', bottom: '10%', width: '100%', zIndex: '10'}}>
                   <MusicCard music={state.selectedMusic} style={{width: '20%', margin: '0 auto'}}/>
                 </div>
-                <Iniciar style={{position: 'absolute', bottom: '7%', right: '7.5%', fontSize: '3em'}}
-                  label='Hora da festa!' onClick={() => {
-                    dispatch(musicActions.set(state.selectedMusic.url))
-                    setInterval(() => onEndGame({...state}), 5000)
-                    setState(s => ({...s, scene: 'PARTY' }))
-                  }}
-                />
+                {state.formedWord && state.formedWord.length === state.selectedMusic.genre.length &&
+                  <Iniciar style={{position: 'absolute', bottom: '7%', right: '7.5%', fontSize: '3em'}}
+                    label='Hora da festa!' onClick={() => {
+                      dispatch(musicActions.set(state.selectedMusic.url))
+                      setState(s => ({...s, scene: 'PARTY' }))
+                    }}
+                  />
+                }
               </React.Fragment>
             )
           case 'PARTY':
@@ -623,6 +661,8 @@ const Core = ({data, onEndGame}) => {
                 <img src={data.character.characterAssets[1].image.url}
                   style={{position: 'absolute', bottom: '-30%', left: '-10%', maxWidth: '50%'}}
                 />
+              <Iniciar label='Ver resultado' onClick={() => onEndGame({gameData: {...data}, gameplayData: {...state}})}
+                style={{position: 'absolute', right: '10%', bottom: '5%', fontSize: '3em'}}/>
               </React.Fragment>
             )
           default:

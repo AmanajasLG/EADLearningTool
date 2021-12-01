@@ -1,8 +1,9 @@
 import React from 'react'
 import { right, error } from '../../img'
+import { shuffle } from '../../_helpers'
 
-const Speller = ({word, onWordCorrect, onWordIncorrect}) => {
-  const [shuffledWord, setShuffledWord] = React.useState(word.split('').map( letter => ({letter, selected: false})))
+const Speller = ({word, onWordCorrect, onWordIncorrect, onWordChange}) => {
+  const [shuffledWord, setShuffledWord] = React.useState(shuffle(word.split('').map( letter => ({letter, selected: false}))))
   const [formedWord, setFormedWord] = React.useState([])
 
   const clearWord = () => {
@@ -25,6 +26,11 @@ const Speller = ({word, onWordCorrect, onWordIncorrect}) => {
       clearWord()
     }
   };
+
+  React.useEffect(() => {
+    if(onWordChange)
+      onWordChange(formedWord.reduce((acc, letter) => acc + letter, ''))
+  }, [formedWord])
 
   return(
     <div className="name-order-div absolute-center">
@@ -58,11 +64,13 @@ const Speller = ({word, onWordCorrect, onWordIncorrect}) => {
             src={error}
             alt="clear-ingredient-name"
           />
+        {onWordCorrect &&
           <img
             onClick={checkWord}
             src={right}
             alt="check-ingredient-name"
           />
+        }
         </div>
       </div>
     </div>

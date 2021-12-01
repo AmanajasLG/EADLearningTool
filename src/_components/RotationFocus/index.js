@@ -1,8 +1,8 @@
 import React from  'react'
 import { recipeBgRound } from '../../img'
-const RotationFocus = ({imageUrl}) => {
+const RotationFocus = ({imageUrl, style}) => {
   return(
-    <div style={{ position: "relative", overflow: "visible" }}>
+    <div style={{overflow: "visible", ...style}}>
       <img
         className="rotate backwards"
         style={{
