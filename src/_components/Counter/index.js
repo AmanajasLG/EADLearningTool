@@ -1,6 +1,6 @@
 import React from 'react'
-import ArrowLeftIcon from '@material-ui/icons/ArrowBackIos'
-import ArrowRightIcon from '@material-ui/icons/ArrowForwardIos'
+import ArrowLeftIcon from '@material-ui/icons/ArrowBack'
+import ArrowRightIcon from '@material-ui/icons/ArrowForward'
 
 const Counter = ({valueStyle, containerStyle, stretch, noLeft, noRight, value, list, arrowColor, onChange}) => {
   const [state, setState] = React.useState(value)
@@ -17,10 +17,18 @@ const Counter = ({valueStyle, containerStyle, stretch, noLeft, noRight, value, l
   }
 
   return(
-    <div style={{display: 'flex', justifyContent: stretch ? 'space-between' : null, ...containerStyle}}>
-      { !noLeft ? <button style={{padding: '1%', cursor: 'pointer', border: 'none'}} onClick={move(-1)}><ArrowLeftIcon style={{color: arrowColor? arrowColor : '#000000'}}/></button> : <div></div>}
+    <div style={{display: 'flex', justifyContent: 'center', position: 'relative', ...containerStyle}}>
+      { !noLeft &&
+        <button style={{marginLeft: '2em', padding: '1%', cursor: 'pointer', border: 'none', position: 'absolute', left:0, height:'100%'}} onClick={move(-1)}>
+          <ArrowLeftIcon fontSize="large" style={{color: arrowColor? arrowColor : '#000000'}}/>
+        </button>
+      }
         <div style={{textAlign: 'center', ...valueStyle}}>{list[state]}</div>
-      { !noRight ? <button style={{padding: '1%', cursor: 'pointer', border: 'none'}} onClick={move(1)}><ArrowRightIcon style={{color: arrowColor? arrowColor : '#000000'}}/></button> : <div></div>}
+      { !noRight &&
+        <button style={{marginRight: '2em', padding: '1%', cursor: 'pointer', border: 'none', position: 'absolute', right:0, height:'100%'}} onClick={move(1)}>
+          <ArrowRightIcon fontSize="large" style={{color: arrowColor? arrowColor : '#000000'}}/>
+        </button>
+      }
     </div>
   )
 }
