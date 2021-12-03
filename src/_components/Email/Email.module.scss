@@ -1,0 +1,35 @@
+#emailScreen {
+	padding: 0 0.8em;
+
+	hr {
+		border: 0px solid;
+		border-bottom: 0.1em solid rgba(0,0,0,0.1);
+	}
+}
+
+#emailHeader {
+	margin: 1em 0.5em;
+	position: relative;
+}
+
+.vr {
+	margin: 0 0.4em;
+	// font-weight: bold;
+	font-size: 1.2em;
+	color: var(--color-main);
+}
+
+.emailLabel {
+	opacity: 0.4;
+}
+
+#emailDate {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+#emailContent {
+	margin: 2em 1.5em 0;
+	font-size: 1.2em;
+}

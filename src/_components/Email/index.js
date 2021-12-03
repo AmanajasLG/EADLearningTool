@@ -3,37 +3,37 @@ import marked from "marked";
 import parse from "html-react-parser";
 import { Iniciar } from "../Button";
 
+import styles from './Email.module.scss'
+
 const Email = ({ email, onReady }) => {
   return (
-    <div style={{ padding: "0 5% 0 5%" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          paddingTop: "2%",
-        }}
-      >
-        <div>
-          Assunto: <span>{email.title}</span>{" "}
-          <span>{email.titleTranslate}</span>
+    <div id={styles["emailScreen"]}>
+      <div id={styles["emailHeader"]}>
+        <div id={styles["emailSubject"]}>
+          <span className={styles["emailLabel"]}>assunto: </span>
+          <span><strong>{email.title}</strong></span>
+          <span className={styles["vr"]}>|</span>
+          <span><em>{email.titleTranslate}</em></span>
         </div>
-        <div>{email.date}</div>
+        <div id={styles["emailDate"]}>{email.date}</div>
+        <div id={styles["emailSender"]}>
+          <span className={styles["emailLabel"]}>de: </span>
+          <span><strong>{email.senderName}</strong></span>
+          <span> </span>
+          <span>({email.senderEmail})</span>
+        </div>
       </div>
-      <div style={{ display: "block", paddingTop: "2%" }}>
-        De:{" "}
-        <span>
-          <strong>{email.senderName}</strong>
-        </span>{" "}
-        <span>{email.senderEmail}</span>
-      </div>
+
       <hr />
 
-      <div style={{ paddingTop: "5%" }}>
-        {parse(marked(email.message.replace("\n", "</br>")))}
+      <div id={styles["emailContent"]}>
+        <div>
+          {parse(marked(email.message.replace("\n", "</br>")))}
+        </div>
+        <br/>
+        <div>Atenciosamente,</div>
+        <div>{email.senderName}</div>
       </div>
-      <br/>
-      <div>Atenciosamente,</div>
-      <div>{email.senderName}</div>
       <Iniciar
         label="Estou pronto!"
         onClick={onReady}
@@ -41,7 +41,7 @@ const Email = ({ email, onReady }) => {
           fontSize: "0.7em",
           position: "absolute",
           right: "5%",
-          bottom: "-2%",
+          bottom: "-2.5%",
         }}
       ></Iniciar>
     </div>

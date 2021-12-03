@@ -30,13 +30,14 @@ const BuyTicketsLoop = ({ data, onDone }) => {
     <React.Fragment>
       {state.window !== "NONE" && (
         <WindowScreen
+          id={styles["windowScreen"]}
           style={{
             position: "absolute",
             left: "10%",
             width: "70%",
             height: "80%",
             margin: "5% auto 0 auto",
-            fontSize: "3em",
+            fontSize: "3em"
           }}
         >
           {state.window === "EMAIL" && (
