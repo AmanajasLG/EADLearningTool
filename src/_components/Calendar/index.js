@@ -1,7 +1,7 @@
-import React from 'react'
-import Counter from '../Counter'
-import { months } from '../../_helpers'
-import './index.scss'
+import React from 'react';
+import Counter from '../Counter';
+import { months } from '../../_helpers';
+import styles from './index.module.scss';
 
 const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) => {
 
@@ -52,7 +52,6 @@ const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) 
   }, [dates])
 
   React.useEffect(() => {
-
     let obj = {month: monthValue, dates: datesValue}
     console.log('monthValue changed', obj)
     if(onChange) onChange(obj)
@@ -67,6 +66,19 @@ const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) 
       if(isDayInRange(num))
         return '-webkit-linear-gradient(top, #ffeeee, #ffeeee 100%, transparent 100%, transparent 100%)'
     return null
+  }
+
+  const DATE_STATE = {
+    NOT_IN_RANGE: 0,
+    IN_RANGE: 1,
+    FIRST_DAY: 2,
+    LAST_DAY: 3
+  };
+
+  const getDateState = (num) => {
+    if( isDaySelected(num) ) return (num === datesValue[0].day && datesValue[0].month === monthValue) ? DATE_STATE.FIRST_DAY : DATE_STATE.LAST_DAY;
+    if( isDayInRange(num) ) return DATE_STATE.IN_RANGE;
+    return DATE_STATE.NOT_IN_RANGE;
   }
 
   const isDayInRange = num =>
@@ -101,16 +113,24 @@ const Calendar = ({noLeft, noRight, clear, dates, month, valueIndex, onChange}) 
         )}
         {Array.from({length: 31}, (_, i) => i + 1).map((num, index) =>
           <div key={index}
-            className='calendarButton'
-            style={{cursor: 'pointer',
-              backgroundImage: setColor(num),
-              padding: '0 10% 0 10%',
-            }}
-            onClick={() => dateSelect(num)}>
-            <p style={{borderRadius: '50%', textAlign: 'center', height: '100%', aspectRatio: '1', transform: 'translateY(20%)',
-                backgroundColor: isDaySelected(num) ? '#fdcccc' : null }}>
-            {num}
-          </p>
+            id={getDateState(num) === DATE_STATE.FIRST_DAY ?
+                  styles["firstDay"] :
+                  (getDateState(num) === DATE_STATE.LAST_DAY ?
+                    styles["lastDay"] :
+                    null)
+            }
+            className={styles['calendarButton'] +
+              (getDateState(num) === DATE_STATE.IN_RANGE ?
+                " "+styles["inRange"] :
+                "") +
+              (isDaySelected(num) ?
+                " " +
+                styles["selected"] : "")
+            }
+            onClick={() => dateSelect(num)}
+          >
+            <span></span>
+            <p>{num}</p>
           </div>
         )}
       </div>
