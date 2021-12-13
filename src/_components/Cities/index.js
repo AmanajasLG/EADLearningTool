@@ -10,12 +10,11 @@ const Cities = ({ value, cities, onPlaceClick, onConfirm }) => {
   };
   return (
     <React.Fragment>
-      <p style={{ textAlign: "center", marginTop: "2%" }}>
+      <p style={{ textAlign: "center", marginTop: "1em" }}>
         <strong>Selecione o destino ideal:</strong>
       </p>
       <div
         style={{
-          backgroundColor: "#EEEEEE",
           display: "flex",
           flexDirection: "row",
           padding: "3%",

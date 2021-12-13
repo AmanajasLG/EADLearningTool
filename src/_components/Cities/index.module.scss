@@ -7,11 +7,13 @@
   overflow: hidden;
   transition: 100ms ease-in-out;
   border: 0em solid #59316d;
+  font-family: 'Abril FatFace';
 
   p {
     display: block;
     text-align: center;
-    color: white,
+    color: white;
+    padding: 0.3em 0;
   }
 }
 
