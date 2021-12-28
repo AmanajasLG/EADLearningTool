@@ -1,0 +1,17 @@
+#breadcrumbs {
+  padding: 0.5em 1em;
+
+  * {
+    vertical-align: middle;
+    text-align: center;
+    margin: 0 0.2em;
+  }
+  
+  > svg {
+    margin-right: 0;
+  }
+
+  > img {
+    width: 4%;
+  }
+}

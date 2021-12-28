@@ -100,8 +100,9 @@ const Wardrobe = ({ wardrobe, onClothesClick, showImage = true, ...props }) => {
             gap: "3%",
           }}
         >
-          {[0, 1, 2].map((value) => (
-            <div key={value}
+          {[0, 1, 2].map((value, index) => (
+            <div
+              key={index}
               style={{
                 backgroundColor: "#ffbc8f",
                 height: "100%",

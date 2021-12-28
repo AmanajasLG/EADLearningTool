@@ -26,15 +26,16 @@
   // margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  left: 1.5em;
-  position: absolute;
-  width: 44em;
+  min-height: 33em;
+  // height: 100%;
+  // left: 1.5em;
+  // position: absolute;
+  // width: 44em;
 }
 
-.has-wardrobe {
-  height: 60% !important;
-}
+// .has-wardrobe {
+//   height: 57% !important;
+// }
 
 #big-cellphone-screen-header {
   height: 7em;
@@ -47,14 +48,15 @@
   top: 0;
 }
 
-#big-cellphone-screen-header span {
+#big-cellphone-screen-header > span {
   position: absolute;
-  left: 6.3em;
+  top: 1.7em;
+  left: 7em;
   font-size: 3em;
 }
 
 #delete-menu {
-  right: 5em;
+  right: 10em;
   top: 2em;
   position: absolute;
   z-index: 10;
@@ -68,23 +70,28 @@
   }
 
   .dropdown-menu {
+    position: fixed !important;
+    inset: unset !important; // Usando important pq o componente Dropdown do bootstrap usa estilo inline 🤦🏻‍♂️🤦🏻‍♂️
+    transform: translate(2.5em, 4.5em) !important;
     background-color: #f9afa1;
     width: 35em;
-    inset: unset !important;
-    right: -30em !important;
-    border-radius: 1em 0 1em 1em;
-    border: solid 2px white;
+    border-radius: 0 1em 1em 1em;
+    border: solid 0.3em white;
+    display: grid;
+    grid-auto-rows: 1fr;
   }
 
   .dropdown-item {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     font-size: 2em;
     padding: 1em 0.5em;
     color: black;
   }
 
   .dropdown-item:first-child {
-    border-radius: 0.5em 0 0 0;
+    border-radius: 0 0.5em 0 0;
   }
 
   .dropdown-item:last-child {

@@ -22,6 +22,7 @@ const initialState = () => ({
   rightTags: [],
   invitation: {},
   wardrobe: {},
+  wardrobeTab: 0,
   phoneWardrobe: {},
   characters: [],
   clothes: {
@@ -32,6 +33,7 @@ const initialState = () => ({
   },
   phoneClothes: [],
   readyAlert: false,
+  timeout: null,
 
   tutotialMessages: [
     {
@@ -98,6 +100,7 @@ const initialState = () => ({
   showPhoneClothes: true,
 
   // NOTIFICATIONS
+  endIntroDialog: false,
   showTutorialBlob: true,
   tutorialBlobCount: 0,
   chooseCharacterScreenNotification: true,

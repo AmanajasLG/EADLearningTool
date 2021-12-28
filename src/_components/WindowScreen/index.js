@@ -4,7 +4,7 @@ const WindowScreen = ({ children, style, ...props }) => {
   const colors = ["#f9afa1", "#ffdea9", "#cbe7de"];
   return (
     <div
-      style={{ backgroundColor: "#EEEEEE", borderRadius: "10px", ...style }}
+      style={{ backgroundColor: "#FFFFFF", borderRadius: "10px", ...style }}
       {...props}
     >
       <div

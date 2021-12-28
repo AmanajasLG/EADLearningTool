@@ -171,12 +171,12 @@ const Game6 = (props) => {
         { question: "Qual data?", answer: invitation.date, asked: false },
         {
           question: "A que horas?",
-          answer: invitation.time.toLowerCase(),
+          answer: invitation.time,
           asked: false,
         },
         {
           question: "Qual estação?",
-          answer: invitation.season.toLowerCase(),
+          answer: invitation.season,
           asked: false,
         },
         {
@@ -259,14 +259,17 @@ const Game6 = (props) => {
       state.countNow &&
       (state.scene !== "INIT" || state.scene !== "END_GAME")
     ) {
-      setState((s) => ({ ...s, countNow: false }));
-
-      setTimeout(
-        () =>
+      
+      setState((s) => ({ ...s,
+        countNow: false,
+        timeout: setTimeout(
+          () =>
           setState((s) => ({ ...s, seconds: s.seconds + 1, countNow: true })),
-        1000
-      );
+          1000
+        )
+      }));
     }
+    return () => {if(state.timeout) clearTimeout(state.timeout);}
   }, [state]);
 
   const onStartGame = () => setState((s) => ({ ...s, scene: "INTRO" }));
@@ -274,12 +277,14 @@ const Game6 = (props) => {
   // INTRO
   const showIntroDialog = () => {
     let introDialog = [...state.introDialog];
-    if (introDialog.length !== 0) {
+    if (introDialog.length > 0) {
       let introDialogShow = [
         ...state.introDialogShow,
         ...introDialog.splice(0, 1),
       ];
       setState((s) => ({ ...s, introDialog, introDialogShow }));
+    } else {
+      setState((s) => ({ ...s, endIntroDialog: true }));
     }
   };
 
@@ -400,7 +405,7 @@ const Game6 = (props) => {
   };
 
   // SELECT CLOTHES IN PHONE
-  const addAnswerToDialogSend = (item) => () => {
+  const addAnswerToDialogSend = (item, wardrobeTab) => () => {
     if (
       state.showTutorialBlob &&
       state.tutorialBlobCount < state.tutorialPhoneBlobsText.length - 1
@@ -444,6 +449,7 @@ const Game6 = (props) => {
       setState((s) => ({
         ...s,
         phoneWardrobe,
+        wardrobeTab: wardrobeTab ?? s.wardrobeTab,
         phoneClothes,
         sendDialogShow,
         showPhoneClothes: false,
@@ -772,12 +778,14 @@ const Game6 = (props) => {
           message: sawInvite
             ? "Apesar de ter checado as informações do evento, o look que você montou não combina com o evento e " +
               wrongClothes.length +
-              " peça(s) ficou(ficaram) estranha(s)... Tomara que Ariel não passe tanta vergonha..."
-            : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
-          messageTranslate: sawInvite
-            ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
+              (wrongClothes.length === 1 ? " peça ficou estranha..." : " peças ficaram estranhas...") +
+              " Tomara que Ariel não passe tanta vergonha..."
+              : "Parece que você não montou um look adequado ao evento… Talvez se tivesse tirado dúvidas com Ariel sobre os detalhes da ocasião, você teria sido mais prestativo.",
+              messageTranslate: sawInvite
+              ? "Even though you checked the event informations, the outfit you came up with doesn't match the event and " +
               wrongClothes.length +
-              " piece(s) of clothing were weird... Let's hope Ariel doesn't get too embarrassed..."
+              (wrongClothes.length === 1 ? " piece of clothing were weird..." : " pieces of clothing were weird...") +
+              " Let's hope Ariel doesn't get too embarrassed..."
             : "It seems like you couldn't come up with an adequate outfit for the event... Maybe if you had asked Ariel again about the occasion's information, you could've been more helpful.",
         },
         {
@@ -785,12 +793,14 @@ const Game6 = (props) => {
           message:
             "Preste atenção nas peças que você escolheu. Em seu look, você escolheu um total de " +
             wrongClothes.length +
-            " peças que não combinam com o evento: " +
+            (wrongClothes.length === 1 ? " peça" : " peças") +
+            " que não combinam com o evento: " +
             wrongClothes.map((clothes) => clothes.name).join(", "),
           messageTranslate:
             "Pay attention to the pieces of clothing you picked. In your outfit, you chose a total of " +
+            (wrongClothes.length === 1 ? " piece" : " pieces") +
             wrongClothes.length +
-            " pieces that did not match the event :" +
+            " that did not match the event: " +
             wrongClothes.map((clothes) => clothes.name).join(", "),
         }
       );
@@ -991,7 +1001,7 @@ const Game6 = (props) => {
 
                     {state.showCellphone && (
                       <CellphoneOverlay
-                        autoLoad={state.introDialog.length > 0}
+                        autoLoad={state.introDialog.length > 0 || !state.endIntroDialog}
                         startMaximized={true}
                         showCloseButton={false}
                         dialogHistory={state.introDialogShow}
@@ -999,7 +1009,7 @@ const Game6 = (props) => {
                           setState((s) => ({ ...s, shouldMinimize: false }))
                         }
                         shouldMinimize={state.shouldMinimize}
-                        stopConversation={state.introDialog.length === 0}
+                        stopConversation={state.endIntroDialog}
                         nextMessage={showIntroDialog}
                         endConversation={() =>
                           setState((s) => ({
@@ -1370,15 +1380,10 @@ const Game6 = (props) => {
                             : state.sendDialogShow
                         }
                         wardrobe={state.phoneWardrobe}
+                        wardrobeTab={state.wardrobeTab}
                         phoneClothes={state.phoneClothes}
                         colors={state.colorTags}
                         // FUCTIONS
-                        endConversation={() =>
-                          setState((s) => ({
-                            ...s,
-                            lastConfirmation: true,
-                          }))
-                        }
                         addAnswerToDialog={addAnswerToDialogSend}
                         addRemoveDialog={() => {
                           setState((s) => ({

@@ -40,7 +40,7 @@ const CellphoneOverlay = ({
     if (autoLoad) {
       setTimeout(() => {
         nextMessage();
-      }, 2000);
+      }, 1840+33*(dialogHistory.at(-1)?.text?.length ?? 0));
     }
 
     //eslint-disable-next-line
@@ -111,73 +111,74 @@ const CellphoneOverlay = ({
                   <img src={ariel} alt="cellphone-profile-pic" />
                   <span>Ariel</span>
                 </div>
-                <div
-                  id="cellphone-dialog-history-wrapper"
-                  className={
-                    (stopConversation ? "has-ready-button" : "") +
-                    (questions ? "has-questions-buttons" : "")
-                  }
-                >
-                  <div id="cellphone-dialog-history-content">
-                    {[...dialogHistory].reverse().map((dialog, index) => (
-                      <div
-                        className={
-                          "cellphone-mensagem" +
-                          (dialog.speaker === "player" ? 0 : 1) +
-                          (index === 0
-                            ? " cellphone-animate-mensagem" +
-                              (dialog.speaker === "player" ? 0 : 1)
-                            : "")
-                        }
-                        key={index}
-                      >
-                        <span lang="pt-br" className="">
-                          {dialog.text}
-                        </span>
-                        {dialog.textTranslate && (
-                          <span lang="en" className="">
-                            {dialog.textTranslate}
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {stopConversation && (
-                  <Button
-                    style={{
-                      position: "relative",
-                      margin: "1em auto",
-                      width: "15em",
-                      fontSize: "2.5em",
-                    }}
-                    onClick={endConversation}
+                <div id="cellphone-dialog-screen-after-header">
+                  <div
+                    id="cellphone-dialog-history-wrapper"
+                    className={
+                      (stopConversation ? "has-ready-button" : "") +
+                      (questions ? "has-questions-buttons" : "")
+                    }
                   >
-                    Estou pronto!
-                  </Button>
-                )}
-
-                {questions && (
-                  <div>
-                    {questions.map((question, index) => (
-                      <Button
-                        key={index}
-                        style={{
-                          position: "relative",
-                          margin: ".5em auto",
-                          width: "16em",
-                          fontSize: "2.2em",
-                          display: "block",
-                          opacity: question.asked ? 0.3 : 1,
-                        }}
-                        onClick={addAnswerToDialog(index)}
-                        disabled={question.asked}
-                      >
-                        {question.question}
-                      </Button>
-                    ))}
+                    <div id="cellphone-dialog-history-content">
+                      {[...dialogHistory].reverse().map((dialog, index) => (
+                        <div
+                          className={
+                            "cellphone-mensagem" +
+                            (dialog.speaker === "player" ? 0 : 1) +
+                            (index === 0
+                              ? " cellphone-animate-mensagem" +
+                                (dialog.speaker === "player" ? 0 : 1)
+                              : "")
+                          }
+                          key={index}
+                        >
+                          <span lang="pt-br" className="">
+                            {dialog.text}
+                          </span>
+                          {dialog.textTranslate && (
+                            <span lang="en" className="">
+                              {dialog.textTranslate}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                )}
+                  {stopConversation && (
+                    <Button
+                      style={{
+                        position: "relative",
+                        margin: "1em auto",
+                        width: "15em",
+                        fontSize: "2.5em",
+                      }}
+                      onClick={endConversation}
+                    >
+                      Estou pronto!
+                    </Button>
+                  )}
+                  {questions && (
+                    <div>
+                      {questions.map((question, index) => (
+                        <Button
+                          key={index}
+                          style={{
+                            position: "relative",
+                            margin: ".5em auto",
+                            width: "16em",
+                            fontSize: "2.2em",
+                            display: "block",
+                            opacity: question.asked ? 0.3 : 1,
+                          }}
+                          onClick={addAnswerToDialog(index)}
+                          disabled={question.asked}
+                        >
+                          {question.question}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

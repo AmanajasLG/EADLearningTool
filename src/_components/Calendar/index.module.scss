@@ -1,0 +1,58 @@
+.calendarButton {
+  cursor: pointer;
+  padding: 0 10% 0 10%;
+  --selectionColor: rgba(var(--rgb-color-main), 0.4);
+  position: relative;
+
+  p {
+    border-radius: 50%;
+    text-align: center;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    transform: translateY(20%);
+  }
+
+  span {
+    position: absolute;
+    inset: 0;
+    max-width: 105%;
+    max-height: 105%;
+    margin-left: 10%;
+    aspect-ratio: 1 / 1;
+    border-radius: 100%;
+  }
+}
+
+.calendarButton.selected {
+  span {
+    background-color: var(--color-fifth);
+  }
+}
+
+.calendarButton#firstDay {
+  --gradientSettings: to left, var(--selectionColor), var(--selectionColor) 50%, transparent 50%, transparent 100%;
+  background-image: -webkit-linear-gradient(var(--gradientSettings));
+  background-image: -moz-linear-gradient(var(--gradientSettings));
+  background-image: -o-linear-gradient(var(--gradientSettings));
+  background-image: linear-gradient(var(--gradientSettings));
+}
+
+.calendarButton#lastDay {
+  --gradientSettings: to right, var(--selectionColor), var(--selectionColor) 50%, transparent 50%, transparent 100%;
+  background-image: -webkit-linear-gradient(var(--gradientSettings));
+  background-image: -moz-linear-gradient(var(--gradientSettings));
+  background-image: -o-linear-gradient(var(--gradientSettings));
+  background-image: linear-gradient(var(--gradientSettings));
+}
+
+.calendarButton.inRange {
+  --gradientSettings: to bottom, var(--selectionColor), var(--selectionColor) 100%, transparent 100%, transparent 100%;
+  background-image: -webkit-linear-gradient(var(--gradientSettings));
+  background-image: -moz-linear-gradient(var(--gradientSettings));
+  background-image: -o-linear-gradient(var(--gradientSettings));
+  background-image: linear-gradient(var(--gradientSettings));
+}
+
+.calendarButton:hover {
+  background-color: #dddddd
+}

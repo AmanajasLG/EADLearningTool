@@ -1,0 +1,29 @@
+.cityCard {
+  background-color: #59316d;
+  cursor: pointer;
+  width: 30%;
+  margin: 1%;
+  border-radius: 1em;
+  overflow: hidden;
+  transition: 100ms ease-in-out;
+  border: 0em solid #59316d;
+  font-family: 'Abril FatFace';
+
+  p {
+    display: block;
+    text-align: center;
+    color: white;
+    padding: 0.3em 0;
+  }
+}
+
+.cityCard#selected {
+  background-color: #f9afa1;
+  border-color: #f9afa1;
+}
+
+.cityCard:hover{
+  background-color: #f9afa1;
+  border: 0.4em solid #f9afa1;
+  border-bottom: none
+}

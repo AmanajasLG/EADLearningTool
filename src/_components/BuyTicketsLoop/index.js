@@ -10,6 +10,8 @@ import { agendamento, emailIcon, destino } from "../../img";
 import { Voltar, Iniciar } from "../Button";
 import Blob from "../Blob";
 
+import styles from "./index.module.scss"
+
 const BuyTicketsLoop = ({ data, onDone }) => {
   const [state, setState] = React.useState(initialState());
 
@@ -28,13 +30,14 @@ const BuyTicketsLoop = ({ data, onDone }) => {
     <React.Fragment>
       {state.window !== "NONE" && (
         <WindowScreen
+          id={styles["windowScreen"]}
           style={{
             position: "absolute",
             left: "10%",
             width: "70%",
             height: "80%",
             margin: "5% auto 0 auto",
-            fontSize: "3em",
+            fontSize: "3em"
           }}
         >
           {state.window === "EMAIL" && (
@@ -117,25 +120,22 @@ const BuyTicketsLoop = ({ data, onDone }) => {
           borderRadius: "6%/2%",
         }}
       >
-        <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
+        <div className={styles["apps"]} id={state.window==="EMAIL" ? styles["selected"] : null}>
           <img
-            style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "EMAIL" }))}
             src={emailIcon}
             alt=""
           />
         </div>
-        <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
+        <div className={styles["apps"]} id={state.window==="PLACES" ? styles["selected"] : null}>
           <img
-            style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "PLACES" }))}
             src={destino}
             alt=""
           />
         </div>
-        <div style={{ backgroundColor: "#aaaaff", borderRadius: "50%" }}>
+        <div className={styles["apps"]} id={state.window==="SCHEDULE" ? styles["selected"] : null}>
           <img
-            style={{ cursor: "pointer" }}
             onClick={() => setState((s) => ({ ...s, window: "SCHEDULE" }))}
             src={agendamento}
             alt=""

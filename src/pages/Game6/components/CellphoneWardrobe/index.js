@@ -3,16 +3,18 @@ import React from "react";
 import Button from "../../../../_components/Button";
 import "./index.scss";
 
-const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
+const CellphoneWardrobe = ({ wardrobe, startingIdx, onClothesClick, ...props }) => {
+  let clampedStartingIdx = Math.min(Math.max(0, startingIdx ?? 0), Object.keys(wardrobe).length-1);
   const [state, setState] = React.useState({
-    wardrobeKey: Object.keys(wardrobe)[0],
+    wardrobeKey: Object.keys(wardrobe)[clampedStartingIdx],
     page: 0,
+    idx: clampedStartingIdx
   });
   const columns = 2,
     pageSize = 4;
 
   return (
-    <div {...props}>
+    <div style={props.style}>
       <div
         style={{
           height: "10%",
@@ -25,7 +27,7 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
         {Object.keys(wardrobe).map((label, index) => (
           <Button
             key={index}
-            onClick={() => setState((s) => ({ wardrobeKey: label, page: 0 }))}
+            onClick={() => setState((s) => ({ wardrobeKey: label, page: 0, idx: index }))}
             style={{
               borderRadius: "5% 5% 0 0",
               flex: "1 0 0px",
@@ -33,7 +35,7 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
               padding: "0.7em 0.5em",
               backgroundColor:
                 "hsl(24, 100%, " +
-                (83 + Math.abs(index - state.page) * 5) +
+                (83 + Math.abs(index - state.idx) * 5) +
                 "%)",
             }}
             id="wardrobe-label-button"
@@ -92,16 +94,17 @@ const CellphoneWardrobe = ({ wardrobe, onClothesClick, ...props }) => {
                     )
                     .map((item, index) => (
                       <Button
+                        key={index}
                         style={{
                           fontSize: "2em",
-                          margin: "0.5em 0.3em",
+                          margin: "0.5em",
                           width: "50%",
-                          height: "3.6em",
+                          height: "3.5em",
                           padding: "0.5em",
                           pointerEvents: item.picked ? "none" : "auto",
                           opacity: item.picked ? 0.3 : 1,
                         }}
-                        onClick={onClothesClick(item)}
+                        onClick={onClothesClick(item, state.idx)}
                       >
                         {item.name}
                       </Button>
