@@ -185,7 +185,7 @@ const Core = ({data, onEndGame}) => {
                         onClick={() => setState(s => ({...s, selectedDish: dish}))}
                         onMouseEnter={(e) => setState( s => ({...s, hoveredDish: {...dish, ...dishPositions[index], index} }))}
                         onMouseLeave={(e) => setState( s => ({...s, hoveredDish: null}))}
-                        src={dish.image? dish.image.url : 'https://res.cloudinary.com/learning-tool/image/upload/v1626714616/Feijoada_b154e2d6f2.svg'} alt={dish.name}
+                        src={dish.silhouette? dish.silhouette[0].url : 'https://res.cloudinary.com/learning-tool/image/upload/v1626714616/Feijoada_b154e2d6f2.svg'} alt="???"
                         style={{position: 'absolute', top: `${dishPositions[index].top}%`, left: `${dishPositions[index].left}%`,
                           maxWidth: '20%', zIndex: state.hoveredDish && state.hoveredDish.index === index? 100 : 0 }}
                       />
@@ -351,11 +351,13 @@ const Core = ({data, onEndGame}) => {
                 )}
 
                 <React.Fragment>
-                  <img
-                    src={dressingBg}
-                    style={{ position: "absolute" }}
-                    alt=""
-                  />
+
+                  <div style={{ position: "absolute", width: '100%', height: '100%', left: '50%' }}>
+                    <img
+                      src={dressingBg}
+                      alt=""
+                    />
+                  </div>
                   <DressingCharacter
                     character={state.choosenCharacter}
                     clothes={state.clothes}
@@ -367,7 +369,7 @@ const Core = ({data, onEndGame}) => {
                       zIndex: state.tutorialBlobCount === 2 ? 1000000 : 0,
                       position: "absolute",
                       bottom: "5em",
-                      left: "30em",
+                      right: "28em",
                     }}
                   />
 
@@ -375,7 +377,7 @@ const Core = ({data, onEndGame}) => {
                     style={{
                       zIndex: state.tutorialBlobCount === 1 ? 1000000 : 0,
                       position: "absolute",
-                      right: "9.5em",
+                      left: "9.5em",
                       top: "10.8em",
                       width: "86em",
                       height: "86em",
@@ -386,8 +388,7 @@ const Core = ({data, onEndGame}) => {
                     }
                   />
 
-                  <Lamp
-                    img={[hanger]}
+                <Iniciar
                     onClick={
                       state.showTutorialBlob
                         ? () => {}
@@ -406,14 +407,16 @@ const Core = ({data, onEndGame}) => {
                             }));
                           }
                     }
-                    message="Estou pronto!"
+                    label="Estou pronto!"
                     style={{
-                      top: "0.5%",
-                      left: "1%",
+                      position: 'absolute',
+                      fontSize: '2em',
+                      bottom: "10%",
+                      right: "5%",
                       zIndex: state.tutorialBlobCount === 4 ? 1000000 : 0,
                     }}
                   />
-                <SmallPhone style={{position: 'absolute', right: '10%', bottom: 0, width: '10%'}} onClick={() => setState(s => ({...s, viewPartyInfo: true})) }/>
+                <SmallPhone style={{position: 'absolute', left: '50%', bottom: 0, width: '10%'}} onClick={() => setState(s => ({...s, viewPartyInfo: true})) }/>
                 {state.viewPartyInfo &&
                   <FullscreenOverlay style={{backgroundColor: '#f9afa1'}}showCloseBtn={false}>
                     <BlobBg blob={{fill: '#f79e8f'}}style={{position: 'absolute', width: '100%', height: '100%'}}/>
