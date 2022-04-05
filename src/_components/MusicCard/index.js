@@ -7,12 +7,22 @@ import './index.scss'
 
 const MusicCard = ({music, imageUrl, onClickPlay, onClickPause, style, ...props}) => {
   const [playing, setPlaying] = React.useState(false);
-  const musicObject = new Audio(music.url)
+  let musicObject
+  if(music.audio)
+    musicObject = new Audio(music.audio.url)
+
   React.useEffect(() => {
-    if(playing) musicObject.play()
+    if(!musicObject)
+      return
+
+    if(playing){
+      musicObject.play()
+      musicObject.volume = 0.2
+    }
     else musicObject.pause()
     return () => {musicObject.pause()}
   }, [playing])
+
   return(
     <div style={{display: 'flex', flexDirection: 'column', backgroundColor: '#fff7ea', borderRadius: '5% / 10%', borderTopRightRadius: 0, overflow: 'hidden', ...style}} {...props}>
       <div style={{display: 'flex', flexDirection: 'row', height: '100%'}}>
