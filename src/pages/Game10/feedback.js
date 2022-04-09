@@ -3,6 +3,29 @@ import React from 'react'
 import DressingCharacter from '../../_components/DressingCharacter'
 import { Iniciar, Voltar } from '../../_components/Button'
 
+const getWrongClothes = (selectedClothes, rightTags) => {
+  let wrongClothes = [];
+
+  for (var key in selectedClothes) {
+    for (let i = 0; i < selectedClothes[key].length; i++) {
+      if (
+        selectedClothes[key][i].time.reduce(
+          (acc, tag) => acc && !rightTags.includes(tag),
+          true
+        ) ||
+        selectedClothes[key][i].weather.reduce(
+          (acc, tag) => acc && !rightTags.includes(tag),
+          true
+        )
+      )
+        wrongClothes.push(selectedClothes[key][i]);
+    }
+  }
+
+  return wrongClothes;
+};
+
+
 const Feedback = ({data, restart, leave}) =>{
   return(
     <div style={{backgroundColor: '#b8d7ff', position: 'absolute', width: '100%', height: '100%'}}>
@@ -43,7 +66,7 @@ const Feedback = ({data, restart, leave}) =>{
             {/*CLOTHES*/}
             <div style={{padding: '2%'}}>
               <div style={{fontFamily: "Abril fatface", fontSize: '1.5em', padding: '3%'}}>
-                {data.gameData.dishText.indexOf( data.gameplayData.selectedDish.name ) >= 0 ?
+                {getWrongClothes(data.gameplayData.clothes, data.gameData.invite.rightTags).length === 0?
                   <div>Você estava bem confortável nas roupas que escolheu e conseguiu aproveitar bem o dia.</div>
                   :
                   <div>As suas roupas te fizeram passar um aperto, mas, bem... Você escolheu ir desconfortável pelo estilo, né?</div>
@@ -62,7 +85,7 @@ const Feedback = ({data, restart, leave}) =>{
             {/*MUSIC*/}
             <div style={{padding: '2%'}}>
               <div style={{fontFamily: "Abril fatface", fontSize: '1.5em', padding: '3%'}}>
-                {data.gameData.dishText.indexOf( data.gameplayData.selectedDish.name ) >= 0 ?
+                {data.gameplayData.formedWord === data.gameplayData.selectedMusic.genre?
                   <div>Todo mundo curtiu o som que você escolheu. Que festa boa!</div>
                   :
                   <div>O clima ficou meio estranho - talvez você não tenha escolhido a música direito.</div>

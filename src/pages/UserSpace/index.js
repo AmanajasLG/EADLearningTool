@@ -77,7 +77,10 @@ const UserSpace = () => {
             <div id="missoes">
               {game.loading ? (
                 <div>Loading...</div>
-              ) : (
+              )
+              : game.error?
+              (<div>Ocorreu um erro: {game.error}</div>)
+              :(
                 game.items.missions &&
                 game.items.missions
                   .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))

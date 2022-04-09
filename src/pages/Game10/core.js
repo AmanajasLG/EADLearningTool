@@ -585,7 +585,7 @@ const Core = ({data, onEndGame}) => {
                     label='Continue' onClick={() => setState(s =>  ({...s, scene: 'CHOOSE_MUSIC'}) )}
                   />
                 </div>
-                <img src={data.character.characterAssets[1].image.url}
+                <img src={data.character.characterAssets.find(asset => asset.bodyPart === "upperBody" && asset.type === "init").image.url}
                   style={{position: 'absolute', bottom: '-30%', left: '-10%', maxWidth: '50%'}}
                 />
               </React.Fragment>
@@ -631,11 +631,11 @@ const Core = ({data, onEndGame}) => {
                 <div style={{position: 'absolute', top: '10%', textAlign: 'center', width: '100%', fontSize: '4em', color: '#59316D'}}>
                   Qual o gênero musical escolhido?
                 </div>
-                <Speller word={state.selectedMusic.genre} onWordChange={ word => setState(s => ({...s, formedWord: word}) )}/>
+                <Speller word={state.selectedMusic.genre + data.musics.slice(0, 3).reduce((s, m) => m === state.selectedMusic? s : s + m.genre , "")} onWordChange={ word => setState(s => ({...s, formedWord: word}) )}/>
                 <div style={{position: 'absolute', bottom: '10%', width: '100%', zIndex: '10'}}>
                   <MusicCard music={state.selectedMusic} style={{width: '20%', margin: '0 auto'}}/>
                 </div>
-                {state.formedWord && state.formedWord.length === state.selectedMusic.genre.length &&
+                {state.formedWord && state.formedWord.length > 0 &&
                   <Iniciar style={{position: 'absolute', bottom: '7%', right: '7.5%', fontSize: '3em'}}
                     label='Hora da festa!' onClick={() => {
                       dispatch(musicActions.set(state.selectedMusic.url))
@@ -661,7 +661,7 @@ const Core = ({data, onEndGame}) => {
                     top: 0
                   }}
                 />
-                <img src={data.character.characterAssets[1].image.url}
+                <img src={data.character.characterAssets.find(asset => asset.bodyPart === "upperBody" && asset.type === "init").image.url}
                   style={{position: 'absolute', bottom: '-30%', left: '-10%', maxWidth: '50%'}}
                 />
               <Iniciar label='Ver resultado' onClick={() => onEndGame({gameData: {...data}, gameplayData: {...state}})}
