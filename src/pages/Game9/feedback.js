@@ -25,14 +25,16 @@ const Feedback = ({data, missionId, userId, restart, leave}) => {
                   </div>
                   <br/>
                   <div style={{fontSize: '1.3em', width: '90%', margin: '0 auto'}}>
-                    Escolher a casa ideal não é tarefa fácil
-                    {data.results.completed < 3 ?
-                      ", mais sorte na próxima!" :
-                      data.results.completed < 6 ?
-                      ", mas você se saiu bem!" :
+                    {data.results.completed < 4 ?
+                      "Ai... Parece que ninguém ficou feliz com a casa nova. Talvez você consiga bancar uma reforma para todos ficarem satisfeitos?"
+                      :
                       data.results.completed < 12 ?
-                      ", mas você se saiu muito bem!" :
-                      ", mas você fez um trabalho espetacular!"
+                      "Algumas pessoas ficaram satisfeitas - outras não. É meio difícil agradar a todos, né?"
+                      :
+                      data.results.completed < 20 ?
+                      "Todos os clientes foram para suas novas casas com muita alegria porque você escolheu ótimos lugares. Lar, doce lar!"
+                      :
+                      "UAU! Você é o corretor de imóveis mais incrível - TODOS os clientes da corretora ficaram satisfeitos! Você merece uma casa por esse feito!"
                     }
                   </div>
                 </div>
@@ -43,14 +45,13 @@ const Feedback = ({data, missionId, userId, restart, leave}) => {
                     `Time left: ${data.results.secondsLeft} `
                   }
                   <span style={{textAlign: 'left'}}>
-                    Choosing the ideal home is not an easy task
-                    {data.results.completed < 3 ?
-                      ", better luck next time!" :
-                      data.results.completed < 6 ?
-                      ", but you did well!" :
+                    {data.results.completed < 4 ?
+                      "Ouch... It seems that no one was happy with the new house. Maybe you can afford a renovation to please everyone?" :
                       data.results.completed < 12 ?
-                      ", but you did very well!" :
-                      ", but you made an expectacular job!"
+                      "Some people were satisfied - others were not. It's kind of hard to please everyone, isn't it?" :
+                      data.results.completed < 20 ?
+                      "All the customers went to their new homes with great joy because you chose great places. Home, sweet home!" :
+                      "WOW! You are the most amazing realtor - EVERY client of the brokerage was satisfied! You deserve a house for this achievement!"
                     }
                   </span>
                 </div>

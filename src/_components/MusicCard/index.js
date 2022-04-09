@@ -17,6 +17,7 @@ const MusicCard = ({music, imageUrl, onClickPlay, onClickPause, style, ...props}
 
     if(playing){
       musicObject.play()
+      musicObject.currentTime = music.audioSampleTime.start
       musicObject.volume = 0.2
     }
     else musicObject.pause()

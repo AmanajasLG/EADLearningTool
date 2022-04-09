@@ -25,17 +25,17 @@ const Feedback = ({data, restart, leave}) =>{
             <div style={{padding: '2%'}}>
               <div style={{fontFamily: "Abril fatface", fontSize: '1.5em', padding: '3%'}}>
                 {data.gameData.dishText.indexOf( data.gameplayData.selectedDish.name ) >= 0 ?
-                  <div>A escolha de {data.gameplayData.selectedDish.name} foi um sucesso!</div>
+                  <div>Esse foi exatamente o prato que o {data.gameData.character.name} sugeriu e você preparou ele certinho. Todos amaram!</div>
                   :
-                  <div>O pessoal na festa esperava que você levasse o que o {data.gameData.character.name} recomendou, mas tudo bem, outras festas virão!</div>
+                  <div>Talvez as pessoas teriam gostado mais se você tivesse feito o prato que o {data.gameData.character.name} sugeriu...</div>
                 }
               </div>
               <hr style={{margin: '7% auto', borderColor:'#59316d', width: '30%' }}/>
               <div style={{fontStyle: 'italic', fontSize: '1em', padding: '3%'}}>
                 {data.gameData.dishText.indexOf( data.gameplayData.selectedDish.name ) >= 0 ?
-                  <div>Choosing {data.gameplayData.selectedDish.name} was a success!</div>
+                  <div>This was exactly the dish {data.gameData.character.name} suggested - and you prepared it just right. Everyone loved it!</div>
                   :
-                  <div>People at the party was expecting you to bring what {data.gameData.character.name} recomended, but it's ok, other parties will come!</div>
+                  <div>Maybe people would have liked it better if you had made the dish {data.gameData.character.name} suggested....</div>
                 }
               </div>
             </div>
@@ -44,17 +44,17 @@ const Feedback = ({data, restart, leave}) =>{
             <div style={{padding: '2%'}}>
               <div style={{fontFamily: "Abril fatface", fontSize: '1.5em', padding: '3%'}}>
                 {data.gameData.dishText.indexOf( data.gameplayData.selectedDish.name ) >= 0 ?
-                  <div>A escolha de {data.gameplayData.selectedDish.name} foi um sucesso!</div>
+                  <div>Você estava bem confortável nas roupas que escolheu e conseguiu aproveitar bem o dia.</div>
                   :
-                  <div>O pessoal na festa esperava que você levasse o que o {data.gameData.character.name} recomendou, mas tudo bem, outras festas virão!</div>
+                  <div>As suas roupas te fizeram passar um aperto, mas, bem... Você escolheu ir desconfortável pelo estilo, né?</div>
                 }
               </div>
               <hr style={{margin: '7% auto', borderColor:'#59316d', width: '30%' }}/>
               <div style={{fontStyle: 'italic', fontSize: '1em', padding: '3%'}}>
                 {data.gameData.dishText.indexOf( data.gameplayData.selectedDish.name ) >= 0 ?
-                  <div>Choosing {data.gameplayData.selectedDish.name} was a success!</div>
+                  <div>You were very comfortable in the clothes you chose and managed to enjoy the day well.</div>
                   :
-                  <div>People at the party was expecting you to bring what {data.gameData.character.name} recomended, but it's ok, other parties will come!</div>
+                  <div>Your clothes made you uncomfortable, but, well... You chose to be uncomfortable because of the style, right?</div>
                 }
               </div>
             </div>
@@ -63,17 +63,17 @@ const Feedback = ({data, restart, leave}) =>{
             <div style={{padding: '2%'}}>
               <div style={{fontFamily: "Abril fatface", fontSize: '1.5em', padding: '3%'}}>
                 {data.gameData.dishText.indexOf( data.gameplayData.selectedDish.name ) >= 0 ?
-                  <div>A escolha de {data.gameplayData.selectedDish.name} foi um sucesso!</div>
+                  <div>Todo mundo curtiu o som que você escolheu. Que festa boa!</div>
                   :
-                  <div>O pessoal na festa esperava que você levasse o que o {data.gameData.character.name} recomendou, mas tudo bem, outras festas virão!</div>
+                  <div>O clima ficou meio estranho - talvez você não tenha escolhido a música direito.</div>
                 }
               </div>
               <hr style={{margin: '7% auto', borderColor:'#59316d', width: '30%' }}/>
               <div style={{fontStyle: 'italic', fontSize: '1em', padding: '3%'}}>
                 {data.gameData.dishText.indexOf( data.gameplayData.selectedDish.name ) >= 0 ?
-                  <div>Choosing {data.gameplayData.selectedDish.name} was a success!</div>
+                  <div>Everyone enjoyed the song you chose. What a good party!</div>
                   :
-                  <div>People at the party was expecting you to bring what {data.gameData.character.name} recomended, but it's ok, other parties will come!</div>
+                  <div>The mood got a little weird - maybe you didn't choose the song well enough.</div>
                 }
               </div>
             </div>
